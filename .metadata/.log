@@ -8,3 +8,16 @@ Command-line arguments:  -os linux -ws gtk -arch x86_64 -product com.android.ide
 
 !ENTRY com.android.ide.eclipse.adt 4 0 2013-02-26 18:35:10.711
 !MESSAGE Failed to load properties file for project 'ThePantry'
+!SESSION 2013-03-05 17:10:49.816 -----------------------------------------------
+eclipse.buildId=v21.1.0-569685
+java.version=1.7.0_15
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product com.android.ide.eclipse.adt.package.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product com.android.ide.eclipse.adt.package.product
+
+!ENTRY org.eclipse.core.resources 2 10035 2013-03-05 17:11:01.762
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY com.android.ide.eclipse.adt 2 0 2013-03-05 17:11:10.066
+!MESSAGE An Android SDK is already being loaded. Please try again later.
