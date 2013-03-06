@@ -1,4 +1,10 @@
 ThePantryBackend::Application.routes.draw do
+  get "users/new"
+
+  post "users/register"
+  post "users/login"
+  post "users/logout"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
