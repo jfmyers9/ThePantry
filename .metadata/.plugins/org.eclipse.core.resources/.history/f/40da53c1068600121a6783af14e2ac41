@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">The Pantry</string>
+    <string name="title_activity_tutorial">TutorialActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_inventory">InventoryActivity</string>
+    <string name="title_activity_home_page">HomePageActivity</string>
+    <string name="title_activity_shopping_list">ShoppingListActivity</string>
+
+</resources>

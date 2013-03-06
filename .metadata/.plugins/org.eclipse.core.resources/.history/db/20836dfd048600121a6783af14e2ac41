@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">The Pantry</string>
+    <string name="title_activity_tutorial">TutorialActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_recipe_page">RecipePageActivity</string>
+    <string name="title_activity_inventory">InventoryActivity</string>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    <string name="title_activity_homepage">HomepageActivity</string>
+    <string name="title_activity_search_results">SearchResultsActivity</string>
+=======
+>>>>>>> 21a510342edfb2650d52b3f290113c5dfebbe6fd
+>>>>>>> 4e1b99368bff8931397f257a5819dd8e11bc235f
+>>>>>>> 960d865b300be942e51582a9a56802575a221717
+
+</resources>

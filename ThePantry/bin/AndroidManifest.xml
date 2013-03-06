@@ -16,10 +16,43 @@
         <activity
             android:name="cs169.project.thepantry.TutorialActivity"
             android:label="@string/title_activity_tutorial" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
         <activity
             android:name="cs169.project.thepantry.InventoryActivity"
             android:label="@string/title_activity_inventory" >
+        </activity>
+        <activity
+            android:name="cs169.project.thepantry.HomePageActivity"
+            android:label="@string/title_activity_home_page" >
+        </activity>
+        <activity
+            android:name="cs169.project.thepantry.ShoppingListActivity"
+            android:label="@string/title_activity_shopping_list" >
+        </activity>
+        <activity
+            android:name="cs169.project.thepantry.SearchResultsActivity"
+            android:label="@string/title_activity_search_results" >
+        </activity>
+        <activity
+            android:name="cs169.project.thepantry.InventoryAddActivity"
+            android:label="@string/title_activity_inventory_add" >
+        </activity>
+        <activity
+            android:name="cs169.project.thepantry.RecipeActivity"
+            android:label="@string/title_activity_recipe" >
+        </activity>
+        <activity
+            android:name="cs169.project.thepantry.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name="cs169.project.thepantry.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
     </application>
 

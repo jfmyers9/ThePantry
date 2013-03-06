@@ -6,5 +6,10 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_inventory">InventoryActivity</string>
+    <string name="title_activity_home_page">HomePageActivity</string>
+    <string name="title_activity_shopping_list">ShoppingListActivity</string>
+    <string name="title_activity_search_results">SearchResultsActivity</string>
+    <string name="title_activity_inventory_add">InventoryAddActivity</string>
+    <string name="title_activity_recipe">RecipeActivity</string>
 
 </resources>
