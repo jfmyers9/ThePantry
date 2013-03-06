@@ -17,6 +17,10 @@
             android:name="cs169.project.thepantry.TutorialActivity"
             android:label="@string/title_activity_tutorial" >
         </activity>
+        <activity
+            android:name="cs169.project.thepantry.InventoryActivity"
+            android:label="@string/title_activity_inventory" >
+        </activity>
     </application>
 
 </manifest>
