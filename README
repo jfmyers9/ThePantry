@@ -1,0 +1,12 @@
+UC Berkeley CS169 Software Engineering Spring 2013
+The Pantry
+Authors: Christina Hang, Justin Kay, Jim Myers, Matt Visco, Amy Zhang
+
+Last Edited: 03/05/13
+
+This is a README file for The Pantry application.
+
+ThePantry directory holds the Android code while thePantryBackend contains the
+Rails code for the backend.
+
+More to come later.
