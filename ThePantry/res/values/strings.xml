@@ -11,5 +11,23 @@
     <string name="title_activity_search_results">SearchResultsActivity</string>
     <string name="title_activity_inventory_add">InventoryAddActivity</string>
     <string name="title_activity_recipe">RecipeActivity</string>
-
+    <string name="action_inventory">My Pantry</string>
+    <string name="action_shopping_list">My Shopping List</string>
+    <string name="action_home_page">Home</string>
+    <string name="action_login">Login</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_register">Sign Up</string>
+    <string name="add_item">Add</string>
+    <string name="ingredient_types">Ingredient Type</string>
+    <string-array name="ingredient_type_array">
+        <item>Grain</item>
+        <item>Produce</item>
+        <item>Dairy</item>
+        <item>Meat</item>
+        <item>Baking</item>
+        <item>Spices</item>
+        <item>Drinks</item>
+        <item>Other</item>
+    </string-array>
+    <string name="add_shopping_list_ingredient">Enter an ingredient</string>
 </resources>
