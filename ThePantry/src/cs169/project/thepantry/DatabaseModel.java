@@ -10,8 +10,9 @@ public class DatabaseModel {
 
 	// incomplete but this is essentially the helper class for this model
 	// should it be a class variable?
-	//private (static final) DatabaseModelHelper dbModel = new DatabaseModelHelper();
-	
+	// private (static final) DatabaseModelHelper dbModel = new DatabaseModelHelper();
+	// private (static final) SQLiteDatabase readDatabase = dbModel.getReadableDatabase();
+	// private (static final) SQLiteDatabase writeDatabase = dbModel.getWriteableDatabase();
 	/** Constructor for the DatabaseModel class. */
 	public DatabaseModel() {
 		// could delete this if we don't want to do anything special?
