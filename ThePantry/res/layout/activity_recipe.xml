@@ -14,6 +14,65 @@
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:layout_marginBottom="10dp"
         android:background="#999999" />
     
+    <TextView
+        android:id="@+id/recipeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/recipePic"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="10pt" />
+    
+    <ImageButton
+        android:id="@+id/favorite"
+        android:layout_width="20dp"
+        android:layout_alignTop="@+id/recipeName"
+        android:layout_alignBottom="@+id/recipeName"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:onClick="addToFavorites" />
+    
+    <ImageButton
+        android:id="@+id/cooked"
+        android:layout_width="20dp"
+        android:layout_alignTop="@+id/recipeName"
+        android:layout_alignBottom="@+id/recipeName"
+        android:layout_toRightOf="@+id/recipeName"
+        android:layout_toLeftOf="@+id/favorite"
+        android:onClick="markCooked" />
+    
+    <Button
+        android:id="@+id/addtoshop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/recipeName"
+        android:layout_alignLeft="@+id/recipeName"
+        android:layout_marginBottom="10dp"
+        android:onClick="addToShopping"
+        android:text="@string/add_to_shopping_list" />
+    
+    <ListView 
+        android:id="@+id/ingredList"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/addtoshop"
+        android:layout_alignLeft="@+id/addtoshop"
+        android:layout_alignRight="@+id/favorite"
+        android:layout_marginBottom="10dp" >
+    </ListView>
+    
+    <TextView
+        android:id="@+id/directions"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ingredList"
+        android:layout_alignLeft="@+id/ingredList"
+        android:layout_alignRight="@+id/ingredList" />
+        
 </RelativeLayout>
