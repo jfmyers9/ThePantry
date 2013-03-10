@@ -8,9 +8,27 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".TutorialActivity" >
 
-    <TextView
+    <TextView android:id="@+id/welcome_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:text="@string/tutorial_title"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp" />
+    
+    <Button android:id="@+id/setup_inventory_button"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/setup_inventory"
+        android:onClick="setupInventory" />
+    
+    <Button android:id="@+id/skip_button"
+        android:layout_below="@id/setup_inventory_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/skip_text"
+        android:onClick="skipTutorial" />
 
 </RelativeLayout>
