@@ -2,6 +2,9 @@ package cs169.project.thepantry;
 
 import java.util.List;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+
 /** Interface class called by the activities to interact with our database.
  *  Uses the DatabaseModelHelper class to create the database.
  * @author amyzhang
@@ -10,9 +13,9 @@ public class DatabaseModel {
 
 	// incomplete but this is essentially the helper class for this model
 	// should it be a class variable?
-	// private (static final) DatabaseModelHelper dbModel = new DatabaseModelHelper();
-	// private (static final) SQLiteDatabase readDatabase = dbModel.getReadableDatabase();
-	// private (static final) SQLiteDatabase writeDatabase = dbModel.getWriteableDatabase();
+	 //private (static final) DatabaseModelHelper dbModel = new DatabaseModelHelper();
+	 //private (static final) SQLiteDatabase readDatabase = dbModel.getReadableDatabase();
+	 //private (static final) SQLiteDatabase writeDatabase = dbModel.getWriteableDatabase();
 	/** Constructor for the DatabaseModel class. */
 	private DatabaseModel() { //changed to private to make it static class	
 		// could delete this if we don't want to do anything special?
@@ -24,6 +27,17 @@ public class DatabaseModel {
 	 * Returns true if the modification was successful, false otherwise.
 	 */
 	public static boolean add(String table, String item, String type, float amount) {
+	    ContentValues values = new ContentValues();
+	    values.put(dbModel.COLUMN_, comment);
+	    long insertId = database.insert(MySQLiteHelper.TABLE_COMMENTS, null,
+	        values);
+	    Cursor cursor = database.query(MySQLiteHelper.TABLE_COMMENTS,
+	        allColumns, MySQLiteHelper.COLUMN_ID + " = " + insertId, null,
+	        null, null, null);
+	    cursor.moveToFirst();
+	    Comment newComment = cursorToComment(cursor);
+	    cursor.close();
+	    return newComment;
 		return true;
 	}
 	

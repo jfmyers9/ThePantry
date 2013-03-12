@@ -34,4 +34,7 @@
     <string name="tutorial_title">Welcome To the Pantry!</string>
     <string name="setup_inventory">Setup Inventory</string>
     <string name="skip_text">Skip</string>
+    <string name="inventoryTable">inventory</string>
+    <string name="shoppingListTable">shoppingList</string>
+    <string name="ingredientsTable">ingredients</string>
 </resources>

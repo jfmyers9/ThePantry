@@ -9,24 +9,24 @@ public class DatabaseModelHelper extends SQLiteOpenHelper {
 	/** Database constant */
 	public static final int DATABASE_VERSION = 1;
 	public static final String DATABASE_NAME = "thePantry";
-	//private static final String CREATE_INVENTORY_TABLE = "SQL code";
-	//private static final String CREATE_SHOPPING_LIST_TABLE = "SQL code";
-	//private static final String CREATE_INGREDIENTS_TABLE = "SQL code";
+	private static final String CREATE_INVENTORY_TABLE = "SQL code";
+	private static final String CREATE_SHOPPING_LIST_TABLE = "SQL code";
+	private static final String CREATE_INGREDIENTS_TABLE = "SQL code";
 	
 	
-	/** Constructor method */
-	public DatabaseModelHelper(Context context, SQLiteDatabase.CursorFactory factory) {
-		// might not need factory since we can use default
-		// if that's the case, the replace factory with null
-		super(context, DATABASE_NAME, factory, DATABASE_VERSION);
-		getWritableDatabase(); // creates a database
+	/** Constructor method.
+	 *  Note: can insert 'SQLiteDatabase.CursorFactor factory' into
+	 *  the method header if we want a customized factory. Otherwise,
+	 *  leave as is. */
+	public DatabaseModelHelper(Context context) {
+		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// db.execSQL(CREATE_INVENTORY_TABLE);
-		// db.execSQL(CREATE_SHOPPING_LIST_TABLE);
-		// db.execSQL(CREATE_INGREDIENTS_TABLE);
+		db.execSQL(CREATE_INVENTORY_TABLE);
+		db.execSQL(CREATE_SHOPPING_LIST_TABLE);
+		db.execSQL(CREATE_INGREDIENTS_TABLE);
 	}
 	
 	@Override
