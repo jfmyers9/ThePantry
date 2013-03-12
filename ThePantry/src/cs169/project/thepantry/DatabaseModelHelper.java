@@ -19,6 +19,7 @@ public class DatabaseModelHelper extends SQLiteOpenHelper {
 		// might not need factory since we can use default
 		// if that's the case, the replace factory with null
 		super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+		getWritableDatabase(); // creates a database
 	}
 	
 	@Override
