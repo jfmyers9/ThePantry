@@ -14,7 +14,7 @@ public class DatabaseModel {
 	// private (static final) SQLiteDatabase readDatabase = dbModel.getReadableDatabase();
 	// private (static final) SQLiteDatabase writeDatabase = dbModel.getWriteableDatabase();
 	/** Constructor for the DatabaseModel class. */
-	public DatabaseModel() {
+	private DatabaseModel() { //changed to private to make it static class	
 		// could delete this if we don't want to do anything special?
 		// can initialize and call DatabaseModelHelper() here
 		// also could getWritableDatabase() or getReadableDatabase() here
@@ -23,29 +23,34 @@ public class DatabaseModel {
 	/** Adds the ITEM, its TYPE and given AMOUNT to the specified TABLE.
 	 * Returns true if the modification was successful, false otherwise.
 	 */
-	public boolean add(String table, String item, String type, float amount) {
+	public static boolean add(String table, String item, String type, float amount) {
 		return true;
 	}
 	
 	/** Removes the ITEM from the specified TABLE.
 	 * Returns true if the modification was successful, false otherwise.
 	 */
-	public boolean remove(String table, String item) {
+	public static boolean remove(String table, String item) {
 		return true;
 	}
 	
 	/** Returns all items from the specified TABLE. */
-	public List<String> findAllItem(String table) {
+	public static List<String> findAllItem(String table) {
+		return null;
+	}
+	
+	/** Returns one item from the specified TABLE. */
+	public static String findItem(String table, String item) {
 		return null;
 	}
 	
 	/** Returns all items of the TYPE from the specified TABLE. */
-	public List<String> findTypeItems(String table, String type) {
+	public static List<String> findTypeItems(String table, String type) {
 		return null;
 	}
 	
 	/** Returns the type of the ITEM from the specified TABLE. */
-	public String findType(String table, String item) {
+	public static String findType(String table, String item) {
 		return null;
 	}
 	
@@ -55,14 +60,22 @@ public class DatabaseModel {
 	}
 	
 	/** Returns all types from the specified TABLE. */
-	public String findAllTypes(String table) {
+	public static List<String> findAllTypes(String table) {
 		return null;
 	}
+	
+	// TODO -- Figure out if we can use android's UI to reference checked items instead of database
+	// TODO -- Figure out way to extract an entire entry and add it to a new table
 	
 	/** Finds the current value of checked for the ITEM from the
 	 *  specified TABLE and sets it to the opposite.
 	 *  Returns true on success, false otherwise. */
-	public boolean checked(String table, String item) {
+	public static boolean checked(String table, String item) {
 		return true;
+	}
+	
+	/** Returns list of all items (preferably entries) checked */
+	public static List<String> checkedItems() {
+		return null;
 	}
 }
