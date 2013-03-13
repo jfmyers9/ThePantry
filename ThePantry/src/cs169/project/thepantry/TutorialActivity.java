@@ -26,6 +26,7 @@ public class TutorialActivity extends Activity {
 			Context context = getApplicationContext();
 			Intent intent = new Intent(context, HomePageActivity.class);
 			startActivity(intent);
+			finish();
 		}
 	}
 
@@ -46,6 +47,7 @@ public class TutorialActivity extends Activity {
 		Context context = getApplicationContext();
 		Intent intent = new Intent(context, HomePageActivity.class);
 		startActivity(intent);
+		finish();
 	}
 
 }
