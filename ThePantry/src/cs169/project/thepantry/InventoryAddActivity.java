@@ -33,7 +33,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	public void search(String item) {
 		//eventually display items returned as buttons as each letters are added to query -- need to create a more detailed search method
 		//If item doesn’t exist CustomItem button appears
-		String foundItem = DatabaseModel.findItem(table, item);
+		//String foundItem = DatabaseModel.findItem(table, item);
 		if (item!=null) {
 			//display button with given item
 		} else {
@@ -45,7 +45,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	
 	/** Display all types in a dropdown menu for user to select */
 	public String customItem() {
-		List<String> types = DatabaseModel.findAllTypes(table);
+		//List<String> types = DatabaseModel.findAllTypes(table);
 		// displays types in spinner?
 		// include custom button
 		// figure out how to retrieve what button user clicked
@@ -54,7 +54,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	
 	/** Adds an entry to Ingredient database */
 	public void addEntry(String item, String type) {
-		DatabaseModel.add(table, item, type, 0); //adds entry to ingredient database
+		//DatabaseModel.add(table, item, type, 0); //adds entry to ingredient database
 		//mark item "checked"
 	}
 	
@@ -62,9 +62,9 @@ public class InventoryAddActivity extends InventoryActivity {
 	public void updateInventory() {
 		//TODO: iterate through all checked items add inventory database, mark as unchecked
 		
-		List<String> entries = DatabaseModel.checkedItems(); //should return entries
+		//List<String> entries = DatabaseModel.checkedItems(); //should return entries
 		String item = null, type = null; // These will get changed once I decide the best way to retrieve entries
-		DatabaseModel.add(getString(R.string.inventoryTable), item, type, 0);
+		//DatabaseModel.add(getString(R.string.inventoryTable), item, type, 0);
 		//Maybe pop up window with items added
 	}
 

@@ -35,6 +35,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				null, null, null);
 
 		c.moveToFirst();
+		
+
 		return c;
 
 	}

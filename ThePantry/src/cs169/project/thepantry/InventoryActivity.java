@@ -31,7 +31,7 @@ public class InventoryActivity extends Activity {
 
 	/** Display buttons with items of specified type */
 	public void showItems(String type) {
-		List<String> items = DatabaseModel.findTypeItems(table, type);
+		//List<String> items = DatabaseModel.findTypeItems(table, type);
 		// Call function to display buttons of 
 	}
 	
@@ -43,7 +43,7 @@ public class InventoryActivity extends Activity {
 	/** Display item searched for if it is in the table 
 	 * Eventually display items dynamically as a letter is added to query*/
 	public void search(String item) {
-		String foundItem = DatabaseModel.findItem(table, item);
+		//String foundItem = DatabaseModel.findItem(table, item);
 		if (item!=null) {
 			//displays item
 		} else {
@@ -58,7 +58,7 @@ public class InventoryActivity extends Activity {
 	
 	/** Removes specified item from database */
 	public void remove(String item) {
-		DatabaseModel.remove(table, item);
+		//DatabaseModel.remove(table, item);
 	}
 	
 }

@@ -1,5 +1,9 @@
 package cs169.project.thepantry;
 
+import cs169.project.thepantry.ThePantryContract;
+import cs169.project.thepantry.ThePantryContract.Ingredients;
+import cs169.project.thepantry.ThePantryContract.Inventory;
+import cs169.project.thepantry.ThePantryContract.ShoppingList;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -9,9 +13,11 @@ public class DatabaseModelHelper extends SQLiteOpenHelper {
 	/** Database constant */
 	public static final int DATABASE_VERSION = 1;
 	public static final String DATABASE_NAME = "thePantry";
-	private static final String CREATE_INVENTORY_TABLE = "SQL code";
-	private static final String CREATE_SHOPPING_LIST_TABLE = "SQL code";
-	private static final String CREATE_INGREDIENTS_TABLE = "SQL code";
+	
+	
+	private static final String CREATE_INVENTORY_TABLE = "CREATE TABLE "+Inventory.TABLE_NAME+"("+ThePantryContract.ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+Inventory.ITEM+" TEXT UNIQUE, "+Inventory.TYPE+" TEXT, "+Inventory.AMOUNT+" Integer)";
+	private static final String CREATE_SHOPPING_LIST_TABLE = "CREATE TABLE "+ShoppingList.TABLE_NAME+"("+ThePantryContract.ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+ShoppingList.ITEM+" TEXT UNIQUE, "+ShoppingList.TYPE+" TEXT, "+ShoppingList.AMOUNT+" Integer, "+ShoppingList.CHECKED+" Integer)";
+	private static final String CREATE_INGREDIENTS_TABLE = "CREATE TABLE "+Ingredients.TABLE_NAME+"("+ThePantryContract.ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+Ingredients.ITEM+" TEXT UNIQUE, "+Ingredients.TYPE+" TEXT, "+Ingredients.AMOUNT+" Integer, "+Ingredients.CHECKED+" Integer)";
 	
 	
 	/** Constructor method.

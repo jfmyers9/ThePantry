@@ -7,6 +7,9 @@ public class ThePantryContract {
 	
 	/** Private constructor method to make class static. */
 	private ThePantryContract() {}
+	 
+	/** Need to figure out if this is chill -- may need specific id for each table*/
+	public static final String ID = "_id";
 	
 	/** Inner class that defines the Ingredients table */
 	public static abstract class Ingredients implements BaseColumns {
