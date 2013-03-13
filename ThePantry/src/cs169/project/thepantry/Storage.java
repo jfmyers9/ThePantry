@@ -1,5 +1,6 @@
 package cs169.project.thepantry;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -10,14 +11,14 @@ import org.json.JSONObject;
  * It parses different attributes of the JSON response and puts them into fields of the object.
  * Right now these extend Storage: Recipe, Attribution, RecipeImages, RecipeSource, SearchResult, SearchMatch
  */
-class Storage {
-	
+class Storage implements Serializable {
+	private static final long serialVersionUID = 0L; //change this each version to remain consistent
 }
 
 /* Recipe keeps track of recipe info. There is a lot more we can take from the Yummly response, such as nutritional info, flavors,
  * cuisine, etc. For now it stores the basic info we need to display the recipe in RecipeActivity.
  */
-class Recipe extends Storage {
+class Recipe extends Storage implements Serializable {
 	String id;
 	String name;
 	Attribution attribution;
@@ -26,11 +27,16 @@ class Recipe extends Storage {
 	RecipeSource source; //not always present
 
 	protected Recipe(JSONObject results) {
+		// images and source not necessarily included
+		try {
+			this.images = new RecipeImages((JSONObject)((JSONArray)results.get("images")).get(0));
+			this.source = new RecipeSource((JSONObject)results.get("source"));
+		} catch (JSONException e) {}
+		
+		// id, name, attribution, ingredientLines always present in response
 		try {
 			this.id = results.getString("id");
 			this.name = results.getString("name");
-			this.images = new RecipeImages((JSONObject)((JSONArray)results.get("images")).get(0));
-			this.source = new RecipeSource((JSONObject)results.get("source"));
 			this.attribution = new Attribution((JSONObject)results.get("attribution"));
 			JSONArray ings = results.getJSONArray("ingredientLines");
 			ingredientLines = new ArrayList<String>();
@@ -48,7 +54,7 @@ class Recipe extends Storage {
 
 /* Attribution stores the stuff we are required to display on RecipeActivity because we are using the free version of Yummly.
  */
-class Attribution extends Storage {
+class Attribution extends Storage implements Serializable {
 	String url;
 	String text;
 	String logo;
@@ -67,7 +73,7 @@ class Attribution extends Storage {
 
 /* RecipeImages stores the images associated with a recipe.
  */
-class RecipeImages extends Storage {
+class RecipeImages extends Storage implements Serializable {
 	String hostedLargeUrl;
 	String hostedSmallUrl;
 	
@@ -84,7 +90,7 @@ class RecipeImages extends Storage {
 
 /* RecipeSource stores the info to link to the recipe online.
  */
-class RecipeSource extends Storage {
+class RecipeSource extends Storage implements Serializable {
 	String sourceRecipeUrl;
 	String sourceSiteUrl;
 	String sourceDisplayName;
@@ -104,7 +110,7 @@ class RecipeSource extends Storage {
 /* SearchResult stores the info that is received when a search is made. It is the info that will be displayed
  * on SearchResultsActivity. It contains an array of all the recipes (SearchMatches) matched by the search.
  */
-class SearchResult extends Storage {
+class SearchResult extends Storage implements Serializable {
 	ArrayList<SearchMatch> matches;
 	Attribution attribution;
 	
@@ -127,17 +133,22 @@ class SearchResult extends Storage {
 
 /* SearchMatch stores all the info that will be displayed for each recipe on SearchResultsActivity.
  */
-class SearchMatch extends Storage {
+class SearchMatch extends Storage implements Serializable {
 	String id;
 	String name;
 	ArrayList<String> ingredients;
 	String smallImageUrl; //not always present
 	
 	protected SearchMatch(JSONObject info) {
+		// smallImageUrl not always present
+		try {
+			this.smallImageUrl = info.getJSONArray("smallImageUrl").getString(0);
+		} catch (JSONException e) {}
+		
+		// id, name, ingredients always present in response
 		try {
 			this.id = info.getString("id");
 			this.name = info.getString("recipeName");
-			//this.smallImageUrl = info.getJSONArray("smallImageUrl").getString(0);
 			JSONArray ings = info.getJSONArray("ingredients");
 			ingredients = new ArrayList<String>();
 			if (ings != null){

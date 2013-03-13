@@ -31,15 +31,15 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_forgot_password=0x7f0a0015;
-        public static final int action_settings=0x7f0a0014;
+        public static final int action_forgot_password=0x7f0a0016;
+        public static final int action_settings=0x7f0a0015;
         public static final int addtoshop=0x7f0a000b;
         public static final int cooked=0x7f0a000a;
         public static final int directions=0x7f0a000d;
         public static final int email=0x7f0a0003;
         public static final int favorite=0x7f0a0009;
         public static final int ingredList=0x7f0a000c;
-        public static final int ingredient_types=0x7f0a0010;
+        public static final int ingredient_types=0x7f0a0011;
         public static final int login=0x7f0a0005;
         public static final int login_form=0x7f0a0002;
         public static final int login_status=0x7f0a0000;
@@ -47,17 +47,18 @@ public final class R {
         public static final int password=0x7f0a0004;
         public static final int recipeName=0x7f0a0008;
         public static final int recipePic=0x7f0a0007;
-        public static final int setup_inventory_button=0x7f0a0012;
-        public static final int shopping_list_button=0x7f0a000f;
-        public static final int shopping_list_text=0x7f0a000e;
+        public static final int results=0x7f0a000e;
+        public static final int setup_inventory_button=0x7f0a0013;
+        public static final int shopping_list_button=0x7f0a0010;
+        public static final int shopping_list_text=0x7f0a000f;
         public static final int sign_in_button=0x7f0a0006;
-        public static final int skip_button=0x7f0a0013;
-        public static final int title_activity_home_page=0x7f0a0016;
-        public static final int title_activity_inventory=0x7f0a0017;
-        public static final int title_activity_login=0x7f0a0018;
-        public static final int title_activity_logout=0x7f0a0019;
-        public static final int title_activity_register=0x7f0a001a;
-        public static final int welcome_text=0x7f0a0011;
+        public static final int skip_button=0x7f0a0014;
+        public static final int title_activity_home_page=0x7f0a0017;
+        public static final int title_activity_inventory=0x7f0a0018;
+        public static final int title_activity_login=0x7f0a0019;
+        public static final int title_activity_logout=0x7f0a001a;
+        public static final int title_activity_register=0x7f0a001b;
+        public static final int welcome_text=0x7f0a0012;
     }
     public static final class layout {
         public static final int activity_home_page=0x7f030000;
