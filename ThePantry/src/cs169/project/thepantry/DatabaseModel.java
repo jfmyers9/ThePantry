@@ -1,7 +1,5 @@
 package cs169.project.thepantry;
 
-import java.util.List;
-
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import android.content.ContentValues;
@@ -46,95 +44,124 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	 * Returns true if the modification was successful, false otherwise.
 	 */
 	public boolean add(String table, String item, String type, float amount) {
-		//Should use the two commands below to make queries to the db
-		SQLiteDatabase db = getReadableDatabase();
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		//TODO - try/catch block all the SQLiteDatabase calls, throws SQLiteException if open failed
+		SQLiteDatabase db = getWritableDatabase();
 		
 		ContentValues values = new ContentValues();
-		values.put(table + "_item", item);
-		values.put(table + "_type", type);
-		values.put(table + "_amount", amount);
-		if (table.equals("shoppinglist") || table.equals("inventory")) {
-			values.put(table + "_checked", false);
+		values.put(ThePantryContract.ITEM, item);
+		values.put(ThePantryContract.TYPE, type);
+		values.put(ThePantryContract.AMOUNT, amount);
+		if (table.equals(ThePantryContract.ShoppingList.TABLE_NAME)
+				|| table.equals(ThePantryContract.Ingredients.TABLE_NAME)) {
+			values.put(ThePantryContract.CHECKED, false);
 		}
 		long newRowId;
 		// TODO - consider using insertOrThrow and add try/catch block?
-		
-		/*
-		newRowId = writeDatabase.insert(table, null, values);
+		newRowId = db.insert(table, null, values);
 		if (newRowId != -1) {
 			return true;
 		} else {
 			return false;
-		}*/
-		return true;
+		}
 	}
 
 	/** Removes the ITEM from the specified TABLE.
 	 * Returns true if the modification was successful, false otherwise.
 	 */
 	public boolean remove(String table, String item) {
-		String selection = table + "_item = ?";
+		SQLiteDatabase db = getWritableDatabase();
+		
+		String selection = ThePantryContract.ITEM + " = ?";
 		String[] selectionArgs = {item};
-		//int val = writeDatabase.delete(table, selection, selectionArgs);
+		int val = db.delete(table, selection, selectionArgs);
 		// TODO - do a check on val to determine success
 		return true;
 	}
-
+	
 	/** Returns all items from the specified TABLE. */
-	public List<String> findAllItems(String table) {
-		//Cursor cursor = readDatabase.query(table, null, null, null, null, null, null);
-		// TODO - parse through the cursor object to return a List<String>?
-		return null;
+	public Cursor findAllItems(String table) {
+		SQLiteDatabase db = getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(table);
+		
+		Cursor c = qb.query(db, null, null, null, null, null, null, null);
+		c.moveToFirst();
+		return c;
 	}
 
 	/** Returns one item from the specified TABLE. */
-	public String findItem(String table, String item) {
+	public Cursor findItem(String table, String item) {
 		// Not quite sure what this is supposed to do
 		// Right now hypothetically returns type, amount, and checked of the item -Amy
-		String selection = table + "_item = ?";
+		SQLiteDatabase db = getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(table);
+		
+		String selection = ThePantryContract.ITEM + " = ?";
 		String[] selectionArgs = {item};
-		//Cursor cursor = readDatabase.query(table, null, selection, selectionArgs, null, null, null);
-		// TODO - parse the cursor into a String
-		return null;
+		
+		Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
+		c.moveToFirst();
+		return c;
 	}
 
 	/** Returns all items of the TYPE from the specified TABLE. */
-	public List<String> findTypeItems(String table, String type) {
-		String[] columns = {table + "_item"};
-		String selection = table + "_type = ?";
+	public Cursor findTypeItems(String table, String type) {
+		SQLiteDatabase db = getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(table);
+		
+		String[] columns = {ThePantryContract.ITEM};
+		String selection = ThePantryContract.TYPE + " = ?";
 		String[] selectionArgs = {type};
-		//Cursor cursor = readDatabase.query(table, columns, selection, selectionArgs, null, null, null);
-		// TODO - parse cursor into a List<String>
-		return null;
+		
+		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
+		c.moveToFirst();
+		return c;
 	}
 
 	/** Returns the type of the ITEM from the specified TABLE. */
-	public String findType(String table, String item) {
-		String[] columns = {table + "_type"};
-		String selection = table + "_item = ?";
+	public Cursor findType(String table, String item) {
+		SQLiteDatabase db = getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(table);
+		
+		String[] columns = {ThePantryContract.TYPE};
+		String selection = ThePantryContract.ITEM + " = ?";
 		String[] selectionArgs = {item};
-		//Cursor cursor = readDatabase.query(table, columns, selection, selectionArgs, null, null, null);
-		// TODO - parse cursor into a String
-		return null;
+		
+		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
+		c.moveToFirst();
+		return c;
 	}
 
 	/** Returns the amount of the ITEM from the specified TABLE. */
-	public String findAmount(String table, String item) {
-		String[] columns = {table + "_amount"};
-		String selection = table + "_item = ?";
+	public Cursor findAmount(String table, String item) {
+		SQLiteDatabase db = getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(table);
+		
+		String[] columns = {ThePantryContract.AMOUNT};
+		String selection = ThePantryContract.ITEM + " = ?";
 		String[] selectionArgs = {item};
-		//Cursor cursor = readDatabase.query(table, columns, selection, selectionArgs, null, null, null);
-		// TODO - parse cursor into a String
-		return null;
+		
+		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
+		c.moveToFirst();
+		return c;
 	}
 
 	/** Returns all types from the specified TABLE. */
-	public List<String> findAllTypes(String table) {
-		String[] columns = {table + "_type"};
-		//Cursor cursor = readDatabase.query(true, table, columns, null, null, null, null, null, null);
-		// TODO - parse cursor into a List<String>
-		return null;
+	public Cursor findAllTypes(String table) {
+		SQLiteDatabase db = getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(table);
+		qb.setDistinct(true);
+		
+		String[] columns = {ThePantryContract.TYPE};
+		
+		Cursor c = qb.query(db, columns, null, null, null, null, null);
+		c.moveToFirst();
+		return c;
 	}
 
 	// TODO -- Figure out if we can use android's UI to reference checked items instead of database
@@ -144,34 +171,44 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	 *  specified TABLE and sets it to the opposite.
 	 *  Returns true on success, false otherwise. */
 	public boolean checked(String table, String item) {
-		String[] columns = {table + "_checked"};
-		String selection = table + "_item = ?";
+		SQLiteDatabase db = getWritableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(table);
+		
+		String[] columns = {ThePantryContract.CHECKED};
+		String selection = ThePantryContract.ITEM + " = ?";
 		String[] selectionArgs = {item};
-		//Cursor cursor = readDatabase.query(table, columns, selection, selectionArgs, null, null, null);
+		
+		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
+		c.moveToFirst();
+		
 		// TODO - parse cursor to extract checkval
 		boolean checkval = false;
 		boolean newval = !checkval;
+		
 		ContentValues values = new ContentValues();
-		values.put(table + "_checked", newval);
-		//int rows = writeDatabase.update(table, values, selection, selectionArgs);
-		// rows is the number of rows updated, should only affect one
-		/*
-		if (rows == 1) {
-			return true;
-		} else {
-			return false;
-		}*/
+		values.put(ThePantryContract.CHECKED, newval);
+		int rows = db.update(table, values, selection, selectionArgs);
+		// TODO - add some check using rows to see if the update was successful
 		return true;
 	}
 
 	/** Returns list of all items (preferably entries) checked */
-	public List<String> checkedItems(String table) {
-		String[] columns = {table + "_item"}; //for entries, omit this line
-		String selection = table + "_checked = ?";
+	public Cursor checkedItems(String table) {
+		SQLiteDatabase db = getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(table);
+		
+		String selection = ThePantryContract.CHECKED + " = ?";
 		String[] selectionArgs = {"true"}; //not quite right...
+		
 		// if we want the entry, can replace columns with null?
-		//Cursor cursor = readDatabase.query(table, columns, selection, selectionArgs, null, null, null);
-		// TODO - parse cursor into a List<String>
-		return null;
+		Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
+		c.moveToFirst();
+		return c;
 	}
+	
+	//TODO - consider creating a private method to construct queries
+	// The code is so repetitive and we could probably get rid of some
+	// of that repetition by making a constructQuery class or something.
 }
