@@ -10,12 +10,13 @@ public class InventoryAddActivity extends InventoryActivity {
 	//TODO: MAKE A ABSTRACT INVENTORY CLASS THAT BOTH INVENTORY ACTIVITIES EXTEND
 	//TODO: Decide on the best way to call the database model
 	//TODO: Make methods for buttons
-	final String table = getString(R.string.ingredientsTable);
+	private String TABLE_NAME;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inventory_add);
+		TABLE_NAME = getString(R.string.ingredientsTable);
 		// Only should show a back button on action bar?
 
 		//TODO: decide how to display categories -- spinner or some other way (can inherit from inventory)
@@ -32,7 +33,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	 *  added ability to put it in ingredient table*/
 	public void search(String item) {
 		//eventually display items returned as buttons as each letters are added to query -- need to create a more detailed search method
-		//If item doesnÕt exist CustomItem button appears
+		//If item doesnï¿½t exist CustomItem button appears
 		//String foundItem = DatabaseModel.findItem(table, item);
 		if (item!=null) {
 			//display button with given item
