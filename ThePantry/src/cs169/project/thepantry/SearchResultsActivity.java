@@ -17,6 +17,9 @@ public class SearchResultsActivity extends Activity {
 		if (results != null) {
 			textview.setText((String)((SearchMatch)results.matches.get(0)).name);
 		}
+		else {
+			textview.setText("null results");
+		}
 	}
 
 	@Override

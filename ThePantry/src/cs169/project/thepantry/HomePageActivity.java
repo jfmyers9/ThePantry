@@ -10,6 +10,7 @@ public class HomePageActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home_page);
+		new SearchTask(getApplication()).execute("search", "pasta, onions");
 	}
 
 	@Override
