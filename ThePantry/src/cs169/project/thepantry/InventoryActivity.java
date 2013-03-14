@@ -15,7 +15,6 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 import cs169.project.thepantry.ThePantryContract.Ingredients;
-import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class InventoryActivity extends ExpandableListActivity implements OnChildClickListener {
 	String table;
