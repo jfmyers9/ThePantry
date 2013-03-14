@@ -1,25 +1,39 @@
 package cs169.project.thepantry;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 public class SearchResultsActivity extends Activity {
 
+	ArrayList<SearchMatch> matches;
+	SearchResultAdapter srAdapter;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search_results);
-		SearchResult results = (SearchResult)getIntent().getExtras().getSerializable("result");
-		TextView textview = (TextView) findViewById(R.id.results);
-		if (results != null) {
-			textview.setText((String)((SearchMatch)results.matches.get(0)).name);
-		}
-		else {
-			textview.setText("null results");
-		}
+		SearchResult result = (SearchResult)getIntent().getExtras().getSerializable("result");
+		matches = result.matches;
+		
+		ListView listView = (ListView) findViewById(R.id.resultList);
+		srAdapter = new SearchResultAdapter(this, matches);          
+		listView.setAdapter(srAdapter);
+		srAdapter.notifyDataSetChanged();
+		
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+			    // When clicked
+				new SearchTask(getApplication()).execute("recipe", (String)view.getTag());
+			}
+		});
 	}
 
 	@Override

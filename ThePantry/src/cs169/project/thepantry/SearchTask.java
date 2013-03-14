@@ -1,17 +1,12 @@
 package cs169.project.thepantry;
 
 import java.net.URLEncoder;
-import java.util.LinkedList;
-import java.util.List;
 
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -85,6 +80,7 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
     		String getURL;
         	HttpParams httpParams = new BasicHttpParams();
     		if (type == "recipe") {
+    			//q should be correctly encoded in this case b/c recipe search is only called by us
     			getURL = URL_GET + q;
     		}
     		else if (type == "search") {
@@ -103,7 +99,6 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
     		}
     		//create an http connection and client
     		//set timeout for connection and socket
-    		System.out.println(getURL);
         	HttpConnectionParams.setConnectionTimeout(httpParams, TIMEOUT_MILLISEC);
         	HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_MILLISEC);
         	HttpClient client = new DefaultHttpClient(httpParams);
@@ -125,7 +120,7 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
             	result = new SearchResult(jsonResponse);
             } else {
             	// TODO invalid request
-            	System.out.println("typeisbad");
+            	//System.out.println("typeisbad");
             	result = new Recipe(new JSONObject());
             }
             return result;

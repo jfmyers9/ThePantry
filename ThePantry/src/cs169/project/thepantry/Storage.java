@@ -1,7 +1,9 @@
 package cs169.project.thepantry;
 
 import java.io.Serializable;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,16 +38,16 @@ class Recipe extends Storage implements Serializable {
 		// id, name, attribution, ingredientLines always present in response
 		try {
 			this.id = results.getString("id");
-			this.name = results.getString("name");
+			this.name = StringEscapeUtils.unescapeHtml4(results.getString("name"));
 			this.attribution = new Attribution((JSONObject)results.get("attribution"));
 			JSONArray ings = results.getJSONArray("ingredientLines");
 			ingredientLines = new ArrayList<String>();
 			if (ings != null){
 				for (int i=0;i<ings.length();i++){ 
-					ingredientLines.add(ings.getString(i)); 
+					ingredientLines.add(StringEscapeUtils.unescapeHtml4(ings.getString(i))); 
 				}
 			}
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -62,9 +64,9 @@ class Attribution extends Storage implements Serializable {
 	protected Attribution(JSONObject att) {
 		try {
 			this.url = att.getString("url");
-			this.text = att.getString("text");
+			this.text = StringEscapeUtils.unescapeHtml4(att.getString("text"));
 			this.logo = att.getString("logo");
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -99,8 +101,8 @@ class RecipeSource extends Storage implements Serializable {
 		try {
 			this.sourceRecipeUrl = src.getString("sourceRecipeUrl");
 			this.sourceSiteUrl = src.getString("sourceSiteUrl");
-			this.sourceDisplayName = src.getString("sourceDisplayName");
-		} catch (JSONException e) {
+			this.sourceDisplayName = StringEscapeUtils.unescapeHtml4(src.getString("sourceDisplayName"));
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -148,15 +150,15 @@ class SearchMatch extends Storage implements Serializable {
 		// id, name, ingredients always present in response
 		try {
 			this.id = info.getString("id");
-			this.name = info.getString("recipeName");
+			this.name = StringEscapeUtils.unescapeHtml4(info.getString("recipeName"));
 			JSONArray ings = info.getJSONArray("ingredients");
 			ingredients = new ArrayList<String>();
 			if (ings != null){
 				for (int i=0;i<ings.length();i++){ 
-					ingredients.add(ings.getString(i)); 
+					ingredients.add(StringEscapeUtils.unescapeHtml4(ings.getString(i))); 
 				}
 			}
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
