@@ -12,7 +12,6 @@
         android:layout_marginRight="20px"
         android:layout_marginTop="5px"
         android:src="@drawable/default_image" >
-        />
     </ImageView>
     
     <LinearLayout

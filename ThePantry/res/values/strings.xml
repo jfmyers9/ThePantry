@@ -45,12 +45,9 @@
 
     <string name="title_activity_menu">MenuActivity</string>
     <string name="title_activity_navigation">NavigationActivity</string>
-<<<<<<< HEAD
     <string name="InventoryAddTitle">Add Ingredients</string>
     <string name="InventoryTitle">Your Inventory</string>
-=======
-    <string name="title_activity_nav_menu_fragment">NavMenuFragment</string>
 
->>>>>>> 1dc40fe73d7c4521bbb3b6c351f838a1e52a93e3
+    <string name="title_activity_nav_menu_fragment">NavMenuFragment</string>
 
 </resources>
