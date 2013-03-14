@@ -9,13 +9,124 @@ package cs169.project.thepantry;
 
 public final class R {
     public static final class array {
-        public static final int ingredient_type_array=0x7f070000;
-        public static final int pref_example_list_titles=0x7f070001;
-        public static final int pref_example_list_values=0x7f070002;
-        public static final int pref_sync_frequency_titles=0x7f070003;
-        public static final int pref_sync_frequency_values=0x7f070004;
+        public static final int ingredient_type_array=0x7f080000;
+        public static final int pref_example_list_titles=0x7f080001;
+        public static final int pref_example_list_values=0x7f080002;
+        public static final int pref_sync_frequency_titles=0x7f080003;
+        public static final int pref_sync_frequency_values=0x7f080004;
     }
     public static final class attr {
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int behindOffset=0x7f010003;
+        /** <p>Must be a floating point value, such as "<code>1.2</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int behindScrollScale=0x7f010005;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int behindWidth=0x7f010004;
+        /** <p>Must be a floating point value, such as "<code>1.2</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int fadeDegree=0x7f01000b;
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int fadeEnabled=0x7f01000a;
+        /** <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>left</code></td><td>0</td><td></td></tr>
+<tr><td><code>right</code></td><td>1</td><td></td></tr>
+</table>
+         */
+        public static final int mode=0x7f010000;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int selectorDrawable=0x7f01000d;
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int selectorEnabled=0x7f01000c;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int shadowDrawable=0x7f010008;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int shadowWidth=0x7f010009;
+        /** <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>margin</code></td><td>0</td><td></td></tr>
+<tr><td><code>fullscreen</code></td><td>1</td><td></td></tr>
+</table>
+         */
+        public static final int touchModeAbove=0x7f010006;
+        /** <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>margin</code></td><td>0</td><td></td></tr>
+<tr><td><code>fullscreen</code></td><td>1</td><td></td></tr>
+</table>
+         */
+        public static final int touchModeBehind=0x7f010007;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int viewAbove=0x7f010001;
+        /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+         */
+        public static final int viewBehind=0x7f010002;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -24,123 +135,140 @@ public final class R {
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     
          */
-        public static final int activity_horizontal_margin=0x7f050000;
-        public static final int activity_vertical_margin=0x7f050001;
+        public static final int activity_horizontal_margin=0x7f060000;
+        public static final int activity_vertical_margin=0x7f060001;
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_forgot_password=0x7f0a0015;
-        public static final int action_settings=0x7f0a0014;
-        public static final int addtoshop=0x7f0a000b;
-        public static final int cooked=0x7f0a000a;
-        public static final int directions=0x7f0a000d;
-        public static final int email=0x7f0a0003;
-        public static final int favorite=0x7f0a0009;
-        public static final int ingredList=0x7f0a000c;
-        public static final int ingredient_types=0x7f0a0010;
-        public static final int login=0x7f0a0005;
-        public static final int login_form=0x7f0a0002;
-        public static final int login_status=0x7f0a0000;
-        public static final int login_status_message=0x7f0a0001;
-        public static final int password=0x7f0a0004;
-        public static final int recipeName=0x7f0a0008;
-        public static final int recipePic=0x7f0a0007;
-        public static final int setup_inventory_button=0x7f0a0012;
-        public static final int shopping_list_button=0x7f0a000f;
-        public static final int shopping_list_text=0x7f0a000e;
-        public static final int sign_in_button=0x7f0a0006;
-        public static final int skip_button=0x7f0a0013;
-        public static final int title_activity_home_page=0x7f0a0016;
-        public static final int title_activity_inventory=0x7f0a0017;
-        public static final int title_activity_login=0x7f0a0018;
-        public static final int title_activity_logout=0x7f0a0019;
-        public static final int title_activity_register=0x7f0a001a;
-        public static final int welcome_text=0x7f0a0011;
+        public static final int action_forgot_password=0x7f05001e;
+        public static final int action_settings=0x7f05001d;
+        public static final int addtoshop=0x7f050011;
+        public static final int cooked=0x7f050010;
+        public static final int directions=0x7f050013;
+        public static final int email=0x7f050009;
+        public static final int favorite=0x7f05000f;
+        public static final int fullscreen=0x7f050003;
+        public static final int ingred=0x7f05001b;
+        public static final int ingredList=0x7f050012;
+        public static final int ingredient_types=0x7f050017;
+        public static final int left=0x7f050000;
+        public static final int login=0x7f05000b;
+        public static final int login_form=0x7f050008;
+        public static final int login_status=0x7f050006;
+        public static final int login_status_message=0x7f050007;
+        public static final int margin=0x7f050002;
+        public static final int password=0x7f05000a;
+        public static final int recipeName=0x7f05000e;
+        public static final int recipePic=0x7f05000d;
+        public static final int results=0x7f050014;
+        public static final int right=0x7f050001;
+        public static final int search_text=0x7f050005;
+        public static final int selected_view=0x7f050004;
+        public static final int setup_inventory_button=0x7f050019;
+        public static final int shopping_list_button=0x7f050016;
+        public static final int shopping_list_text=0x7f050015;
+        public static final int sign_in_button=0x7f05000c;
+        public static final int skip_button=0x7f05001a;
+        public static final int slidingmenumain=0x7f05001c;
+        public static final int title_activity_home_page=0x7f05001f;
+        public static final int title_activity_inventory=0x7f050020;
+        public static final int title_activity_login=0x7f050021;
+        public static final int title_activity_logout=0x7f050022;
+        public static final int title_activity_register=0x7f050023;
+        public static final int welcome_text=0x7f050018;
     }
     public static final class layout {
         public static final int activity_home_page=0x7f030000;
         public static final int activity_inventory=0x7f030001;
         public static final int activity_inventory_add=0x7f030002;
         public static final int activity_login=0x7f030003;
-        public static final int activity_recipe=0x7f030004;
-        public static final int activity_search_results=0x7f030005;
-        public static final int activity_shopping_list=0x7f030006;
-        public static final int activity_tutorial=0x7f030007;
+        public static final int activity_navigation=0x7f030004;
+        public static final int activity_recipe=0x7f030005;
+        public static final int activity_search_results=0x7f030006;
+        public static final int activity_shopping_list=0x7f030007;
+        public static final int activity_tutorial=0x7f030008;
+        public static final int list_ingredients=0x7f030009;
+        public static final int slidingmenumain=0x7f03000a;
     }
     public static final class menu {
-        public static final int home_page=0x7f090000;
-        public static final int inventory=0x7f090001;
-        public static final int inventory_add=0x7f090002;
-        public static final int login=0x7f090003;
-        public static final int recipe=0x7f090004;
-        public static final int search_results=0x7f090005;
-        public static final int shopping_list=0x7f090006;
-        public static final int tutorial=0x7f090007;
+        public static final int home_page=0x7f0a0000;
+        public static final int inventory=0x7f0a0001;
+        public static final int inventory_add=0x7f0a0002;
+        public static final int login=0x7f0a0003;
+        public static final int navigation=0x7f0a0004;
+        public static final int recipe=0x7f0a0005;
+        public static final int search_results=0x7f0a0006;
+        public static final int shopping_list=0x7f0a0007;
+        public static final int tutorial=0x7f0a0008;
     }
     public static final class string {
-        public static final int action_forgot_password=0x7f06001f;
-        public static final int action_home_page=0x7f06000c;
-        public static final int action_inventory=0x7f06000a;
-        public static final int action_login=0x7f06000d;
-        public static final int action_logout=0x7f06000e;
-        public static final int action_register=0x7f06000f;
-        public static final int action_settings=0x7f060002;
-        public static final int action_shopping_list=0x7f06000b;
-        public static final int action_sign_in_register=0x7f06001d;
-        public static final int action_sign_in_short=0x7f06001e;
-        public static final int add_item=0x7f060010;
-        public static final int add_shopping_list_ingredient=0x7f060012;
-        public static final int add_to_shopping_list=0x7f060013;
-        public static final int app_name=0x7f060000;
-        public static final int error_field_required=0x7f060024;
-        public static final int error_incorrect_password=0x7f060023;
-        public static final int error_invalid_email=0x7f060021;
-        public static final int error_invalid_password=0x7f060022;
-        public static final int hello_world=0x7f060003;
-        public static final int ingredient_types=0x7f060011;
-        public static final int ingredientsTable=0x7f060019;
-        public static final int inventoryTable=0x7f060017;
-        public static final int login_progress_signing_in=0x7f060020;
-        public static final int pref_default_display_name=0x7f06002a;
-        public static final int pref_description_social_recommendations=0x7f060028;
+        public static final int action_forgot_password=0x7f070023;
+        public static final int action_home_page=0x7f07000c;
+        public static final int action_inventory=0x7f07000a;
+        public static final int action_login=0x7f07000d;
+        public static final int action_logout=0x7f07000e;
+        public static final int action_register=0x7f07000f;
+        public static final int action_settings=0x7f070002;
+        public static final int action_shopping_list=0x7f07000b;
+        public static final int action_sign_in_register=0x7f070021;
+        public static final int action_sign_in_short=0x7f070022;
+        public static final int add_item=0x7f070010;
+        public static final int add_shopping_list_ingredient=0x7f070012;
+        public static final int add_to_shopping_list=0x7f070013;
+        public static final int app_name=0x7f070000;
+        public static final int button_search=0x7f07001b;
+        public static final int enter_search_query=0x7f07001a;
+        public static final int error_field_required=0x7f070028;
+        public static final int error_incorrect_password=0x7f070027;
+        public static final int error_invalid_email=0x7f070025;
+        public static final int error_invalid_password=0x7f070026;
+        public static final int hello_world=0x7f070003;
+        public static final int ingredient_types=0x7f070011;
+        public static final int ingredientsTable=0x7f070019;
+        public static final int inventoryTable=0x7f070017;
+        public static final int login_progress_signing_in=0x7f070024;
+        public static final int pref_default_display_name=0x7f07002e;
+        public static final int pref_description_social_recommendations=0x7f07002c;
         /**  Example settings for Data & Sync 
          */
-        public static final int pref_header_data_sync=0x7f06002c;
+        public static final int pref_header_data_sync=0x7f070030;
         /**  Strings related to Settings 
  Example General settings 
          */
-        public static final int pref_header_general=0x7f060026;
+        public static final int pref_header_general=0x7f07002a;
         /**  Example settings for Notifications 
          */
-        public static final int pref_header_notifications=0x7f06002f;
-        public static final int pref_ringtone_silent=0x7f060032;
-        public static final int pref_title_add_friends_to_messages=0x7f06002b;
-        public static final int pref_title_display_name=0x7f060029;
-        public static final int pref_title_new_message_notifications=0x7f060030;
-        public static final int pref_title_ringtone=0x7f060031;
-        public static final int pref_title_social_recommendations=0x7f060027;
-        public static final int pref_title_sync_frequency=0x7f06002d;
-        public static final int pref_title_system_sync_settings=0x7f06002e;
-        public static final int pref_title_vibrate=0x7f060033;
+        public static final int pref_header_notifications=0x7f070033;
+        public static final int pref_ringtone_silent=0x7f070036;
+        public static final int pref_title_add_friends_to_messages=0x7f07002f;
+        public static final int pref_title_display_name=0x7f07002d;
+        public static final int pref_title_new_message_notifications=0x7f070034;
+        public static final int pref_title_ringtone=0x7f070035;
+        public static final int pref_title_social_recommendations=0x7f07002b;
+        public static final int pref_title_sync_frequency=0x7f070031;
+        public static final int pref_title_system_sync_settings=0x7f070032;
+        public static final int pref_title_vibrate=0x7f070037;
         /**  Strings related to login 
          */
-        public static final int prompt_email=0x7f06001b;
-        public static final int prompt_password=0x7f06001c;
-        public static final int setup_inventory=0x7f060015;
-        public static final int shoppingListTable=0x7f060018;
-        public static final int skip_text=0x7f060016;
-        public static final int title_activity_home_page=0x7f060005;
-        public static final int title_activity_inventory=0x7f060004;
-        public static final int title_activity_inventory_add=0x7f060008;
-        public static final int title_activity_login=0x7f06001a;
-        public static final int title_activity_recipe=0x7f060009;
-        public static final int title_activity_search_results=0x7f060007;
-        public static final int title_activity_settings=0x7f060025;
-        public static final int title_activity_shopping_list=0x7f060006;
-        public static final int title_activity_tutorial=0x7f060001;
-        public static final int tutorial_title=0x7f060014;
+        public static final int prompt_email=0x7f07001f;
+        public static final int prompt_password=0x7f070020;
+        public static final int setup_inventory=0x7f070015;
+        public static final int shoppingListTable=0x7f070018;
+        public static final int skip_text=0x7f070016;
+        public static final int title_activity_home_page=0x7f070005;
+        public static final int title_activity_inventory=0x7f070004;
+        public static final int title_activity_inventory_add=0x7f070008;
+        public static final int title_activity_login=0x7f07001e;
+        public static final int title_activity_menu=0x7f07001c;
+        public static final int title_activity_navigation=0x7f07001d;
+        public static final int title_activity_recipe=0x7f070009;
+        public static final int title_activity_search_results=0x7f070007;
+        public static final int title_activity_settings=0x7f070029;
+        public static final int title_activity_shopping_list=0x7f070006;
+        public static final int title_activity_tutorial=0x7f070001;
+        public static final int tutorial_title=0x7f070014;
     }
     public static final class style {
         /** 
@@ -164,12 +292,12 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f080000;
+        public static final int AppBaseTheme=0x7f090000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f080001;
-        public static final int LoginFormContainer=0x7f080002;
+        public static final int AppTheme=0x7f090001;
+        public static final int LoginFormContainer=0x7f090002;
     }
     public static final class xml {
         public static final int pref_data_sync=0x7f040000;
@@ -177,4 +305,243 @@ public final class R {
         public static final int pref_headers=0x7f040002;
         public static final int pref_notification=0x7f040003;
     }
+    public static final class styleable {
+        /** Attributes that can be used with a SlidingMenu.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #SlidingMenu_behindOffset cs169.project.thepantry:behindOffset}</code></td><td></td></tr>
+           <tr><td><code>{@link #SlidingMenu_behindScrollScale cs169.project.thepantry:behindScrollScale}</code></td><td></td></tr>
+           <tr><td><code>{@link #SlidingMenu_behindWidth cs169.project.thepantry:behindWidth}</code></td><td></td></tr>
+           <tr><td><code>{@link #SlidingMenu_fadeDegree cs169.project.thepantry:fadeDegree}</code></td><td></td></tr>
+           <tr><td><code>{@link #SlidingMenu_fadeEnabled cs169.project.thepantry:fadeEnabled}</code></td><td></td></tr>
+           <tr><td><code>{@link #SlidingMenu_mode cs169.project.thepantry:mode}</code></td><td></td></tr>
+           <tr><td><code>{@link #SlidingMenu_selectorDrawable cs169.project.thepantry:selectorDrawable}</code></td><td></td></tr>
+           <tr><td><code>{@link #SlidingMenu_selectorEnabled cs169.project.thepantry:selectorEnabled}</code></td><td></td></tr>
+           <tr><td><code>{@link #SlidingMenu_shadowDrawable cs169.project.thepantry:shadowDrawable}</code></td><td></td></tr>
+           <tr><td><code>{@link #SlidingMenu_shadowWidth cs169.project.thepantry:shadowWidth}</code></td><td></td></tr>
+           <tr><td><code>{@link #SlidingMenu_touchModeAbove cs169.project.thepantry:touchModeAbove}</code></td><td></td></tr>
+           <tr><td><code>{@link #SlidingMenu_touchModeBehind cs169.project.thepantry:touchModeBehind}</code></td><td></td></tr>
+           <tr><td><code>{@link #SlidingMenu_viewAbove cs169.project.thepantry:viewAbove}</code></td><td></td></tr>
+           <tr><td><code>{@link #SlidingMenu_viewBehind cs169.project.thepantry:viewBehind}</code></td><td></td></tr>
+           </table>
+           @see #SlidingMenu_behindOffset
+           @see #SlidingMenu_behindScrollScale
+           @see #SlidingMenu_behindWidth
+           @see #SlidingMenu_fadeDegree
+           @see #SlidingMenu_fadeEnabled
+           @see #SlidingMenu_mode
+           @see #SlidingMenu_selectorDrawable
+           @see #SlidingMenu_selectorEnabled
+           @see #SlidingMenu_shadowDrawable
+           @see #SlidingMenu_shadowWidth
+           @see #SlidingMenu_touchModeAbove
+           @see #SlidingMenu_touchModeBehind
+           @see #SlidingMenu_viewAbove
+           @see #SlidingMenu_viewBehind
+         */
+        public static final int[] SlidingMenu = {
+            0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003,
+            0x7f010004, 0x7f010005, 0x7f010006, 0x7f010007,
+            0x7f010008, 0x7f010009, 0x7f01000a, 0x7f01000b,
+            0x7f01000c, 0x7f01000d
+        };
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#behindOffset}
+          attribute's value can be found in the {@link #SlidingMenu} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:behindOffset
+        */
+        public static final int SlidingMenu_behindOffset = 3;
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#behindScrollScale}
+          attribute's value can be found in the {@link #SlidingMenu} array.
+
+
+          <p>Must be a floating point value, such as "<code>1.2</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:behindScrollScale
+        */
+        public static final int SlidingMenu_behindScrollScale = 5;
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#behindWidth}
+          attribute's value can be found in the {@link #SlidingMenu} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:behindWidth
+        */
+        public static final int SlidingMenu_behindWidth = 4;
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#fadeDegree}
+          attribute's value can be found in the {@link #SlidingMenu} array.
+
+
+          <p>Must be a floating point value, such as "<code>1.2</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:fadeDegree
+        */
+        public static final int SlidingMenu_fadeDegree = 11;
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#fadeEnabled}
+          attribute's value can be found in the {@link #SlidingMenu} array.
+
+
+          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:fadeEnabled
+        */
+        public static final int SlidingMenu_fadeEnabled = 10;
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#mode}
+          attribute's value can be found in the {@link #SlidingMenu} array.
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>left</code></td><td>0</td><td></td></tr>
+<tr><td><code>right</code></td><td>1</td><td></td></tr>
+</table>
+          @attr name android:mode
+        */
+        public static final int SlidingMenu_mode = 0;
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#selectorDrawable}
+          attribute's value can be found in the {@link #SlidingMenu} array.
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          @attr name android:selectorDrawable
+        */
+        public static final int SlidingMenu_selectorDrawable = 13;
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#selectorEnabled}
+          attribute's value can be found in the {@link #SlidingMenu} array.
+
+
+          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:selectorEnabled
+        */
+        public static final int SlidingMenu_selectorEnabled = 12;
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#shadowDrawable}
+          attribute's value can be found in the {@link #SlidingMenu} array.
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          @attr name android:shadowDrawable
+        */
+        public static final int SlidingMenu_shadowDrawable = 8;
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#shadowWidth}
+          attribute's value can be found in the {@link #SlidingMenu} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:shadowWidth
+        */
+        public static final int SlidingMenu_shadowWidth = 9;
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#touchModeAbove}
+          attribute's value can be found in the {@link #SlidingMenu} array.
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>margin</code></td><td>0</td><td></td></tr>
+<tr><td><code>fullscreen</code></td><td>1</td><td></td></tr>
+</table>
+          @attr name android:touchModeAbove
+        */
+        public static final int SlidingMenu_touchModeAbove = 6;
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#touchModeBehind}
+          attribute's value can be found in the {@link #SlidingMenu} array.
+
+
+          <p>Must be one of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>margin</code></td><td>0</td><td></td></tr>
+<tr><td><code>fullscreen</code></td><td>1</td><td></td></tr>
+</table>
+          @attr name android:touchModeBehind
+        */
+        public static final int SlidingMenu_touchModeBehind = 7;
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#viewAbove}
+          attribute's value can be found in the {@link #SlidingMenu} array.
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          @attr name android:viewAbove
+        */
+        public static final int SlidingMenu_viewAbove = 1;
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#viewBehind}
+          attribute's value can be found in the {@link #SlidingMenu} array.
+
+
+          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
+or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
+          @attr name android:viewBehind
+        */
+        public static final int SlidingMenu_viewBehind = 2;
+    };
 }

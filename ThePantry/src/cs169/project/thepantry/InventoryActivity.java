@@ -7,11 +7,12 @@ import android.app.Activity;
 import android.view.Menu;
 
 public class InventoryActivity extends Activity {
-	final String table = getString(R.string.inventoryTable);
+	private String TABLE_NAME;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		TABLE_NAME = getString(R.string.inventoryTable);
 		setContentView(R.layout.activity_inventory);
 		
 		//TODO: decide how to display categories -- spinner or some other way
