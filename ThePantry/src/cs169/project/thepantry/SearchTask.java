@@ -1,19 +1,28 @@
 package cs169.project.thepantry;
 
+import java.net.URLEncoder;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONObject;
 
+import android.app.Application;
+import android.content.Intent;
 import android.os.AsyncTask;
 
-/* How to use SearchTask:
- * new SearchTask().execute(String request_type, String query)
+/* How to use SearchTask: (<--click the plus button on eclipse)
+ * new SearchTask(getApplication()).execute(String request_type, String query)
  * if request_type is "recipe", SearchTask will return the recipe with query = recipe_ID
  * if request_type is "search", SearchTask will return the result of searching Yummly with query
  * 
@@ -37,7 +46,14 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
 	String URL_GET     = URL_BASE + "/recipe/";
     String URL_SEARCH  = URL_BASE + "/recipes";
     String URL_META    = URL_BASE + "/metadata";
+    
+    Application app; //application that called the task
+    String type = "";
 
+    public SearchTask(Application app) {
+    	this.app = app;
+    }
+    
     // TODO onPreExecute is called by the UI thread before execution to show a progress bar or something in the UI
 	//protected void onPreExecute() {
 	//	
@@ -60,8 +76,9 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
 		//the first string is the type of request, either "recipe" (get recipe) or "search" (search for recipe)
 		//the second string passed in is either the recipe ID or the search query q in String format
 		//this can be extended to multiple strings to search for individual ingredients, allergies, cuisines, etc.
-		String type = strings[0];
+		type = strings[0];
 		String q = strings[1];
+		
     	try {
     		// generate the correct URL for the get request
     		// create http parameters for the get request that will be appended to the URL in the request
@@ -71,16 +88,22 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
     			getURL = URL_GET + q;
     		}
     		else if (type == "search") {
-    			httpParams.setParameter("q", q);
+    			//parse query for mulitple ingredients separated by commas
+    			//right now the first thing is treated as a normal search
     			getURL = URL_SEARCH;
+    			String[] qs = q.replaceAll(",\\s", ",").split(",");
+    			getURL += "?q=" + URLEncoder.encode(qs[0], "UTF-8");
+    			for (int i=1; i<qs.length; i++) {
+    				getURL += "&allowedIngredient%5B%5D=" + URLEncoder.encode(qs[i], "UTF-8");
+    			}
     		}
     		else {
     			// TODO throw invalid request exception?
     			getURL = "";
     		}
-    		
     		//create an http connection and client
     		//set timeout for connection and socket
+    		System.out.println(getURL);
         	HttpConnectionParams.setConnectionTimeout(httpParams, TIMEOUT_MILLISEC);
         	HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_MILLISEC);
         	HttpClient client = new DefaultHttpClient(httpParams);
@@ -102,9 +125,9 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
             	result = new SearchResult(jsonResponse);
             } else {
             	// TODO invalid request
+            	System.out.println("typeisbad");
             	result = new Recipe(new JSONObject());
             }
-            
             return result;
             
     	} catch (Exception e) {
@@ -118,10 +141,19 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
 	// TODO onPostExecute(Result) is invoked on the UI thread after the background computation finishes. 
 	//The result of the background computation is passed to this step as a parameter.
 //	@Override
-/*	protected void onPostExecute(Storage result) {
-		 // create an intent with the Storage object, this is the format:
-		 // Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
-		 // intent.putExtra(field, message);
-		 // startActivity(intent);
-    }*/
+	protected void onPostExecute(Storage result) {
+		 // create an intent with the Storage object
+		if (type == "recipe") {
+			Intent intent = new Intent(app.getApplicationContext(), RecipeActivity.class);
+			intent.putExtra("result", result);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			app.startActivity(intent);
+		} else if (type == "search") {
+			Intent intent = new Intent(app.getApplicationContext(), SearchResultsActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.putExtra("result", result);
+			app.startActivity(intent);
+		}
+		 
+    }
 }

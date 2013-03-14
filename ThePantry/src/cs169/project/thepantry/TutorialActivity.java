@@ -17,7 +17,7 @@ public class TutorialActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		SharedPreferences opened = PreferenceManager.getDefaultSharedPreferences(this);
-		if (opened.getBoolean(OPENED, false) == false) {
+		if (opened.getBoolean(OPENED, false) == true) {
 			SharedPreferences.Editor editor = opened.edit();
 			editor.putBoolean(OPENED, true);
 			editor.commit();
@@ -26,6 +26,7 @@ public class TutorialActivity extends Activity {
 			Context context = getApplicationContext();
 			Intent intent = new Intent(context, HomePageActivity.class);
 			startActivity(intent);
+			finish();
 		}
 	}
 
@@ -38,7 +39,7 @@ public class TutorialActivity extends Activity {
 	
 	public void setupInventory(View view) {
 		Context context = getApplicationContext();
-		Intent intent = new Intent(context, InventoryAddActivity.class);
+		Intent intent = new Intent(context, InventoryActivity.class);
 		startActivity(intent);
 	}
 	
@@ -46,6 +47,7 @@ public class TutorialActivity extends Activity {
 		Context context = getApplicationContext();
 		Intent intent = new Intent(context, HomePageActivity.class);
 		startActivity(intent);
+		finish();
 	}
 
 }
