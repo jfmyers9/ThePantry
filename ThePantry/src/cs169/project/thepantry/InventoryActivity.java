@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.TextView;
 import cs169.project.thepantry.ThePantryContract.Ingredients;
 
 public class InventoryActivity extends ExpandableListActivity implements OnChildClickListener {
@@ -23,8 +24,13 @@ public class InventoryActivity extends ExpandableListActivity implements OnChild
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setTitle(getString(R.string.InventoryTitle));
-		table = Ingredients.TABLE_NAME; // This needs to change to Inventory once I figure out inheritance with this
-		makeList();
+		 // This needs to change to Inventory once I figure out inheritance with this	
+		
+		if (this instanceof InventoryActivity) {
+			table = Inventory.TABLE_NAME;
+			makeList(table);
+		}
+		
 	}
 	
 
@@ -36,7 +42,7 @@ public class InventoryActivity extends ExpandableListActivity implements OnChild
 	}
 	
 	public void makeList() {
-		ArrayList<String> groupItem = getTypes();
+		ArrayList<String> groupItem = getTypes(table);
 
 		ArrayList<Object> childItem = new ArrayList<Object>();
 		for (int i = 0; i < groupItem.size(); i ++) {
@@ -57,8 +63,7 @@ public class InventoryActivity extends ExpandableListActivity implements OnChild
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 				CheckBox checkBox = (CheckBox) v.findViewById(R.id.textView1);
 				checkBox.toggle();
-
-				//Call checked function here
+				dm.checked(table, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
 				return true;
 			}
 		});
@@ -73,7 +78,7 @@ public class InventoryActivity extends ExpandableListActivity implements OnChild
 	}
 
 	/** Display buttons with items of specified type */
-	public ArrayList<String> getTypes() {
+	public ArrayList<String> getTypes(String table) {
 		dm = new DatabaseModel(this);
 		Cursor types = dm.findAllTypes(table);
 		ArrayList<String> result = new ArrayList<String>();
