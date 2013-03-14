@@ -44,11 +44,6 @@
         <activity
             android:name="cs169.project.thepantry.InventoryAddActivity"
             android:label="@string/title_activity_inventory_add" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="cs169.project.thepantry.RecipeActivity"
@@ -74,6 +69,10 @@
         <activity
             android:name="cs169.project.thepantry.NavMenuFragment"
             android:label="@string/title_activity_nav_menu_fragment" >
+        </activity>
+        <activity
+            android:name="cs169.project.thepantry.BasicMenuActivity"
+            android:label="@string/title_activity_basic_menu" >
         </activity>
     </application>
 

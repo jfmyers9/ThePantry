@@ -41,6 +41,7 @@
     <string name="ingredientsTable">ingredients</string>
     <string name="enter_search_query">Enter search query...</string>
     <string name="button_search">Search</string>
+
     <drawable name="default_image">#000000</drawable>
 
     <string name="title_activity_menu">MenuActivity</string>
@@ -48,6 +49,6 @@
     <string name="InventoryAddTitle">Add Ingredients</string>
     <string name="InventoryTitle">Your Inventory</string>
     <string name="title_activity_nav_menu_fragment">NavMenuFragment</string>
-
+    <string name="title_activity_basic_menu">BasicMenuActivity</string>
 
 </resources>

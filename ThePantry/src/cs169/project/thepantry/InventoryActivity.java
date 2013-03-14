@@ -14,7 +14,6 @@ import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import cs169.project.thepantry.ThePantryContract.Ingredients;
-import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class InventoryActivity extends ExpandableListActivity implements OnChildClickListener {
 	String table;
