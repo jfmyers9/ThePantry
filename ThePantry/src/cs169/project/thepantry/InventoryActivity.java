@@ -15,6 +15,7 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 import cs169.project.thepantry.ThePantryContract.Ingredients;
+import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class InventoryActivity extends ExpandableListActivity implements OnChildClickListener {
 	String table;
@@ -41,8 +42,8 @@ public class InventoryActivity extends ExpandableListActivity implements OnChild
 		return true;
 	}
 	
-	public void makeList() {
-		ArrayList<String> groupItem = getTypes(table);
+	public void makeList(String s) {
+		ArrayList<String> groupItem = getTypes(s);
 
 		ArrayList<Object> childItem = new ArrayList<Object>();
 		for (int i = 0; i < groupItem.size(); i ++) {
@@ -113,7 +114,7 @@ public class InventoryActivity extends ExpandableListActivity implements OnChild
 	/** Marks items as checked in table of current activity */
 	public void checkItem(String item) {
 		dm = new DatabaseModel(this);
-		boolean success = dm.checked(table, item);
+		boolean success = dm.checked(table, item, true);
 		if (success) {
 			// do something?
 		} else {
