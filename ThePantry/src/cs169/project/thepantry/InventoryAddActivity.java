@@ -23,7 +23,7 @@ public class InventoryAddActivity extends InventoryActivity {
 		super.onCreate(savedInstanceState);
 		setTitle(getString(R.string.InventoryAddTitle));
 		table = Ingredients.TABLE_NAME;
-		makeList();
+		makeList(table);
 		
 		// Only should show a back button on action bar?	
 	}
@@ -36,8 +36,8 @@ public class InventoryAddActivity extends InventoryActivity {
 	}
 	
 	@Override
-	public void makeList() {
-		ArrayList<String> groupItem = getTypes(table);
+	public void makeList(String s) {
+		ArrayList<String> groupItem = getTypes(s);
 
 		ArrayList<Object> childItem = new ArrayList<Object>();
 		for (int i = 0; i < groupItem.size(); i ++) {
