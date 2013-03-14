@@ -35,7 +35,8 @@ public class NavMenuFragment extends ListFragment {
 			intent = new Intent(context, HomePageActivity.class);
 			break;
 		case 1:
-			intent = new Intent(context, InventoryActivity.class);
+			InventoryActivity invAct = new InventoryActivity();
+			intent = new Intent(context, invAct.getClass());
 			break;
 		case 2:
 			intent = new Intent(context, ShoppingListActivity.class);
