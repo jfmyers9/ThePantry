@@ -9,15 +9,15 @@
     android:paddingLeft="40dp"
     tools:context=".MainActivity" >
 
-    <CheckedTextView
+    <CheckBox
     	android:id="@+id/textView1"
         android:layout_width="wrap_content"
        	android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:text="@string/hello_world"
+       	android:text="@string/hello_world"
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple" />
+        android:focusable="false" />
 
 </LinearLayout>

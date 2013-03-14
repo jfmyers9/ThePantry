@@ -2,20 +2,19 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-import cs169.project.thepantry.ThePantryContract.Ingredients;
-import cs169.project.thepantry.ThePantryContract.Inventory;
-import android.os.Bundle;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ExpandableListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
-import android.widget.ArrayAdapter;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
+import cs169.project.thepantry.ThePantryContract.Ingredients;
+import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class InventoryActivity extends ExpandableListActivity implements OnChildClickListener {
 	String table;
@@ -24,21 +23,46 @@ public class InventoryActivity extends ExpandableListActivity implements OnChild
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_inventory);
-		
-		table = Inventory.TABLE_NAME;
-		
-		dm = new DatabaseModel(this);
-		Cursor types = dm.findAllTypes(table);
-		//TODO: decide how to display categories -- spinner or some other way
-
+		setTitle(getString(R.string.InventoryTitle));
+		table = Ingredients.TABLE_NAME; // This needs to change to Inventory once I figure out inheritance with this
+		makeList();
 	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.inventory, menu);
 		return true;
+	}
+	
+	public void makeList() {
+		ArrayList<String> groupItem = getTypes();
+
+		ArrayList<Object> childItem = new ArrayList<Object>();
+		for (int i = 0; i < groupItem.size(); i ++) {
+			ArrayList<String> child = getItems(groupItem.get(i));
+			childItem.add(child);
+		}
+
+		ExpandableListView expandbleLis = getExpandableListView();
+		expandbleLis.setDividerHeight(2);
+		expandbleLis.setGroupIndicator(null);
+		expandbleLis.setClickable(true);
+
+		NewAdapter mNewAdapter = new NewAdapter(groupItem, childItem);
+		mNewAdapter.setInflater((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),this);
+		getExpandableListView().setAdapter(mNewAdapter);
+		expandbleLis.setOnChildClickListener(new OnChildClickListener() {
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+				CheckBox checkBox = (CheckBox) v.findViewById(R.id.textView1);
+				checkBox.toggle();
+
+				//Call checked function here
+				return true;
+			}
+		});
 	}
 	
 	/** Takes you to InventoryAdd Activity */
@@ -50,16 +74,36 @@ public class InventoryActivity extends ExpandableListActivity implements OnChild
 	}
 
 	/** Display buttons with items of specified type */
-	public void showItems(String type) {
+	public ArrayList<String> getTypes() {
+		dm = new DatabaseModel(this);
+		Cursor types = dm.findAllTypes(table);
+		ArrayList<String> result = new ArrayList<String>();
+		if (types.moveToFirst()){
+			while(!types.isAfterLast()){
+				String data = types.getString(0);
+				result.add(data);
+				types.moveToNext();
+			}
+		}
+		types.close();
+		return result;
+	}
+	
+	/** Display buttons with items of specified type */
+	public ArrayList<String> getItems(String type) {
 		dm = new DatabaseModel(this);
 		Cursor items = dm.findTypeItems(Ingredients.TABLE_NAME, type);
 		
-		System.out.println(items.getString(0));
-		//System.out.println(items.getString(1));
-		//System.out.println(items.getString(2));
-		//System.out.println(items.getString(3));
-		//System.out.println(items.getString(4));
-		// Call function to display buttons of 
+		ArrayList<String> result = new ArrayList<String>();
+		if (items.moveToFirst()){
+			while(!items.isAfterLast()){
+				String data = items.getString(0);
+				result.add(data);
+				items.moveToNext();
+			}
+		}
+		items.close();
+		return result;
 	}
 	
 	/** Marks items as checked in table of current activity */

@@ -49,16 +49,10 @@ public class NewAdapter extends BaseExpandableListAdapter {
 		tempChild = (ArrayList<String>) ChildItem.get(groupPosition);
 		TextView text = null;
 		if (convertView == null) {
-			convertView = minflater.inflate(R.layout.child_row, null); //child_row amy will make in layout
+			convertView = minflater.inflate(R.layout.child_row, null); 
 		}
-		text = (TextView) convertView.findViewById(R.id.textView1); //textView1 will name id in layout
+		text = (TextView) convertView.findViewById(R.id.textView1); 
 		text.setText(tempChild.get(childPosition));
-		convertView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) { //THIS WILL PROBABLY NEED TO BE CHANGED ONCE WE GET THE EXPANDABLE WORKING
-				Toast.makeText(activity, tempChild.get(childPosition), Toast.LENGTH_SHORT).show();
-			}
-		});
 		return convertView;
 	}
 

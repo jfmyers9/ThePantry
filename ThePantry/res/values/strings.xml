@@ -43,5 +43,7 @@
     <string name="button_search">Search</string>
     <string name="title_activity_menu">MenuActivity</string>
     <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="InventoryAddTitle">Add Ingredients</string>
+    <string name="InventoryTitle">Your Inventory</string>
 
 </resources>
