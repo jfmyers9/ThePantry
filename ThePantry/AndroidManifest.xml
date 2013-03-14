@@ -7,8 +7,9 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="17" />
-    
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
 
     <application
         android:allowBackup="true"
@@ -19,8 +20,9 @@
             android:name="cs169.project.thepantry.TutorialActivity"
             android:label="@string/title_activity_tutorial" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -30,10 +32,6 @@
         <activity
             android:name="cs169.project.thepantry.HomePageActivity"
             android:label="@string/title_activity_home_page" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity
             android:name="cs169.project.thepantry.ShoppingListActivity"
@@ -46,6 +44,11 @@
         <activity
             android:name="cs169.project.thepantry.InventoryAddActivity"
             android:label="@string/title_activity_inventory_add" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="cs169.project.thepantry.RecipeActivity"
@@ -59,6 +62,18 @@
             android:name="cs169.project.thepantry.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
+        <activity
+            android:name="cs169.project.thepantry.MenuActivity"
+            android:label="@string/title_activity_menu" >
+        </activity>
+        <activity
+            android:name="cs169.project.thepantry.NavigationActivity"
+            android:label="@string/title_activity_navigation" >
+        </activity>
+        <activity
+            android:name="cs169.project.thepantry.NavMenuFragment"
+            android:label="@string/title_activity_nav_menu_fragment" >
         </activity>
     </application>
 
