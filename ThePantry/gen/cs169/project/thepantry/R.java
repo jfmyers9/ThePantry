@@ -142,15 +142,15 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_forgot_password=0x7f05001e;
-        public static final int action_settings=0x7f05001d;
+        public static final int action_forgot_password=0x7f05001f;
+        public static final int action_settings=0x7f05001e;
         public static final int addtoshop=0x7f050011;
         public static final int cooked=0x7f050010;
         public static final int directions=0x7f050013;
         public static final int email=0x7f050009;
         public static final int favorite=0x7f05000f;
         public static final int fullscreen=0x7f050003;
-        public static final int ingred=0x7f05001b;
+        public static final int ingred=0x7f05001c;
         public static final int ingredList=0x7f050012;
         public static final int ingredient_types=0x7f050017;
         public static final int left=0x7f050000;
@@ -171,12 +171,13 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int shopping_list_text=0x7f050015;
         public static final int sign_in_button=0x7f05000c;
         public static final int skip_button=0x7f05001a;
-        public static final int slidingmenumain=0x7f05001c;
-        public static final int title_activity_home_page=0x7f05001f;
-        public static final int title_activity_inventory=0x7f050020;
-        public static final int title_activity_login=0x7f050021;
-        public static final int title_activity_logout=0x7f050022;
-        public static final int title_activity_register=0x7f050023;
+        public static final int slidingmenumain=0x7f05001d;
+        public static final int textView1=0x7f05001b;
+        public static final int title_activity_home_page=0x7f050020;
+        public static final int title_activity_inventory=0x7f050021;
+        public static final int title_activity_login=0x7f050022;
+        public static final int title_activity_logout=0x7f050023;
+        public static final int title_activity_register=0x7f050024;
         public static final int welcome_text=0x7f050018;
     }
     public static final class layout {
@@ -189,8 +190,10 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int activity_search_results=0x7f030006;
         public static final int activity_shopping_list=0x7f030007;
         public static final int activity_tutorial=0x7f030008;
-        public static final int list_ingredients=0x7f030009;
-        public static final int slidingmenumain=0x7f03000a;
+        public static final int child_row=0x7f030009;
+        public static final int group_row=0x7f03000a;
+        public static final int list_ingredients=0x7f03000b;
+        public static final int slidingmenumain=0x7f03000c;
     }
     public static final class menu {
         public static final int home_page=0x7f0a0000;
