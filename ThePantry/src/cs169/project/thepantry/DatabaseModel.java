@@ -170,24 +170,14 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	/** Finds the current value of checked for the ITEM from the
 	 *  specified TABLE and sets it to the opposite.
 	 *  Returns true on success, false otherwise. */
-	public boolean checked(String table, String item) {
+	public boolean checked(String table, String item, boolean checked) {
 		SQLiteDatabase db = getWritableDatabase();
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		qb.setTables(table);
 		
-		String[] columns = {ThePantryContract.CHECKED};
 		String selection = ThePantryContract.ITEM + " = ?";
 		String[] selectionArgs = {item};
 		
-		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-		c.moveToFirst();
-		
-		// TODO - parse cursor to extract checkval
-		boolean checkval = false;
-		boolean newval = !checkval;
-		
 		ContentValues values = new ContentValues();
-		values.put(ThePantryContract.CHECKED, newval);
+		values.put(ThePantryContract.CHECKED, checked);
 		int rows = db.update(table, values, selection, selectionArgs);
 		// TODO - add some check using rows to see if the update was successful
 		return true;
@@ -211,4 +201,5 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	//TODO - consider creating a private method to construct queries
 	// The code is so repetitive and we could probably get rid of some
 	// of that repetition by making a constructQuery class or something.
+
 }
