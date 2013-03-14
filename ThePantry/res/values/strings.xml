@@ -19,6 +19,7 @@
     <string name="action_register">Sign Up</string>
     <string name="add_item">Add</string>
     <string name="ingredient_types">Ingredient Type</string>
+
     <string-array name="ingredient_type_array">
         <item>Grain</item>
         <item>Produce</item>
@@ -29,6 +30,7 @@
         <item>Drinks</item>
         <item>Other</item>
     </string-array>
+
     <string name="add_shopping_list_ingredient">Enter an ingredient</string>
     <string name="add_to_shopping_list">Add to Shopping List</string>
     <string name="tutorial_title">Welcome To the Pantry!</string>
@@ -39,4 +41,6 @@
     <string name="ingredientsTable">ingredients</string>
     <string name="enter_search_query">Enter search query here...</string>
     <string name="button_search">Search</string>
+    <string name="title_activity_menu">MenuActivity</string>
+
 </resources>
