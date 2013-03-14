@@ -1,17 +1,12 @@
 package cs169.project.thepantry;
 
 import java.net.URLEncoder;
-import java.util.LinkedList;
-import java.util.List;
 
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -49,6 +44,7 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
     
     Application app; //application that called the task
     String type = "";
+    String q = "";
 
     public SearchTask(Application app) {
     	this.app = app;
@@ -76,8 +72,8 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
 		//the first string is the type of request, either "recipe" (get recipe) or "search" (search for recipe)
 		//the second string passed in is either the recipe ID or the search query q in String format
 		//this can be extended to multiple strings to search for individual ingredients, allergies, cuisines, etc.
-		type = strings[0];
-		String q = strings[1];
+		this.type = strings[0];
+		this.q = strings[1];
 		
     	try {
     		// generate the correct URL for the get request
@@ -85,6 +81,7 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
     		String getURL;
         	HttpParams httpParams = new BasicHttpParams();
     		if (type == "recipe") {
+    			//q should be correctly encoded in this case b/c recipe search is only called by us
     			getURL = URL_GET + q;
     		}
     		else if (type == "search") {
@@ -103,7 +100,6 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
     		}
     		//create an http connection and client
     		//set timeout for connection and socket
-    		System.out.println(getURL);
         	HttpConnectionParams.setConnectionTimeout(httpParams, TIMEOUT_MILLISEC);
         	HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_MILLISEC);
         	HttpClient client = new DefaultHttpClient(httpParams);
@@ -125,7 +121,7 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
             	result = new SearchResult(jsonResponse);
             } else {
             	// TODO invalid request
-            	System.out.println("typeisbad");
+            	//System.out.println("typeisbad");
             	result = new Recipe(new JSONObject());
             }
             return result;
@@ -147,11 +143,14 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
 			Intent intent = new Intent(app.getApplicationContext(), RecipeActivity.class);
 			intent.putExtra("result", result);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			app.startActivity(intent);
 		} else if (type == "search") {
 			Intent intent = new Intent(app.getApplicationContext(), SearchResultsActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.putExtra("result", result);
+			intent.putExtra("currentSearch", this.q);
 			app.startActivity(intent);
 		}
 		 

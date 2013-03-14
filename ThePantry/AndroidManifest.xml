@@ -71,6 +71,10 @@
             android:name="cs169.project.thepantry.NavigationActivity"
             android:label="@string/title_activity_navigation" >
         </activity>
+        <activity
+            android:name="cs169.project.thepantry.NavMenuFragment"
+            android:label="@string/title_activity_nav_menu_fragment" >
+        </activity>
     </application>
 
 </manifest>
