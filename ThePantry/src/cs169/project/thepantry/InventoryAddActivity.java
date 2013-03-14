@@ -2,7 +2,6 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -12,8 +11,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 import cs169.project.thepantry.ThePantryContract.Ingredients;
 
 public class InventoryAddActivity extends InventoryActivity {
@@ -26,6 +24,7 @@ public class InventoryAddActivity extends InventoryActivity {
 		setTitle(getString(R.string.InventoryAddTitle));
 		table = Ingredients.TABLE_NAME;
 		makeList();
+		
 		// Only should show a back button on action bar?	
 	}
 	
@@ -36,6 +35,36 @@ public class InventoryAddActivity extends InventoryActivity {
 		return true;
 	}
 	
+	@Override
+	public void makeList() {
+		ArrayList<String> groupItem = getTypes(table);
+
+		ArrayList<Object> childItem = new ArrayList<Object>();
+		for (int i = 0; i < groupItem.size(); i ++) {
+			ArrayList<String> child = getItems(groupItem.get(i));
+			childItem.add(child);
+		}
+
+		ExpandableListView expandbleLis = getExpandableListView();
+		expandbleLis.setDividerHeight(2);
+		expandbleLis.setGroupIndicator(null);
+		expandbleLis.setClickable(true);
+
+		NewAdapter mNewAdapter = new NewAdapter(groupItem, childItem);
+		mNewAdapter.setInflater((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),this);
+		getExpandableListView().setAdapter(mNewAdapter);
+		expandbleLis.setOnChildClickListener(new OnChildClickListener() {
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+				CheckBox checkBox = (CheckBox) v.findViewById(R.id.textView1);
+				checkBox.toggle();
+				dm.checked(table, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
+				return true;
+			}
+		});
+	}
+	
+	@Override
 	/** Same functionality as InventoryActivity search
 	 *  added ability to put it in ingredient table*/
 	public void search(String item) {
