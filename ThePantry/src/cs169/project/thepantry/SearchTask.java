@@ -44,6 +44,7 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
     
     Application app; //application that called the task
     String type = "";
+    String q = "";
 
     public SearchTask(Application app) {
     	this.app = app;
@@ -71,8 +72,8 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
 		//the first string is the type of request, either "recipe" (get recipe) or "search" (search for recipe)
 		//the second string passed in is either the recipe ID or the search query q in String format
 		//this can be extended to multiple strings to search for individual ingredients, allergies, cuisines, etc.
-		type = strings[0];
-		String q = strings[1];
+		this.type = strings[0];
+		this.q = strings[1];
 		
     	try {
     		// generate the correct URL for the get request
@@ -142,11 +143,14 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
 			Intent intent = new Intent(app.getApplicationContext(), RecipeActivity.class);
 			intent.putExtra("result", result);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			app.startActivity(intent);
 		} else if (type == "search") {
 			Intent intent = new Intent(app.getApplicationContext(), SearchResultsActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.putExtra("result", result);
+			intent.putExtra("currentSearch", this.q);
 			app.startActivity(intent);
 		}
 		 

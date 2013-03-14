@@ -6,8 +6,8 @@
     
     <ImageView 
         android:id="@+id/image"
-        android:layout_width="100px"
-        android:layout_height="100px"
+        android:layout_width="150px"
+        android:layout_height="150px"
         android:layout_marginLeft="5px"
         android:layout_marginRight="20px"
         android:layout_marginTop="5px"
@@ -17,7 +17,7 @@
     
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100px"
+        android:layout_height="150px"
         android:layout_marginLeft="0px"
         android:layout_marginRight="5px"
         android:layout_marginTop="5px"
