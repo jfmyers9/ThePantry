@@ -144,7 +144,7 @@ class SearchMatch extends Storage implements Serializable {
 	protected SearchMatch(JSONObject info) {
 		// smallImageUrl not always present
 		try {
-			this.smallImageUrl = info.getJSONArray("smallImageUrl").getString(0);
+			this.smallImageUrl = info.getJSONArray("smallImageUrls").getString(0);
 		} catch (JSONException e) {}
 		
 		// id, name, ingredients always present in response

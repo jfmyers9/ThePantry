@@ -3,10 +3,12 @@ package cs169.project.thepantry;
 import java.util.List;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
@@ -48,7 +50,13 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	    
 	    TextView youNeedView = (TextView) listItem.findViewById(R.id.you_need);
 	    youNeedView.setText("You need: " + youNeed);
-
+	    
+	    /*ImageView imageView = (ImageView) listItem.findViewById(R.id.image);
+	    if (values.get(position).smallImageUrl != null) {
+	    	imageView.setImageURI(Uri.parse(values.get(position).smallImageUrl));
+	    	System.out.println(values.get(position).smallImageUrl);
+	    }*/
+	    
 	    return listItem;
 	  
 	  }
