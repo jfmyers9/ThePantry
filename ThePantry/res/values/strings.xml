@@ -37,4 +37,6 @@
     <string name="inventoryTable">inventory</string>
     <string name="shoppingListTable">shoppingList</string>
     <string name="ingredientsTable">ingredients</string>
+    <string name="enter_search_query">Enter search query here...</string>
+    <string name="button_search">Search</string>
 </resources>

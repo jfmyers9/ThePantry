@@ -1,5 +1,6 @@
 package cs169.project.thepantry;
 
+import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -90,10 +91,10 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
     			//parse query for mulitple ingredients separated by commas
     			//right now the first thing is treated as a normal search
     			getURL = URL_SEARCH;
-    			String[] qs = q.replaceAll(",\\s", ",").replaceAll("\\s","%20").split(",");
-    			getURL += "?q=" + qs[0];
+    			String[] qs = q.replaceAll(",\\s", ",").split(",");
+    			getURL += "?q=" + URLEncoder.encode(qs[0], "UTF-8");
     			for (int i=1; i<qs.length; i++) {
-    				getURL += "&allowedIngredient%5B%5D=" + qs[i];
+    				getURL += "&allowedIngredient%5B%5D=" + URLEncoder.encode(qs[i], "UTF-8");
     			}
     		}
     		else {
@@ -102,6 +103,7 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
     		}
     		//create an http connection and client
     		//set timeout for connection and socket
+    		System.out.println(getURL);
         	HttpConnectionParams.setConnectionTimeout(httpParams, TIMEOUT_MILLISEC);
         	HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_MILLISEC);
         	HttpClient client = new DefaultHttpClient(httpParams);
@@ -140,12 +142,6 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
 	//The result of the background computation is passed to this step as a parameter.
 //	@Override
 	protected void onPostExecute(Storage result) {
-		if (result == null){
-			System.out.println("nullpost");
-		}
-		else {
-			System.out.println("notnullpost");
-		}
 		 // create an intent with the Storage object
 		if (type == "recipe") {
 			Intent intent = new Intent(app.getApplicationContext(), RecipeActivity.class);
