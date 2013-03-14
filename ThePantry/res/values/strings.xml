@@ -42,5 +42,6 @@
     <string name="enter_search_query">Enter search query here...</string>
     <string name="button_search">Search</string>
     <string name="title_activity_menu">MenuActivity</string>
+    <string name="title_activity_navigation">NavigationActivity</string>
 
 </resources>

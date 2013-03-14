@@ -184,25 +184,27 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int activity_inventory=0x7f030001;
         public static final int activity_inventory_add=0x7f030002;
         public static final int activity_login=0x7f030003;
-        public static final int activity_recipe=0x7f030004;
-        public static final int activity_search_results=0x7f030005;
-        public static final int activity_shopping_list=0x7f030006;
-        public static final int activity_tutorial=0x7f030007;
-        public static final int list_ingredients=0x7f030008;
-        public static final int slidingmenumain=0x7f030009;
+        public static final int activity_navigation=0x7f030004;
+        public static final int activity_recipe=0x7f030005;
+        public static final int activity_search_results=0x7f030006;
+        public static final int activity_shopping_list=0x7f030007;
+        public static final int activity_tutorial=0x7f030008;
+        public static final int list_ingredients=0x7f030009;
+        public static final int slidingmenumain=0x7f03000a;
     }
     public static final class menu {
         public static final int home_page=0x7f0a0000;
         public static final int inventory=0x7f0a0001;
         public static final int inventory_add=0x7f0a0002;
         public static final int login=0x7f0a0003;
-        public static final int recipe=0x7f0a0004;
-        public static final int search_results=0x7f0a0005;
-        public static final int shopping_list=0x7f0a0006;
-        public static final int tutorial=0x7f0a0007;
+        public static final int navigation=0x7f0a0004;
+        public static final int recipe=0x7f0a0005;
+        public static final int search_results=0x7f0a0006;
+        public static final int shopping_list=0x7f0a0007;
+        public static final int tutorial=0x7f0a0008;
     }
     public static final class string {
-        public static final int action_forgot_password=0x7f070022;
+        public static final int action_forgot_password=0x7f070023;
         public static final int action_home_page=0x7f07000c;
         public static final int action_inventory=0x7f07000a;
         public static final int action_login=0x7f07000d;
@@ -210,59 +212,60 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int action_register=0x7f07000f;
         public static final int action_settings=0x7f070002;
         public static final int action_shopping_list=0x7f07000b;
-        public static final int action_sign_in_register=0x7f070020;
-        public static final int action_sign_in_short=0x7f070021;
+        public static final int action_sign_in_register=0x7f070021;
+        public static final int action_sign_in_short=0x7f070022;
         public static final int add_item=0x7f070010;
         public static final int add_shopping_list_ingredient=0x7f070012;
         public static final int add_to_shopping_list=0x7f070013;
         public static final int app_name=0x7f070000;
         public static final int button_search=0x7f07001b;
         public static final int enter_search_query=0x7f07001a;
-        public static final int error_field_required=0x7f070027;
-        public static final int error_incorrect_password=0x7f070026;
-        public static final int error_invalid_email=0x7f070024;
-        public static final int error_invalid_password=0x7f070025;
+        public static final int error_field_required=0x7f070028;
+        public static final int error_incorrect_password=0x7f070027;
+        public static final int error_invalid_email=0x7f070025;
+        public static final int error_invalid_password=0x7f070026;
         public static final int hello_world=0x7f070003;
         public static final int ingredient_types=0x7f070011;
         public static final int ingredientsTable=0x7f070019;
         public static final int inventoryTable=0x7f070017;
-        public static final int login_progress_signing_in=0x7f070023;
-        public static final int pref_default_display_name=0x7f07002d;
-        public static final int pref_description_social_recommendations=0x7f07002b;
+        public static final int login_progress_signing_in=0x7f070024;
+        public static final int pref_default_display_name=0x7f07002e;
+        public static final int pref_description_social_recommendations=0x7f07002c;
         /**  Example settings for Data & Sync 
          */
-        public static final int pref_header_data_sync=0x7f07002f;
+        public static final int pref_header_data_sync=0x7f070030;
         /**  Strings related to Settings 
  Example General settings 
          */
-        public static final int pref_header_general=0x7f070029;
+        public static final int pref_header_general=0x7f07002a;
         /**  Example settings for Notifications 
          */
-        public static final int pref_header_notifications=0x7f070032;
-        public static final int pref_ringtone_silent=0x7f070035;
-        public static final int pref_title_add_friends_to_messages=0x7f07002e;
-        public static final int pref_title_display_name=0x7f07002c;
-        public static final int pref_title_new_message_notifications=0x7f070033;
-        public static final int pref_title_ringtone=0x7f070034;
-        public static final int pref_title_social_recommendations=0x7f07002a;
-        public static final int pref_title_sync_frequency=0x7f070030;
-        public static final int pref_title_system_sync_settings=0x7f070031;
-        public static final int pref_title_vibrate=0x7f070036;
+        public static final int pref_header_notifications=0x7f070033;
+        public static final int pref_ringtone_silent=0x7f070036;
+        public static final int pref_title_add_friends_to_messages=0x7f07002f;
+        public static final int pref_title_display_name=0x7f07002d;
+        public static final int pref_title_new_message_notifications=0x7f070034;
+        public static final int pref_title_ringtone=0x7f070035;
+        public static final int pref_title_social_recommendations=0x7f07002b;
+        public static final int pref_title_sync_frequency=0x7f070031;
+        public static final int pref_title_system_sync_settings=0x7f070032;
+        public static final int pref_title_vibrate=0x7f070037;
         /**  Strings related to login 
          */
-        public static final int prompt_email=0x7f07001e;
-        public static final int prompt_password=0x7f07001f;
+        public static final int prompt_email=0x7f07001f;
+        public static final int prompt_password=0x7f070020;
         public static final int setup_inventory=0x7f070015;
         public static final int shoppingListTable=0x7f070018;
         public static final int skip_text=0x7f070016;
         public static final int title_activity_home_page=0x7f070005;
         public static final int title_activity_inventory=0x7f070004;
         public static final int title_activity_inventory_add=0x7f070008;
-        public static final int title_activity_login=0x7f07001d;
+        public static final int title_activity_login=0x7f07001e;
         public static final int title_activity_menu=0x7f07001c;
+        public static final int title_activity_navigation=0x7f07001d;
         public static final int title_activity_recipe=0x7f070009;
         public static final int title_activity_search_results=0x7f070007;
-        public static final int title_activity_settings=0x7f070028;
+        public static final int title_activity_settings=0x7f070029;
         public static final int title_activity_shopping_list=0x7f070006;
         public static final int title_activity_tutorial=0x7f070001;
         public static final int tutorial_title=0x7f070014;
