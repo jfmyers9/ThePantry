@@ -61,7 +61,7 @@ public class StorageTest extends AndroidTestCase {
 		Storage storage = new Storage();
 		storage.makeImg(recpImgJSON);
 		assertEquals("1", storage.getImgLUrl());
-		assertEquals("logo", storage.getImgSUrl());
+		assertEquals("pizza", storage.getImgSUrl());
 	}
 
 }
