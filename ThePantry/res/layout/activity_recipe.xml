@@ -24,7 +24,7 @@
     
     <TextView
         android:id="@+id/recipeName"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/recipePic"
         android:layout_alignParentLeft="true"
@@ -51,7 +51,6 @@
         android:layout_alignBottom="@+id/recipeName"
         android:layout_alignTop="@+id/recipeName"
         android:layout_toLeftOf="@+id/favorite"
-        android:layout_toRightOf="@+id/recipeName"
         android:onClick="toggleCooked" />
     
     <Button
@@ -75,7 +74,6 @@
     <TextView
         android:id="@+id/directions"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
    
 </LinearLayout>     
