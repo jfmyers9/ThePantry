@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -65,6 +66,7 @@ public class RecipeActivity extends Activity {
 		
 		//Render directions to view.
 		directions = (TextView)findViewById(R.id.directions);
+		directions.setText(Html.fromHtml("<a href='"+info.source.sourceRecipeUrl + "'>"+info.source.sourceDisplayName+"</a>"));
 		
 		dm = new DatabaseModel(this);
 		

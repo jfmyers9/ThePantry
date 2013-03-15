@@ -90,10 +90,9 @@ public class InventoryActivity extends BasicMenuActivity {
 	}
 	
 	/** Takes you to InventoryAdd Activity */
-	public void edit() { // change back to void after testing
-		//TODO -- make intent to Inventory Add
+	public void edit(View view) {
 		Context context = getApplicationContext();
-		Intent intent = new Intent(context, InventoryAddActivity.class); //Change back to HomePageActivity.class 
+		Intent intent = new Intent(context, InventoryAddActivity.class);
 		startActivity(intent);
 	}
 

@@ -73,7 +73,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	
 	public void addShopItem(View view) {
 		EditText eText = (EditText) findViewById(R.id.shopping_list_text);
-		addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), 1);
+		addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), "1");
 		((BaseExpandableListAdapter)eView.getExpandableListAdapter()).notifyDataSetChanged();
 	}
 	
@@ -121,7 +121,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	}
 	
 	/** Adds the given item to the shopping list */
-	public void addItem(String item, String type, float amount) {
+	public void addItem(String item, String type, String amount) {
 		DatabaseModel dm = new DatabaseModel(this);
 		// for testing purposes of the display, success is set to true
 		boolean success = dm.add(ThePantryContract.ShoppingList.TABLE_NAME, item, type, amount);
@@ -139,6 +139,16 @@ public class ShoppingListActivity extends BasicMenuActivity {
 			}
 		} else {
 		}
+	}
+	
+	/** Extracts the item text and type from the user input. */
+	public void addExtract() {
+		String amount = "1";
+		EditText itemText = (EditText) findViewById(R.id.shopping_list_text);
+		Spinner typeSpinner = (Spinner) findViewById(R.id.add_sl_types);
+		String item = itemText.getText().toString();
+		String type = typeSpinner.getSelectedItem().toString();
+		addItem(item, type, amount);
 	}
 	
 	/** Removes the given item from the shopping list */
