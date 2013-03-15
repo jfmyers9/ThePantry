@@ -10,8 +10,7 @@
         android:layout_height="150dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="5dp"
-        android:src="@drawable/default_image" >
+        android:layout_marginTop="5dp">
     </com.loopj.android.image.SmartImageView>
     
     <LinearLayout
@@ -27,7 +26,6 @@
      	    android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
     	    android:textSize="25px"
-    	    android:text="Title"
      	    >
      	</TextView> 
      	
@@ -36,7 +34,6 @@
      	    android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
     	    android:textSize="18px"
-    	    android:text="Time: 6 hours"
      	    >
      	</TextView> 
      	
@@ -45,7 +42,6 @@
      	    android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
     	    android:textSize="18px"
-			android:text="You have: bacon, bacon, bacon grease"
      	    >
      	</TextView> 
      	
@@ -54,7 +50,6 @@
      	    android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
     	    android:textSize="18px"
-    	    android:text="You need: more bacon"
      	    >
      	</TextView> 
 
