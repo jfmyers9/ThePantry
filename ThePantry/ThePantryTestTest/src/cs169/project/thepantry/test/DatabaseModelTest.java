@@ -1,15 +1,11 @@
 package cs169.project.thepantry.test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-import android.content.pm.ApplicationInfo;
-import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.test.AndroidTestCase;
-import android.test.mock.MockContext;
 import cs169.project.thepantry.DatabaseModel;
-import cs169.project.thepantry.HomePageActivity;
-import cs169.project.thepantry.ThePantryContract;
 
 public class DatabaseModelTest extends AndroidTestCase {
 
@@ -62,30 +58,29 @@ public class DatabaseModelTest extends AndroidTestCase {
 	public void testRemove() {
 		table = "ingredients";
 		String item = "Strawberries";
-		Cursor c = testdm.findAllItems(table);
-		ArrayList<String> items = parseCursor(c);
-		for (String i : items) {
-			System.out.println(i);
-		}
-		//testdm.add(table, item, "Produce", "12");
-		//assertTrue("Strawberries should still be in the database", findItem(item));
-		//boolean success = testdm.remove(table, item);
-		//assertTrue("DatabaseModel.remove() returned false", success);
-		//assertFalse("Error: Bread is still in database", findItem(item));
+		testdm.add(table, item, "Produce", "12");
+		assertTrue("Strawberries should still be in the database", findItem(item));
+		boolean success = testdm.remove(table, item);
+		assertTrue("DatabaseModel.remove() returned false", success);
+		assertFalse("Error: Bread is still in database", findItem(item));
 	}
 
 	public void testFindAllItems() {
 		fail("Not yet implemented");
 	}
 
-	public void testFindItem() {
+	public void testFindItem1() {
 		table = "ingredients";
-		String item1 = "Cookies";
-		String item2 = "Milk";
-		boolean success1 = testdm.findItem(table, item1);
-		boolean success2 = testdm.findItem(table, item2);
-		assertFalse("Error: We don't have any cookies", success1);
-		assertTrue("Error: We do have milk", success2);
+		String item = "Cookies";
+		boolean success = testdm.findItem(table, item);
+		assertFalse("Error: We don't have any cookies", success);
+	}
+	
+	public void testFindItem2() {
+		table = "ingredients";
+		String item = "Milk";
+		boolean success = testdm.findItem(table, item);
+		assertTrue("Error: We do have milk", success);
 	}
 
 	public void testFindTypeItems() {
@@ -111,24 +106,46 @@ public class DatabaseModelTest extends AndroidTestCase {
 	}
 
 	public void testFindAllTypes() {
-		fail("Not yet implemented");
+		table = "ingredients";
+		Cursor ctypes = testdm.findAllTypes(table);
+		ArrayList<String> types = parseCursor(ctypes);
+		String[] match = {"Produce", "Dairy", "Poultry", "Grain"};
+		for (String type : types) {
+			boolean contains = Arrays.asList(match).contains(type);
+			assertTrue("Error: Incorrect type " + type, contains);
+		}
 	}
 
 	public void testChecked() {
 		table = "recipe";
 		String recipe = "Spinach";
-		assertFalse("Error: Spinach hasn't been cooked", isChecked(table, recipe, "Cooked"));
-		boolean success = testdm.checked(table, recipe, "Cooked", true);
+		assertFalse("Error: Spinach hasn't been cooked", isChecked(table, recipe, "cooked"));
+		boolean success = testdm.checked(table, recipe, "cooked", true);
 		assertTrue("DatabaseModel.checked() returned false", success);
-		assertTrue("Error: Spinach has been cooked", isChecked(table, recipe, "Cooked"));
+		assertTrue("Error: Spinach has been cooked", isChecked(table, recipe, "cooked"));
 	}
 
-	public void testCheckedItems() {
-		fail("Not yet implemented");
+	public void testCheckedItems1() {
+		table = "ingredients";
+		Cursor c = testdm.checkedItems(table, "checked");
+		assertNull("Error: No items were checked", c);
+	}
+	
+	public void testCheckedItems2() {
+		table = "recipe";
+		Cursor c = testdm.checkedItems(table, "favorite");
+		ArrayList<String> checked = parseCursor(c);
+		String item = checked.get(0);
+		assertEquals("Error: Bacon is not " + item, item, "Bacon");
 	}
 
-	public void testIsItemChecked(String item) {
-		fail("Not yet implemented");
+	public void testIsItemChecked() {
+		table = "recipe";
+		String recipe = "Fried Rice";
+		boolean checked1 = testdm.isItemChecked(table, recipe, "favorite");
+		boolean checked2 = testdm.isItemChecked(table, recipe, "cooked");
+		assertFalse("Error: Fried Rice is not a favorite", checked1);
+		assertTrue("Error: Fried Rice has been cooked", checked2);
 	}
 
 }
