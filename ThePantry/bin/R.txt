@@ -314,14 +314,27 @@ int id abs__textButton 0x7f050018
 int id abs__title 0x7f050020
 int id abs__titleDivider 0x7f050021
 int id abs__up 0x7f05000b
+<<<<<<< HEAD
 int id action_forgot_password 0x7f05005e
 int id action_settings 0x7f05005d
 int id add_sl_types 0x7f05004f
 int id addtoshop 0x7f050049
 int id cooked 0x7f050048
 int id directions 0x7f05004b
+=======
+int id action_forgot_password 0x7f050060
+int id action_settings 0x7f05005f
+int id add_sl_types 0x7f050050
+int id addtoshop 0x7f05004a
+int id checkBox1 0x7f050055
+int id checkedText1 0x7f050056
+int id cooked 0x7f050049
+int id directions 0x7f05004c
+>>>>>>> c7d7cfbf0f2a7fdb1979d8a87846fffa8df7106f
 int id disableHome 0x7f050009
+int id edit 0x7f05003a
 int id edit_query 0x7f05002c
+<<<<<<< HEAD
 int id email 0x7f050041
 int id exp_inv_add_list 0x7f05003d
 int id exp_shop_list 0x7f050050
@@ -346,10 +359,37 @@ int id recipeName 0x7f050046
 int id recipePic 0x7f050045
 int id recsList 0x7f050039
 int id resultList 0x7f05004c
+=======
+int id email 0x7f050042
+int id exp_inv_add_list 0x7f05003e
+int id exp_shop_list 0x7f050051
+int id exp_view 0x7f05003c
+int id favorite 0x7f050048
+int id fullscreen 0x7f050013
+int id homeAsUp 0x7f050006
+int id image 0x7f050058
+int id ingred 0x7f050057
+int id ingredList 0x7f05004b
+int id left 0x7f050010
+int id listMode 0x7f050002
+int id login 0x7f050044
+int id login_form 0x7f050041
+int id login_status 0x7f05003f
+int id login_status_message 0x7f050040
+int id margin 0x7f050012
+int id menu_frame 0x7f05005d
+int id normal 0x7f050001
+int id password 0x7f050043
+int id recipeName 0x7f050047
+int id recipePic 0x7f050046
+int id recsList 0x7f050039
+int id resultList 0x7f05004d
+>>>>>>> c7d7cfbf0f2a7fdb1979d8a87846fffa8df7106f
 int id right 0x7f050011
 int id search 0x7f05003c
 int id search_text 0x7f050038
 int id selected_view 0x7f050014
+<<<<<<< HEAD
 int id setup_inventory_button 0x7f050052
 int id shopping_list_button 0x7f05004e
 int id shopping_list_text 0x7f05004d
@@ -374,6 +414,31 @@ int id welcome_text 0x7f050051
 int id wrap_content 0x7f050000
 int id you_have 0x7f050059
 int id you_need 0x7f05005a
+=======
+int id setup_inventory_button 0x7f050053
+int id shopping_list_button 0x7f05004f
+int id shopping_list_text 0x7f05004e
+int id showCustom 0x7f050008
+int id showHome 0x7f050005
+int id showTitle 0x7f050007
+int id sign_in_button 0x7f050045
+int id skip_button 0x7f050054
+int id slidingmenumain 0x7f05005e
+int id tabMode 0x7f050003
+int id time 0x7f05005a
+int id title 0x7f050059
+int id title_activity_home_page 0x7f050061
+int id title_activity_inventory 0x7f050062
+int id title_activity_login 0x7f050063
+int id title_activity_logout 0x7f050064
+int id title_activity_register 0x7f050065
+int id update_button 0x7f05003d
+int id useLogo 0x7f050004
+int id welcome_text 0x7f050052
+int id wrap_content 0x7f050000
+int id you_have 0x7f05005b
+int id you_need 0x7f05005c
+>>>>>>> c7d7cfbf0f2a7fdb1979d8a87846fffa8df7106f
 int integer abs__max_action_buttons 0x7f090000
 int integer num_cols 0x7f090001
 int layout abs__action_bar_home 0x7f030000
@@ -430,9 +495,9 @@ int menu recipe 0x7f0d0007
 int menu search_results 0x7f0d0008
 int menu shopping_list 0x7f0d0009
 int menu tutorial 0x7f0d000a
-int string InventoryAddTitle 0x7f0a0031
-int string InventoryTitle 0x7f0a0032
-int string ShoppingListTitle 0x7f0a0024
+int string InventoryAddTitle 0x7f0a0032
+int string InventoryTitle 0x7f0a0033
+int string ShoppingListTitle 0x7f0a0025
 int string abs__action_bar_home_description 0x7f0a0000
 int string abs__action_bar_up_description 0x7f0a0001
 int string abs__action_menu_overflow_description 0x7f0a0002
@@ -448,7 +513,11 @@ int string abs__searchview_description_voice 0x7f0a000e
 int string abs__share_action_provider_share_with 0x7f0a0006
 int string abs__shareactionprovider_share_with 0x7f0a0008
 int string abs__shareactionprovider_share_with_application 0x7f0a0009
+<<<<<<< HEAD
 int string action_forgot_password 0x7f0a003c
+=======
+int string action_forgot_password 0x7f0a003d
+>>>>>>> c7d7cfbf0f2a7fdb1979d8a87846fffa8df7106f
 int string action_home_page 0x7f0a001b
 int string action_inventory 0x7f0a0019
 int string action_login 0x7f0a001c
@@ -456,22 +525,38 @@ int string action_logout 0x7f0a001d
 int string action_register 0x7f0a001e
 int string action_settings 0x7f0a0011
 int string action_shopping_list 0x7f0a001a
+<<<<<<< HEAD
 int string action_sign_in_register 0x7f0a003a
 int string action_sign_in_short 0x7f0a003b
+=======
+int string action_sign_in_register 0x7f0a003b
+int string action_sign_in_short 0x7f0a003c
+>>>>>>> c7d7cfbf0f2a7fdb1979d8a87846fffa8df7106f
 int string add_item 0x7f0a001f
-int string add_shopping_list_ingredient 0x7f0a0025
-int string add_to_shopping_list 0x7f0a0026
+int string add_shopping_list_ingredient 0x7f0a0026
+int string add_to_shopping_list 0x7f0a0027
 int string app_name 0x7f0a000f
+<<<<<<< HEAD
 int string button_search 0x7f0a002e
 int string enter_search_query 0x7f0a002d
 int string error_field_required 0x7f0a0041
 int string error_incorrect_password 0x7f0a0040
 int string error_invalid_email 0x7f0a003e
 int string error_invalid_password 0x7f0a003f
+=======
+int string button_search 0x7f0a002f
+int string edit 0x7f0a0023
+int string enter_search_query 0x7f0a002e
+int string error_field_required 0x7f0a0042
+int string error_incorrect_password 0x7f0a0041
+int string error_invalid_email 0x7f0a003f
+int string error_invalid_password 0x7f0a0040
+>>>>>>> c7d7cfbf0f2a7fdb1979d8a87846fffa8df7106f
 int string hello_world 0x7f0a0012
 int string ingredient_search 0x7f0a0022
 int string ingredient_types 0x7f0a0020
 int string ingredient_update 0x7f0a0021
+<<<<<<< HEAD
 int string ingredientsTable 0x7f0a002c
 int string inventoryTable 0x7f0a002a
 int string login_progress_signing_in 0x7f0a003d
@@ -507,10 +592,47 @@ int string title_activity_navigation 0x7f0a0030
 int string title_activity_recipe 0x7f0a0018
 int string title_activity_search_results 0x7f0a0016
 int string title_activity_settings 0x7f0a0042
+=======
+int string ingredientsTable 0x7f0a002d
+int string inventoryTable 0x7f0a002b
+int string login_progress_signing_in 0x7f0a003e
+int string pref_default_display_name 0x7f0a0048
+int string pref_description_social_recommendations 0x7f0a0046
+int string pref_header_data_sync 0x7f0a004a
+int string pref_header_general 0x7f0a0044
+int string pref_header_notifications 0x7f0a004d
+int string pref_ringtone_silent 0x7f0a0050
+int string pref_title_add_friends_to_messages 0x7f0a0049
+int string pref_title_display_name 0x7f0a0047
+int string pref_title_new_message_notifications 0x7f0a004e
+int string pref_title_ringtone 0x7f0a004f
+int string pref_title_social_recommendations 0x7f0a0045
+int string pref_title_sync_frequency 0x7f0a004b
+int string pref_title_system_sync_settings 0x7f0a004c
+int string pref_title_vibrate 0x7f0a0051
+int string prompt_email 0x7f0a0039
+int string prompt_password 0x7f0a003a
+int string recommendations 0x7f0a0037
+int string search 0x7f0a0024
+int string setup_inventory 0x7f0a0029
+int string shoppingListTable 0x7f0a002c
+int string skip_text 0x7f0a002a
+int string title_activity_basic_menu 0x7f0a0036
+int string title_activity_home_page 0x7f0a0014
+int string title_activity_inventory 0x7f0a0013
+int string title_activity_inventory_add 0x7f0a0017
+int string title_activity_login 0x7f0a0038
+int string title_activity_menu 0x7f0a0030
+int string title_activity_nav_menu_fragment 0x7f0a0034
+int string title_activity_navigation 0x7f0a0031
+int string title_activity_recipe 0x7f0a0018
+int string title_activity_search_results 0x7f0a0016
+int string title_activity_settings 0x7f0a0043
+>>>>>>> c7d7cfbf0f2a7fdb1979d8a87846fffa8df7106f
 int string title_activity_shopping_list 0x7f0a0015
 int string title_activity_tutorial 0x7f0a0010
-int string tutorial_title 0x7f0a0027
-int string update_inventory 0x7f0a0034
+int string tutorial_title 0x7f0a0028
+int string update_inventory 0x7f0a0035
 int style AppBaseTheme 0x7f0b0059
 int style AppTheme 0x7f0b005a
 int style DialogWindowTitle_Sherlock 0x7f0b0036
