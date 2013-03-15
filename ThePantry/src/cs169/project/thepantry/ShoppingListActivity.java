@@ -32,7 +32,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 		//ActionBar actionBar = getActionBar();
 		
 		// Creates and populates the ingredient type drop-down menu
-		spinner = (Spinner) findViewById(R.id.ingredient_types);
+		spinner = (Spinner) findViewById(R.id.add_sl_item_types);
 		ArrayAdapter<CharSequence> adapter = 
 				ArrayAdapter.createFromResource(this,
 												R.array.ingredient_type_array,
@@ -42,7 +42,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 		
 		groupItems = new ArrayList<String>();
 		childItems = new ArrayList<Object>();
-		eView = (ExpandableListView) findViewById(R.id.exp_shop_list);
+		eView = (ExpandableListView) findViewById(R.id.shopping_list);
 		eView.setAdapter(new NewAdapter(groupItems, childItems));
 	}
 
@@ -54,7 +54,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	}
 	
 	public void addShopItem(View view) {
-		EditText eText = (EditText) findViewById(R.id.shopping_list_text);
+		EditText eText = (EditText) findViewById(R.id.add_sl_item_text);
 		addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), 1);
 	}
 	
@@ -117,7 +117,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	public void check(View view) {
 		dm = new DatabaseModel(this);
 		CheckBox checkBox = (CheckBox) view.findViewById(R.id.textView1);
-		dm.checked(ThePantryContract.ShoppingList.TABLE_NAME, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
+		dm.checked(ThePantryContract.ShoppingList.TABLE_NAME, ((TextView)checkBox).getText().toString(), ThePantryContract.CHECKED,  checkBox.isChecked());
 	}
 	
 	// TODO - use CursorLoader and an Adapter to populate the ListView
