@@ -15,9 +15,10 @@ import android.widget.ListView;
 public class SearchResultsActivity extends BasicMenuActivity {
 
 	ArrayList<SearchMatch> matches;
-	SearchResultAdapter srAdapter;
-	SearchModel sm = new SearchModel();
-	ListView listView;
+	//public for testing
+	public SearchResultAdapter srAdapter;
+	public SearchModel sm = new SearchModel();
+	public ListView listView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
