@@ -3,9 +3,9 @@ package cs169.project.thepantry;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
@@ -108,14 +108,6 @@ public class InventoryAddActivity extends InventoryActivity {
 		// figure out how to retrieve what button user clicked
 		//return null;
 		
-	}
-	
-	/** Adds an entry to Ingredient database */
-	public void addEntry(String item, String type) {
-		dm = new DatabaseModel(this);
-		dm.add(table, item, type, 0); //adds entry to ingredient database
-		
-		//mark item "checked"
 	}
 	
 	@Override
