@@ -1,9 +1,23 @@
 package cs169.project.thepantry;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +28,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -35,7 +50,13 @@ public class LoginActivity extends Activity {
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
-	private UserLoginTask mAuthTask = null;
+	private GetJsonObject gsjo = null;
+	
+	public final static String EXTRA_USER = "cs169.warmup.warmupproject.USER";
+	public final static String EXTRA_COUNT = "cs169.warmup.warmupproject.COUNT";
+	
+	String urlAdd = "http://desolate-savannah-2939.herokuapp.com/users/add";
+	String urlLogin = "http://desolate-savannah-2939.herokuapp.com/users/login";
 
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
@@ -99,7 +120,7 @@ public class LoginActivity extends Activity {
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
-		if (mAuthTask != null) {
+		if (gsjo != null) {
 			return;
 		}
 
@@ -130,11 +151,7 @@ public class LoginActivity extends Activity {
 			mEmailView.setError(getString(R.string.error_field_required));
 			focusView = mEmailView;
 			cancel = true;
-		} else if (!mEmail.contains("@")) {
-			mEmailView.setError(getString(R.string.error_invalid_email));
-			focusView = mEmailView;
-			cancel = true;
-		}
+		} 
 
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
@@ -145,8 +162,22 @@ public class LoginActivity extends Activity {
 			// perform the user login attempt.
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
-			mAuthTask = new UserLoginTask();
-			mAuthTask.execute((Void) null);
+	    	String user = mEmail;
+	    	String password = mPassword;
+	    	JSONObject obj = new JSONObject();
+	    	try {
+	    		obj.put("user", user);
+	    		obj.put("password", password);
+	    		gsjo = new GetJsonObject(obj);
+	    		gsjo.execute(urlAdd);
+	    	} catch (Exception e) {
+				Context context = getApplicationContext();
+				CharSequence text = "Fuck Me";
+				int duration = Toast.LENGTH_LONG;
+
+				Toast toast = Toast.makeText(context, text, duration);
+				toast.show();
+	    	}
 		}
 	}
 
@@ -195,48 +226,93 @@ public class LoginActivity extends Activity {
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
+private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
+    	
+    	private JSONObject mjson;
+    	
+        public GetJsonObject(JSONObject json) {
+            mjson = json;
+        }
 
+		@Override
+		protected JSONObject doInBackground(String... urls) {
+		   	HttpClient client = new DefaultHttpClient();
+	    	HttpPost post = new HttpPost(urls[0]);
+	    	HttpResponse resp;
+	    	post.addHeader("Content-type", "application/json");
+	    	try {
+	    		post.setEntity(new StringEntity(mjson.toString()));
+	    		resp = client.execute(post);
+	    		HttpEntity ent = resp.getEntity();
+	            InputStream instream = ent.getContent();
+	            BufferedReader br = new BufferedReader(new InputStreamReader(instream));
+	            StringBuilder builder = new StringBuilder();
+	            String line = br.readLine();
+	            while (line != null) {
+	            	builder.append(line + "\n");
+	            	line = br.readLine();
+	            }
+	            instream.close();
+	            String result = builder.toString();
+	            JSONObject respObj = new JSONObject(result);
+	            return respObj;
+	    	} catch (Exception e) {
+	    		e.printStackTrace();
+	    		return new JSONObject();
+	    	}
+		}
+		
+		@Override
+		protected void onPostExecute(JSONObject result) {
 			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return false;
-			}
+				int errCode = (Integer)result.get("errCode");
+				if (errCode == 1) {
+					int count = (Integer) result.get("count");
+					Context context = getApplicationContext();
+					CharSequence text = "Yay, you logged in..";
+					int duration = Toast.LENGTH_LONG;
 
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				} else if (errCode == -1) {
+					Context context = getApplicationContext();
+					CharSequence text = "Invalid username and password combination. Please try again.";
+					int duration = Toast.LENGTH_LONG;
+
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				} else if (errCode == -2) {
+					Context context = getApplicationContext();
+					CharSequence text = "User Already Exists, Try Again.";
+					int duration = Toast.LENGTH_LONG;
+
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				} else if (errCode == -3) {
+					Context context = getApplicationContext();
+					CharSequence text = "Invalid UserName, Try Again.";
+					int duration = Toast.LENGTH_LONG;
+
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				} else if (errCode == -4) {
+					Context context = getApplicationContext();
+					CharSequence text = "Invalid Password, Try Again.";
+					int duration = Toast.LENGTH_LONG;
+
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
 				}
-			}
+			} catch (Exception e) {
+				Context context = getApplicationContext();
+				CharSequence text = "You Fucked UP.";
+				int duration = Toast.LENGTH_LONG;
 
-			// TODO: register the new account here.
-			return true;
-		}
-
-		@Override
-		protected void onPostExecute(final Boolean success) {
-			mAuthTask = null;
-			showProgress(false);
-
-			if (success) {
-				finish();
-			} else {
-				mPasswordView
-						.setError(getString(R.string.error_incorrect_password));
-				mPasswordView.requestFocus();
+				Toast toast = Toast.makeText(context, text, duration);
+				toast.show();
 			}
 		}
-
-		@Override
-		protected void onCancelled() {
-			mAuthTask = null;
-			showProgress(false);
-		}
-	}
+    	
+    }
+    
 }
