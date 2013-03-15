@@ -61,6 +61,10 @@ public class InventoryAddActivity extends BaseListActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	public void check(View view) {
+		super.check(view);
+	}
+	
 	/** Same functionality as InventoryActivity search
 	 *  added ability to put it in ingredient table*/
 	public void search(View view) {
