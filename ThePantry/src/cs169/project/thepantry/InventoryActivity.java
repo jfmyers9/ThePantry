@@ -85,7 +85,7 @@ public class InventoryActivity extends BasicMenuActivity {
 	public void check(View view) {
 		dm = new DatabaseModel(this);
 		CheckBox checkBox = (CheckBox) view.findViewById(R.id.textView1);
-		dm.checked(table, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
+		dm.checked(table, ((TextView)checkBox).getText().toString(), ThePantryContract.CHECKED, checkBox.isChecked());
 	}
 	
 	/** Takes you to InventoryAdd Activity */

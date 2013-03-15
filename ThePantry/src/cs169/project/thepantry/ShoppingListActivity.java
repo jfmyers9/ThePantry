@@ -73,10 +73,9 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	
 	/** Removes the given item from the shopping list */
 	public void removeItem(String item) {
+		// TODO - get the item/View by finding it from layout
 		DatabaseModel dm = new DatabaseModel(this);
-		// for testing purposes of the display, success is set to true
-		boolean success = true;
-		//dm.remove(ThePantryContract.ShoppingList.TABLE_NAME, item);
+		boolean success = dm.remove(ThePantryContract.ShoppingList.TABLE_NAME, item);
 		if (success) {
 			// TODO - remove item and its checkbox from display/layout
 		} else {
@@ -84,21 +83,29 @@ public class ShoppingListActivity extends BasicMenuActivity {
 		}
 	}
 	
+	/** Swipes to bring up the delete button for an item on the shopping list. */
+	public void swipeToRemove(String item) {
+		// TODO - implement this, brings up a button whose onClick=removeItem
+	}
+	
 	/** Updates the inventory with items checked on the shopping list */
 	public void updateInventory() {
+		boolean remSuccess = false;
 		DatabaseModel dm = new DatabaseModel(this);
-		Cursor c = dm.checkedItems(ThePantryContract.ShoppingList.TABLE_NAME);
-		boolean remSuccess = true; //set to true for display testing
-		// TODO - parse cursor and fill this list 
-		/*List<String> items;
-		for (String item : items) {
-			boolean addSuccess = dm.add(ThePantryContract.Inventory.TABLE_NAME, item, type, amount);
-			if (addSuccess) {
-				boolean remSuccess = dm.remove(ThePantryContract.ShoppingList.TABLE_NAME, item);
-			} else {
-				// do something else
+		Cursor c = dm.checkedItems(ThePantryContract.ShoppingList.TABLE_NAME, ThePantryContract.CHECKED);
+
+		// Parses the cursor into a list of Strings, still needs work, have to extract type and amount
+		ArrayList<String> items = new ArrayList<String>();
+		if (c.moveToFirst()){
+			while(!c.isAfterLast()){
+				String data = c.getString(0);
+				items.add(data);
+				c.moveToNext();
 			}
-		}*/
+		}
+		c.close();
+		
+		// Add to inventory, removing from shopping list
 		if (remSuccess) {
 			// remove the item from the shopping list display, add it to inventory display
 		} else {

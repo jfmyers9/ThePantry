@@ -9,16 +9,18 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.loopj.android.image.SmartImageView;
 
 public class RecipeActivity extends Activity {
 	
 	Recipe info;
 	
-	WebView picture;
+	SmartImageView picture;
 	TextView name;
 	ListView ingredients;
 	TextView directions;
@@ -36,9 +38,10 @@ public class RecipeActivity extends Activity {
 		info = (Recipe)getIntent().getExtras().getSerializable("result");
 		
 		//Display recipe picture if there is one.
-		picture = (WebView)findViewById(R.id.recipePic);
-		if (info.images != null && info.images.hostedLargeUrl != null) {
-			picture.loadUrl(info.images.hostedLargeUrl);
+		picture = (SmartImageView)findViewById(R.id.recipePic);
+		if (info.images != null && info.images.hostedLargeUrl != null) { //might need online check
+			picture.setImageUrl(info.images.hostedLargeUrl);
+			picture.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		}
 		
 		//Display recipe name.
