@@ -9,7 +9,7 @@
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" >
-        </uses-permission>
+    </uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
@@ -42,6 +42,11 @@
         <activity
             android:name="cs169.project.thepantry.ShoppingListActivity"
             android:label="@string/title_activity_shopping_list" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="cs169.project.thepantry.SearchResultsActivity"
@@ -85,5 +90,10 @@
             android:name="cs169.project.thepantry.BasicMenuActivity"
             android:label="@string/title_activity_basic_menu" >
         </activity>
+        <activity
+            android:name="cs169.project.thepantry.BaseListActivity"
+            android:label="@string/title_activity_base_list" >
+        </activity>
     </application>
+
 </manifest>
