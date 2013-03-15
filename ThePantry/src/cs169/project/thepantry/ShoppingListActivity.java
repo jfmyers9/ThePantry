@@ -38,7 +38,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	}
 	
 	/** Adds the given item to the shopping list */
-	public void addItem(String item, String type, float amount) {
+	public void addItem(String item, String type, String amount) {
 		DatabaseModel dm = new DatabaseModel(this);
 		boolean success = dm.add(ThePantryContract.ShoppingList.TABLE_NAME, item, type, amount);
 		if (success) {
@@ -50,7 +50,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	
 	/** Extracts the item text and type from the user input. */
 	public void addExtract() {
-		float amount = 1;
+		String amount = "1";
 		EditText itemText = (EditText) findViewById(R.id.add_sl_item_text);
 		Spinner typeSpinner = (Spinner) findViewById(R.id.add_sl_item_types);
 		String item = itemText.getText().toString();

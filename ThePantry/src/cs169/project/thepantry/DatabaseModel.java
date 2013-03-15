@@ -1,12 +1,12 @@
 package cs169.project.thepantry;
 
-import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+
+import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 /** Interface class called by the activities to interact with our database.
  *  Uses the DatabaseModelHelper class to create the database.
@@ -55,6 +55,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				|| table.equals(ThePantryContract.Ingredients.TABLE_NAME)) {
 			values.put(ThePantryContract.CHECKED, false);
 		}
+		
 		long newRowId;
 		// TODO - consider using insertOrThrow and add try/catch block?
 		newRowId = db.insert(table, null, values);
@@ -89,10 +90,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		return c;
 	}
 
-	/** Returns one item from the specified TABLE. */
-	public Cursor findItem(String table, String item) {
-		// Not quite sure what this is supposed to do
-		// Right now hypothetically returns type, amount, and checked of the item -Amy
+	/** Finds if an item is in the specified TABLE. */
+	public boolean findItem(String table, String item) {
 		SQLiteDatabase db = getReadableDatabase();
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(table);
@@ -101,8 +100,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		String[] selectionArgs = {item};
 		
 		Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
-		c.moveToFirst();
-		return c;
+		if(c.moveToFirst()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/** Returns all items of the TYPE from the specified TABLE. */
@@ -171,9 +173,13 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	public boolean checked(String table, String item, String col, boolean checked) {
 		SQLiteDatabase db = getWritableDatabase();
 		
-		String selection = ThePantryContract.ITEM + " = ?";
+		String selection;
+		if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
+			selection = ThePantryContract.RECIPE + " = ?";
+		} else {
+			selection = ThePantryContract.ITEM + " = ?";	
+		}
 		String[] selectionArgs = {item};
-		
 		ContentValues values = new ContentValues();
 		
 		String newCheck;
@@ -196,10 +202,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		qb.setTables(table);
 		
 		String selection = col + " = ?";
-		String[] selectionArgs = {"true"}; //not quite right...
-		
-		// if we want the entry, can replace columns with null?
-		
+		String[] selectionArgs = {"true"};
+
 
 		Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
 		c.moveToFirst();

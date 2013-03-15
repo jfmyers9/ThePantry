@@ -3,11 +3,13 @@ package cs169.project.thepantry;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
@@ -55,23 +57,30 @@ public class InventoryAddActivity extends InventoryActivity {
 	}
 	
 	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			return true;
+		}	
+		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
 	public void makeList(ArrayList<String> groupItem, ArrayList<Object> childItem) {
 
 		eView.setDividerHeight(2);
-		eView.setGroupIndicator(null);
 		eView.setClickable(true);
 
 		NewAdapter mNewAdapter = new NewAdapter(groupItem, childItem);
 		mNewAdapter.setInflater((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),this);
 		eView.setAdapter(mNewAdapter);
+		
+		//Doesn't do anything right now
 		eView.setOnChildClickListener(new OnChildClickListener() {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-				//I think we can get rid of all of this
 				
-				//CheckBox checkBox = (CheckBox) v.findViewById(R.id.textView1);
-				//checkBox.toggle();
-				//dm.checked(table, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
 				return true;
 			}
 		});
@@ -85,15 +94,15 @@ public class InventoryAddActivity extends InventoryActivity {
 		//If item doesn't exist CustomItem button appears
 		dm = new DatabaseModel(this);
 		
-		/*
-		boolean found = dm.findItem(table, item);
+		EditText item = (EditText) findViewById(R.id.search);
+		boolean found = dm.findItem(table, item.getText().toString());
 		if (found) {
 			//display button with given item
 		} else {
 			//display custom button
-			String type = customItem(); // retrieves the type user wants selected item to be
-			addEntry(item, type); // figure out a way to allow user to undo this if they screw up
-		}*/
+			//String type = customItem(); // retrieves the type user wants selected item to be
+			//addEntry(item, type); // figure out a way to allow user to undo this if they screw up
+		}
 	}
 	
 	/** Display all types in a dropdown menu for user to select */
@@ -106,14 +115,6 @@ public class InventoryAddActivity extends InventoryActivity {
 		// figure out how to retrieve what button user clicked
 		//return null;
 		
-	}
-	
-	/** Adds an entry to Ingredient database */
-	public void addEntry(String item, String type) {
-		dm = new DatabaseModel(this);
-		dm.add(table, item, type, "0"); //adds entry to ingredient database
-		
-		//mark item "checked"
 	}
 	
 	@Override
@@ -136,18 +137,11 @@ public class InventoryAddActivity extends InventoryActivity {
 			}
 		}
 		checked.close();
+		Context context = getApplicationContext();
+		Intent intent = new Intent(context, InventoryAddActivity.class);
+		startActivity(intent);
 
 		//Maybe pop up window with items added -- maybe store what didn't get added
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			finish();
-			return true;
-		}	
-		return super.onOptionsItemSelected(item);
 	}
 
 }

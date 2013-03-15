@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -89,10 +88,9 @@ public class InventoryActivity extends BasicMenuActivity {
 	}
 	
 	/** Takes you to InventoryAdd Activity */
-	public void edit() { // change back to void after testing
-		//TODO -- make intent to Inventory Add
+	public void edit(View view) {
 		Context context = getApplicationContext();
-		Intent intent = new Intent(context, InventoryAddActivity.class); //Change back to HomePageActivity.class 
+		Intent intent = new Intent(context, InventoryAddActivity.class);
 		startActivity(intent);
 	}
 
@@ -104,7 +102,6 @@ public class InventoryActivity extends BasicMenuActivity {
 		if (types.moveToFirst()){
 			while(!types.isAfterLast()){
 				String data = types.getString(0);
-				System.out.println(data);
 				result.add(data);
 				types.moveToNext();
 			}
