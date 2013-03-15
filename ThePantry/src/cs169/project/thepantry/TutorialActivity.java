@@ -25,13 +25,11 @@ public class TutorialActivity extends Activity {
 			editor.commit();
 			setContentView(R.layout.activity_tutorial);
 		} else {
-			//Context context = getApplicationContext();
+			Context context = getApplicationContext();
 			HomePageActivity nextAct = new HomePageActivity();
-			//Intent intent = new Intent(context, nextAct.getClass());
-			//startActivity(intent);
-			// get recommended recipes based on ingredients in the user's inventory
-			//finish(); //this shuts down the app for a second
-			nextAct.getRecommendations(getApplication());
+			Intent intent = new Intent(context, nextAct.getClass());
+			startActivity(intent);
+			finish(); //this shuts down the app for a second?
 		}
 	}
 
@@ -50,15 +48,10 @@ public class TutorialActivity extends Activity {
 	}
 	
 	public void skipTutorial(View view) {
-		//Context context = getApplicationContext();
-		//Intent intent = new Intent(context, HomePageActivity.class);
-		//startActivity(intent);
-		//should add a number of tries to check online
-		if (isOnline()) {
-			HomePageActivity nextAct = new HomePageActivity();
-			nextAct.getRecommendations(getApplication());
-		}
-		//finish();
+		Context context = getApplicationContext();
+		Intent intent = new Intent(context, HomePageActivity.class);
+		startActivity(intent);
+		finish();
 	}
 	
 	public boolean isOnline() {

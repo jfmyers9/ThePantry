@@ -22,7 +22,9 @@ public class HomePageActivity extends BasicMenuActivity {
 
 		// intent extras are null coming from the sliding menu
 		if (getIntent().getExtras() == null) {
-			getRecommendations(getApplication());
+			if (isOnline()){
+				getRecommendations(getApplication());
+			}
 		}
 		
 		else {
@@ -59,7 +61,7 @@ public class HomePageActivity extends BasicMenuActivity {
 	
 	public void getRecommendations(Application app) {
 		//if (isOnline()){
-			SearchCriteria searchcriteria = new SearchCriteria("home", "bacon", 5);
+			SearchCriteria searchcriteria = new SearchCriteria("home", "bacon", 4);
 			new SearchTask(app).execute(searchcriteria);
 		//}
 	}
