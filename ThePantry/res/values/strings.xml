@@ -21,6 +21,7 @@
     <string name="ingredient_types">Ingredient Type</string>
     <string name="ingredient_update">Update Inventory</string>
     <string name="ingredient_search">Enter Item</string>
+    <string name="edit">Edit</string>
     <string name="search">Search</string>
     <string name="ShoppingListTitle">Your Shopping List</string>
   

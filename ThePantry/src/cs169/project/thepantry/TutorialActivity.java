@@ -19,7 +19,7 @@ public class TutorialActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		SharedPreferences opened = PreferenceManager.getDefaultSharedPreferences(this);
-		if (opened.getBoolean(OPENED, false) == true) {
+		if (opened.getBoolean(OPENED, false) == false) {
 			SharedPreferences.Editor editor = opened.edit();
 			editor.putBoolean(OPENED, true);
 			editor.commit();
