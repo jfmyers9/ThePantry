@@ -62,16 +62,10 @@ public class DatabaseModelTest extends AndroidTestCase {
 	public void testRemove() {
 		table = "ingredients";
 		String item = "Strawberries";
-		Cursor c = testdm.findAllItems(table);
-		ArrayList<String> items = parseCursor(c);
-		for (String i : items) {
-			System.out.println(i);
-		}
-		//testdm.add(table, item, "Produce", "12");
-		//assertTrue("Strawberries should still be in the database", findItem(item));
-		//boolean success = testdm.remove(table, item);
-		//assertTrue("DatabaseModel.remove() returned false", success);
-		//assertFalse("Error: Bread is still in database", findItem(item));
+		assertTrue("Strawberries should still be in the database", findItem(item));
+		boolean success = testdm.remove(table, item);
+		assertTrue("DatabaseModel.remove() returned false", success);
+		assertFalse("Error: Bread is still in database", findItem(item));
 	}
 
 	public void testFindAllItems() {
@@ -89,7 +83,12 @@ public class DatabaseModelTest extends AndroidTestCase {
 	}
 
 	public void testFindTypeItems() {
-		fail("Not yet implemented");
+		table = "ingredients";
+		String type = "Produce";
+		Cursor citems = testdm.findTypeItems(table, type);
+		ArrayList<String> items = parseCursor(citems);
+		assertEquals("Error: Strawberries is not ", items.get(0), "Strawberries");
+		assertEquals("Error: Lettuce is not ", items.get(1), "Lettuce");
 	}
 
 	public void testFindType() {
@@ -111,7 +110,13 @@ public class DatabaseModelTest extends AndroidTestCase {
 	}
 
 	public void testFindAllTypes() {
-		fail("Not yet implemented");
+		table = "ingredients";
+		Cursor ctypes = testdm.findAllTypes(table);
+		ArrayList<String> types = parseCursor(ctypes);
+		assertEquals("Error: Produce is not ", types.get(0), "Produce");
+		assertEquals("Error: Produce is not ", types.get(1), "Dairy");
+		assertEquals("Error: Produce is not ", types.get(2), "Poultry");
+		assertEquals("Error: Produce is not ", types.get(3), "Grain");
 	}
 
 	public void testChecked() {
