@@ -26,6 +26,9 @@ public class InventoryActivity extends BasicMenuActivity {
 	
 	ExpandableListView eView;
 	ExpandableListAdapter adapter;
+	NewAdapter mNewAdapter;
+	
+	private ArrayList<IngredientGroup> groupItem;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,19 +38,18 @@ public class InventoryActivity extends BasicMenuActivity {
 		eView = (ExpandableListView)findViewById(R.id.exp_view);
 		eView.setFocusable(true);
 		
+		groupItem = new ArrayList<IngredientGroup>();
 
 		//Doesn't make list if onCreate is being called from InventoryAdd
 		if (this instanceof InventoryActivity) {
 			table = Inventory.TABLE_NAME;
 			
 			//Makes ArrayList of types and items
-			ArrayList<String> groupItem = getTypes(table);
-			ArrayList<ArrayList<String>> childItem = new ArrayList<ArrayList<String>>();
-			for (int i = 0; i < groupItem.size(); i ++) {
-				ArrayList<String> child = getItems(groupItem.get(i));
-				childItem.add(child);
+			groupItem = getTypes(table);
+			for (IngredientGroup g : groupItem) {
+				g.setChildren(getItems(g.getGroup()));
 			}
-			makeList(groupItem, childItem);
+			makeList();
 		}
 		
 	}
@@ -60,14 +62,13 @@ public class InventoryActivity extends BasicMenuActivity {
 		return true;
 	}
 	
-	public void makeList(ArrayList<String> groupItem, ArrayList<ArrayList<String>> childItem) {
+	public void makeList() {
 
 		eView.setDividerHeight(2);
 		eView.setGroupIndicator(null);
 		eView.setClickable(true);
 
-		NewAdapter mNewAdapter = new NewAdapter(groupItem, childItem);
-		mNewAdapter.setInflater((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),this);
+		mNewAdapter = new NewAdapter(getApplicationContext(), groupItem);
 		eView.setAdapter(mNewAdapter);
 		eView.setOnChildClickListener(new OnChildClickListener() {
 			@Override
@@ -84,7 +85,7 @@ public class InventoryActivity extends BasicMenuActivity {
 	
 	public void check(View view) {
 		dm = new DatabaseModel(this);
-		CheckBox checkBox = (CheckBox) view.findViewById(R.id.textView1);
+		CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox1);
 		dm.checked(table, ((TextView)checkBox).getText().toString(), ThePantryContract.CHECKED, checkBox.isChecked());
 	}
 	
@@ -97,15 +98,15 @@ public class InventoryActivity extends BasicMenuActivity {
 	}
 
 	/** Display buttons with items of specified type */
-	public ArrayList<String> getTypes(String table) {
+	public ArrayList<IngredientGroup> getTypes(String table) {
 		dm = new DatabaseModel(this);
 		Cursor types = dm.findAllTypes(table);
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<IngredientGroup> result = new ArrayList<IngredientGroup>();
 		if (types.moveToFirst()){
 			while(!types.isAfterLast()){
 				String data = types.getString(0);
 				System.out.println(data);
-				result.add(data);
+				result.add(new IngredientGroup(data, new ArrayList<IngredientChild>()));
 				types.moveToNext();
 			}
 		}
@@ -114,15 +115,15 @@ public class InventoryActivity extends BasicMenuActivity {
 	}
 	
 	/** Display buttons with items of specified type */
-	public ArrayList<String> getItems(String type) {
+	public ArrayList<IngredientChild> getItems(String type) {
 		dm = new DatabaseModel(this);
 		Cursor items = dm.findTypeItems(Ingredients.TABLE_NAME, type);
 		
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<IngredientChild> result = new ArrayList<IngredientChild>();
 		if (items.moveToFirst()){
 			while(!items.isAfterLast()){
 				String data = items.getString(0);
-				result.add(data);
+				result.add(new IngredientChild(data,type));
 				items.moveToNext();
 			}
 		}

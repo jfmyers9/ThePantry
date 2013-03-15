@@ -17,10 +17,13 @@ import com.actionbarsherlock.view.MenuItem;
 import com.slidingmenu.lib.SlidingMenu;
 
 import cs169.project.thepantry.ThePantryContract.Ingredients;
+import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class InventoryAddActivity extends InventoryActivity {
 	String table = Ingredients.TABLE_NAME;
 	private DatabaseModel dm;
+	
+	private ArrayList<IngredientGroup> groupItem;
 	
 
 	@Override
@@ -34,13 +37,14 @@ public class InventoryAddActivity extends InventoryActivity {
 		table = Ingredients.TABLE_NAME;
 		
 		//Makes ArrayList of types and items
-		ArrayList<String> groupItem = getTypes(table);
-		ArrayList<ArrayList<String>> childItem = new ArrayList<ArrayList<String>>();
-		for (int i = 0; i < groupItem.size(); i ++) {
-			ArrayList<String> child = getItems(groupItem.get(i));
-			childItem.add(child);
+		table = Inventory.TABLE_NAME;
+		
+		//Makes ArrayList of types and items
+		groupItem = getTypes(table);
+		for (IngredientGroup g : groupItem) {
+			g.setChildren(getItems(g.getGroup()));
 		}
-		makeList(groupItem, childItem);
+		makeList();
 		
 		
 		// Only should show a back button on action bar?	
@@ -54,14 +58,13 @@ public class InventoryAddActivity extends InventoryActivity {
 	}
 	
 	@Override
-	public void makeList(ArrayList<String> groupItem, ArrayList<ArrayList<String>> childItem) {
+	public void makeList() {
 
 		eView.setDividerHeight(2);
 		eView.setGroupIndicator(null);
 		eView.setClickable(true);
 
-		NewAdapter mNewAdapter = new NewAdapter(groupItem, childItem);
-		mNewAdapter.setInflater((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),this);
+		NewAdapter mNewAdapter = new NewAdapter(getApplicationContext(), groupItem);
 		eView.setAdapter(mNewAdapter);
 		eView.setOnChildClickListener(new OnChildClickListener() {
 			@Override
@@ -119,7 +122,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	/** Checks an item in the database */
 	public void check(View view) {
 		dm = new DatabaseModel(this);
-		CheckBox checkBox = (CheckBox) view.findViewById(R.id.textView1);
+		CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox1);
 		dm.checked(table, ((TextView)checkBox).getText().toString(), ThePantryContract.CHECKED, checkBox.isChecked());
 	}
 	
