@@ -1,5 +1,8 @@
 package cs169.project.thepantry;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -63,6 +66,17 @@ public class BasicMenuActivity extends SlidingFragmentActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getSupportMenuInflater().inflate(R.menu.basic_menu, menu);
 		return true;
+	}
+	
+	// check if there is a network connection. each activity will inherit this
+	public boolean isOnline() {
+	    ConnectivityManager cm =
+	        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    if (netInfo != null && netInfo.isConnected()) {
+	        return true;
+	    }
+	    return false;
 	}
 
 }
