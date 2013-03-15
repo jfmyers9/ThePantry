@@ -69,7 +69,8 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
 	@Override
 	protected Storage doInBackground(String... strings) {
 		
-		//the first string is the type of request, either "recipe" (get recipe) or "search" (search for recipe)
+		//the first string is the type of request, either "recipe" (get recipe), "search" (search for recipe),
+		//"home", to generate recommended recipes for the homepage
 		//the second string passed in is either the recipe ID or the search query q in String format
 		//this can be extended to multiple strings to search for individual ingredients, allergies, cuisines, etc.
 		this.type = strings[0];
@@ -84,7 +85,7 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
     			//q should be correctly encoded in this case b/c recipe search is only called by us
     			getURL = URL_GET + q;
     		}
-    		else if (type == "search") {
+    		else if (type == "search" || type == "home") {
     			//parse query for mulitple ingredients separated by commas
     			//right now the first thing is treated as a normal search
     			getURL = URL_SEARCH;
@@ -117,7 +118,7 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
             Storage result;
             if (type == "recipe") {
             	result = new Recipe(jsonResponse);
-            } else if (type == "search") {
+            } else if (type == "search" || type == "home") {
             	result = new SearchResult(jsonResponse);
             } else {
             	// TODO invalid request
@@ -146,8 +147,15 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			app.startActivity(intent);
 		} else if (type == "search") {
-			SearchResultsActivity sAct = new SearchResultsActivity();
-			Intent intent = new Intent(app.getApplicationContext(), sAct.getClass());
+			//SearchResultsActivity sAct = new SearchResultsActivity();
+			Intent intent = new Intent(app.getApplicationContext(), SearchResultsActivity.class); //sAct.getClass()
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.putExtra("result", result);
+			intent.putExtra("currentSearch", this.q);
+			app.startActivity(intent);
+		} else if (type == "home") {
+			Intent intent = new Intent(app.getApplicationContext(), HomePageActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.putExtra("result", result);

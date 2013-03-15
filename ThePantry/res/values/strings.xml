@@ -55,6 +55,7 @@
 
     <string name="title_activity_nav_menu_fragment">NavMenuFragment</string>
     <string name="title_activity_basic_menu">BasicMenuActivity</string>
+    <string name="recommendations">Recommendations:</string>
 
 
 </resources>

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -23,11 +25,13 @@ public class TutorialActivity extends Activity {
 			editor.commit();
 			setContentView(R.layout.activity_tutorial);
 		} else {
-			Context context = getApplicationContext();
+			//Context context = getApplicationContext();
 			HomePageActivity nextAct = new HomePageActivity();
-			Intent intent = new Intent(context, nextAct.getClass());
-			startActivity(intent);
-			finish();
+			//Intent intent = new Intent(context, nextAct.getClass());
+			//startActivity(intent);
+			// get recommended recipes based on ingredients in the user's inventory
+			//finish(); //this shuts down the app for a second
+			nextAct.getRecommendations(getApplication());
 		}
 	}
 
@@ -46,10 +50,24 @@ public class TutorialActivity extends Activity {
 	}
 	
 	public void skipTutorial(View view) {
-		Context context = getApplicationContext();
-		Intent intent = new Intent(context, HomePageActivity.class);
-		startActivity(intent);
-		finish();
+		//Context context = getApplicationContext();
+		//Intent intent = new Intent(context, HomePageActivity.class);
+		//startActivity(intent);
+		if (isOnline()) {
+			HomePageActivity nextAct = new HomePageActivity();
+			nextAct.getRecommendations(getApplication());
+		}
+		//finish();
+	}
+	
+	public boolean isOnline() {
+	    ConnectivityManager cm =
+	        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    if (netInfo != null && netInfo.isConnected()) {
+	        return true;
+	    }
+	    return false;
 	}
 
 }
