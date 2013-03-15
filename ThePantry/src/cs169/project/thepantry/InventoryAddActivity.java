@@ -17,6 +17,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.slidingmenu.lib.SlidingMenu;
 
 import cs169.project.thepantry.ThePantryContract.Ingredients;
+import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class InventoryAddActivity extends InventoryActivity {
 	String table = Ingredients.TABLE_NAME;
@@ -110,7 +111,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	/** Adds an entry to Ingredient database */
 	public void addEntry(String item, String type) {
 		dm = new DatabaseModel(this);
-		dm.add(table, item, type, 0); //adds entry to ingredient database
+		dm.add(table, item, type, "0"); //adds entry to ingredient database
 		
 		//mark item "checked"
 	}
@@ -125,39 +126,16 @@ public class InventoryAddActivity extends InventoryActivity {
 	
 	/** Adds all items to inventory database that have been checked */
 	public void updateInventory(View view) {
-		//TODO: iterate through all checked items add inventory database, mark as unchecked
 		dm = new DatabaseModel(this);
-
-		System.out.println("DEFINITELY HERE");
-		//I don't think checkedItems is working -- could be checked function though
 		Cursor checked = dm.checkedItems(table, ThePantryContract.CHECKED);
 
 		if (checked.moveToFirst()){
-			System.out.println("****************");
 			while(!checked.isAfterLast()){
-				String data = checked.getString(0);
-				System.out.println(checked.getString(0));
-				System.out.println(checked.getString(1));
-				System.out.println(checked.getString(2));
-				System.out.println(checked.getString(3));
-				//result.add(data);
+				dm.add(Inventory.TABLE_NAME, checked.getString(0), checked.getString(1), checked.getString(3));
 				checked.moveToNext();
 			}
 		}
 		checked.close();
-		
-		boolean remSuccess = true; //set to true for display testing
-		
-		// TODO - parse cursor and fill this list 
-		/*List<String> items;
-		for (String item : items) {
-			boolean addSuccess = dm.add(Inventory.TABLE_NAME, item, type, amount);
-		}*/
-		if (remSuccess) {
-			// remove the item from the shopping list display, add it to inventory display
-		} else {
-			// do something else
-		}
 
 		//Maybe pop up window with items added -- maybe store what didn't get added
 	}

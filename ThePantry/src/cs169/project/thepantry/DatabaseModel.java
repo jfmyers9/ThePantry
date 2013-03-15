@@ -43,7 +43,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	/** Adds the ITEM, its TYPE and given AMOUNT to the specified TABLE.
 	 * Returns true if the modification was successful, false otherwise.
 	 */
-	public boolean add(String table, String item, String type, float amount) {
+	public boolean add(String table, String item, String type, String amount) {
 		//TODO - try/catch block all the SQLiteDatabase calls, throws SQLiteException if open failed
 		SQLiteDatabase db = getWritableDatabase();
 		
@@ -176,11 +176,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		
 		ContentValues values = new ContentValues();
 		
-		int newCheck;
+		String newCheck;
 		if (checked) {
-			newCheck = 1;
+			newCheck = "true";
 		} else {
-			newCheck=0;
+			newCheck="false";
 		}
 		values.put(col, newCheck);
 		int rows = db.update(table, values, selection, selectionArgs);
