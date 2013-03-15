@@ -2,14 +2,11 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
@@ -17,34 +14,33 @@ import com.actionbarsherlock.view.MenuItem;
 import com.slidingmenu.lib.SlidingMenu;
 
 import cs169.project.thepantry.ThePantryContract.Ingredients;
-import cs169.project.thepantry.ThePantryContract.Inventory;
 
-public class InventoryAddActivity extends InventoryActivity {
-	String table = Ingredients.TABLE_NAME;
-	private DatabaseModel dm;
-	
-	private ArrayList<IngredientGroup> groupItem = new ArrayList<IngredientGroup>();;
-	
+public class InventoryAddActivity extends BaseListActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		setTitle(getString(R.string.InventoryAddTitle));
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inventory_add);
-		setTitle(getString(R.string.InventoryAddTitle));
+		table = Ingredients.TABLE_NAME;
+		
+		System.out.println("fucked");
+		
 		SlidingMenu sm = getSlidingMenu();
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 		eView = (ExpandableListView)findViewById(R.id.exp_inv_add_list);
-		table = Ingredients.TABLE_NAME;
+		eView.setFocusable(true);
+		eView.setDividerHeight(2);
+		eView.setClickable(true);
+
+		groupItems = new ArrayList<IngredientGroup>();
+		groupNames = new ArrayList<String>();
 		
-		//Makes ArrayList of types and items
-		groupItem = getTypes(table);
-		for (IngredientGroup g : groupItem) {
-			g.setChildren(getItems(g.getGroup()));
-		}
-		makeList();
+		fillArrays();
 		
-		
-		// Only should show a back button on action bar?	
+		eAdapter = new NewAdapter(getApplicationContext(), groupItems);
+		eView.setAdapter(eAdapter);	
+		System.out.println("wAY fucked");
 	}
 	
 	@Override
@@ -55,17 +51,15 @@ public class InventoryAddActivity extends InventoryActivity {
 	}
 	
 	@Override
-	public void makeList() {
-
-		eView.setDividerHeight(2);
-		eView.setGroupIndicator(null);
-		eView.setClickable(true);
-
-		NewAdapter mNewAdapter = new NewAdapter(getApplicationContext(), groupItem);
-		eView.setAdapter(mNewAdapter);
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			return true;
+		}	
+		return super.onOptionsItemSelected(item);
 	}
 	
-	@Override
 	/** Same functionality as InventoryActivity search
 	 *  added ability to put it in ingredient table*/
 	public void search(View view) {
@@ -84,53 +78,12 @@ public class InventoryAddActivity extends InventoryActivity {
 		}*/
 	}
 	
-	/** Display all types in a dropdown menu for user to select */
+	/** Display all types in a drop-down menu for user to select
+	 * Called from search if item doesn't exist */
 	public void customItem() {
 		Cursor types = dm.findAllTypes(table);
-
-		// displays types in spinner?
-		// include custom button
-		
+		// displays types in spinner -- include custom button
 		// figure out how to retrieve what button user clicked
-		//return null;
-		
-	}
-	
-	@Override
-	/** Checks an item in the database */
-	public void check(View view) {
-		dm = new DatabaseModel(this);
-		CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox1);
-		dm.checked(table, ((TextView)checkBox).getText().toString(), ThePantryContract.CHECKED, checkBox.isChecked());
-	}
-	
-	/** Adds all items to inventory database that have been checked */
-	public void updateInventory(View view) {
-		dm = new DatabaseModel(this);
-		Cursor checked = dm.checkedItems(table, ThePantryContract.CHECKED);
-
-		if (checked.moveToFirst()){
-			while(!checked.isAfterLast()){
-				dm.add(Inventory.TABLE_NAME, checked.getString(0), checked.getString(1), checked.getString(3));
-				checked.moveToNext();
-			}
-		}
-		checked.close();
-		Context context = getApplicationContext();
-		Intent intent = new Intent(context, InventoryActivity.class);
-		startActivity(intent);
-
-		//Maybe pop up window with items added -- maybe store what didn't get added
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			finish();
-			return true;
-		}	
-		return super.onOptionsItemSelected(item);
 	}
 
 }
