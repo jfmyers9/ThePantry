@@ -22,6 +22,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	String table = Ingredients.TABLE_NAME;
 	private DatabaseModel dm;
 	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,7 +32,17 @@ public class InventoryAddActivity extends InventoryActivity {
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 		eView = (ExpandableListView)findViewById(R.id.exp_inv_add_list);
 		table = Ingredients.TABLE_NAME;
-		makeList();
+		
+		//Makes ArrayList of types and items
+		ArrayList<String> groupItem = getTypes(table);
+		ArrayList<Object> childItem = new ArrayList<Object>();
+		for (int i = 0; i < groupItem.size(); i ++) {
+			ArrayList<String> child = getItems(groupItem.get(i));
+			childItem.add(child);
+		}
+		makeList(groupItem, childItem);
+		
+		
 		// Only should show a back button on action bar?	
 	}
 	
@@ -43,14 +54,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	}
 	
 	@Override
-	public void makeList() {
-		ArrayList<String> groupItem = getTypes(table);
-
-		ArrayList<Object> childItem = new ArrayList<Object>();
-		for (int i = 0; i < groupItem.size(); i ++) {
-			ArrayList<String> child = getItems(groupItem.get(i));
-			childItem.add(child);
-		}
+	public void makeList(ArrayList<String> groupItem, ArrayList<Object> childItem) {
 
 		eView.setDividerHeight(2);
 		eView.setGroupIndicator(null);
@@ -62,9 +66,11 @@ public class InventoryAddActivity extends InventoryActivity {
 		eView.setOnChildClickListener(new OnChildClickListener() {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-				CheckBox checkBox = (CheckBox) v.findViewById(R.id.textView1);
-				checkBox.toggle();
-				dm.checked(table, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
+				//I think we can get rid of all of this
+				
+				//CheckBox checkBox = (CheckBox) v.findViewById(R.id.textView1);
+				//checkBox.toggle();
+				//dm.checked(table, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
 				return true;
 			}
 		});
@@ -73,7 +79,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	@Override
 	/** Same functionality as InventoryActivity search
 	 *  added ability to put it in ingredient table*/
-	public void search(String item) {
+	public void search(View view) {
 		//eventually display items returned as buttons as each letters are added to query -- need to create a more detailed search method
 		//If item doesn't exist CustomItem button appears
 		dm = new DatabaseModel(this);
@@ -109,11 +115,37 @@ public class InventoryAddActivity extends InventoryActivity {
 		//mark item "checked"
 	}
 	
+	@Override
+	/** Checks an item in the database */
+	public void check(View view) {
+		dm = new DatabaseModel(this);
+		CheckBox checkBox = (CheckBox) view.findViewById(R.id.textView1);
+		dm.checked(table, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
+	}
+	
 	/** Adds all items to inventory database that have been checked */
-	public void updateInventory() {
+	public void updateInventory(View view) {
 		//TODO: iterate through all checked items add inventory database, mark as unchecked
 		dm = new DatabaseModel(this);
-		Cursor c = dm.checkedItems(table);
+
+		System.out.println("DEFINITELY HERE");
+		//I don't think checkedItems is working -- could be checked function though
+		Cursor checked = dm.checkedItems(table);
+
+		if (checked.moveToFirst()){
+			System.out.println("****************");
+			while(!checked.isAfterLast()){
+				String data = checked.getString(0);
+				System.out.println(checked.getString(0));
+				System.out.println(checked.getString(1));
+				System.out.println(checked.getString(2));
+				System.out.println(checked.getString(3));
+				//result.add(data);
+				checked.moveToNext();
+			}
+		}
+		checked.close();
+		
 		boolean remSuccess = true; //set to true for display testing
 		
 		// TODO - parse cursor and fill this list 

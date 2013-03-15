@@ -26,19 +26,29 @@ public class InventoryActivity extends BasicMenuActivity {
 	
 	ExpandableListView eView;
 	ExpandableListAdapter adapter;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_inventory);
 		setTitle(getString(R.string.InventoryTitle));
+		setContentView(R.layout.activity_inventory);
 		eView = (ExpandableListView)findViewById(R.id.exp_view);
 		eView.setFocusable(true);
-		 // This needs to change to Inventory once I figure out inheritance with this	
 		
-		table = Inventory.TABLE_NAME;
-		System.out.println("making the eView");
-		makeList();
+
+		//Doesn't make list if onCreate is being called from InventoryAdd
+		if (this instanceof InventoryActivity) {
+			table = Inventory.TABLE_NAME;
+			
+			//Makes ArrayList of types and items
+			ArrayList<String> groupItem = getTypes(table);
+			ArrayList<Object> childItem = new ArrayList<Object>();
+			for (int i = 0; i < groupItem.size(); i ++) {
+				ArrayList<String> child = getItems(groupItem.get(i));
+				childItem.add(child);
+			}
+			makeList(groupItem, childItem);
+		}
 		
 	}
 	
@@ -50,14 +60,7 @@ public class InventoryActivity extends BasicMenuActivity {
 		return true;
 	}
 	
-	public void makeList() {
-		ArrayList<String> groupItem = getTypes(table);
-
-		ArrayList<Object> childItem = new ArrayList<Object>();
-		for (int i = 0; i < groupItem.size(); i ++) {
-			ArrayList<String> child = getItems(groupItem.get(i));
-			childItem.add(child);
-		}
+	public void makeList(ArrayList<String> groupItem, ArrayList<Object> childItem) {
 
 		eView.setDividerHeight(2);
 		eView.setGroupIndicator(null);
@@ -69,12 +72,20 @@ public class InventoryActivity extends BasicMenuActivity {
 		eView.setOnChildClickListener(new OnChildClickListener() {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-				CheckBox checkBox = (CheckBox) v.findViewById(R.id.textView1);
-				checkBox.toggle();
-				dm.checked(table, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
+				//I think we can get rid of all of this
+				
+				//CheckBox checkBox = (CheckBox) v.findViewById(R.id.textView1);
+				//checkBox.toggle();
+				//dm.checked(table, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
 				return true;
 			}
 		});
+	}
+	
+	public void check(View view) {
+		dm = new DatabaseModel(this);
+		CheckBox checkBox = (CheckBox) view.findViewById(R.id.textView1);
+		dm.checked(table, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
 	}
 	
 	/** Takes you to InventoryAdd Activity */
@@ -119,20 +130,10 @@ public class InventoryActivity extends BasicMenuActivity {
 		return result;
 	}
 	
-	/** Marks items as checked in table of current activity */
-	public void checkItem(String item) {
-		dm = new DatabaseModel(this);
-		boolean success = dm.checked(table, item, true);
-		if (success) {
-			// do something?
-		} else {
-			// do something else?
-		}
-	}
 	
 	/** Display item searched for if it is in the table 
 	 * Eventually display items dynamically as a letter is added to query*/
-	public void search(String item) {
+	public void search(View view) {
 		//for now just have it return true if item is in table, false otherwise
 		dm = new DatabaseModel(this);
 		
