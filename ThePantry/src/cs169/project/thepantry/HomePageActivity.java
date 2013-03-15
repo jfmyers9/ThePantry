@@ -86,10 +86,8 @@ public class HomePageActivity extends BasicMenuActivity {
 					recommendations = ((SearchResult)result).matches;
 					srAdapter = new SearchResultAdapter(HomePageActivity.this, recommendations);   
 					listView.setAdapter(srAdapter);
-					listView.bringToFront();
 				} else {
 					srAdapter.values = ((SearchResult)result).matches; 
-					recommendations = ((SearchResult)result).matches;
 					srAdapter.notifyDataSetChanged();
 				}
 			}
