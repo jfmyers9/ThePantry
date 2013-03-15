@@ -71,6 +71,7 @@ public class HomePageActivity extends BasicMenuActivity {
 		SearchCriteria searchcriteria;
 		if (youHave != null && youHave.moveToFirst()) {
 			//pick one of your inventory items at random and recommend recipes based on that
+			// TODO redo search for 0 results
 			int numItems = youHave.getCount();
 			int loc = (int)(Math.random() * (numItems));
 			while (loc > 0) {
