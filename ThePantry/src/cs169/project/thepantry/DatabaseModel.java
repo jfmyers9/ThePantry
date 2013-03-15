@@ -71,8 +71,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		qb.setTables(table);
 		
 		Cursor c = qb.query(db, null, null, null, null, null, null, null);
-		c.moveToFirst();
-		return c;
+		if (c.moveToFirst()) {
+			return c;
+		} else {
+			return null;
+		}
 	}
 
 	/** Finds if an item is in the specified TABLE. */
@@ -103,8 +106,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		String[] selectionArgs = {type};
 		
 		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-		c.moveToFirst();
-		return c;
+		if (c.moveToFirst()) {
+			return c;
+		} else {
+			return null;
+		}
 	}
 
 	/** Returns the type of the ITEM from the specified TABLE. */
@@ -118,8 +124,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		String[] selectionArgs = {item};
 		
 		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-		c.moveToFirst();
-		return c;
+		if (c.moveToFirst()) {
+			return c;
+		} else {
+			return null;
+		}
 	}
 
 	/** Returns the amount of the ITEM from the specified TABLE. */
@@ -133,8 +142,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		String[] selectionArgs = {item};
 		
 		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-		c.moveToFirst();
-		return c;
+		if (c.moveToFirst()) {
+			return c;
+		} else {
+			return null;
+		}
 	}
 
 	/** Returns all types from the specified TABLE. */
@@ -147,8 +159,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		String[] columns = {ThePantryContract.TYPE};
 		
 		Cursor c = qb.query(db, columns, null, null, null, null, null);
-		c.moveToFirst();
-		return c;
+		if (c.moveToFirst()) {
+			return c;
+		} else {
+			return null;
+		}
 	}
 
 	// TODO -- Figure out if we can use android's UI to reference checked items instead of database
@@ -175,8 +190,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 		values.put(col, newCheck);
 		int rows = db.update(table, values, selection, selectionArgs);
-		// TODO - add some check using rows to see if the update was successful
-		return true;
+		if (rows != 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 
@@ -191,8 +209,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 
 
 		Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
-		c.moveToFirst();
-		return c;
+		if (c.moveToFirst()) {
+			return c;
+		} else {
+			return null;
+		}
 	}
 	
 	

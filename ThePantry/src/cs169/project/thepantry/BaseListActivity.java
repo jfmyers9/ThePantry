@@ -52,7 +52,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor types = dm.findAllTypes(table);
 		ArrayList<IngredientGroup> result = new ArrayList<IngredientGroup>();
-		if (types.moveToFirst()){
+		if (types!=null){
 			while(!types.isAfterLast()){
 				String data = types.getString(0);
 				System.out.println(data);
@@ -70,7 +70,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 		Cursor items = dm.findTypeItems(table, type);
 		
 		ArrayList<IngredientChild> result = new ArrayList<IngredientChild>();
-		if (items.moveToFirst()){
+		if (items != null){
 			while(!items.isAfterLast()){
 				String data = items.getString(0);
 				IngredientChild temp = new IngredientChild(data,type);

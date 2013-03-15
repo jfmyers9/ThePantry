@@ -15,7 +15,7 @@ import com.actionbarsherlock.view.Menu;
 import cs169.project.thepantry.ThePantryContract.ShoppingList;
 
 public class ShoppingListActivity extends BaseListActivity {
-	
+
 	private Spinner spinner;
 
 	@Override
