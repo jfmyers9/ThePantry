@@ -12,6 +12,7 @@ public class ThePantryContract {
 	public static final String CHECKED = "checked";
 	public static final String COOKED = "cooked";
 	public static final String FAVORITE = "favorite";
+	public static final String RECIPE = "recipe";
 	
 	/** Private constructor method to make class static. */
 	private ThePantryContract() {}

@@ -267,9 +267,13 @@ int drawable abs__textfield_searchview_holo_dark 0x7f02006b
 int drawable abs__textfield_searchview_holo_light 0x7f02006c
 int drawable abs__textfield_searchview_right_holo_dark 0x7f02006d
 int drawable abs__textfield_searchview_right_holo_light 0x7f02006e
-int drawable default_image 0x7f020071
-int drawable ic_launcher 0x7f02006f
-int drawable shadow 0x7f020070
+int drawable check_off 0x7f02006f
+int drawable check_on 0x7f020070
+int drawable default_image 0x7f020075
+int drawable ic_launcher 0x7f020071
+int drawable shadow 0x7f020072
+int drawable star_off 0x7f020073
+int drawable star_on 0x7f020074
 int id abs__action_bar 0x7f050027
 int id abs__action_bar_container 0x7f050026
 int id abs__action_bar_subtitle 0x7f050016

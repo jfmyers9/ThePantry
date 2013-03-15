@@ -42,7 +42,7 @@
         android:layout_alignTop="@+id/recipeName"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:onClick="addToFavorites" />
+        android:onClick="toggleFavorites" />
     
     <ImageButton
         android:id="@+id/cooked"
@@ -52,7 +52,7 @@
         android:layout_alignTop="@+id/recipeName"
         android:layout_toLeftOf="@+id/favorite"
         android:layout_toRightOf="@+id/recipeName"
-        android:onClick="markCooked" />
+        android:onClick="toggleCooked" />
     
     <Button
         android:id="@+id/addtoshop"
