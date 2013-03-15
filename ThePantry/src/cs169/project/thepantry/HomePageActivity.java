@@ -64,14 +64,14 @@ public class HomePageActivity extends BasicMenuActivity {
 	}
 	
 	public void getRecommendations() {		
-		DatabaseModel dm = new DatabaseModel(this, DATABASE_NAME);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor youHave = dm.findAllItems(Inventory.TABLE_NAME);
 
-		//pick one of your inventory items at random and recommend recipes based on that
-		int numItems = youHave.getCount();
-		int loc = (int)(Math.random() * (numItems-1));
 		SearchCriteria searchcriteria;
-		if (youHave.moveToFirst()) {
+		if (youHave != null && youHave.moveToFirst()) {
+			//pick one of your inventory items at random and recommend recipes based on that
+			int numItems = youHave.getCount();
+			int loc = (int)(Math.random() * (numItems));
 			while (loc > 0) {
 				youHave.moveToNext();
 				loc--;
@@ -83,7 +83,6 @@ public class HomePageActivity extends BasicMenuActivity {
 			searchcriteria = new SearchCriteria("home", "bacon", 4);
 		}
 		new HomeSearchTask(getApplicationContext()).execute(searchcriteria);
-
 	}
 	
 	public class HomeSearchTask extends AsyncTask<SearchCriteria, String, Storage> {

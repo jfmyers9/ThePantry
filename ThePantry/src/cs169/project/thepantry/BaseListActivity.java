@@ -59,8 +59,8 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 				result.add(new IngredientGroup(data, new ArrayList<IngredientChild>()));
 				types.moveToNext();
 			}
-		}
 		types.close();
+		}
 		return result;
 	}
 	
