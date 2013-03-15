@@ -57,8 +57,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		String selection = ThePantryContract.ITEM + " = ?";
 		String[] selectionArgs = {item};
 		int val = db.delete(table, selection, selectionArgs);
-		// TODO - do a check on val to determine success
-		return true;
+		if (val != 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/** Returns all items from the specified TABLE. */

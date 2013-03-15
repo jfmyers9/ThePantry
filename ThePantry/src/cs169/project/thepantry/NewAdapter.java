@@ -9,11 +9,14 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class NewAdapter extends BaseExpandableListAdapter {
 	
 	private ArrayList<IngredientGroup> groups;
 	private Context context;
+	private IngredientChild tmpChild;
 	
 	public NewAdapter(Context context, ArrayList<IngredientGroup> groups) {
 		this.context = context;
@@ -48,8 +51,20 @@ public class NewAdapter extends BaseExpandableListAdapter {
 			LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 			convertView = infalInflater.inflate(R.layout.child_row, null);
 		}
-		CheckBox cb = (CheckBox)convertView.findViewById(R.id.checkBox1);
-		cb.setText(child.getName());
+		final ViewHolder childHolder = new ViewHolder();
+		childHolder.cb = (CheckBox)convertView.findViewById(R.id.checkBox1);
+		childHolder.cb.setText(child.getName());
+        childHolder.cb
+        .setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton button,
+                    boolean isChecked) {
+                IngredientChild item = (IngredientChild) childHolder.cb
+                        .getTag();
+                item.setSelected(button.isChecked());
+            }
+        });
+        childHolder.cb.setTag(child);
 		return convertView;
 	}
 
@@ -62,7 +77,7 @@ public class NewAdapter extends BaseExpandableListAdapter {
 	public Object getGroup(int groupPosition) {
 		return groups.get(groupPosition);
 	}
-
+	
 	@Override
 	public int getGroupCount() {
 		return groups.size();
@@ -94,6 +109,10 @@ public class NewAdapter extends BaseExpandableListAdapter {
 	@Override
 	public boolean isChildSelectable(int groupPosition, int childPosition) {
 		return true;
+	}
+	
+	public static class ViewHolder {
+	    protected CheckBox cb;
 	}
 	
 }

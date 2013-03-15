@@ -31,6 +31,7 @@ public class ShoppingListActivity extends BaseListActivity {
 		
 		groupItems = new ArrayList<IngredientGroup>();
 		groupNames = new ArrayList<String>();
+		children = new ArrayList<IngredientChild>();
 		
 		fillArrays();
 		
@@ -61,6 +62,7 @@ public class ShoppingListActivity extends BaseListActivity {
 		eText.setText("");
 		((BaseExpandableListAdapter)eView.getExpandableListAdapter()).notifyDataSetChanged();
 	}
+	
 	
 	/** Extracts the item text and type from the user input. */
 	public void addExtract() {
