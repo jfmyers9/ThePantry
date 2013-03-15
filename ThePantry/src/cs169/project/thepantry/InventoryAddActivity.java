@@ -116,7 +116,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	public void check(View view) {
 		dm = new DatabaseModel(this);
 		CheckBox checkBox = (CheckBox) view.findViewById(R.id.textView1);
-		dm.checked(table, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
+		dm.checked(table, ((TextView)checkBox).getText().toString(), ThePantryContract.CHECKED, checkBox.isChecked());
 	}
 	
 	/** Adds all items to inventory database that have been checked */
@@ -126,7 +126,7 @@ public class InventoryAddActivity extends InventoryActivity {
 
 		System.out.println("DEFINITELY HERE");
 		//I don't think checkedItems is working -- could be checked function though
-		Cursor checked = dm.checkedItems(table);
+		Cursor checked = dm.checkedItems(table, ThePantryContract.CHECKED);
 
 		if (checked.moveToFirst()){
 			System.out.println("****************");

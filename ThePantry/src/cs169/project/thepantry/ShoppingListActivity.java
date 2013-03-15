@@ -67,7 +67,7 @@ public class ShoppingListActivity extends Activity {
 	/** Updates the inventory with items checked on the shopping list */
 	public void updateInventory() {
 		DatabaseModel dm = new DatabaseModel(this);
-		Cursor c = dm.checkedItems(ThePantryContract.ShoppingList.TABLE_NAME);
+		Cursor c = dm.checkedItems(ThePantryContract.ShoppingList.TABLE_NAME, ThePantryContract.CHECKED);
 		boolean remSuccess = true; //set to true for display testing
 		// TODO - parse cursor and fill this list 
 		/*List<String> items;

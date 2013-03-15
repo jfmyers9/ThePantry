@@ -167,10 +167,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	// TODO -- Figure out if we can use android's UI to reference checked items instead of database
 	// TODO -- Figure out way to extract an entire entry and add it to a new table
 
-	/** Finds the current value of checked for the ITEM from the
-	 *  specified TABLE and sets it to the opposite.
-	 *  Returns true on success, false otherwise. */
-	public boolean checked(String table, String item, boolean checked) {
+	/** Sets the check value of the item to whatever checked it */
+	public boolean checked(String table, String item, String col, boolean checked) {
 		SQLiteDatabase db = getWritableDatabase();
 		
 		String selection = ThePantryContract.ITEM + " = ?";
@@ -178,70 +176,31 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		
 		ContentValues values = new ContentValues();
 		
-		//GET THIS WORKING WITH INTS INSTEAD OF BOOLS
 		int newCheck;
 		if (checked) {
 			newCheck = 1;
 		} else {
 			newCheck=0;
 		}
-		values.put(ThePantryContract.CHECKED, newCheck);
+		values.put(col, newCheck);
 		int rows = db.update(table, values, selection, selectionArgs);
 		// TODO - add some check using rows to see if the update was successful
 		return true;
 	}
-	//COMMENTED OUT INCASE WE CANT FIGURE OUT HOW TO ACCESS CHECKBOX INFO WHEN CLICKED
-		/*
-	public boolean checked(String table, String item) {
-		SQLiteDatabase db = getWritableDatabase();
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		qb.setTables(table);
-
-		String[] columns = {ThePantryContract.CHECKED};
-		String selection = ThePantryContract.ITEM + " = ?";
-		String[] selectionArgs = {item};
-
-		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-		c.moveToFirst();
-
-		//Parse cursor to extract checkval
-		boolean checked=false;
-		boolean newVal=false;
-		if (c.moveToFirst()){
-			checked=true;
-			int checkVal = c.getInt(0);
-			if (checkVal == 0) {
-				newVal=true;
-			}else {
-				newVal=false;
-			}
-		}
-		c.close();
-		System.out.println("EVERYTHING IS FUCKED");
-		ContentValues values = new ContentValues();
-		values.put(ThePantryContract.CHECKED, newVal);
-		if (checked) {
-			int rows = db.update(table, values, selection, selectionArgs);
-			System.out.println("YEEEEEEEEEEEEEE");
-			return true;
-		} else {
-			return false;
-		}
-	}*/
-	
-
 	
 
 	/** Returns list of all items (preferably entries) checked */
-	public Cursor checkedItems(String table) {
+	public Cursor checkedItems(String table, String col) {
 		SQLiteDatabase db = getReadableDatabase();
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(table);
 		
-		String selection = ThePantryContract.CHECKED + " = ?";
+		String selection = col + " = ?";
 		String[] selectionArgs = {"true"}; //not quite right...
 		
 		// if we want the entry, can replace columns with null?
+		
+
 		Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
 		c.moveToFirst();
 		return c;
