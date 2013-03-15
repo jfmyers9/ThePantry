@@ -58,5 +58,6 @@
     <string name="title_activity_basic_menu">BasicMenuActivity</string>
     <string name="recommendations">Recommendations:</string>
     <string name="title_activity_base_list">BaseListActivity</string>
+    <string name="ingredient">Ingredients:</string>
 
 </resources>

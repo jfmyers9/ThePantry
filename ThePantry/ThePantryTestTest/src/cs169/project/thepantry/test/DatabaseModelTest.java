@@ -2,23 +2,28 @@ package cs169.project.thepantry.test;
 
 import java.util.ArrayList;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
+
+import android.content.pm.ApplicationInfo;
+import android.content.res.AssetManager;
 import android.database.Cursor;
+import android.test.AndroidTestCase;
 import android.test.mock.MockContext;
 import cs169.project.thepantry.DatabaseModel;
+import cs169.project.thepantry.HomePageActivity;
+import cs169.project.thepantry.ShoppingListActivity;
 import cs169.project.thepantry.ThePantryContract;
 
-import org.junit.*;
-
-public class DatabaseModelTest extends TestCase {
+public class DatabaseModelTest extends AndroidTestCase {
 
 	DatabaseModel testdm;
 	String table;
 	private static final String DATABASE_NAME = "testdatabase";
 	
+	@Before
 	protected void setUp() throws Exception {
-		MockContext dummy = new MockContext();
-		testdm = new DatabaseModel(dummy, DATABASE_NAME);
+		testdm = new DatabaseModel(getContext(), DATABASE_NAME);
 	}
 
 	protected void tearDown() throws Exception {
@@ -46,7 +51,7 @@ public class DatabaseModelTest extends TestCase {
 		String amount = "12";
 		boolean success = testdm.add(table, item, type, amount);
 		assertTrue("Error: Ice Cream not added to database", success);
-		testFindItem(item);	
+		//testFindItem(item);	
 	}
 
 	public void testRemove() {
@@ -54,7 +59,7 @@ public class DatabaseModelTest extends TestCase {
 		String item = "Milk";
 		boolean success = testdm.remove(table, item);
 		assertTrue("Error: Milk not removed from database", success);
-		testFindItem(item);
+		//testFindItem(item);
 	}
 
 	public void testFindAllItems() {
@@ -107,6 +112,19 @@ public class DatabaseModelTest extends TestCase {
 
 	public void testIsItemChecked(String item) {
 		fail("Not yet implemented");
+	}
+	
+	private class ExampleMock extends MockContext {
+		
+		@Override
+		public ApplicationInfo getApplicationInfo() {
+			return (new HomePageActivity()).getApplicationInfo();
+		}
+		
+		@Override
+		public AssetManager getAssets() {
+			return (new HomePageActivity()).getAssets();
+		}
 	}
 
 }

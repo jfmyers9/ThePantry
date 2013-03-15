@@ -1,17 +1,20 @@
 package cs169.project.thepantry;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
@@ -24,13 +27,9 @@ public class RecipeActivity extends BasicMenuActivity {
 	
 	SmartImageView picture;
 	TextView name;
-	ListView ingredients;
-	TextView directions;
 	ImageButton star;
 	ImageButton check;
-	
-	ArrayList<String> recipe_ingreds;
-	IngredientAdapter ingredAdapter;
+	LinearLayout ll;
 	
 	boolean faved;
 	boolean cooked;
@@ -60,15 +59,19 @@ public class RecipeActivity extends BasicMenuActivity {
 		name.setText(info.name);
 		
 		//Render the ingredients list to view.
-		ingredients = (ListView)findViewById(R.id.ingredList);
-		recipe_ingreds = info.ingredientLines;
-		
-		ingredAdapter = new IngredientAdapter(this, recipe_ingreds);
-		ingredients.setAdapter(ingredAdapter);
+		ll = (LinearLayout)findViewById(R.id.list);
+		displayIngreds(info.ingredientLines);
 		
 		//Render directions to view.
-		directions = (TextView)findViewById(R.id.directions);
+		TextView direction = new TextView(this);
+		direction.setText("Directions:");
+		direction.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
+		ll.addView(direction);
+		
+		TextView directions = new TextView(this);
 		directions.setText(Html.fromHtml("<a href='"+info.source.sourceRecipeUrl + "'>"+info.source.sourceDisplayName+"</a>"));
+		directions.setMovementMethod(LinkMovementMethod.getInstance());
+		ll.addView(directions);
 		
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		
@@ -86,32 +89,14 @@ public class RecipeActivity extends BasicMenuActivity {
 		
 	}
 	
-	public class IngredientAdapter extends ArrayAdapter<String> {
-		
-		private final Context context;
-		private final ArrayList<String> values;
-		
-		public IngredientAdapter(Context context, ArrayList<String> values) {
-			//call the super class constructor and provide resource layout id
-			//instead of the default list view item
-			super(context, R.layout.list_ingredients, values);
-			this.context = context;
-			this.values = values;
-		}
-		
-		//for every ingredient in the array set the list item
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View listIngred = inflater.inflate(R.layout.list_ingredients, parent, false);
-			
-			TextView ingred = (TextView)listIngred.findViewById(R.id.ingred);
-			ingred.setText(values.get(position));
-			
-			return listIngred;
+	public void displayIngreds(List<String> ingreds) {
+		for (String ingred : ingreds) {
+			TextView tv = new TextView(this);
+			tv.setText(ingred);
+			ll.addView(tv);
 		}
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
