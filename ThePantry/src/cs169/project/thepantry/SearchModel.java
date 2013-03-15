@@ -70,7 +70,6 @@ public class SearchModel {
     		}
     		//create an http connection and client
     		//set timeout for connection and socket
-    		System.out.println(getURL);
         	HttpConnectionParams.setConnectionTimeout(httpParams, TIMEOUT_MILLISEC);
         	HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_MILLISEC);
         	HttpClient client = new DefaultHttpClient(httpParams);

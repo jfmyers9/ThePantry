@@ -1,25 +1,23 @@
 package cs169.project.thepantry;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.loopj.android.image.SmartImageView;
+
+import cs169.project.thepantry.ThePantryContract.ShoppingList;
 
 public class RecipeActivity extends BasicMenuActivity {
 	
@@ -168,12 +166,13 @@ public class RecipeActivity extends BasicMenuActivity {
 	public void addToShopping(View v) {
 		// for each ingredient in list
 		for (String ingred : info.ingredientLines) {
-			String amt;
-			String ingred_name;
-			// parse string for quantity and ingredient name
-			// check ingredients table for ingredient
-			// check shopping table for ingredient
-			// add ingredient to shopping table if not previously in either table
+			// TODO: parse amount and item, check for ingredient and previous amount
+			String amt = "1";
+			String ingred_name = ingred;
+			dm = new DatabaseModel(this, DATABASE_NAME);	
+			dm.add(ShoppingList.TABLE_NAME, ingred_name, "Other", amt);
+			Toast toast = Toast.makeText(getApplicationContext(), "Items added!", Toast.LENGTH_SHORT);
+			toast.show();
 		}
 		
 	}
