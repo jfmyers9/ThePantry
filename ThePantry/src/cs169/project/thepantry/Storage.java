@@ -13,8 +13,21 @@ import org.json.JSONObject;
  * It parses different attributes of the JSON response and puts them into fields of the object.
  * Right now these extend Storage: Recipe, Attribution, RecipeImages, RecipeSource, SearchResult, SearchMatch
  */
-class Storage implements Serializable {
+public class Storage implements Serializable {
 	private static final long serialVersionUID = 0L; //change this each version to remain consistent
+	
+	// for testing:
+	public static SearchCriteria makeSC(String s, String q, int m, int sk) {
+		return new SearchCriteria(s,q,m,sk);
+	}
+	
+	public static SearchCriteria makeSC(String s, String q, int m) {
+		return new SearchCriteria(s,q,m);
+	}
+	
+	public static SearchCriteria makeSC(String s, String q) {
+		return new SearchCriteria(s,q);
+	}
 }
 
 /* Recipe keeps track of recipe info. There is a lot more we can take from the Yummly response, such as nutritional info, flavors,

@@ -31,13 +31,14 @@ public class SearchModel {
     String q;
     int maxResults;
     int resultsToSkip;
+	public String getURL;
 	
 	public Storage search(SearchCriteria sc) {
 		
-		//the first string is the type of request, either "recipe" (get recipe), "search" (search for recipe),
+		//type is the type of request, either "recipe" (get recipe), "search" (search for recipe),
 		//"home", to generate recommended recipes for the homepage
-		//the second string passed in is either the recipe ID or the search query q in String format
-		//this can be extended to multiple strings to search for individual ingredients, allergies, cuisines, etc.
+		//q is either the recipe ID or the search query q in String format
+		//q is separated by commas: the first term is the search query q, after that terms are ingredients
 		this.type = sc.type;
 		this.q = sc.q;
 		this.maxResults = sc.maxResults;
@@ -46,7 +47,6 @@ public class SearchModel {
     	try {
     		// generate the correct URL for the get request
     		// create http parameters for the get request that will be appended to the URL in the request
-    		String getURL;
         	HttpParams httpParams = new BasicHttpParams();
     		if (type == "recipe") {
     			//q should be correctly encoded in this case b/c recipe search is only called by us
@@ -70,6 +70,7 @@ public class SearchModel {
     		}
     		//create an http connection and client
     		//set timeout for connection and socket
+    		System.out.println(getURL);
         	HttpConnectionParams.setConnectionTimeout(httpParams, TIMEOUT_MILLISEC);
         	HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_MILLISEC);
         	HttpClient client = new DefaultHttpClient(httpParams);
@@ -91,15 +92,14 @@ public class SearchModel {
             	result = new SearchResult(jsonResponse);
             } else {
             	// TODO invalid request
-            	result = null;//new Recipe(new JSONObject());
+            	result = null;
             }
             return result;
             
     	} catch (Exception e) {
     		// TODO return some kind of default results (not this though it's sketch)
     		e.printStackTrace();
-    		//Storage defaultresult = new Recipe(new JSONObject());
-    		return null;//defaultresult;
+    		return null;
         }
 	}
 }
