@@ -11,13 +11,13 @@ import android.widget.EditText;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class SearchResultsActivity extends Activity {
+public class SearchResultsActivity extends BasicMenuActivity {
 
 	ArrayList<SearchMatch> matches;
 	SearchResultAdapter srAdapter;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search_results);
 		
@@ -36,22 +36,19 @@ public class SearchResultsActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 			    // When clicked
-				new SearchTask(getApplication()).execute("recipe", (String)view.getTag());
+				if (isOnline()){
+					new SearchTask(getApplication()).execute("recipe", (String)view.getTag());
+				}
 			}
 		});
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.search_results, menu);
-		return true;
 	}
 	
 	public void search(View view) throws Exception {
 		EditText searchText = (EditText) findViewById(R.id.search_text);
     	String search = searchText.getText().toString();
-		new SearchTask(getApplication()).execute("search", search);
+    	if (isOnline()) {
+    		new SearchTask(getApplication()).execute("search", search);
+    	}
 	}
 
 }

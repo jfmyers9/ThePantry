@@ -32,6 +32,8 @@ class Recipe extends Storage implements Serializable {
 		// images and source not necessarily included
 		try {
 			this.images = new RecipeImages((JSONObject)((JSONArray)results.get("images")).get(0));
+		} catch (JSONException e) {}
+		try {
 			this.source = new RecipeSource((JSONObject)results.get("source"));
 		} catch (JSONException e) {}
 		
@@ -82,11 +84,10 @@ class RecipeImages extends Storage implements Serializable {
 	protected RecipeImages(JSONObject ims) {
 		try {
 			this.hostedLargeUrl = ims.getString("hostedLargeUrl");
+		} catch (JSONException e) {}
+		try {
 			this.hostedSmallUrl = ims.getString("hostedSmallUrl");
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (JSONException e) {}
 	}
 }
 
@@ -100,12 +101,13 @@ class RecipeSource extends Storage implements Serializable {
 	protected RecipeSource(JSONObject src) {
 		try {
 			this.sourceRecipeUrl = src.getString("sourceRecipeUrl");
+		} catch (Exception e) {}
+		try {
 			this.sourceSiteUrl = src.getString("sourceSiteUrl");
+		} catch (Exception e) {}
+		try {
 			this.sourceDisplayName = StringEscapeUtils.unescapeHtml4(src.getString("sourceDisplayName"));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (Exception e) {}
 	}
 }
 
@@ -144,7 +146,7 @@ class SearchMatch extends Storage implements Serializable {
 	protected SearchMatch(JSONObject info) {
 		// smallImageUrl not always present
 		try {
-			this.smallImageUrl = info.getJSONArray("smallImageUrl").getString(0);
+			this.smallImageUrl = info.getJSONArray("smallImageUrls").getString(0);
 		} catch (JSONException e) {}
 		
 		// id, name, ingredients always present in response

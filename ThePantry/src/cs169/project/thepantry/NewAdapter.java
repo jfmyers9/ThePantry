@@ -2,17 +2,16 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckBox;
 import android.widget.CheckedTextView;
-import android.widget.Checkable;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class NewAdapter extends BaseExpandableListAdapter {
 
@@ -20,6 +19,9 @@ public class NewAdapter extends BaseExpandableListAdapter {
 	 public ArrayList<Object> ChildItem = new ArrayList<Object>();
 	 public LayoutInflater minflater;
 	 public Activity activity;
+	 public String table;
+	 public DatabaseModel dm;
+	 public Context cont;
 	 
 	 public NewAdapter(ArrayList<String> grList, ArrayList<Object> childItem) {
 		 groupItem = grList;
@@ -53,6 +55,12 @@ public class NewAdapter extends BaseExpandableListAdapter {
 		}
 		text = (TextView) convertView.findViewById(R.id.textView1); 
 		text.setText(tempChild.get(childPosition));
+		convertView.setOnClickListener(new OnClickListener() {
+			   @Override
+			   public void onClick(View v) {
+				  //This responds to anywhere you click except for text, may be good to use
+			   }
+			  });
 		return convertView;
 	}
 

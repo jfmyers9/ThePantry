@@ -2,25 +2,18 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-import android.os.Bundle;
-
-import android.app.Activity;
-//import android.app.ActionBar;
-
 import android.database.Cursor;
-
-import android.view.Menu;
-
-//import android.widget.CheckBox;
+import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.ArrayAdapter;
 
+import com.actionbarsherlock.view.Menu;
 
-public class ShoppingListActivity extends Activity {
+public class ShoppingListActivity extends BasicMenuActivity {
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setTitle(R.string.action_shopping_list);
 		setContentView(R.layout.activity_shopping_list);
@@ -40,7 +33,7 @@ public class ShoppingListActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.shopping_list, menu);
+		getSupportMenuInflater().inflate(R.menu.shopping_list, menu);
 		return true;
 	}
 	
@@ -86,7 +79,7 @@ public class ShoppingListActivity extends Activity {
 	public void updateInventory() {
 		boolean remSuccess = false;
 		DatabaseModel dm = new DatabaseModel(this);
-		Cursor c = dm.checkedItems(ThePantryContract.ShoppingList.TABLE_NAME);
+		Cursor c = dm.checkedItems(ThePantryContract.ShoppingList.TABLE_NAME, ThePantryContract.CHECKED);
 
 		// Parses the cursor into a list of Strings, still needs work, have to extract type and amount
 		ArrayList<String> items = new ArrayList<String>();
@@ -100,16 +93,6 @@ public class ShoppingListActivity extends Activity {
 		c.close();
 		
 		// Add to inventory, removing from shopping list
-		for (String item : items) {
-			String type = "Other";
-			float amount = 1;
-			boolean addSuccess = dm.add(ThePantryContract.Inventory.TABLE_NAME, item, type, amount);
-			if (addSuccess) {
-				remSuccess = dm.remove(ThePantryContract.ShoppingList.TABLE_NAME, item);
-			} else {
-				// do something else
-			}
-		}
 		if (remSuccess) {
 			// remove the item from the shopping list display, add it to inventory display
 		} else {
@@ -117,16 +100,6 @@ public class ShoppingListActivity extends Activity {
 		}
 	}
 	
-	/** Marks a shopping list item as checked */
-	public void checkItem(String item, boolean checked) {
-		DatabaseModel dm = new DatabaseModel(this);
-		boolean success = dm.checked(ThePantryContract.ShoppingList.TABLE_NAME, item, checked);
-		if (success) {
-			// do something?
-		} else {
-			// do something else?
-		}
-	}
 	
 	// TODO - use CursorLoader and an Adapter to populate the ListView
 

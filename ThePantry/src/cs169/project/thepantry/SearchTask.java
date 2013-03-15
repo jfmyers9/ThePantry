@@ -146,7 +146,8 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			app.startActivity(intent);
 		} else if (type == "search") {
-			Intent intent = new Intent(app.getApplicationContext(), SearchResultsActivity.class);
+			SearchResultsActivity sAct = new SearchResultsActivity();
+			Intent intent = new Intent(app.getApplicationContext(), sAct.getClass());
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			intent.putExtra("result", result);

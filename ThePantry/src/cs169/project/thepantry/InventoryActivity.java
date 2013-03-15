@@ -2,67 +2,90 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-import android.app.ExpandableListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.TextView;
+
+import com.actionbarsherlock.view.Menu;
+
 import cs169.project.thepantry.ThePantryContract.Ingredients;
 import cs169.project.thepantry.ThePantryContract.Inventory;
 
-public class InventoryActivity extends ExpandableListActivity implements OnChildClickListener {
+public class InventoryActivity extends BasicMenuActivity {
 	String table;
 	private DatabaseModel dm;
 	
+	ExpandableListView eView;
+	ExpandableListAdapter adapter;
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setTitle(getString(R.string.InventoryTitle));
-		table = Ingredients.TABLE_NAME; // This needs to change to Inventory once I figure out inheritance with this
-		makeList();
+		setContentView(R.layout.activity_inventory);
+		eView = (ExpandableListView)findViewById(R.id.exp_view);
+		eView.setFocusable(true);
+		
+
+		//Doesn't make list if onCreate is being called from InventoryAdd
+		if (this instanceof InventoryActivity) {
+			table = Inventory.TABLE_NAME;
+			
+			//Makes ArrayList of types and items
+			ArrayList<String> groupItem = getTypes(table);
+			ArrayList<Object> childItem = new ArrayList<Object>();
+			for (int i = 0; i < groupItem.size(); i ++) {
+				ArrayList<String> child = getItems(groupItem.get(i));
+				childItem.add(child);
+			}
+			makeList(groupItem, childItem);
+		}
+		
 	}
 	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.inventory, menu);
+		getSupportMenuInflater().inflate(R.menu.inventory, menu);
 		return true;
 	}
 	
-	public void makeList() {
-		ArrayList<String> groupItem = getTypes();
+	public void makeList(ArrayList<String> groupItem, ArrayList<Object> childItem) {
 
-		ArrayList<Object> childItem = new ArrayList<Object>();
-		for (int i = 0; i < groupItem.size(); i ++) {
-			ArrayList<String> child = getItems(groupItem.get(i));
-			childItem.add(child);
-		}
-
-		ExpandableListView expandbleLis = getExpandableListView();
-		expandbleLis.setDividerHeight(2);
-		expandbleLis.setGroupIndicator(null);
-		expandbleLis.setClickable(true);
+		eView.setDividerHeight(2);
+		eView.setGroupIndicator(null);
+		eView.setClickable(true);
 
 		NewAdapter mNewAdapter = new NewAdapter(groupItem, childItem);
 		mNewAdapter.setInflater((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),this);
-		getExpandableListView().setAdapter(mNewAdapter);
-		expandbleLis.setOnChildClickListener(new OnChildClickListener() {
+		eView.setAdapter(mNewAdapter);
+		eView.setOnChildClickListener(new OnChildClickListener() {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-				CheckBox checkBox = (CheckBox) v.findViewById(R.id.textView1);
-				checkBox.toggle();
-
-				//Call checked function here
+				//I think we can get rid of all of this
+				
+				//CheckBox checkBox = (CheckBox) v.findViewById(R.id.textView1);
+				//checkBox.toggle();
+				//dm.checked(table, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
 				return true;
 			}
 		});
+	}
+	
+	public void check(View view) {
+		dm = new DatabaseModel(this);
+		CheckBox checkBox = (CheckBox) view.findViewById(R.id.textView1);
+		dm.checked(table, ((TextView)checkBox).getText().toString(), ThePantryContract.CHECKED, checkBox.isChecked());
 	}
 	
 	/** Takes you to InventoryAdd Activity */
@@ -74,13 +97,14 @@ public class InventoryActivity extends ExpandableListActivity implements OnChild
 	}
 
 	/** Display buttons with items of specified type */
-	public ArrayList<String> getTypes() {
+	public ArrayList<String> getTypes(String table) {
 		dm = new DatabaseModel(this);
 		Cursor types = dm.findAllTypes(table);
 		ArrayList<String> result = new ArrayList<String>();
 		if (types.moveToFirst()){
 			while(!types.isAfterLast()){
 				String data = types.getString(0);
+				System.out.println(data);
 				result.add(data);
 				types.moveToNext();
 			}
@@ -106,20 +130,10 @@ public class InventoryActivity extends ExpandableListActivity implements OnChild
 		return result;
 	}
 	
-	/** Marks items as checked in table of current activity */
-	public void checkItem(String item) {
-		dm = new DatabaseModel(this);
-		boolean success = dm.checked(table, item);
-		if (success) {
-			// do something?
-		} else {
-			// do something else?
-		}
-	}
 	
 	/** Display item searched for if it is in the table 
 	 * Eventually display items dynamically as a letter is added to query*/
-	public void search(String item) {
+	public void search(View view) {
 		//for now just have it return true if item is in table, false otherwise
 		dm = new DatabaseModel(this);
 		

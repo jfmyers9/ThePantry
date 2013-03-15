@@ -3,7 +3,6 @@ package cs169.project.thepantry;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +35,8 @@ public class NavMenuFragment extends ListFragment {
 			intent = new Intent(context, HomePageActivity.class);
 			break;
 		case 1:
-			intent = new Intent(context, InventoryActivity.class);
+			InventoryActivity invAct = new InventoryActivity();
+			intent = new Intent(context, invAct.getClass());
 			break;
 		case 2:
 			intent = new Intent(context, ShoppingListActivity.class);

@@ -1,29 +1,31 @@
 package cs169.project.thepantry;
 
-import android.os.Bundle;
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.loopj.android.image.SmartImageView;
+
 public class RecipeActivity extends Activity {
 	
 	Recipe info;
 	
-	WebView picture;
+	SmartImageView picture;
 	TextView name;
 	ListView ingredients;
 	TextView directions;
 	
-	String[] recipe_ingreds;
+	ArrayList<String> recipe_ingreds;
 	IngredientAdapter ingredAdapter;
 
 	@Override
@@ -32,13 +34,14 @@ public class RecipeActivity extends Activity {
 		setContentView(R.layout.activity_recipe);
 		
 		//Get bundle with recipe information.
-		Intent i = this.getIntent();
-		info = (Recipe)i.getSerializableExtra("results");
+		//Intent i = this.getIntent();
+		info = (Recipe)getIntent().getExtras().getSerializable("result");
 		
 		//Display recipe picture if there is one.
-		picture = (WebView)findViewById(R.id.recipePic);
-		if (info.images != null) {
-			picture.loadUrl(info.images.hostedSmallUrl);
+		picture = (SmartImageView)findViewById(R.id.recipePic);
+		if (info.images != null && info.images.hostedLargeUrl != null) { //might need online check
+			picture.setImageUrl(info.images.hostedLargeUrl);
+			picture.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		}
 		
 		//Display recipe name.
@@ -47,7 +50,7 @@ public class RecipeActivity extends Activity {
 		
 		//Render the ingredients list to view.
 		ingredients = (ListView)findViewById(R.id.ingredList);
-		recipe_ingreds = (String[])(info.ingredientLines).toArray();
+		recipe_ingreds = info.ingredientLines;
 		
 		ingredAdapter = new IngredientAdapter(this, recipe_ingreds);
 		ingredients.setAdapter(ingredAdapter);
@@ -59,9 +62,9 @@ public class RecipeActivity extends Activity {
 	public class IngredientAdapter extends ArrayAdapter<String> {
 		
 		private final Context context;
-		private final String[] values;
+		private final ArrayList<String> values;
 		
-		public IngredientAdapter(Context context, String[] values) {
+		public IngredientAdapter(Context context, ArrayList<String> values) {
 			//call the super class constructor and provide resource layout id
 			//instead of the default list view item
 			super(context, R.layout.list_ingredients, values);
@@ -76,7 +79,7 @@ public class RecipeActivity extends Activity {
 			View listIngred = inflater.inflate(R.layout.list_ingredients, parent, false);
 			
 			TextView ingred = (TextView)listIngred.findViewById(R.id.ingred);
-			ingred.setText(values[position]);
+			ingred.setText(values.get(position));
 			
 			return listIngred;
 		}
