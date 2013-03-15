@@ -15,7 +15,9 @@ public class HomePageActivity extends BasicMenuActivity {
 	public void search(View view) throws Exception {
 		EditText searchText = (EditText) findViewById(R.id.search_text);
     	String search = searchText.getText().toString();
-		new SearchTask(getApplication()).execute("search", search);
+    	if (isOnline()) {
+    		new SearchTask(getApplication()).execute("search", search);
+    	}
 	}
 
 }
