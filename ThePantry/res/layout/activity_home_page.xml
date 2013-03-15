@@ -20,5 +20,20 @@
         android:layout_height="wrap_content"
         android:onClick="search"
         android:text="@string/button_search" />
+    
+    <TextView
+    	android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="25px"
+        android:text="@string/recommendations" />
+        
+    <ListView 
+        android:id="@+id/recsList"
+        android:layout_height="match_parent" 
+        android:layout_width="fill_parent"
+		>
+        
+    </ListView>
 
 </LinearLayout>

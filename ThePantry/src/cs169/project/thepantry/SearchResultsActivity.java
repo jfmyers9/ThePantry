@@ -37,7 +37,8 @@ public class SearchResultsActivity extends BasicMenuActivity {
 					int position, long id) {
 			    // When clicked
 				if (isOnline()){
-					new SearchTask(getApplication()).execute("recipe", (String)view.getTag());
+		    		SearchCriteria searchcriteria = new SearchCriteria("recipe", (String)view.getTag());
+		    		new SearchTask(getApplication()).execute(searchcriteria);
 				}
 			}
 		});
@@ -47,7 +48,8 @@ public class SearchResultsActivity extends BasicMenuActivity {
 		EditText searchText = (EditText) findViewById(R.id.search_text);
     	String search = searchText.getText().toString();
     	if (isOnline()) {
-    		new SearchTask(getApplication()).execute("search", search);
+    		SearchCriteria searchcriteria = new SearchCriteria("search", search);
+    		new SearchTask(getApplication()).execute(searchcriteria);
     	}
 	}
 
