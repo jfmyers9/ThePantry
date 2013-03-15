@@ -9,7 +9,6 @@ import android.test.AndroidTestCase;
 import android.test.mock.MockContext;
 import cs169.project.thepantry.DatabaseModel;
 import cs169.project.thepantry.HomePageActivity;
-import cs169.project.thepantry.ShoppingListActivity;
 import cs169.project.thepantry.ThePantryContract;
 
 public class DatabaseModelTest extends AndroidTestCase {
