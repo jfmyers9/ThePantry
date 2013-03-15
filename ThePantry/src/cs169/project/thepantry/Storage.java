@@ -164,5 +164,33 @@ class SearchMatch extends Storage implements Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}	
+}
+
+/* SearchCriteria stores information for a search so we can easily pass # of results, etc.
+ * It can be created either with just the type and query, type query and maxresults, or type query maxresults and resultstoskip
+*/
+class SearchCriteria extends Storage implements Serializable {
+	int maxResults = 40;
+	int resultsToSkip = 0;
+	String q;
+	String type;
+	
+	protected SearchCriteria(String t, String query) {
+		this.type = t;
+		this.q = query;
+	}
+	
+	protected SearchCriteria(String t, String query, int max) {
+		this.type = t;
+		this.q = query;
+		this.maxResults = max;
+	}
+	
+	protected SearchCriteria(String t, String query, int max, int skip) {
+		this.type = t;
+		this.q = query;
+		this.maxResults = max;
+		this.resultsToSkip = skip;
 	}
 }

@@ -53,6 +53,7 @@ public class TutorialActivity extends Activity {
 		//Context context = getApplicationContext();
 		//Intent intent = new Intent(context, HomePageActivity.class);
 		//startActivity(intent);
+		//should add a number of tries to check online
 		if (isOnline()) {
 			HomePageActivity nextAct = new HomePageActivity();
 			nextAct.getRecommendations(getApplication());

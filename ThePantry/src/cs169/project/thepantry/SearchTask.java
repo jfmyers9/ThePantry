@@ -30,7 +30,7 @@ import android.os.AsyncTask;
  * Progress is the type of progress that is published during background computation
  * Result is the type of the result of background computation
  */
-public class SearchTask extends AsyncTask<String, String, Storage> {
+public class SearchTask extends AsyncTask<SearchCriteria, String, Storage> {
 	//for accessing the api - id and key, plus timeout and retry info
 	private String API_ID = "a169c318";
 	private String API_KEY = "4778f72efbcabe0f761efefd92afe5b0";
@@ -45,6 +45,8 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
     Application app; //application that called the task
     String type = "";
     String q = "";
+    int maxResults = 40;
+    int resultsToSkip = 0;
 
     public SearchTask(Application app) {
     	this.app = app;
@@ -67,14 +69,16 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
 	 * These values are published on the UI thread, in the onProgressUpdate(Progress...) step.
 	 */
 	@Override
-	protected Storage doInBackground(String... strings) {
+	protected Storage doInBackground(SearchCriteria... sc) {
 		
 		//the first string is the type of request, either "recipe" (get recipe), "search" (search for recipe),
 		//"home", to generate recommended recipes for the homepage
 		//the second string passed in is either the recipe ID or the search query q in String format
 		//this can be extended to multiple strings to search for individual ingredients, allergies, cuisines, etc.
-		this.type = strings[0];
-		this.q = strings[1];
+		this.type = sc[0].type;
+		this.q = sc[0].q;
+		this.maxResults = sc[0].maxResults;
+		this.resultsToSkip = sc[0].resultsToSkip;
 		
     	try {
     		// generate the correct URL for the get request
@@ -94,6 +98,8 @@ public class SearchTask extends AsyncTask<String, String, Storage> {
     			for (int i=1; i<qs.length; i++) {
     				getURL += "&allowedIngredient%5B%5D=" + URLEncoder.encode(qs[i], "UTF-8");
     			}
+    			getURL += "&maxResult=" + maxResults;
+    			getURL += "&start=" + resultsToSkip;
     		}
     		else {
     			// TODO throw invalid request exception?

@@ -40,7 +40,8 @@ public class HomePageActivity extends BasicMenuActivity {
 						int position, long id) {
 					// When clicked
 					if (isOnline()){
-						new SearchTask(getApplication()).execute("recipe", (String)view.getTag());
+			    		SearchCriteria searchcriteria = new SearchCriteria("recipe", (String)view.getTag());
+						new SearchTask(getApplication()).execute(searchcriteria);
 					}
 				}
 			});
@@ -51,13 +52,15 @@ public class HomePageActivity extends BasicMenuActivity {
 		EditText searchText = (EditText) findViewById(R.id.search_text);
     	String search = searchText.getText().toString();
     	if (isOnline()) {
-    		new SearchTask(getApplication()).execute("search", search);
+    		SearchCriteria searchcriteria = new SearchCriteria("search", search);
+    		new SearchTask(getApplication()).execute(searchcriteria);
     	}
 	}
 	
 	public void getRecommendations(Application app) {
 		//if (isOnline()){
-			new SearchTask(app).execute("home", "bacon");
+			SearchCriteria searchcriteria = new SearchCriteria("home", "bacon", 5);
+			new SearchTask(app).execute(searchcriteria);
 		//}
 	}
 
