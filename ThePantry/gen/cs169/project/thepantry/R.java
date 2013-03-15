@@ -1092,11 +1092,22 @@ containing a value of this type.
         public static final int abs__title=0x7f050020;
         public static final int abs__titleDivider=0x7f050021;
         public static final int abs__up=0x7f05000b;
+<<<<<<< HEAD
         public static final int action_forgot_password=0x7f05005d;
         public static final int action_settings=0x7f05005c;
         public static final int addtoshop=0x7f050049;
         public static final int cooked=0x7f050048;
         public static final int directions=0x7f05004b;
+=======
+        public static final int action_forgot_password=0x7f05005e;
+        public static final int action_settings=0x7f05005d;
+        public static final int add_sl_item_button=0x7f05004d;
+        public static final int add_sl_item_text=0x7f05004c;
+        public static final int add_sl_item_types=0x7f05004e;
+        public static final int addtoshop=0x7f050048;
+        public static final int cooked=0x7f050047;
+        public static final int directions=0x7f05004a;
+>>>>>>> 42abe2e4de2f5a5a2344248bc753d08cbbed1a2a
         public static final int disableHome=0x7f050009;
         public static final int edit_query=0x7f05002c;
         public static final int email=0x7f050041;
@@ -1105,10 +1116,16 @@ containing a value of this type.
         public static final int favorite=0x7f050047;
         public static final int fullscreen=0x7f050013;
         public static final int homeAsUp=0x7f050006;
+<<<<<<< HEAD
         public static final int image=0x7f050055;
         public static final int ingred=0x7f050054;
         public static final int ingredList=0x7f05004a;
         public static final int ingredient_types=0x7f05004f;
+=======
+        public static final int image=0x7f050056;
+        public static final int ingred=0x7f050055;
+        public static final int ingredList=0x7f050049;
+>>>>>>> 42abe2e4de2f5a5a2344248bc753d08cbbed1a2a
         public static final int left=0x7f050010;
         public static final int listMode=0x7f050002;
         public static final int login=0x7f050043;
@@ -1116,7 +1133,11 @@ containing a value of this type.
         public static final int login_status=0x7f05003e;
         public static final int login_status_message=0x7f05003f;
         public static final int margin=0x7f050012;
+<<<<<<< HEAD
         public static final int menu_frame=0x7f05005a;
+=======
+        public static final int menu_frame=0x7f05005b;
+>>>>>>> 42abe2e4de2f5a5a2344248bc753d08cbbed1a2a
         public static final int normal=0x7f050001;
         public static final int password=0x7f050042;
         public static final int recipeName=0x7f050046;
@@ -1127,6 +1148,7 @@ containing a value of this type.
         public static final int search=0x7f05003c;
         public static final int search_text=0x7f050038;
         public static final int selected_view=0x7f050014;
+<<<<<<< HEAD
         public static final int setup_inventory_button=0x7f050051;
         public static final int shopping_list_button=0x7f05004e;
         public static final int shopping_list_text=0x7f05004d;
@@ -1151,6 +1173,32 @@ containing a value of this type.
         public static final int wrap_content=0x7f050000;
         public static final int you_have=0x7f050058;
         public static final int you_need=0x7f050059;
+=======
+        public static final int setup_inventory_button=0x7f050052;
+        public static final int shopping_list=0x7f050050;
+        public static final int showCustom=0x7f050008;
+        public static final int showHome=0x7f050005;
+        public static final int showTitle=0x7f050007;
+        public static final int sign_in_button=0x7f050043;
+        public static final int skip_button=0x7f050053;
+        public static final int slidingmenumain=0x7f05005c;
+        public static final int tabMode=0x7f050003;
+        public static final int textView1=0x7f050054;
+        public static final int time=0x7f050058;
+        public static final int title=0x7f050057;
+        public static final int title_activity_home_page=0x7f05005f;
+        public static final int title_activity_inventory=0x7f050060;
+        public static final int title_activity_login=0x7f050061;
+        public static final int title_activity_logout=0x7f050062;
+        public static final int title_activity_register=0x7f050063;
+        public static final int update_button=0x7f05003a;
+        public static final int update_sl_inventory=0x7f05004f;
+        public static final int useLogo=0x7f050004;
+        public static final int welcome_text=0x7f050051;
+        public static final int wrap_content=0x7f050000;
+        public static final int you_have=0x7f050059;
+        public static final int you_need=0x7f05005a;
+>>>>>>> 42abe2e4de2f5a5a2344248bc753d08cbbed1a2a
     }
     public static final class integer {
         public static final int abs__max_action_buttons=0x7f090000;
@@ -1314,12 +1362,15 @@ containing a value of this type.
          */
         public static final int prompt_email=0x7f0a0036;
         public static final int prompt_password=0x7f0a0037;
+<<<<<<< HEAD
         public static final int recommendations=0x7f0a0034;
+=======
+>>>>>>> 42abe2e4de2f5a5a2344248bc753d08cbbed1a2a
         public static final int search=0x7f0a0023;
         public static final int setup_inventory=0x7f0a0027;
         public static final int shoppingListTable=0x7f0a002a;
         public static final int skip_text=0x7f0a0028;
-        public static final int title_activity_basic_menu=0x7f0a0033;
+        public static final int title_activity_basic_menu=0x7f0a0034;
         public static final int title_activity_home_page=0x7f0a0014;
         public static final int title_activity_inventory=0x7f0a0013;
         public static final int title_activity_inventory_add=0x7f0a0017;
@@ -1333,6 +1384,7 @@ containing a value of this type.
         public static final int title_activity_shopping_list=0x7f0a0015;
         public static final int title_activity_tutorial=0x7f0a0010;
         public static final int tutorial_title=0x7f0a0026;
+        public static final int update_inventory=0x7f0a0033;
     }
     public static final class style {
         /** 

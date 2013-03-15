@@ -32,7 +32,11 @@ public final class R {
 		public static final int abs__progress_horizontal = 0x7f05000f;
 		public static final int showHome = 0x7f050005;
 		public static final int fullscreen = 0x7f050013;
+<<<<<<< HEAD
 		public static final int slidingmenumain = 0x7f05005b;
+=======
+		public static final int slidingmenumain = 0x7f05005c;
+>>>>>>> 42abe2e4de2f5a5a2344248bc753d08cbbed1a2a
 		public static final int abs__home = 0x7f05000a;
 		public static final int abs__search_src_text = 0x7f050033;
 		public static final int abs__search_mag_icon = 0x7f050031;

@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,26 +7,34 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".ShoppingListActivity" >
-
+    
+    
     <EditText
         android:id= "@+id/shopping_list_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_shopping_list_ingredient"
-        android:inputType="text" />
+        android:hint="@string/add_shopping_list_ingredient"
+        android:inputType="text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
     
     <Button
         android:id="@+id/shopping_list_button"
     	android:layout_height="wrap_content"
      	android:layout_width="wrap_content"
     	android:text="@string/add_item"
-     	android:onClick="addItem" />
+     	android:onClick="addShopItem"
+     	android:layout_toRightOf="@id/shopping_list_text"/>
+   
     
     <Spinner
-    	android:id="@+id/ingredient_types"
+    	android:id="@+id/add_sl_types"
     	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content" />
+    	android:layout_height="wrap_content"
+    	android:layout_toRightOf="@id/shopping_list_button" />
     
-    <!-- Still need to add cateogires, not sure if they should be spinners too? -->
-    
-</LinearLayout>
+    <ExpandableListView android:id="@+id/exp_shop_list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/shopping_list_button"/>    
+</RelativeLayout>
