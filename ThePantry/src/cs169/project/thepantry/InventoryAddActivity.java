@@ -35,7 +35,7 @@ public class InventoryAddActivity extends InventoryActivity {
 		
 		//Makes ArrayList of types and items
 		ArrayList<String> groupItem = getTypes(table);
-		ArrayList<Object> childItem = new ArrayList<Object>();
+		ArrayList<ArrayList<String>> childItem = new ArrayList<ArrayList<String>>();
 		for (int i = 0; i < groupItem.size(); i ++) {
 			ArrayList<String> child = getItems(groupItem.get(i));
 			childItem.add(child);
@@ -54,7 +54,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	}
 	
 	@Override
-	public void makeList(ArrayList<String> groupItem, ArrayList<Object> childItem) {
+	public void makeList(ArrayList<String> groupItem, ArrayList<ArrayList<String>> childItem) {
 
 		eView.setDividerHeight(2);
 		eView.setGroupIndicator(null);

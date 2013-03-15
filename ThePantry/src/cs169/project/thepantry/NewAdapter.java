@@ -1,30 +1,29 @@
 package cs169.project.thepantry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.app.Activity;
 import android.content.Context;
-import android.provider.Contacts.Groups;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 public class NewAdapter extends BaseExpandableListAdapter {
 
 	 public ArrayList<String> groupItem, tempChild;
-	 public ArrayList<Object> childItem = new ArrayList<Object>();
+	 public ArrayList<ArrayList<String>> childItem = new ArrayList<ArrayList<String>>();
 	 public LayoutInflater minflater;
 	 public Activity activity;
 	 public String table;
 	 public DatabaseModel dm;
 	 public Context cont;
 	 
-	 public NewAdapter(ArrayList<String> grList, ArrayList<Object> childItem) {
+	 public NewAdapter(ArrayList<String> grList, ArrayList<ArrayList<String>> childItem) {
 		 groupItem = grList;
 		 this.childItem = childItem;
 	 }
@@ -49,7 +48,7 @@ public class NewAdapter extends BaseExpandableListAdapter {
 	public View getChildView(int groupPosition, final int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 		
-		tempChild = (ArrayList<String>) childItem.get(groupPosition);
+		tempChild = childItem.get(groupPosition);
 		TextView text = null;
 		if (convertView == null) {
 			convertView = minflater.inflate(R.layout.child_row, null); 
@@ -67,7 +66,7 @@ public class NewAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		return ((ArrayList<String>) childItem.get(groupPosition)).size();
+		return childItem.get(groupPosition).size();
 	}
 
 	@Override
@@ -118,12 +117,6 @@ public class NewAdapter extends BaseExpandableListAdapter {
 	public boolean isChildSelectable(int arg0, int arg1) {
 		// TODO Auto-generated method stub
 		return false;
-	}
-	
-	public void add(String g, String c) {
-		groupItem.add(g);
-		childItem.add(c);
-		notifyDataSetChanged();
 	}
 
 }
