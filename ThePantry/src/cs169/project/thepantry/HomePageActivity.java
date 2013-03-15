@@ -1,16 +1,21 @@
 package cs169.project.thepantry;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
+import cs169.project.thepantry.ThePantryContract.Inventory;
+import cs169.project.thepantry.ThePantryContract.ShoppingList;
 
 public class HomePageActivity extends BasicMenuActivity {
 	
@@ -18,12 +23,14 @@ public class HomePageActivity extends BasicMenuActivity {
 	SearchResultAdapter srAdapter;
 	SearchModel sm = new SearchModel();
 	ListView listView;
+	DatabaseModel dm;
+	private static final String DATABASE_NAME = "thepantry";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home_page);
-		
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);	
 		recommendations = new ArrayList<SearchMatch>();
 		listView = (ListView) findViewById(R.id.recsList);
 		srAdapter = new SearchResultAdapter(getApplicationContext(), recommendations);          
@@ -57,8 +64,25 @@ public class HomePageActivity extends BasicMenuActivity {
     	}
 	}
 	
-	public void getRecommendations() {
-		SearchCriteria searchcriteria = new SearchCriteria("home", "bacon", 4);
+	public void getRecommendations() {		
+		dm = new DatabaseModel(this, DATABASE_NAME);
+		Cursor youHave = dm.findAllItems(Inventory.TABLE_NAME);
+
+		SearchCriteria searchcriteria;
+		if (youHave != null && youHave.moveToFirst()) {
+			//pick one of your inventory items at random and recommend recipes based on that
+			int numItems = youHave.getCount();
+			int loc = (int)(Math.random() * (numItems));
+			while (loc > 0) {
+				youHave.moveToNext();
+				loc--;
+			}
+			searchcriteria = new SearchCriteria("home", youHave.getString(0), 4);
+		}
+		else {
+			//default is bacon
+			searchcriteria = new SearchCriteria("home", "bacon", 4);
+		}
 		new HomeSearchTask(getApplicationContext()).execute(searchcriteria);
 	}
 	

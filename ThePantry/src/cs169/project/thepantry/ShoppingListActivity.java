@@ -56,22 +56,12 @@ public class ShoppingListActivity extends BaseListActivity {
 		return true;
 	}
 	
+	/** Retrieves user input and adds the ingredient to the shopping list and database */
 	public void addShopItem(View view) {
 		EditText eText = (EditText) findViewById(R.id.shopping_list_text);
 		addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), "1");
 		eText.setText("");
 		((BaseExpandableListAdapter)eView.getExpandableListAdapter()).notifyDataSetChanged();
-	}
-	
-	
-	/** Extracts the item text and type from the user input. */
-	public void addExtract() {
-		String amount = "1";
-		EditText itemText = (EditText) findViewById(R.id.shopping_list_text);
-		Spinner typeSpinner = (Spinner) findViewById(R.id.add_sl_types);
-		String item = itemText.getText().toString();
-		String type = typeSpinner.getSelectedItem().toString();
-		addItem(item, type, amount);
 	}
 
 }

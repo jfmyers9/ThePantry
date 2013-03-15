@@ -23,7 +23,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 	
 	protected ArrayList<String> parseCursor(Cursor items) {
 		ArrayList<String> result = new ArrayList<String>();
-		if (items.moveToFirst()){
+		if (items != null){
 			while(!items.isAfterLast()){
 				String data = items.getString(0);
 				result.add(data);
