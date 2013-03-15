@@ -81,6 +81,7 @@ public class HomePageActivity extends BasicMenuActivity {
 		
 		@Override
 		protected void onPostExecute(Storage result) {
+		if (result != null) {
 			if (this.type == "home") {
 				if (srAdapter.values.size() == 0) {
 					recommendations = ((SearchResult)result).matches;
@@ -106,6 +107,7 @@ public class HomePageActivity extends BasicMenuActivity {
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
 			}
+		}
 		}
 	}
 }

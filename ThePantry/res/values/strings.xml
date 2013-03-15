@@ -24,7 +24,6 @@
     <string name="edit">Edit</string>
     <string name="search">Search</string>
     <string name="ShoppingListTitle">Your Shopping List</string>
-  
 
     <string-array name="ingredient_type_array">
         <item>Grain</item>
@@ -54,11 +53,11 @@
     <string name="title_activity_navigation">NavigationActivity</string>
     <string name="InventoryAddTitle">Add Ingredients</string>
     <string name="InventoryTitle">Your Inventory</string>
-
     <string name="title_activity_nav_menu_fragment">NavMenuFragment</string>
     <string name="update_inventory">Update Inventory</string>
     <string name="title_activity_basic_menu">BasicMenuActivity</string>
     <string name="recommendations">Recommendations:</string>
-
+    <string name="title_activity_base_list">BaseListActivity</string>
+    <string name="ingredient">Ingredients:</string>
 
 </resources>
