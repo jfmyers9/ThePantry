@@ -55,10 +55,6 @@ public class ShoppingListActivity extends BaseListActivity {
 		return true;
 	}
 	
-	public void check(View view) {
-		super.check(view);
-	}
-	
 	public void addShopItem(View view) {
 		EditText eText = (EditText) findViewById(R.id.shopping_list_text);
 		addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), "1");

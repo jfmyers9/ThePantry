@@ -18,7 +18,6 @@
         android:textColor="#FFFFFF"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:focusable="false" 
-        android:onClick="check"/>
+        android:focusable="false" />
 
 </LinearLayout>

@@ -2,21 +2,17 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.slidingmenu.lib.SlidingMenu;
 
 import cs169.project.thepantry.ThePantryContract.Ingredients;
-import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class InventoryAddActivity extends BaseListActivity {
 
@@ -59,10 +55,6 @@ public class InventoryAddActivity extends BaseListActivity {
 			return true;
 		}	
 		return super.onOptionsItemSelected(item);
-	}
-	
-	public void check(View view) {
-		super.check(view);
 	}
 	
 	/** Same functionality as InventoryActivity search

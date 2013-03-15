@@ -14,6 +14,7 @@ public class NewAdapter extends BaseExpandableListAdapter {
 	
 	private ArrayList<IngredientGroup> groups;
 	private Context context;
+	private IngredientChild tmpChild;
 	
 	public NewAdapter(Context context, ArrayList<IngredientGroup> groups) {
 		this.context = context;
@@ -50,6 +51,11 @@ public class NewAdapter extends BaseExpandableListAdapter {
 		}
 		CheckBox cb = (CheckBox)convertView.findViewById(R.id.checkBox1);
 		cb.setText(child.getName());
+		cb.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	((CheckBox)v).isChecked();
+            }
+        });
 		return convertView;
 	}
 
@@ -62,7 +68,7 @@ public class NewAdapter extends BaseExpandableListAdapter {
 	public Object getGroup(int groupPosition) {
 		return groups.get(groupPosition);
 	}
-
+	
 	@Override
 	public int getGroupCount() {
 		return groups.size();
