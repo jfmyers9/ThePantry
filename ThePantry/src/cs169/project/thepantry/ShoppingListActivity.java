@@ -32,7 +32,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 		//ActionBar actionBar = getActionBar();
 		
 		// Creates and populates the ingredient type drop-down menu
-		spinner = (Spinner) findViewById(R.id.add_sl_item_types);
+		spinner = (Spinner) findViewById(R.id.add_sl_types);
 		ArrayAdapter<CharSequence> adapter = 
 				ArrayAdapter.createFromResource(this,
 												R.array.ingredient_type_array,
@@ -42,7 +42,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 		
 		groupItems = new ArrayList<String>();
 		childItems = new ArrayList<Object>();
-		eView = (ExpandableListView) findViewById(R.id.shopping_list);
+		eView = (ExpandableListView) findViewById(R.id.exp_shop_list);
 		eView.setAdapter(new NewAdapter(groupItems, childItems));
 	}
 
@@ -54,7 +54,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	}
 	
 	public void addShopItem(View view) {
-		EditText eText = (EditText) findViewById(R.id.add_sl_item_text);
+		EditText eText = (EditText) findViewById(R.id.shopping_list_text);
 		addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), 1);
 	}
 	
