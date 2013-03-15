@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-ThePantryBackend::Application.config.secret_token = '04f35f7c5a16e9f0bcbb108d79ac919f2141207b7b31989314027ac5ab4b979b2c7363a5d3a9476e692018f2cf0da3cea03a181e07071121a7927eb9467e4d67'
+ThePantryBackend::Application.config.secret_token = '4766b8d23c34735271b21cbc6bd886dbce1f8b3eaf6764c0c831df6576ce2f25a7e527537f71be0d1607e9fe7ba9668988d8e099c81a49bf20a7291999753c74'
