@@ -16,7 +16,7 @@ import com.loopj.android.image.SmartImageView;
 public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	
 	  private final Context context;
-	  private final List<SearchMatch> values;
+	  public List<SearchMatch> values;
 
 	  public SearchResultAdapter(Context context, List<SearchMatch> values) {
 		  
