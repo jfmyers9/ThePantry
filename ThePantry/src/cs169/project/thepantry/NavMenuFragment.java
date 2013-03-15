@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.slidingmenu.lib.app.SlidingFragmentActivity;
+
 public class NavMenuFragment extends ListFragment {
 
 	@Override
@@ -35,15 +37,21 @@ public class NavMenuFragment extends ListFragment {
 		case 0:
 			System.out.println(context.toString());
 			if (context instanceof HomePageActivity) {
-				((SlidingFragmentActivity) getParentFragment()).toggle();
+				open = false;
 			}
 			intent = new Intent(context, HomePageActivity.class);
 			break;
 		case 1:
+			if (context instanceof InventoryActivity) {
+				open = false;
+			}
 			InventoryActivity invAct = new InventoryActivity();
 			intent = new Intent(context, invAct.getClass());
 			break;
 		case 2:
+			if (context instanceof ShoppingListActivity) {
+				open = false;
+			}
 			intent = new Intent(context, ShoppingListActivity.class);
 			break;
 		case 3:
@@ -54,7 +62,8 @@ public class NavMenuFragment extends ListFragment {
 			break;
 		}
 		if (!open) {
-			
+			BasicMenuActivity ba = (BasicMenuActivity) getActivity();
+			ba.toggle();
 		} else {
 			startActivity(intent);
 		}

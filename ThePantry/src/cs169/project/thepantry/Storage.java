@@ -16,6 +16,10 @@ import org.json.JSONObject;
 public class Storage implements Serializable {
 	private static final long serialVersionUID = 0L; //change this each version to remain consistent
 	
+	public static Recipe recipe;
+	public static Attribution att;
+	public static RecipeImages imgs;
+	
 	// for testing:
 	public static SearchCriteria makeSC(String s, String q, int m, int sk) {
 		return new SearchCriteria(s,q,m,sk);
@@ -27,6 +31,54 @@ public class Storage implements Serializable {
 	
 	public static SearchCriteria makeSC(String s, String q) {
 		return new SearchCriteria(s,q);
+	}
+	
+	public static void makeRecipe(JSONObject res) {
+		recipe = new Recipe(res);
+	}
+	
+	public String getRecipeId() {
+		return recipe.id;
+	}
+	
+	public String getRecipeName() {
+		return recipe.name;
+	}
+	
+	public Attribution getRecipeAtt() {
+		return recipe.attribution;
+	}
+	
+	public ArrayList<String> getRecipeIngLines() {
+		return recipe.ingredientLines;
+	}
+	
+	public void makeAtt(JSONObject obj) {
+		att = new Attribution(obj);
+	}
+	
+	public String getAttLogo() {
+		return att.logo;
+	}
+	
+	public String getAttUrl() {
+		return att.url;
+	}
+	
+	public String getAttText() {
+		return att.text;
+	}
+	
+	public void makeImg(JSONObject obj) {
+		imgs = new RecipeImages(obj);
+	}
+	
+	public String getImgSUrl() {
+		return imgs.hostedSmallUrl;
+	}
+	
+	public String getImgLUrl() {
+		return imgs.hostedLargeUrl;
 	}
 }
 
@@ -66,6 +118,10 @@ class Recipe extends Storage implements Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public String getId() {
+		return id;
 	}
 }
 
