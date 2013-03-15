@@ -49,6 +49,7 @@ public class InventoryActivity extends BasicMenuActivity {
 			for (IngredientGroup g : groupItem) {
 				g.setChildren(getItems(g.getGroup()));
 			}
+			System.out.println("Making List");
 			makeList();
 		}
 		

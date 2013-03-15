@@ -2,12 +2,10 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -16,9 +14,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.loopj.android.image.SmartImageView;
 
-public class RecipeActivity extends Activity {
+public class RecipeActivity extends BasicMenuActivity {
 	
 	Recipe info;
 	
@@ -38,7 +38,7 @@ public class RecipeActivity extends Activity {
 	DatabaseModel dm;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recipe);
 		
@@ -113,7 +113,7 @@ public class RecipeActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.recipe, menu);
+		getSupportMenuInflater().inflate(R.menu.recipe, menu);
 		return true;
 	}
 	
@@ -189,6 +189,16 @@ public class RecipeActivity extends Activity {
 			// add ingredient to shopping table if not previously in either table
 		}
 		
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			return true;
+		}	
+		return super.onOptionsItemSelected(item);
 	}
 
 }

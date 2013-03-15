@@ -41,18 +41,10 @@ public class ShoppingListActivity extends BasicMenuActivity {
 		fillArrays();
 		
 		eView.setDividerHeight(2);
-		eView.setGroupIndicator(null);
 		eView.setClickable(true);;
 		
 		eAdapter = new NewAdapter(getApplicationContext(), groupItems);
 		eView.setAdapter(eAdapter);
-		
-		int count = eAdapter.getGroupCount();
-		for (int i = 0; i < count; i++) {
-			eView.expandGroup(i);
-		}
-		// Only use action bar if we want to specify certain items on it
-		//ActionBar actionBar = getActionBar();
 		
 		// Creates and populates the ingredient type drop-down menu
 		spinner = (Spinner) findViewById(R.id.add_sl_types);
@@ -74,6 +66,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	public void addShopItem(View view) {
 		EditText eText = (EditText) findViewById(R.id.shopping_list_text);
 		addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), "1");
+		eText.setText("");
 		((BaseExpandableListAdapter)eView.getExpandableListAdapter()).notifyDataSetChanged();
 	}
 	

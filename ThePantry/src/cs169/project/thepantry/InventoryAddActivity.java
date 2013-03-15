@@ -23,7 +23,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	String table = Ingredients.TABLE_NAME;
 	private DatabaseModel dm;
 	
-	private ArrayList<IngredientGroup> groupItem;
+	private ArrayList<IngredientGroup> groupItem = new ArrayList<IngredientGroup>();;
 	
 
 	@Override
@@ -35,9 +35,6 @@ public class InventoryAddActivity extends InventoryActivity {
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 		eView = (ExpandableListView)findViewById(R.id.exp_inv_add_list);
 		table = Ingredients.TABLE_NAME;
-		
-		//Makes ArrayList of types and items
-		table = Inventory.TABLE_NAME;
 		
 		//Makes ArrayList of types and items
 		groupItem = getTypes(table);
@@ -66,17 +63,6 @@ public class InventoryAddActivity extends InventoryActivity {
 
 		NewAdapter mNewAdapter = new NewAdapter(getApplicationContext(), groupItem);
 		eView.setAdapter(mNewAdapter);
-		eView.setOnChildClickListener(new OnChildClickListener() {
-			@Override
-			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-				//I think we can get rid of all of this
-				
-				//CheckBox checkBox = (CheckBox) v.findViewById(R.id.textView1);
-				//checkBox.toggle();
-				//dm.checked(table, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
-				return true;
-			}
-		});
 	}
 	
 	@Override
@@ -131,7 +117,7 @@ public class InventoryAddActivity extends InventoryActivity {
 		}
 		checked.close();
 		Context context = getApplicationContext();
-		Intent intent = new Intent(context, InventoryAddActivity.class);
+		Intent intent = new Intent(context, InventoryActivity.class);
 		startActivity(intent);
 
 		//Maybe pop up window with items added -- maybe store what didn't get added
