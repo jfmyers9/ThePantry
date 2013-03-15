@@ -20,7 +20,7 @@ import cs169.project.thepantry.ThePantryContract.ShoppingList;
 public class HomePageActivity extends BasicMenuActivity {
 	
 	ArrayList<SearchMatch> recommendations;
-	SearchResultAdapter srAdapter;
+	public SearchResultAdapter srAdapter;
 	SearchModel sm = new SearchModel();
 	ListView listView;
 	DatabaseModel dm;
