@@ -3,9 +3,9 @@ package cs169.project.thepantry;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
@@ -17,11 +17,14 @@ import com.actionbarsherlock.view.MenuItem;
 import com.slidingmenu.lib.SlidingMenu;
 
 import cs169.project.thepantry.ThePantryContract.Ingredients;
+import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class InventoryAddActivity extends InventoryActivity {
 	String table = Ingredients.TABLE_NAME;
 	private DatabaseModel dm;
 	private static final String DATABASE_NAME = "thepantry";
+	
+	private ArrayList<IngredientGroup> groupItem = new ArrayList<IngredientGroup>();;
 	
 
 	@Override
@@ -35,13 +38,11 @@ public class InventoryAddActivity extends InventoryActivity {
 		table = Ingredients.TABLE_NAME;
 		
 		//Makes ArrayList of types and items
-		ArrayList<String> groupItem = getTypes(table);
-		ArrayList<ArrayList<String>> childItem = new ArrayList<ArrayList<String>>();
-		for (int i = 0; i < groupItem.size(); i ++) {
-			ArrayList<String> child = getItems(groupItem.get(i));
-			childItem.add(child);
+		groupItem = getTypes(table);
+		for (IngredientGroup g : groupItem) {
+			g.setChildren(getItems(g.getGroup()));
 		}
-		makeList(groupItem, childItem);
+		makeList();
 		
 		
 		// Only should show a back button on action bar?	
@@ -55,26 +56,14 @@ public class InventoryAddActivity extends InventoryActivity {
 	}
 	
 	@Override
-	public void makeList(ArrayList<String> groupItem, ArrayList<ArrayList<String>> childItem) {
+	public void makeList() {
 
 		eView.setDividerHeight(2);
 		eView.setGroupIndicator(null);
 		eView.setClickable(true);
 
-		NewAdapter mNewAdapter = new NewAdapter(groupItem, childItem);
-		mNewAdapter.setInflater((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),this);
+		NewAdapter mNewAdapter = new NewAdapter(getApplicationContext(), groupItem);
 		eView.setAdapter(mNewAdapter);
-		eView.setOnChildClickListener(new OnChildClickListener() {
-			@Override
-			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-				//I think we can get rid of all of this
-				
-				//CheckBox checkBox = (CheckBox) v.findViewById(R.id.textView1);
-				//checkBox.toggle();
-				//dm.checked(table, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
-				return true;
-			}
-		});
 	}
 	
 	@Override
@@ -120,7 +109,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	/** Checks an item in the database */
 	public void check(View view) {
 		dm = new DatabaseModel(this, DATABASE_NAME);
-		CheckBox checkBox = (CheckBox) view.findViewById(R.id.textView1);
+		CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox1);
 		dm.checked(table, ((TextView)checkBox).getText().toString(), ThePantryContract.CHECKED, checkBox.isChecked());
 	}
 	
@@ -134,31 +123,15 @@ public class InventoryAddActivity extends InventoryActivity {
 		Cursor checked = dm.checkedItems(table, ThePantryContract.CHECKED);
 
 		if (checked.moveToFirst()){
-			System.out.println("****************");
 			while(!checked.isAfterLast()){
-				String data = checked.getString(0);
-				System.out.println(checked.getString(0));
-				System.out.println(checked.getString(1));
-				System.out.println(checked.getString(2));
-				System.out.println(checked.getString(3));
-				//result.add(data);
+				dm.add(Inventory.TABLE_NAME, checked.getString(0), checked.getString(1), checked.getString(3));
 				checked.moveToNext();
 			}
 		}
 		checked.close();
-		
-		boolean remSuccess = true; //set to true for display testing
-		
-		// TODO - parse cursor and fill this list 
-		/*List<String> items;
-		for (String item : items) {
-			boolean addSuccess = dm.add(Inventory.TABLE_NAME, item, type, amount);
-		}*/
-		if (remSuccess) {
-			// remove the item from the shopping list display, add it to inventory display
-		} else {
-			// do something else
-		}
+		Context context = getApplicationContext();
+		Intent intent = new Intent(context, InventoryActivity.class);
+		startActivity(intent);
 
 		//Maybe pop up window with items added -- maybe store what didn't get added
 	}

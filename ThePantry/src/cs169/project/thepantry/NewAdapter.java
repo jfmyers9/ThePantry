@@ -1,122 +1,99 @@
 package cs169.project.thepantry;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckBox;
 import android.widget.CheckedTextView;
-import android.widget.TextView;
 
 public class NewAdapter extends BaseExpandableListAdapter {
-
-	 public ArrayList<String> groupItem, tempChild;
-	 public ArrayList<ArrayList<String>> childItem = new ArrayList<ArrayList<String>>();
-	 public LayoutInflater minflater;
-	 public Activity activity;
-	 public String table;
-	 public DatabaseModel dm;
-	 public Context cont;
-	 
-	 public NewAdapter(ArrayList<String> grList, ArrayList<ArrayList<String>> childItem) {
-		 groupItem = grList;
-		 this.childItem = childItem;
-	 }
-	 
-	 public void setInflater(LayoutInflater mInflater, Activity act) {
-		 this.minflater = mInflater;
-		 activity = act;
-	 }
-	 
-	@Override
-	public Object getChild(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-		return null;
+	
+	private ArrayList<IngredientGroup> groups;
+	private Context context;
+	
+	public NewAdapter(Context context, ArrayList<IngredientGroup> groups) {
+		this.context = context;
+		this.groups = groups;
 	}
-
-	@Override
-	public long getChildId(int arg0, int arg1) {
-		return 0;
-	}
-
-	@Override
-	public View getChildView(int groupPosition, final int childPosition,
-			boolean isLastChild, View convertView, ViewGroup parent) {
-		
-		tempChild = childItem.get(groupPosition);
-		TextView text = null;
-		if (convertView == null) {
-			convertView = minflater.inflate(R.layout.child_row, null); 
+	
+	public void addChild(IngredientChild child, IngredientGroup group) {
+		if (!groups.contains(group)) {
+			groups.add(group);
 		}
-		text = (TextView) convertView.findViewById(R.id.textView1); 
-		text.setText(tempChild.get(childPosition));
-		convertView.setOnClickListener(new OnClickListener() {
-			   @Override
-			   public void onClick(View v) {
-				  //This responds to anywhere you click except for text, may be good to use
-			   }
-			  });
+		int index = groups.indexOf(group);
+		ArrayList<IngredientChild> children = groups.get(index).getChildren();
+		children.add(child);
+		groups.get(index).setChildren(children);
+	}
+
+	@Override
+	public Object getChild(int groupPosition, int childPosition) {
+		return groups.get(groupPosition).getChildren().get(childPosition);
+	}
+
+	@Override
+	public long getChildId(int groupPosition, int childPosition) {
+		return childPosition;
+	}
+
+	@Override
+	public View getChildView(int groupPosition, int childPosition,
+			boolean isLastChild, View convertView, ViewGroup parent) {
+		IngredientChild child = groups.get(groupPosition).getChildren().get(childPosition);
+		if (convertView == null) {
+			LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+			convertView = infalInflater.inflate(R.layout.child_row, null);
+		}
+		CheckBox cb = (CheckBox)convertView.findViewById(R.id.checkBox1);
+		cb.setText(child.getName());
 		return convertView;
 	}
 
 	@Override
 	public int getChildrenCount(int groupPosition) {
-		return childItem.get(groupPosition).size();
+		return groups.get(groupPosition).getChildren().size();
 	}
 
 	@Override
-	public Object getGroup(int arg0) {
-		// TODO Auto-generated method stub
-		return null;
+	public Object getGroup(int groupPosition) {
+		return groups.get(groupPosition);
 	}
 
 	@Override
 	public int getGroupCount() {
-		return groupItem.size();
-	}
-	
-	 @Override
-	 public void onGroupCollapsed(int groupPosition) {
-	  super.onGroupCollapsed(groupPosition);
-	 }
-
-	 @Override
-	 public void onGroupExpanded(int groupPosition) {
-	  super.onGroupExpanded(groupPosition);
-	 }
-
-
-	@Override
-	public long getGroupId(int arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+		return groups.size();
 	}
 
 	@Override
-	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+	public long getGroupId(int groupPosition) {
+		return groupPosition;
+	}
+
+	@Override
+	public View getGroupView(int groupPosition, boolean isExpanded,
+			View convertView, ViewGroup parent) {
+		IngredientGroup group = groups.get(groupPosition);
 		if (convertView == null) {
-			convertView = minflater.inflate(R.layout.group_row, null);
+			LayoutInflater inf = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+			convertView = inf.inflate(R.layout.group_row, null);
 		}
-		((CheckedTextView) convertView).setText(groupItem.get(groupPosition)); //child_row amy will make in layout
-		((CheckedTextView) convertView).setChecked(isExpanded);
+		CheckedTextView ctv = (CheckedTextView)convertView.findViewById(R.id.checkedText1);
+		ctv.setText(group.getGroup());		
 		return convertView;
 	}
 
 	@Override
 	public boolean hasStableIds() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
-	public boolean isChildSelectable(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isChildSelectable(int groupPosition, int childPosition) {
+		return true;
 	}
-
+	
 }
