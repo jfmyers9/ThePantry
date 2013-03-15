@@ -76,7 +76,7 @@ public class SearchTask extends AsyncTask<SearchCriteria, String, Storage> {
 		
 		@Override
 		protected void onPostExecute(Storage result) {
-
+		if (result != null) {
 			if (this.type == "search") {
 				if (srAdapter.values.size() == 0) {
 					matches = ((SearchResult)result).matches;
@@ -97,7 +97,7 @@ public class SearchTask extends AsyncTask<SearchCriteria, String, Storage> {
 				startActivity(intent);
 			}
 		}
-		
+		}
 	}
 
 }
