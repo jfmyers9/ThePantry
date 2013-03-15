@@ -52,15 +52,15 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor types = dm.findAllTypes(table);
 		ArrayList<IngredientGroup> result = new ArrayList<IngredientGroup>();
-		if (types != null){
+		if (types!=null){
 			while(!types.isAfterLast()){
 				String data = types.getString(0);
 				System.out.println(data);
 				result.add(new IngredientGroup(data, new ArrayList<IngredientChild>()));
 				types.moveToNext();
 			}
-		}
 		types.close();
+		}
 		return result;
 	}
 	

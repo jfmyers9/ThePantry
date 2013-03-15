@@ -58,7 +58,6 @@ public class DatabaseModelTest extends AndroidTestCase {
 	public void testRemove() {
 		table = "ingredients";
 		String item = "Strawberries";
-		testdm.add(table, item, "Produce", "12");
 		assertTrue("Strawberries should still be in the database", findItem(item));
 		boolean success = testdm.remove(table, item);
 		assertTrue("DatabaseModel.remove() returned false", success);
@@ -66,7 +65,14 @@ public class DatabaseModelTest extends AndroidTestCase {
 	}
 
 	public void testFindAllItems() {
-		fail("Not yet implemented");
+		table = "ingredients";
+		Cursor citems = testdm.findAllItems(table);
+		ArrayList<String> items = parseCursor(citems);
+		String[] match = {"Strawberries", "Milk", "Chicken", "Bread", "Lettuce", "Eggs"};
+		for (String item : items) {
+			boolean contains = Arrays.asList(match).contains(item);
+			assertTrue("Error: Incorrect type " + item, contains);
+		}
 	}
 
 	public void testFindItem1() {
@@ -84,7 +90,12 @@ public class DatabaseModelTest extends AndroidTestCase {
 	}
 
 	public void testFindTypeItems() {
-		fail("Not yet implemented");
+		table = "ingredients";
+		String type = "Produce";
+		Cursor citems = testdm.findTypeItems(table, type);
+		ArrayList<String> items = parseCursor(citems);
+		assertEquals("Error: Strawberries is not ", items.get(0), "Strawberries");
+		assertEquals("Error: Lettuce is not ", items.get(1), "Lettuce");
 	}
 
 	public void testFindType() {
