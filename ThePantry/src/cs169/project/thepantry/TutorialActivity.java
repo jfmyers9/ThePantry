@@ -17,14 +17,15 @@ public class TutorialActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		SharedPreferences opened = PreferenceManager.getDefaultSharedPreferences(this);
-		if (opened.getBoolean(OPENED, false) == false) {
+		if (opened.getBoolean(OPENED, false) == true) {
 			SharedPreferences.Editor editor = opened.edit();
 			editor.putBoolean(OPENED, true);
 			editor.commit();
 			setContentView(R.layout.activity_tutorial);
 		} else {
 			Context context = getApplicationContext();
-			Intent intent = new Intent(context, HomePageActivity.class);
+			HomePageActivity nextAct = new HomePageActivity();
+			Intent intent = new Intent(context, nextAct.getClass());
 			startActivity(intent);
 			finish();
 		}

@@ -6,22 +6,26 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
+
+import com.actionbarsherlock.view.Menu;
+
 import cs169.project.thepantry.ThePantryContract.Ingredients;
 
 public class InventoryAddActivity extends InventoryActivity {
 	String table = Ingredients.TABLE_NAME;
 	private DatabaseModel dm;
 	
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setTitle(getString(R.string.InventoryAddTitle));
+		eView = (ExpandableListView)findViewById(R.id.exp_inv_add_list);
 		table = Ingredients.TABLE_NAME;
 		
 		//Makes ArrayList of types and items
@@ -41,22 +45,21 @@ public class InventoryAddActivity extends InventoryActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.inventory_add, menu);
+		getSupportMenuInflater().inflate(R.menu.inventory_add, menu);
 		return true;
 	}
 	
 	@Override
 	public void makeList(ArrayList<String> groupItem, ArrayList<Object> childItem) {
 
-		ExpandableListView expandbleLis = getExpandableListView();
-		expandbleLis.setDividerHeight(2);
-		expandbleLis.setGroupIndicator(null);
-		expandbleLis.setClickable(true);
+		eView.setDividerHeight(2);
+		eView.setGroupIndicator(null);
+		eView.setClickable(true);
 
 		NewAdapter mNewAdapter = new NewAdapter(groupItem, childItem);
 		mNewAdapter.setInflater((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),this);
-		getExpandableListView().setAdapter(mNewAdapter);
-		expandbleLis.setOnChildClickListener(new OnChildClickListener() {
+		eView.setAdapter(mNewAdapter);
+		eView.setOnChildClickListener(new OnChildClickListener() {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 				//I think we can get rid of all of this

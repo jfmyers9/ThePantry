@@ -2,31 +2,39 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-import android.app.ExpandableListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
+
+import com.actionbarsherlock.view.Menu;
+
 import cs169.project.thepantry.ThePantryContract.Ingredients;
 import cs169.project.thepantry.ThePantryContract.Inventory;
 
-public class InventoryActivity extends ExpandableListActivity implements OnChildClickListener {
+public class InventoryActivity extends BasicMenuActivity {
 	String table;
 	private DatabaseModel dm;
 	
+	ExpandableListView eView;
+	ExpandableListAdapter adapter;
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTitle(getString(R.string.InventoryTitle));
-		 // This needs to change to Inventory once I figure out inheritance with this	
+		setContentView(R.layout.activity_inventory);
+		eView = (ExpandableListView)findViewById(R.id.exp_view);
+		eView.setFocusable(true);
 		
+
 		//Doesn't make list if onCreate is being called from InventoryAdd
 		if (this instanceof InventoryActivity) {
 			table = Inventory.TABLE_NAME;
@@ -47,20 +55,20 @@ public class InventoryActivity extends ExpandableListActivity implements OnChild
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.inventory, menu);
+		getSupportMenuInflater().inflate(R.menu.inventory, menu);
 		return true;
 	}
 	
 	public void makeList(ArrayList<String> groupItem, ArrayList<Object> childItem) {
-		ExpandableListView expandbleLis = getExpandableListView();
-		expandbleLis.setDividerHeight(2);
-		expandbleLis.setGroupIndicator(null);
-		expandbleLis.setClickable(true);
+
+		eView.setDividerHeight(2);
+		eView.setGroupIndicator(null);
+		eView.setClickable(true);
 
 		NewAdapter mNewAdapter = new NewAdapter(groupItem, childItem);
 		mNewAdapter.setInflater((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE),this);
-		getExpandableListView().setAdapter(mNewAdapter);
-		expandbleLis.setOnChildClickListener(new OnChildClickListener() {
+		eView.setAdapter(mNewAdapter);
+		eView.setOnChildClickListener(new OnChildClickListener() {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 				//I think we can get rid of all of this
@@ -95,6 +103,7 @@ public class InventoryActivity extends ExpandableListActivity implements OnChild
 		if (types.moveToFirst()){
 			while(!types.isAfterLast()){
 				String data = types.getString(0);
+				System.out.println(data);
 				result.add(data);
 				types.moveToNext();
 			}
@@ -120,17 +129,6 @@ public class InventoryActivity extends ExpandableListActivity implements OnChild
 		return result;
 	}
 	
-	/** Marks items as checked in table of current activity */
-	public void checkItem(String item) {
-		dm = new DatabaseModel(this);
-		//boolean success = dm.checked(table, item);
-		boolean success = true; //change later 
-		if (success) {
-			// do something?
-		} else {
-			// do something else?
-		}
-	}
 	
 	/** Display item searched for if it is in the table 
 	 * Eventually display items dynamically as a letter is added to query*/
