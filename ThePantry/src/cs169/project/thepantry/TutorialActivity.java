@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -27,7 +29,7 @@ public class TutorialActivity extends Activity {
 			HomePageActivity nextAct = new HomePageActivity();
 			Intent intent = new Intent(context, nextAct.getClass());
 			startActivity(intent);
-			finish();
+			finish(); //this shuts down the app for a second?
 		}
 	}
 
@@ -50,6 +52,16 @@ public class TutorialActivity extends Activity {
 		Intent intent = new Intent(context, HomePageActivity.class);
 		startActivity(intent);
 		finish();
+	}
+	
+	public boolean isOnline() {
+	    ConnectivityManager cm =
+	        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    if (netInfo != null && netInfo.isConnected()) {
+	        return true;
+	    }
+	    return false;
 	}
 
 }
