@@ -40,7 +40,7 @@
      	android:layout_below="@id/shopping_list_button"
      	android:layout_centerHorizontal="true"
     	android:text="@string/update_inventory"
-     	android:onClick="addShopItem" />
+     	android:onClick="updateInventory" />
     
     <ExpandableListView android:id="@+id/exp_shop_list"
         android:layout_width="fill_parent"

@@ -33,6 +33,7 @@ public class InventoryAddActivity extends BaseListActivity {
 
 		groupItems = new ArrayList<IngredientGroup>();
 		groupNames = new ArrayList<String>();
+		children = new ArrayList<IngredientChild>();
 		
 		fillArrays();
 		

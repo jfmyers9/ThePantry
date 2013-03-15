@@ -24,7 +24,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	public static final String DATABASE_NAME = "thepantry";
 	public ArrayList<IngredientGroup> groupItems;
 	public ArrayList<String> groupNames;
-	public ArrayList<ArrayList<String>> childItems;
+	public ArrayList<IngredientChild> children;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,9 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 		if (items.moveToFirst()){
 			while(!items.isAfterLast()){
 				String data = items.getString(0);
-				result.add(new IngredientChild(data,type));
+				IngredientChild temp = new IngredientChild(data,type);
+				children.add(temp);
+				result.add(temp);
 				items.moveToNext();
 			}
 		}
@@ -130,15 +132,14 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	/** Adds all items to inventory database that have been checked */
 	public void updateInventory(View view) {
 		dm = new DatabaseModel(this, DATABASE_NAME);
-		Cursor checked = dm.checkedItems(table, ThePantryContract.CHECKED);
-
-		if (checked.moveToFirst()){
-			while(!checked.isAfterLast()){
-				dm.add(Inventory.TABLE_NAME, checked.getString(0), checked.getString(1), checked.getString(3));
-				checked.moveToNext();
+		for (IngredientChild c : children) {
+			if (c.isSelected()) {
+				boolean success = dm.add(Inventory.TABLE_NAME, c.getName(),c.getGroup(),"1");
+				if (!success) {
+					System.err.println("You Fucked Up");
+				}
 			}
 		}
-		checked.close();
 		
 		//For now it takes you to inventory -- next iteration it will pop toast?
 		Context context = getApplicationContext();
