@@ -3,6 +3,9 @@ package cs169.project.thepantry.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import android.content.pm.ApplicationInfo;
+import android.content.res.AssetManager;
+
 import android.database.Cursor;
 import android.test.AndroidTestCase;
 import cs169.project.thepantry.DatabaseModel;
