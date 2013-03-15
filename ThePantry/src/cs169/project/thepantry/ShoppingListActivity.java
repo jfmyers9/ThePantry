@@ -1,13 +1,28 @@
 package cs169.project.thepantry;
 
+import java.util.ArrayList;
+
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
 
 public class ShoppingListActivity extends BasicMenuActivity {
+	
+	private DatabaseModel dm;
+	private ExpandableListView eView;
+	private Spinner spinner;
+	
+	private ArrayList<String> groupItems;
+	private ArrayList<Object> childItems;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -17,13 +32,18 @@ public class ShoppingListActivity extends BasicMenuActivity {
 		//ActionBar actionBar = getActionBar();
 		
 		// Creates and populates the ingredient type drop-down menu
-		Spinner spinner = (Spinner) findViewById(R.id.ingredient_types);
+		spinner = (Spinner) findViewById(R.id.ingredient_types);
 		ArrayAdapter<CharSequence> adapter = 
 				ArrayAdapter.createFromResource(this,
 												R.array.ingredient_type_array,
 												android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
+		
+		groupItems = new ArrayList<String>();
+		childItems = new ArrayList<Object>();
+		eView = (ExpandableListView) findViewById(R.id.exp_shop_list);
+		eView.setAdapter(new NewAdapter(groupItems, childItems));
 	}
 
 	@Override
@@ -33,16 +53,21 @@ public class ShoppingListActivity extends BasicMenuActivity {
 		return true;
 	}
 	
+	public void addShopItem(View view) {
+		EditText eText = (EditText) findViewById(R.id.shopping_list_text);
+		addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), 1);
+	}
+	
 	/** Adds the given item to the shopping list */
 	public void addItem(String item, String type, float amount) {
 		DatabaseModel dm = new DatabaseModel(this);
 		// for testing purposes of the display, success is set to true
-		boolean success = true;
-				//dm.add(ThePantryContract.ShoppingList.TABLE_NAME, item, type, amount);
+		boolean success = dm.add(ThePantryContract.ShoppingList.TABLE_NAME, item, type, amount);
 		if (success) {
-			// TODO - display item on shopping list (add it to layout)
+			groupItems.add(type);
+			childItems.add(item);
+			((NewAdapter)eView.getExpandableListAdapter()).add(type, item);
 		} else {
-			// do something else
 		}
 	}
 	
@@ -82,15 +107,10 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	}
 	
 	/** Marks a shopping list item as checked */
-	public void checkItem(String item) {
-		DatabaseModel dm = new DatabaseModel(this);
-		//boolean success = dm.checked(ThePantryContract.ShoppingList.TABLE_NAME, item);
-		boolean success = true;
-		if (success) {
-			// do something?
-		} else {
-			// do something else?
-		}
+	public void check(View view) {
+		dm = new DatabaseModel(this);
+		CheckBox checkBox = (CheckBox) view.findViewById(R.id.textView1);
+		dm.checked(ThePantryContract.ShoppingList.TABLE_NAME, ((TextView)checkBox).getText().toString(), checkBox.isChecked());
 	}
 	
 	// TODO - use CursorLoader and an Adapter to populate the ListView
