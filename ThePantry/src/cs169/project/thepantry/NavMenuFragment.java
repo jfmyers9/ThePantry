@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.slidingmenu.lib.app.SlidingFragmentActivity;
+
 public class NavMenuFragment extends ListFragment {
 
 	@Override
@@ -21,24 +23,35 @@ public class NavMenuFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		String[] colors = getResources().getStringArray(R.array.nav_menu_items);
-		ArrayAdapter<String> colorAdapter = new ArrayAdapter<String>(getActivity(), 
+		ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getActivity(), 
 				android.R.layout.simple_list_item_1, android.R.id.text1, colors);
-		setListAdapter(colorAdapter);
+		setListAdapter(menuAdapter);
 	}
 	
 	@Override
 	public void onListItemClick(ListView lv, View v, int position, long id) {
 		Context context = getActivity();
+		boolean open = true;
 		Intent intent = null;
 		switch (position) {
 		case 0:
+			System.out.println(context.toString());
+			if (context instanceof HomePageActivity) {
+				open = false;
+			}
 			intent = new Intent(context, HomePageActivity.class);
 			break;
 		case 1:
+			if (context instanceof InventoryActivity) {
+				open = false;
+			}
 			InventoryActivity invAct = new InventoryActivity();
 			intent = new Intent(context, invAct.getClass());
 			break;
 		case 2:
+			if (context instanceof ShoppingListActivity) {
+				open = false;
+			}
 			intent = new Intent(context, ShoppingListActivity.class);
 			break;
 		case 3:
@@ -48,7 +61,12 @@ public class NavMenuFragment extends ListFragment {
 			intent = new Intent(context, SettingsActivity.class);
 			break;
 		}
-		startActivity(intent);
+		if (!open) {
+			BasicMenuActivity ba = (BasicMenuActivity) getActivity();
+			ba.toggle();
+		} else {
+			startActivity(intent);
+		}
 	}
 
 }

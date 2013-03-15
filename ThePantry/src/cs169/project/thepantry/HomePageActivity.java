@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -29,7 +30,7 @@ public class HomePageActivity extends BasicMenuActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home_page);
-		
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);	
 		recommendations = new ArrayList<SearchMatch>();
 		listView = (ListView) findViewById(R.id.recsList);
 		srAdapter = new SearchResultAdapter(getApplicationContext(), recommendations);          
