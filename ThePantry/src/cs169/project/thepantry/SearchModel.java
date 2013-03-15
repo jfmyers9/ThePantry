@@ -91,15 +91,15 @@ public class SearchModel {
             	result = new SearchResult(jsonResponse);
             } else {
             	// TODO invalid request
-            	result = new Recipe(new JSONObject());
+            	result = null;//new Recipe(new JSONObject());
             }
             return result;
             
     	} catch (Exception e) {
     		// TODO return some kind of default results (not this though it's sketch)
     		e.printStackTrace();
-    		Storage defaultresult = new Recipe(new JSONObject());
-    		return defaultresult;
+    		//Storage defaultresult = new Recipe(new JSONObject());
+    		return null;//defaultresult;
         }
 	}
 }
