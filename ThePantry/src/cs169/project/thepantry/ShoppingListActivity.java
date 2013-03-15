@@ -1,21 +1,16 @@
 package cs169.project.thepantry;
 
-import android.os.Bundle;
-
-import android.app.Activity;
-//import android.app.ActionBar;
-
 import android.database.Cursor;
-
-import android.view.Menu;
-
-import android.widget.Spinner;
+import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
-public class ShoppingListActivity extends Activity {
+import com.actionbarsherlock.view.Menu;
+
+public class ShoppingListActivity extends BasicMenuActivity {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_shopping_list);
 		// Only use action bar if we want to specify certain items on it
@@ -34,7 +29,7 @@ public class ShoppingListActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.shopping_list, menu);
+		getSupportMenuInflater().inflate(R.menu.shopping_list, menu);
 		return true;
 	}
 	

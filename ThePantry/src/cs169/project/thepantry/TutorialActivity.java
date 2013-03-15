@@ -40,7 +40,8 @@ public class TutorialActivity extends Activity {
 	
 	public void setupInventory(View view) {
 		Context context = getApplicationContext();
-		Intent intent = new Intent(context, InventoryActivity.class);
+		InventoryAddActivity invAddAct = new InventoryAddActivity();
+		Intent intent = new Intent(context, invAddAct.getClass());
 		startActivity(intent);
 	}
 	
