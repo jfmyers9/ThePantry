@@ -84,7 +84,7 @@ public class HomePageActivity extends BasicMenuActivity {
 			if (this.type == "home") {
 				if (srAdapter.values.size() == 0) {
 					recommendations = ((SearchResult)result).matches;
-					srAdapter = new SearchResultAdapter(getApplicationContext(), recommendations);     
+					srAdapter = new SearchResultAdapter(HomePageActivity.this, recommendations);     
 					listView.setAdapter(srAdapter);
 				} else {
 					srAdapter.values = ((SearchResult)result).matches; 
