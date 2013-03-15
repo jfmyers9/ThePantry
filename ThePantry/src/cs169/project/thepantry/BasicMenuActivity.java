@@ -20,6 +20,10 @@ public class BasicMenuActivity extends SlidingFragmentActivity {
 		title = null;
 	}
 	
+	public String getActTitle() {
+		return title;
+	}
+	
 	public BasicMenuActivity(String name) {
 		title = name;
 	}
