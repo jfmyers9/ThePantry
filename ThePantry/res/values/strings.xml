@@ -48,6 +48,7 @@
     <string name="InventoryAddTitle">Add Ingredients</string>
     <string name="InventoryTitle">Your Inventory</string>
     <string name="title_activity_nav_menu_fragment">NavMenuFragment</string>
+    <string name="update_inventory">Update Inventory</string>
 
 
 </resources>
