@@ -13,6 +13,8 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.slidingmenu.lib.SlidingMenu;
 
 import cs169.project.thepantry.ThePantryContract.Ingredients;
 
@@ -20,18 +22,16 @@ public class InventoryAddActivity extends InventoryActivity {
 	String table = Ingredients.TABLE_NAME;
 	private DatabaseModel dm;
 	
-	public InventoryAddActivity() {
-		super();
-	}
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_inventory_add);
 		setTitle(getString(R.string.InventoryAddTitle));
+		SlidingMenu sm = getSlidingMenu();
+		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 		eView = (ExpandableListView)findViewById(R.id.exp_inv_add_list);
 		table = Ingredients.TABLE_NAME;
 		makeList();
-		
 		// Only should show a back button on action bar?	
 	}
 	
@@ -128,6 +128,16 @@ public class InventoryAddActivity extends InventoryActivity {
 		}
 
 		//Maybe pop up window with items added -- maybe store what didn't get added
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			return true;
+		}	
+		return super.onOptionsItemSelected(item);
 	}
 
 }

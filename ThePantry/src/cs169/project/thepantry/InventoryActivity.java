@@ -27,13 +27,11 @@ public class InventoryActivity extends BasicMenuActivity {
 	ExpandableListView eView;
 	ExpandableListAdapter adapter;
 	
-	public InventoryActivity() {
-		super("Inventory");
-	}
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inventory);
+		setTitle(getString(R.string.InventoryTitle));
 		eView = (ExpandableListView)findViewById(R.id.exp_view);
 		eView.setFocusable(true);
 		 // This needs to change to Inventory once I figure out inheritance with this	
