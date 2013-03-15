@@ -2,6 +2,8 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -14,17 +16,17 @@ import com.actionbarsherlock.view.MenuItem;
 import com.slidingmenu.lib.SlidingMenu;
 
 import cs169.project.thepantry.ThePantryContract.Ingredients;
+import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class InventoryAddActivity extends BaseListActivity {
 
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		setTitle(getString(R.string.InventoryAddTitle));
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inventory_add);
+		setTitle(getString(R.string.InventoryAddTitle));
 		table = Ingredients.TABLE_NAME;
-		
-		System.out.println("fucked");
 		
 		SlidingMenu sm = getSlidingMenu();
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
@@ -40,7 +42,6 @@ public class InventoryAddActivity extends BaseListActivity {
 		
 		eAdapter = new NewAdapter(getApplicationContext(), groupItems);
 		eView.setAdapter(eAdapter);	
-		System.out.println("wAY fucked");
 	}
 	
 	@Override
@@ -65,7 +66,7 @@ public class InventoryAddActivity extends BaseListActivity {
 	public void search(View view) {
 		//eventually display items returned as buttons as each letters are added to query -- need to create a more detailed search method
 		//If item doesn't exist CustomItem button appears
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		
 		/*
 		boolean found = dm.findItem(table, item);
@@ -84,6 +85,7 @@ public class InventoryAddActivity extends BaseListActivity {
 		Cursor types = dm.findAllTypes(table);
 		// displays types in spinner -- include custom button
 		// figure out how to retrieve what button user clicked
+		//return null;
 	}
 
 }

@@ -6,11 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
 
@@ -24,7 +22,6 @@ public class ShoppingListActivity extends BaseListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		setTitle(getString(R.string.ShoppingListTitle));
 		super.onCreate(savedInstanceState);
-		
 		setContentView(R.layout.activity_shopping_list);
 		table = ShoppingList.TABLE_NAME;
 		eView = (ExpandableListView) findViewById(R.id.exp_shop_list);
@@ -74,6 +71,5 @@ public class ShoppingListActivity extends BaseListActivity {
 		String type = typeSpinner.getSelectedItem().toString();
 		addItem(item, type, amount);
 	}
-	
 
 }

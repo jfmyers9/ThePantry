@@ -36,6 +36,8 @@ public class RecipeActivity extends BasicMenuActivity {
 	boolean cooked;
 	
 	DatabaseModel dm;
+	
+	private static final String DATABASE_NAME = "thepantry";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		directions = (TextView)findViewById(R.id.directions);
 		directions.setText(Html.fromHtml("<a href='"+info.source.sourceRecipeUrl + "'>"+info.source.sourceDisplayName+"</a>"));
 		
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		
 		//set favorite button to grayscale or colored image based on state in db
 		//check if recipe in database or if not favorited
@@ -146,7 +148,7 @@ public class RecipeActivity extends BasicMenuActivity {
 	*/
 	public void toggleFavorites(View v) {
 		// update recipe table of database so favorited column is yes/no
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		if (faved) {
 			faved = false;
 			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.FAVORITE, false);
@@ -163,7 +165,7 @@ public class RecipeActivity extends BasicMenuActivity {
 	 */
 	public void toggleCooked(View v) {
 		// update recipe table of database so cooked column is true
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		if (cooked) {
 			cooked = false;
 			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.COOKED, false);

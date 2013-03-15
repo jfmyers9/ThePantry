@@ -10,37 +10,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 /** Interface class called by the activities to interact with our database.
- *  Uses the DatabaseModelHelper class to create the database.
- * @author amyzhang
- */
+* Uses the DatabaseModelHelper class to create the database.
+* @author amyzhang
+*/
 public class DatabaseModel extends SQLiteAssetHelper {
 
-    private static final String DATABASE_NAME = "thepantry";
+    //private static final String DATABASE_NAME = "thepantry";
     private static final int DATABASE_VERSION = 1;
 
-    public DatabaseModel(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);  
+    public DatabaseModel(Context context, String databaseName) {
+        super(context, databaseName, null, DATABASE_VERSION);
     }
 
-    public Cursor tester() {
-		SQLiteDatabase db = getReadableDatabase();
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-
-		String [] sqlSelect = {"0 _id", "item", "type", "amount", "checked"}; 
-		String sqlTables = "ingredients";
-
-		qb.setTables(sqlTables);
-		Cursor c = qb.query(db, sqlSelect, null, null,
-				null, null, null);
-
-		c.moveToFirst();
-		
-
-		return c;
-
-	}
-    
-    
 	/** Adds the ITEM, its TYPE and given AMOUNT to the specified TABLE.
 	 * Returns true if the modification was successful, false otherwise.
 	 */

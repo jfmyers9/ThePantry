@@ -42,7 +42,7 @@ public class NavMenuFragment extends ListFragment {
 			intent = new Intent(context, ShoppingListActivity.class);
 			break;
 		case 3:
-			intent = new Intent(context, HomePageActivity.class);
+			intent = new Intent(context, LoginActivity.class);
 			break;
 		case 4:
 			intent = new Intent(context, SettingsActivity.class);

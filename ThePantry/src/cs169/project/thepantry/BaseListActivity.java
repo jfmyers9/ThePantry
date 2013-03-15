@@ -21,7 +21,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	public ExpandableListView eView;
 	NewAdapter eAdapter;
 	public String table;
-	
+	public static final String DATABASE_NAME = "thepantry";
 	public ArrayList<IngredientGroup> groupItems;
 	public ArrayList<String> groupNames;
 	public ArrayList<ArrayList<String>> childItems;
@@ -49,7 +49,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	
 	/** Display buttons with items of specified type */
 	public ArrayList<IngredientGroup> getTypes() {
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor types = dm.findAllTypes(table);
 		ArrayList<IngredientGroup> result = new ArrayList<IngredientGroup>();
 		if (types.moveToFirst()){
@@ -66,7 +66,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	
 	/** Display buttons with items of specified type */
 	public ArrayList<IngredientChild> getItems(String type) {
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor items = dm.findTypeItems(table, type);
 		
 		ArrayList<IngredientChild> result = new ArrayList<IngredientChild>();
@@ -84,7 +84,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	
 	/** Marks an item as checked */
 	public void check(View view) {
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		
 		// Finds  the view that called check
 		CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox1); //This is a little unclean
@@ -96,7 +96,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	
 	/** Adds the given item to the list */
 	public void addItem(String item, String type, String amount) {
-		DatabaseModel dm = new DatabaseModel(this);	
+		DatabaseModel dm = new DatabaseModel(this, DATABASE_NAME);	
 		boolean success = dm.add(table, item, type, amount);
 		int groupPos = 0;
 		IngredientGroup temp = new IngredientGroup(type,new ArrayList<IngredientChild>());
@@ -118,7 +118,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	/** Removes the given item from the shopping list */
 	public void removeItem(String item) {
 		// TODO - get the item/View by finding it from layout
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		boolean success = dm.remove(table, item);
 		if (success) {
 			// TODO - remove item and its checkbox from display/layout
@@ -129,7 +129,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	
 	/** Adds all items to inventory database that have been checked */
 	public void updateInventory(View view) {
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor checked = dm.checkedItems(table, ThePantryContract.CHECKED);
 
 		if (checked.moveToFirst()){

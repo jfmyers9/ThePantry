@@ -17,6 +17,7 @@ public class HomePageActivity extends BasicMenuActivity {
 	ArrayList<SearchMatch> recommendations;
 	SearchResultAdapter srAdapter;
 	SearchModel sm = new SearchModel();
+	ListView listView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -24,8 +25,8 @@ public class HomePageActivity extends BasicMenuActivity {
 		setContentView(R.layout.activity_home_page);
 		
 		recommendations = new ArrayList<SearchMatch>();
-		ListView listView = (ListView) findViewById(R.id.recsList);
-		srAdapter = new SearchResultAdapter(this, recommendations);          
+		listView = (ListView) findViewById(R.id.recsList);
+		srAdapter = new SearchResultAdapter(getApplicationContext(), recommendations);          
 		listView.setAdapter(srAdapter);
 		srAdapter.notifyDataSetChanged();
 		
@@ -81,8 +82,14 @@ public class HomePageActivity extends BasicMenuActivity {
 		@Override
 		protected void onPostExecute(Storage result) {
 			if (this.type == "home") {
-				srAdapter.values = ((SearchResult)result).matches; 
-				srAdapter.notifyDataSetChanged();
+				if (srAdapter.values.size() == 0) {
+					recommendations = ((SearchResult)result).matches;
+					srAdapter = new SearchResultAdapter(HomePageActivity.this, recommendations);   
+					listView.setAdapter(srAdapter);
+				} else {
+					srAdapter.values = ((SearchResult)result).matches; 
+					srAdapter.notifyDataSetChanged();
+				}
 			}
 			else if (this.type == "search") {
 				Intent intent = new Intent(context, SearchResultsActivity.class);

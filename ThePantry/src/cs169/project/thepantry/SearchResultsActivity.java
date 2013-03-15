@@ -17,6 +17,7 @@ public class SearchResultsActivity extends BasicMenuActivity {
 	ArrayList<SearchMatch> matches;
 	SearchResultAdapter srAdapter;
 	SearchModel sm = new SearchModel();
+	ListView listView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,7 @@ public class SearchResultsActivity extends BasicMenuActivity {
 		SearchResult result = (SearchResult)getIntent().getExtras().getSerializable("result");
 		matches = result.matches;
 		
-		ListView listView = (ListView) findViewById(R.id.resultList);
+		listView = (ListView) findViewById(R.id.resultList);
 		srAdapter = new SearchResultAdapter(this, matches);          
 		listView.setAdapter(srAdapter);
 		srAdapter.notifyDataSetChanged();
@@ -77,8 +78,16 @@ public class SearchTask extends AsyncTask<SearchCriteria, String, Storage> {
 		protected void onPostExecute(Storage result) {
 
 			if (this.type == "search") {
-				srAdapter.values = ((SearchResult)result).matches;
-				srAdapter.notifyDataSetChanged();
+				if (srAdapter.values.size() == 0) {
+					matches = ((SearchResult)result).matches;
+					srAdapter = new SearchResultAdapter(SearchResultsActivity.this, matches);   
+					listView.setAdapter(srAdapter);
+					listView.bringToFront();
+				}
+				else {
+					srAdapter.values = ((SearchResult)result).matches;
+					srAdapter.notifyDataSetChanged();
+				}
 			}
 			else if (this.type == "recipe") {
 				Intent intent = new Intent(context, RecipeActivity.class);

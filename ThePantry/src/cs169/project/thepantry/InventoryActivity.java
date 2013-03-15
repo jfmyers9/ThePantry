@@ -12,6 +12,7 @@ import com.actionbarsherlock.view.Menu;
 
 import cs169.project.thepantry.ThePantryContract.Inventory;
 
+
 public class InventoryActivity extends BaseListActivity {
 
 	@Override
@@ -44,6 +45,7 @@ public class InventoryActivity extends BaseListActivity {
 		return true;
 	}
 	
+
 	/** Takes you to InventoryAdd Activity */
 	public void edit(View view) {
 		Context context = getApplicationContext();
@@ -55,7 +57,7 @@ public class InventoryActivity extends BaseListActivity {
 	 * Eventually display items dynamically as a letter is added to query*/
 	public void search(View view) {
 		//for now just have it return true if item is in table, false otherwise
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		
 		/*
 		boolean found = dm.findItem(table, item);
@@ -65,6 +67,5 @@ public class InventoryActivity extends BaseListActivity {
 			//display message -- item not in inventory
 		}*/
 	}
-
 	
 }
