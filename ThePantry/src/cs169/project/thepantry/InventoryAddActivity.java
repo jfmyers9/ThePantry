@@ -21,6 +21,7 @@ import cs169.project.thepantry.ThePantryContract.Ingredients;
 public class InventoryAddActivity extends InventoryActivity {
 	String table = Ingredients.TABLE_NAME;
 	private DatabaseModel dm;
+	private static final String DATABASE_NAME = "thepantry";
 	
 
 	@Override
@@ -82,7 +83,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	public void search(View view) {
 		//eventually display items returned as buttons as each letters are added to query -- need to create a more detailed search method
 		//If item doesn't exist CustomItem button appears
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		
 		/*
 		boolean found = dm.findItem(table, item);
@@ -109,8 +110,8 @@ public class InventoryAddActivity extends InventoryActivity {
 	
 	/** Adds an entry to Ingredient database */
 	public void addEntry(String item, String type) {
-		dm = new DatabaseModel(this);
-		dm.add(table, item, type, 0); //adds entry to ingredient database
+		dm = new DatabaseModel(this, DATABASE_NAME);
+		dm.add(table, item, type, "0"); //adds entry to ingredient database
 		
 		//mark item "checked"
 	}
@@ -118,7 +119,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	@Override
 	/** Checks an item in the database */
 	public void check(View view) {
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		CheckBox checkBox = (CheckBox) view.findViewById(R.id.textView1);
 		dm.checked(table, ((TextView)checkBox).getText().toString(), ThePantryContract.CHECKED, checkBox.isChecked());
 	}
@@ -126,7 +127,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	/** Adds all items to inventory database that have been checked */
 	public void updateInventory(View view) {
 		//TODO: iterate through all checked items add inventory database, mark as unchecked
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 
 		System.out.println("DEFINITELY HERE");
 		//I don't think checkedItems is working -- could be checked function though

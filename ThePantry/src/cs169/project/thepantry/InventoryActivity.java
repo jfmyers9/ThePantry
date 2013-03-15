@@ -23,6 +23,7 @@ import cs169.project.thepantry.ThePantryContract.Inventory;
 public class InventoryActivity extends BasicMenuActivity {
 	String table;
 	private DatabaseModel dm;
+	private static final String DATABASE_NAME = "thepantry";
 	
 	ExpandableListView eView;
 	ExpandableListAdapter adapter;
@@ -83,7 +84,7 @@ public class InventoryActivity extends BasicMenuActivity {
 	}
 	
 	public void check(View view) {
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		CheckBox checkBox = (CheckBox) view.findViewById(R.id.textView1);
 		dm.checked(table, ((TextView)checkBox).getText().toString(), ThePantryContract.CHECKED, checkBox.isChecked());
 	}
@@ -98,7 +99,7 @@ public class InventoryActivity extends BasicMenuActivity {
 
 	/** Display buttons with items of specified type */
 	public ArrayList<String> getTypes(String table) {
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor types = dm.findAllTypes(table);
 		ArrayList<String> result = new ArrayList<String>();
 		if (types.moveToFirst()){
@@ -115,7 +116,7 @@ public class InventoryActivity extends BasicMenuActivity {
 	
 	/** Display buttons with items of specified type */
 	public ArrayList<String> getItems(String type) {
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor items = dm.findTypeItems(Ingredients.TABLE_NAME, type);
 		
 		ArrayList<String> result = new ArrayList<String>();
@@ -135,7 +136,7 @@ public class InventoryActivity extends BasicMenuActivity {
 	 * Eventually display items dynamically as a letter is added to query*/
 	public void search(View view) {
 		//for now just have it return true if item is in table, false otherwise
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		
 		/*
 		boolean found = dm.findItem(table, item);
@@ -153,7 +154,7 @@ public class InventoryActivity extends BasicMenuActivity {
 	
 	/** Removes specified item from database */
 	public void remove(String item) {
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		// for testing purposes of the display, success is set to true
 		boolean success = true;
 		dm.remove(table, item);

@@ -25,6 +25,8 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	
 	private ArrayList<String> groupItems;
 	private ArrayList<ArrayList<String>> childItems;
+	
+	private static final String DATABASE_NAME = "thepantry";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	
 	public void addShopItem(View view) {
 		EditText eText = (EditText) findViewById(R.id.shopping_list_text);
-		addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), 1);
+		addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), "1");
 		((BaseExpandableListAdapter)eView.getExpandableListAdapter()).notifyDataSetChanged();
 	}
 	
@@ -84,7 +86,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	
 	/* Fills the group arraylist with data from database. */
 	public ArrayList<String> getTypes(String table) {
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor types = dm.findAllTypes(table);
 		ArrayList<String> result = new ArrayList<String>();
 		if (types.moveToFirst()){
@@ -101,7 +103,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	
 	/* Fills the children with items from database. */
 	public ArrayList<String> getItems(String type) {
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor items = dm.findTypeItems(ThePantryContract.ShoppingList.TABLE_NAME, type);
 		
 		ArrayList<String> result = new ArrayList<String>();
@@ -117,8 +119,8 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	}
 	
 	/** Adds the given item to the shopping list */
-	public void addItem(String item, String type, float amount) {
-		DatabaseModel dm = new DatabaseModel(this);
+	public void addItem(String item, String type, String amount) {
+		DatabaseModel dm = new DatabaseModel(this, DATABASE_NAME);
 		// for testing purposes of the display, success is set to true
 		boolean success = dm.add(ThePantryContract.ShoppingList.TABLE_NAME, item, type, amount);
 		if (success) {
@@ -139,7 +141,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	/** Removes the given item from the shopping list */
 	public void removeItem(String item) {
 		// TODO - get the item/View by finding it from layout
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		boolean success = dm.remove(ThePantryContract.ShoppingList.TABLE_NAME, item);
 		if (success) {
 			// TODO - remove item and its checkbox from display/layout
@@ -156,7 +158,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	/** Updates the inventory with items checked on the shopping list */
 	public void updateInventory() {
 		boolean remSuccess = false;
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor c = dm.checkedItems(ThePantryContract.ShoppingList.TABLE_NAME, ThePantryContract.CHECKED);
 
 		// Parses the cursor into a list of Strings, still needs work, have to extract type and amount
@@ -180,7 +182,7 @@ public class ShoppingListActivity extends BasicMenuActivity {
 	
 	/** Marks a shopping list item as checked */
 	public void check(View view) {
-		dm = new DatabaseModel(this);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		CheckBox checkBox = (CheckBox) view.findViewById(R.id.textView1);
 		dm.checked(ThePantryContract.ShoppingList.TABLE_NAME, ((TextView)checkBox).getText().toString(), ThePantryContract.CHECKED,  checkBox.isChecked());
 	}
