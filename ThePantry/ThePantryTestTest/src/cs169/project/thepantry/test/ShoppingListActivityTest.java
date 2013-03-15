@@ -1,16 +1,18 @@
 package cs169.project.thepantry.test;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import cs169.project.thepantry.ShoppingListActivity;
+import android.test.ActivityUnitTestCase;
 
-public class ShoppingListActivityTest extends
-		ActivityInstrumentationTestCase2<ShoppingListActivity> {
+public class ShoppingListActivityTest extends ActivityInstrumentationTestCase2<ShoppingListActivity> {
 
 	private ShoppingListActivity listAct;
 	private Spinner mSpinner;
 	private SpinnerAdapter mPlanetData;
+	private EditText mText;
 	public static final int ADAPTER_COUNT = 9;  
 	
 	public ShoppingListActivityTest() {
@@ -23,6 +25,7 @@ public class ShoppingListActivityTest extends
 	    listAct = getActivity();
 	    mSpinner =(Spinner) listAct.findViewById(cs169.project.thepantry.R.id.add_sl_types);
 	    mPlanetData = mSpinner.getAdapter();
+	    mText = (EditText) listAct.findViewById(cs169.project.thepantry.R.id.shopping_list_text);
 	}
 
 	protected void tearDown() throws Exception {
@@ -34,49 +37,10 @@ public class ShoppingListActivityTest extends
 	    assertTrue(mPlanetData != null);
 	    assertEquals(mPlanetData.getCount(),ADAPTER_COUNT);
 	  } // end of testPreConditions() method definition
-	
-	public void testOnCreateBundle() {
-		fail("Not yet implemented");
-	}
-
-	public void testOnCreateOptionsMenuMenu() {
-		fail("Not yet implemented");
-	}
 
 	public void testAddShopItem() {
-		fail("Not yet implemented");
-	}
-
-	public void testFillArrays() {
-		fail("Not yet implemented");
-	}
-
-	public void testGetTypes() {
-		fail("Not yet implemented");
-	}
-
-	public void testGetItems() {
-		fail("Not yet implemented");
-	}
-
-	public void testAddItem() {
-		fail("Not yet implemented");
-	}
-
-	public void testRemoveItem() {
-		fail("Not yet implemented");
-	}
-
-	public void testSwipeToRemove() {
-		fail("Not yet implemented");
-	}
-
-	public void testUpdateInventory() {
-		fail("Not yet implemented");
-	}
-
-	public void testCheck() {
-		fail("Not yet implemented");
+		listAct.addShopItem(mText);
+		assertNull(mText.getText());
 	}
 
 }
