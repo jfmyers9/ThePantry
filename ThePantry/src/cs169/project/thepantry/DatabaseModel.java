@@ -193,7 +193,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	}
 	
 	
-	/** Returns 0 if item is not checked and 1 if item is checked for
+	/** Returns false if item is not checked and true if item is checked for
 	 * favorited and cooked recipe
 	 */
 	public boolean isItemChecked(String table, String recipe_name, String col) {
