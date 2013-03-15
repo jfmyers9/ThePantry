@@ -177,11 +177,60 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		String[] selectionArgs = {item};
 		
 		ContentValues values = new ContentValues();
-		values.put(ThePantryContract.CHECKED, checked);
+		
+		//GET THIS WORKING WITH INTS INSTEAD OF BOOLS
+		int newCheck;
+		if (checked) {
+			newCheck = 1;
+		} else {
+			newCheck=0;
+		}
+		values.put(ThePantryContract.CHECKED, newCheck);
 		int rows = db.update(table, values, selection, selectionArgs);
 		// TODO - add some check using rows to see if the update was successful
 		return true;
 	}
+	//COMMENTED OUT INCASE WE CANT FIGURE OUT HOW TO ACCESS CHECKBOX INFO WHEN CLICKED
+		/*
+	public boolean checked(String table, String item) {
+		SQLiteDatabase db = getWritableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(table);
+
+		String[] columns = {ThePantryContract.CHECKED};
+		String selection = ThePantryContract.ITEM + " = ?";
+		String[] selectionArgs = {item};
+
+		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
+		c.moveToFirst();
+
+		//Parse cursor to extract checkval
+		boolean checked=false;
+		boolean newVal=false;
+		if (c.moveToFirst()){
+			checked=true;
+			int checkVal = c.getInt(0);
+			if (checkVal == 0) {
+				newVal=true;
+			}else {
+				newVal=false;
+			}
+		}
+		c.close();
+		System.out.println("EVERYTHING IS FUCKED");
+		ContentValues values = new ContentValues();
+		values.put(ThePantryContract.CHECKED, newVal);
+		if (checked) {
+			int rows = db.update(table, values, selection, selectionArgs);
+			System.out.println("YEEEEEEEEEEEEEE");
+			return true;
+		} else {
+			return false;
+		}
+	}*/
+	
+
+	
 
 	/** Returns list of all items (preferably entries) checked */
 	public Cursor checkedItems(String table) {
