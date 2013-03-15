@@ -1,5 +1,7 @@
 package cs169.project.thepantry;
 
+import java.util.ArrayList;
+
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import android.content.ContentValues;
@@ -204,6 +206,34 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
 		c.moveToFirst();
 		return c;
+	}
+	
+	
+	/** Returns 0 if item is not checked and 1 if item is checked for
+	 * favorited and cooked recipe
+	 */
+	public boolean isItemChecked(String table, String recipe_name, String col) {
+		SQLiteDatabase db = getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(table);
+		
+		String[] columns = {col};
+		String selection = ThePantryContract.RECIPE + " = ?";
+		String[] selectionArgs = {recipe_name};
+		
+		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
+		if (c.moveToFirst()) {
+			String data = c.getString(0);
+			System.out.println(data);
+			if (data.equals("true")) {
+				c.close();
+				return true;
+			}
+			c.close();
+			return false;
+		}
+		c.close();
+		return false;
 	}
 	
 	//TODO - consider creating a private method to construct queries
