@@ -24,6 +24,7 @@ public class InventoryAddActivity extends InventoryActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_inventory_add);
 		setTitle(getString(R.string.InventoryAddTitle));
 		eView = (ExpandableListView)findViewById(R.id.exp_inv_add_list);
 		table = Ingredients.TABLE_NAME;
@@ -35,7 +36,6 @@ public class InventoryAddActivity extends InventoryActivity {
 			ArrayList<String> child = getItems(groupItem.get(i));
 			childItem.add(child);
 		}
-		setContentView(R.layout.activity_inventory_add);
 		makeList(groupItem, childItem);
 		
 		
@@ -124,6 +124,7 @@ public class InventoryAddActivity extends InventoryActivity {
 		//TODO: iterate through all checked items add inventory database, mark as unchecked
 		dm = new DatabaseModel(this);
 
+		System.out.println("DEFINITELY HERE");
 		//I don't think checkedItems is working -- could be checked function though
 		Cursor checked = dm.checkedItems(table);
 

@@ -30,6 +30,7 @@ public class InventoryActivity extends BasicMenuActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setTitle(getString(R.string.InventoryTitle));
 		setContentView(R.layout.activity_inventory);
 		eView = (ExpandableListView)findViewById(R.id.exp_view);
 		eView.setFocusable(true);

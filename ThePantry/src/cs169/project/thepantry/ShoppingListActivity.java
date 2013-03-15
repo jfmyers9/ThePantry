@@ -89,12 +89,8 @@ public class ShoppingListActivity extends Activity {
 	/** Marks a shopping list item as checked */
 	public void checkItem(String item) {
 		DatabaseModel dm = new DatabaseModel(this);
-<<<<<<< HEAD
 		//boolean success = dm.checked(ThePantryContract.ShoppingList.TABLE_NAME, item);
 		boolean success = true;
-=======
-		boolean success = dm.checked(ThePantryContract.ShoppingList.TABLE_NAME, item, true);
->>>>>>> aa1aba8581cc2bc785dc8c41dc566dec3c8069d2
 		if (success) {
 			// do something?
 		} else {
