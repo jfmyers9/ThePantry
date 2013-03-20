@@ -9,7 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/* The Storage class stores object representations of data that we get from the Yummly API.
+/** The Storage class stores object representations of data that we get from the Yummly API.
  * It parses different attributes of the JSON response and puts them into fields of the object.
  * Right now these extend Storage: Recipe, Attribution, RecipeImages, RecipeSource, SearchResult, SearchMatch
  */
@@ -82,8 +82,9 @@ public class Storage implements Serializable {
 	}
 }
 
-/* Recipe keeps track of recipe info. There is a lot more we can take from the Yummly response, such as nutritional info, flavors,
+/** Recipe keeps track of recipe info. There is a lot more we can take from the Yummly response, such as nutritional info, flavors,
  * cuisine, etc. For now it stores the basic info we need to display the recipe in RecipeActivity.
+ * Call the constructor using the JSON response returned by Yummly after a request for a certain recipe.
  */
 class Recipe extends Storage implements Serializable {
 	String id;
@@ -125,7 +126,7 @@ class Recipe extends Storage implements Serializable {
 	}
 }
 
-/* Attribution stores the stuff we are required to display on RecipeActivity because we are using the free version of Yummly.
+/** Attribution stores the stuff we are required to display on RecipeActivity because we are using the free version of Yummly.
  */
 class Attribution extends Storage implements Serializable {
 	String url;
@@ -144,7 +145,8 @@ class Attribution extends Storage implements Serializable {
 	}
 }
 
-/* RecipeImages stores the images associated with a recipe.
+/** RecipeImages stores the images associated with a recipe.
+ * A recipe may have a small image and a large image associated with it but may not. Check if these are null.
  */
 class RecipeImages extends Storage implements Serializable {
 	String hostedLargeUrl;
@@ -160,7 +162,8 @@ class RecipeImages extends Storage implements Serializable {
 	}
 }
 
-/* RecipeSource stores the info to link to the recipe online.
+/** RecipeSource stores the info to link to the recipe online.
+ * The URL to the recipe, the URL to the source site, and the site display name may be accessible. Check if they are null.
  */
 class RecipeSource extends Storage implements Serializable {
 	String sourceRecipeUrl;
@@ -180,7 +183,7 @@ class RecipeSource extends Storage implements Serializable {
 	}
 }
 
-/* SearchResult stores the info that is received when a search is made. It is the info that will be displayed
+/** SearchResult stores the info that is received when a search is made. It is the info that will be displayed
  * on SearchResultsActivity. It contains an array of all the recipes (SearchMatches) matched by the search.
  */
 class SearchResult extends Storage implements Serializable {
@@ -204,19 +207,27 @@ class SearchResult extends Storage implements Serializable {
 	}
 }
 
-/* SearchMatch stores all the info that will be displayed for each recipe on SearchResultsActivity.
+/** SearchMatch stores all the info that will be displayed for each recipe on SearchResultsActivity.
  */
 class SearchMatch extends Storage implements Serializable {
 	String id;
 	String name;
 	ArrayList<String> ingredients;
 	String smallImageUrl; //not always present
+	String sourceDisplayName; //not always present but defaults to Unknown
 	
 	protected SearchMatch(JSONObject info) {
 		// smallImageUrl not always present
 		try {
 			this.smallImageUrl = info.getJSONArray("smallImageUrls").getString(0);
 		} catch (JSONException e) {}
+		
+		// sourceDisplayName not always present, default to Unknown
+		try {
+			this.sourceDisplayName = info.getString("sourceDisplayName");
+		} catch (JSONException e) {
+			this.sourceDisplayName = "Unknown";
+		}
 		
 		// id, name, ingredients always present in response
 		try {
@@ -236,7 +247,7 @@ class SearchMatch extends Storage implements Serializable {
 	}	
 }
 
-/* SearchCriteria stores information for a search so we can easily pass # of results, etc.
+/** SearchCriteria stores information for a search so we can easily pass # of results, etc.
  * It can be created either with just the type and query, type query and maxresults, or type query maxresults and resultstoskip
 */
 class SearchCriteria extends Storage implements Serializable {

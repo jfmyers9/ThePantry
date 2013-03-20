@@ -1,7 +1,9 @@
 package cs169.project.thepantry;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -47,7 +49,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		
 		//Display recipe picture if there is one.
 		picture = (SmartImageView)findViewById(R.id.recipePic);
-		if (info.images != null && info.images.hostedLargeUrl != null) { //might need online check
+		if (info.images != null && info.images.hostedLargeUrl != null && isOnline()) { //might need online check
 			picture.setImageUrl(info.images.hostedLargeUrl);
 			picture.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		}
@@ -57,19 +59,22 @@ public class RecipeActivity extends BasicMenuActivity {
 		name.setText(info.name);
 		
 		//Render the ingredients list to view.
-		ll = (LinearLayout)findViewById(R.id.list);
+		ll = (LinearLayout)findViewById(R.id.ingList);
 		displayIngreds(info.ingredientLines);
 		
 		//Render directions to view.
-		TextView direction = new TextView(this);
-		direction.setText("Directions:");
-		direction.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
-		ll.addView(direction);
+		ll = (LinearLayout)findViewById(R.id.dirList);
+		TextView title = new TextView(this);
+		title.setText("Directions:");
+		title.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
+		ll.addView(title);
+		//fetch and parse directions aynchronously
+		new ParseDirectionsTask().execute(info.source.sourceRecipeUrl);
 		
-		TextView directions = new TextView(this);
-		directions.setText(Html.fromHtml("<a href='"+info.source.sourceRecipeUrl + "'>"+info.source.sourceDisplayName+"</a>"));
-		directions.setMovementMethod(LinkMovementMethod.getInstance());
-		ll.addView(directions);
+		TextView source = new TextView(this);
+		source.setText(Html.fromHtml("Source: <a href='"+info.source.sourceRecipeUrl + "'>"+info.source.sourceDisplayName+"</a>"));
+		source.setMovementMethod(LinkMovementMethod.getInstance());
+		ll.addView(source);
 		
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		
@@ -185,6 +190,31 @@ public class RecipeActivity extends BasicMenuActivity {
 			return true;
 		}	
 		return super.onOptionsItemSelected(item);
+	}
+	
+	/* Class for asynchronously retrieving directions
+	 * 
+	 */
+	public class ParseDirectionsTask extends AsyncTask<String, Void, ArrayList<String>> {
+		
+		@Override
+		protected ArrayList<String> doInBackground(String... url) {
+			return DirectionParser.getDirections(url[0]);
+		}
+		
+		@Override
+		protected void onPostExecute(ArrayList<String> directionsList) {
+			if (directionsList.size() > 0) {
+				String directionsText = "";
+				for (String dir : directionsList) {
+					directionsText += dir + "\n";
+				}
+				TextView directions = new TextView(RecipeActivity.this);
+				directions.setText(directionsText);
+				ll.addView(directions);
+			}
+		}
+		
 	}
 
 }
