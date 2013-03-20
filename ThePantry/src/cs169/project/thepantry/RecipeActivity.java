@@ -9,6 +9,7 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,6 +43,7 @@ public class RecipeActivity extends BasicMenuActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_recipe);
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 		
 		//Get bundle with recipe information.
 		//Intent i = this.getIntent();
@@ -207,10 +209,11 @@ public class RecipeActivity extends BasicMenuActivity {
 			if (directionsList.size() > 0) {
 				String directionsText = "";
 				for (String dir : directionsList) {
-					directionsText += dir + "\n";
+					directionsText += dir + "\n\n";
 				}
 				TextView directions = new TextView(RecipeActivity.this);
 				directions.setText(directionsText);
+				directions.setTextSize(TypedValue.COMPLEX_UNIT_PT, 7);
 				ll.addView(directions);
 			}
 		}

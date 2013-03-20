@@ -59,5 +59,6 @@
     <string name="recommendations">Recommendations:</string>
     <string name="title_activity_base_list">BaseListActivity</string>
     <string name="ingredient">Ingredients:</string>
+    <string name="results">Search Results:</string>
 
 </resources>
