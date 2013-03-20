@@ -20,8 +20,8 @@ public class ShoppingListActivity extends BaseListActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		setTitle(getString(R.string.ShoppingListTitle));
 		super.onCreate(savedInstanceState);
+		setTitle(getString(R.string.ShoppingListTitle));
 		setContentView(R.layout.activity_shopping_list);
 		table = ShoppingList.TABLE_NAME;
 		eView = (ExpandableListView) findViewById(R.id.exp_shop_list);
