@@ -9,4 +9,22 @@ This is a README file for The Pantry application.
 ThePantry directory holds the Android code while thePantryBackend contains the
 Rails code for the backend.
 
-More to come later.
+In order to run our project. You can either:
+
+1. Take the ThePantry.apk file out of ThePantry/bin and place it on your android device.
+
+or
+
+2.    1. Add ThePantry as an Android Project in Eclipse.
+      2. Add SlidingMenuLibrary as an Android Project Library in Eclipse
+      3. Add ActionBarSherlock as an Android Project Library in Eclipse
+      4. Make sure that ThePantry has dependency of SlidingMenuLibrary
+      5. Make sure that SlidingMenuLibrary has ActionBarSherlock as a dependency.
+      6. Make sure that the Java Build Path's are correct to your local jars in the ThePantry/libs folder.
+      7. Build the Android Project onto an Emulator Device or a local hardware device.
+
+In order to run the tests for this project, you can:
+
+1. Add ThePanty/ThePantryTestTest as AndroidProject in Eclipse. Go to each of the test files and run them as an Android
+  JUnit Application. It should inform you on the passing status of each test.
+2. Ruby on Rails Unit Tests can be run in a similar fashion to the warmup project.
