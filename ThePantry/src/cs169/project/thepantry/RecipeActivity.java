@@ -81,13 +81,13 @@ public class RecipeActivity extends BasicMenuActivity {
 		//set favorite button to grayscale or colored image based on state in db
 		//check if recipe in database or if not favorited
 		star = (ImageButton)findViewById(R.id.favorite);
-		faved = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.FAVORITE);
+		faved = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE);
 		setStarButton(faved);
 		
 		//set cooked button to grayscale or colored image based on state in db
 		//check if recipe is in db or not cooked
 		check = (ImageButton)findViewById(R.id.cooked);
-		cooked = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.COOKED);
+		cooked = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED);
 		setCheckButton(cooked);
 		
 	}
@@ -139,10 +139,10 @@ public class RecipeActivity extends BasicMenuActivity {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		if (faved) {
 			faved = false;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.FAVORITE, false);
+			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, false);
 		} else {
 			faved = true;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.FAVORITE, true);
+			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, true);
 		}
 		setStarButton(faved);
 	}
@@ -156,10 +156,10 @@ public class RecipeActivity extends BasicMenuActivity {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		if (cooked) {
 			cooked = false;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.COOKED, false);
+			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, false);
 		} else {
 			cooked = true;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.COOKED, true);
+			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, true);
 		}
 		setCheckButton(cooked);
 	}
