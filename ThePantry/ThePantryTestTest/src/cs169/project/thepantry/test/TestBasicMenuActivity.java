@@ -1,6 +1,8 @@
 package cs169.project.thepantry.test;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.TouchUtils;
+import android.test.ViewAsserts;
 import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -8,23 +10,19 @@ import android.widget.ListView;
 import com.actionbarsherlock.app.ActionBar;
 import com.slidingmenu.lib.SlidingMenu;
 
-import cs169.project.thepantry.BasicMenuActivity;
 import cs169.project.thepantry.HomePageActivity;
 
 public class TestBasicMenuActivity extends ActivityInstrumentationTestCase2<HomePageActivity> {
 	
-	 private BasicMenuActivity mActivity;
+	 private HomePageActivity mActivity;
 	 private ActionBar actionBar;
 	 private SlidingMenu sm;
 	 private EditText eText;
 	 private ListView lView;
-
-	public TestBasicMenuActivity(Class<HomePageActivity> activityClass) {
-		super(activityClass);
-	}
 	
-	public TestBasicMenuActivity() {
-		super("cs169.project.thepantry.HomePageActivity", HomePageActivity.class);
+	public TestBasicMenuActivity(String name) {
+		super("cs169.project.thepantry", HomePageActivity.class);
+		setName(name);
 	}
 	
 	protected void setUp() throws Exception {
@@ -46,14 +44,13 @@ public class TestBasicMenuActivity extends ActivityInstrumentationTestCase2<Home
 	}
 	
 	public void testEditTextUI() {
-		mActivity.runOnUiThread(
-				new Runnable() {
-					public void run() {
-						eText.requestFocus();
-						eText.setText("Bacon");
-					}
-		});
-	    assertEquals("Bacon",eText.getText().toString());
+		TouchUtils.tapView(this, eText);
+		TouchUtils.clickView(this, eText);
+		TouchUtils.tapView(this, eText);
+		eText.performClick();
+		this.sendKeys("1");
+		this.sendKeys("2");
+	    assertEquals("1",eText.getText().toString());
 	}
 	
 	public void testListView() {
@@ -63,6 +60,23 @@ public class TestBasicMenuActivity extends ActivityInstrumentationTestCase2<Home
 						lView.requestFocus();
 					}
 		});
+		this.sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
+		this.sendKeys(KeyEvent.KEYCODE_3D_MODE);
+		ViewAsserts.assertOnScreen(lView.getRootView(), eText);
+		assertEquals(lView, (ListView) mActivity.findViewById(cs169.project.thepantry.R.id.recsList));
 	}
+	
+	public void testSlidingMenu() {
+		mActivity.runOnUiThread(
+				new Runnable() {
+					public void run() {
+						lView.requestFocus();
+					}
+		});
+		this.sendKeys("l");
+		ViewAsserts.assertOnScreen(eText.getRootView(), lView);
+	}
+	
+	
 
 }

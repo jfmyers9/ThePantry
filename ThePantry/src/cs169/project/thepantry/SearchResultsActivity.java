@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -15,14 +16,16 @@ import android.widget.ListView;
 public class SearchResultsActivity extends BasicMenuActivity {
 
 	ArrayList<SearchMatch> matches;
-	SearchResultAdapter srAdapter;
-	SearchModel sm = new SearchModel();
-	ListView listView;
+	//public for testing
+	public SearchResultAdapter srAdapter;
+	public SearchModel sm = new SearchModel();
+	public ListView listView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search_results);
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 		
 		EditText searchText = (EditText) findViewById(R.id.search_text);
 		searchText.setText((String)getIntent().getStringExtra("currentSearch"));
