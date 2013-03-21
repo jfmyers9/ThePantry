@@ -78,22 +78,9 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 				result.add(temp);
 				items.moveToNext();
 			}
+			items.close();
 		}
-		items.close();
 		return result;
-	}
-	
-	
-	/** Marks an item as checked */
-	public void check(View view) {
-		dm = new DatabaseModel(this, DATABASE_NAME);
-		
-		// Finds  the view that called check
-		CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox1); //This is a little unclean
-		String item =  ((TextView)checkBox).getText().toString();
-		
-		//Updates the check field of the item that called check
-		dm.checked(table, item, ThePantryContract.CHECKED,  checkBox.isChecked());
 	}
 	
 	/** Adds the given item to the list */
@@ -129,7 +116,8 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 		}
 	}
 	
-	/** Adds all items to inventory database that have been checked */
+	/** Adds all items to inventory database that have been checked 
+	 * Need to check if item is in inventory table -- can increment amount if is */
 	public void updateInventory(View view) {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		for (IngredientChild c : children) {

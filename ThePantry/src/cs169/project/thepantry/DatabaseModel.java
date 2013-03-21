@@ -175,7 +175,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		
 		String selection;
 		if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
-			selection = ThePantryContract.RECIPE + " = ?";
+			selection = ThePantryContract.Recipe.RECIPE + " = ?";
 		} else {
 			selection = ThePantryContract.ITEM + " = ?";	
 		}
@@ -226,7 +226,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		qb.setTables(table);
 		
 		String[] columns = {col};
-		String selection = ThePantryContract.RECIPE + " = ?";
+		String selection = ThePantryContract.Recipe.RECIPE + " = ?";
 		String[] selectionArgs = {recipe_name};
 		
 		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);

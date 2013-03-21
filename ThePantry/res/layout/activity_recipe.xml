@@ -50,22 +50,13 @@
 	            android:layout_toLeftOf="@id/cooked"
 	            android:layout_marginBottom="10dp"
 	            android:layout_marginLeft="10dp"
-	            android:textSize="10pt" >
+	            android:textSize="14pt" >
 	        </TextView>
-	
-	        <Button
-	            android:id="@+id/addtoshop"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_alignLeft="@id/recipeName"
-	            android:layout_below="@id/recipeName"
-	            android:onClick="addToShopping"
-	            android:text="@string/add_to_shopping_list" />
 	        
 	    </RelativeLayout>
 	
 		<LinearLayout 
-		    android:id="@+id/list"
+		    android:id="@+id/ingList"
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
 		    android:layout_margin="10dp"
@@ -78,6 +69,29 @@
 		        android:textSize="10pt"
 		        android:text="@string/ingredient" />
 		    
+		</LinearLayout>
+		
+		<LinearLayout 
+		    android:id="@+id/ingButtons"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="vertical" >
+		   
+		    <Button
+	            android:id="@+id/addtoshop"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:onClick="addToShopping"
+	            android:text="@string/add_to_shopping_list" />
+		    
+		</LinearLayout>
+		
+		<LinearLayout 
+		    	android:id="@+id/dirList"
+		    	android:layout_width="fill_parent"
+		    	android:layout_height="wrap_content"
+		    	android:layout_margin="10dp"
+		    	android:orientation="vertical" >
 		</LinearLayout>
 		
 	</LinearLayout>

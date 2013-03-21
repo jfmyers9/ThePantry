@@ -14,7 +14,7 @@ import com.slidingmenu.lib.app.SlidingFragmentActivity;
 public class BasicMenuActivity extends SlidingFragmentActivity {
 	
 	private String title;
-	private ActionBar actionBar;
+	public ActionBar actionBar;
 	
 	public BasicMenuActivity() {
 		title = null;

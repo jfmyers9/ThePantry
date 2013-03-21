@@ -15,11 +15,11 @@ import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class InventoryActivity extends BaseListActivity {
 
+	//CALL IT THE PANTRY!
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		setTitle(getString(R.string.InventoryTitle));
 		super.onCreate(savedInstanceState);
-		
+		setTitle(getString(R.string.InventoryTitle));
 		setContentView(R.layout.activity_inventory);
 		table = Inventory.TABLE_NAME;
 		eView = (ExpandableListView)findViewById(R.id.exp_view);

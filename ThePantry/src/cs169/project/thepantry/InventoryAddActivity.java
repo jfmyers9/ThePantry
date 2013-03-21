@@ -27,9 +27,9 @@ public class InventoryAddActivity extends BaseListActivity {
 		SlidingMenu sm = getSlidingMenu();
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 		eView = (ExpandableListView)findViewById(R.id.exp_inv_add_list);
-		eView.setFocusable(true);
+		eView.setFocusable(false);
 		eView.setDividerHeight(2);
-		eView.setClickable(true);
+		eView.setClickable(false);
 
 		groupItems = new ArrayList<IngredientGroup>();
 		groupNames = new ArrayList<String>();

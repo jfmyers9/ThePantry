@@ -9,17 +9,35 @@
     tools:context=".SearchResultsActivity" 
     android:orientation="vertical">
 
+    <LinearLayout android:id="@+id/search_bar"
+  	    android:layout_width="fill_parent"
+  	    android:layout_height="wrap_content"
+  	    android:orientation="horizontal" >
+  	    
     <EditText
         android:id="@+id/search_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_search_query" />
-    
+        android:hint="@string/enter_search_query" 
+        android:layout_weight="3"/>
+
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:onClick="search"
-        android:text="@string/button_search" />
+        android:text="@string/button_search" 
+        android:layout_weight="1"/>
+    
+    </LinearLayout>
+    
+    <TextView
+    	android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="25px"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/results" />
     
     <ListView 
         android:id="@+id/resultList"

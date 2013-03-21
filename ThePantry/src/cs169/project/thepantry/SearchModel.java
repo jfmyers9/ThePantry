@@ -12,8 +12,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONObject;
 
-/* SearchModel searches the Yummly API using a SearchCriteria and returns a SearchResult
- * 
+/** SearchModel searches the Yummly API using a SearchCriteria and returns a SearchResult 
  */
 public class SearchModel {
 	

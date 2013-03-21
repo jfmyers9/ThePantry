@@ -34,7 +34,7 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	  public View getView(int position, View convertView, ViewGroup parent) {
 		String youHave = "";
 		String youNeed = "";
-		String time = "";
+		String source = "Unknown";
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    View listItem = inflater.inflate(R.layout.list_result, parent, false);
 	
@@ -75,10 +75,6 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 		    // set the title of the result item
 		    TextView titleView = (TextView) listItem.findViewById(R.id.title);
 		    titleView.setText(values.get(position).name);
-	    
-		    // TODO set the required time
-		    TextView timeView = (TextView) listItem.findViewById(R.id.time);
-		    timeView.setText(time); //(values.get(position).time);
 		    
 		    //set you have and you need
 		    TextView youHaveView = (TextView) listItem.findViewById(R.id.you_have);
@@ -86,6 +82,10 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 		    
 		    TextView youNeedView = (TextView) listItem.findViewById(R.id.you_need);
 		    youNeedView.setText("You need: " + youNeed);
+		    
+		    // display the source
+		    TextView timeView = (TextView) listItem.findViewById(R.id.source);
+		    timeView.setText("Source: " + values.get(position).sourceDisplayName);
 		    
 		    //load the image
 		    SmartImageView imageView = (SmartImageView) listItem.findViewById(R.id.image);
