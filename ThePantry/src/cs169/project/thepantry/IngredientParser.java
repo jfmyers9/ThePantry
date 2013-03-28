@@ -9,8 +9,8 @@ public class IngredientParser {
 	public static String[] parse(String ingredientLine) {
 		
 		//match number, followed by measurement, ignore anything in parenths, match the ingredient, not after comma
-		String measRegex = "(teaspoon|tablespoon|pounds)?";
-		String ingredRegex = "([^[a-zA-Z]]+)? " + measRegex + " (\\(.*\\))? ([a-zA-Z\\s]+)";
+		String measRegex = "(boxes|box|bunches|bunch|cans?|cloves?|cups?|handfuls?|heads?|ounces?|ozs?|ozs?\\.|packages?|pounds?|slices?|sprigs?|sticks?|strips?|teaspoons?|tablespoons?|tsps?|tsps?\\.|tbsps?|tbsps?\\.)?";
+		String ingredRegex = "([^[a-zA-Z]]+)? ?" + measRegex + " ?(\\(.*\\))? ?([a-zA-Z ]+)";
 		
 		String number = "";
 		String measurement = "";

@@ -92,6 +92,7 @@ public class SearchTask extends AsyncTask<SearchCriteria, String, Storage> {
 				else {
 					srAdapter.values = ((SearchResult)result).matches;
 					srAdapter.notifyDataSetChanged();
+					listView.smoothScrollToPosition(0);
 				}
 			}
 			else if (this.type == "recipe") {

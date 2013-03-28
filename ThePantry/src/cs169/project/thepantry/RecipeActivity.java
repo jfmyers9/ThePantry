@@ -3,13 +3,15 @@ package cs169.project.thepantry;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -73,9 +75,15 @@ public class RecipeActivity extends BasicMenuActivity {
 		//fetch and parse directions aynchronously
 		new ParseDirectionsTask().execute(info.source.sourceRecipeUrl);
 		
+		//display the source and link to the web page source, open in a webview inside the app if clicked
 		TextView source = new TextView(this);
-		source.setText(Html.fromHtml("Source: <a href='"+info.source.sourceRecipeUrl + "'>"+info.source.sourceDisplayName+"</a>"));
-		source.setMovementMethod(LinkMovementMethod.getInstance());
+		source.setText("Source: " + info.source.sourceDisplayName);
+		source.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayWebpage(info.source.sourceRecipeUrl);
+            }
+        });
 		ll.addView(source);
 		
 		dm = new DatabaseModel(this, DATABASE_NAME);
@@ -192,6 +200,13 @@ public class RecipeActivity extends BasicMenuActivity {
 			return true;
 		}	
 		return super.onOptionsItemSelected(item);
+	}
+	
+	// open display webpage activity with the url
+	public void displayWebpage(String url) {
+		Intent intent = new Intent(getApplicationContext(), DisplayWebpageActivity.class);
+		intent.putExtra("url", url);
+		startActivity(intent);
 	}
 	
 	/* Class for asynchronously retrieving directions
