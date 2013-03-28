@@ -20,10 +20,14 @@ public class IngredientParser {
 		Pattern p = Pattern.compile(ingredRegex);
 	    Matcher m = p.matcher(ingredientLine);
 	    if (m.find()) {
-	        number = m.group(1);
-	        measurement = m.group(2);
-	        additional = m.group(3);
-	        ingredient = m.group(4);
+	    	if (m.group(1) != null ) {
+	    		number = m.group(1); }
+	    	if (m.group(2) != null ) {
+	    		measurement = m.group(2); }
+	    	if (m.group(3) != null ) {
+	    		additional = m.group(3); }
+	    	if (m.group(4) != null ) {
+	    		ingredient = m.group(4); }
 	    }
 	    
 	    String[] parsed = {number, measurement, additional, ingredient};
