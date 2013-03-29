@@ -98,6 +98,10 @@
             android:name="cs169.project.thepantry.DisplayWebpageActivity"
             android:label="@string/title_activity_display_webpage" >
         </activity>
+        <activity
+            android:name="cs169.project.thepantry.ProfileActivity"
+            android:label="@string/title_activity_profile" >
+        </activity>
     </application>
 
 </manifest>
