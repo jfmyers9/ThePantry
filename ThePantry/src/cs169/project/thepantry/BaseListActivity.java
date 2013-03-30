@@ -20,8 +20,8 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 
 	public DatabaseModel dm;
 	public ExpandableListView eView;
-	NewAdapter eAdapter;
-	public String table;
+	BaseListAdapter eAdapter;
+	public String table = ThePantryContract.Ingredients.TABLE_NAME;
 	public static final String DATABASE_NAME = "thepantry";
 	public ArrayList<IngredientGroup> groupItems;
 	public ArrayList<String> groupNames;

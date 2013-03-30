@@ -36,8 +36,7 @@ public class ShoppingListActivity extends BaseListActivity {
 		children = new ArrayList<IngredientChild>();
 		
 		fillArrays();
-		
-		eAdapter = new NewAdapter(getApplicationContext(), groupItems);
+		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems);
 		eView.setAdapter(eAdapter);
 		
 		
@@ -47,6 +46,7 @@ public class ShoppingListActivity extends BaseListActivity {
 				ArrayAdapter.createFromResource(this,
 												R.array.ingredient_type_array,
 												android.R.layout.simple_spinner_item);
+		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, groupNames);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
 	}

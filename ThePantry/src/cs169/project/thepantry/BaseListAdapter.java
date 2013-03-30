@@ -11,12 +11,12 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-public class NewAdapter extends BaseExpandableListAdapter {
+public class BaseListAdapter extends BaseExpandableListAdapter {
 	
 	private ArrayList<IngredientGroup> groups;
 	private Context context;
 	
-	public NewAdapter(Context context, ArrayList<IngredientGroup> groups) {
+	public BaseListAdapter(Context context, ArrayList<IngredientGroup> groups) {
 		this.context = context;
 		this.groups = groups;
 	}
