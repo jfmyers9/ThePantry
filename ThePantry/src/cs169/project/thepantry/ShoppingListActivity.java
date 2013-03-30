@@ -1,5 +1,6 @@
 package cs169.project.thepantry;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 
@@ -59,9 +61,14 @@ public class ShoppingListActivity extends BaseListActivity {
 	/** Retrieves user input and adds the ingredient to the shopping list and database */
 	public void addShopItem(View view) {
 		EditText eText = (EditText) findViewById(R.id.shopping_list_text);
-		addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), "1");
+		try {
+			addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), "1");
+			((BaseExpandableListAdapter)eView.getExpandableListAdapter()).notifyDataSetChanged();
+		} catch (IOException e) {
+			Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
+			toast.show();
+		}
 		eText.setText("");
-		((BaseExpandableListAdapter)eView.getExpandableListAdapter()).notifyDataSetChanged();
 	}
 
 }
