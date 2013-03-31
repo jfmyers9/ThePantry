@@ -40,10 +40,15 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		
 		long newRowId;
 		// TODO - consider using insertOrThrow and add try/catch block?
-		newRowId = db.insert(table, null, values);
-		if (newRowId != -1) {
-			return true;
+		if (!findItem(table, item)) {
+			newRowId = db.insert(table, null, values);
+			if (newRowId != -1) {
+				return true;
+			} else {
+				return false;
+			}
 		} else {
+			// When we implement amount we can increment it here instead of adding duplicates
 			return false;
 		}
 	}

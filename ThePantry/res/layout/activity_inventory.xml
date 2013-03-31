@@ -9,36 +9,29 @@
     tools:context=".InventoryActivity" >
 
     <TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    
+
     <Button
         android:id="@+id/edit"
-    	android:layout_height="wrap_content"
-     	android:layout_width="wrap_content"
-    	android:text="@string/edit"
-     	android:onClick="edit" />
-    
-    <EditText
-        android:id="@+id/search_text"
-        android:layout_below = "@+id/edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/ingredient_search" />
-    
-    <Button
-        android:id="@+id/search"
-        android:layout_below = "@+id/edit"
-        android:layout_toRightOf = "@+id/search_text"
-    	android:layout_height="wrap_content"
-     	android:layout_width="wrap_content"
-    	android:text="@string/search"
-     	android:onClick="search" />
-    
-   	<ExpandableListView 
+        android:onClick="edit"
+        android:text="@string/edit" />
+
+    <ExpandableListView
         android:id="@+id/exp_view"
-        android:layout_below = "@+id/search"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/edit" />
+
+    <SearchView
+        android:id="@+id/search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/edit" >
+    </SearchView>
 
 </RelativeLayout>

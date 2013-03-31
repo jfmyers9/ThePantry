@@ -17,21 +17,13 @@
     	android:text="@string/ingredient_update"
      	android:onClick="updateInventory" />
        
-    <EditText
-        android:id="@+id/search_text"
-        android:layout_below = "@+id/update_button"
+    <SearchView
+        android:id="@+id/search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/ingredient_search" />
-    
-    <Button
-        android:id="@+id/search"
-        android:layout_below = "@+id/update_button"
-        android:layout_toRightOf = "@+id/search_text"
-    	android:layout_height="wrap_content"
-     	android:layout_width="wrap_content"
-    	android:text="@string/search"
-     	android:onClick="search" />
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/update_button" >
+    </SearchView>
    
     <ExpandableListView 
         android:id="@+id/exp_inv_add_list"

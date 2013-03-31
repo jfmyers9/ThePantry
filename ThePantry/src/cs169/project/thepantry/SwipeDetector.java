@@ -15,7 +15,7 @@ public class SwipeDetector implements View.OnTouchListener {
 	}
 	
 	private static final String logTag = "SwipeDetector";
-	private static final int MIN_DISTANCE = 10;
+	private static final int MIN_DISTANCE = 100;
 	private float downX, downY, upX, upY;
 	private Action mSwipeDetected = Action.None;
 	
@@ -35,7 +35,7 @@ public class SwipeDetector implements View.OnTouchListener {
 			downY = event.getY();
 			mSwipeDetected = Action.None;
 			return false; // Allows for click handling concurrently with swipe
-		case MotionEvent.ACTION_UP:
+		case MotionEvent.ACTION_MOVE:
 			upX = event.getX();
 			upY = event.getY();
 			
@@ -48,11 +48,11 @@ public class SwipeDetector implements View.OnTouchListener {
 				if (deltaX < 0) {
 					Log.i(logTag, "Swipe Left to Right");
 					mSwipeDetected = Action.LR;
-					return false;
+					return true;
 				} else if (deltaX > 0) {
 					Log.i(logTag, "Swipe Right to Left");
 					mSwipeDetected = Action.RL;
-					return false;
+					return true;
 				}	
 			} else if (Math.abs(deltaY) > MIN_DISTANCE) { // Vertical swipe detected
 				// Up or down
@@ -66,7 +66,7 @@ public class SwipeDetector implements View.OnTouchListener {
 					return false;
 				}
 			}
-			return false;
+			return true;
 		}
 		return false;
 	}
