@@ -45,8 +45,6 @@ public class TestBasicMenuActivity extends ActivityInstrumentationTestCase2<Home
 	
 	public void testEditTextUI() {
 		TouchUtils.tapView(this, eText);
-		TouchUtils.clickView(this, eText);
-		TouchUtils.tapView(this, eText);
 		eText.performClick();
 		this.sendKeys("1");
 		this.sendKeys("2");

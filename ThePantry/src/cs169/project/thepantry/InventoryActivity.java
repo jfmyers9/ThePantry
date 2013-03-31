@@ -33,7 +33,7 @@ public class InventoryActivity extends BaseListActivity {
 		
 		fillArrays();
 		
-		eAdapter = new NewAdapter(getApplicationContext(), groupItems);
+		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems);
 		eView.setAdapter(eAdapter);
 		
 	}

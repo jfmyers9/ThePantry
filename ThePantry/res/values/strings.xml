@@ -60,5 +60,7 @@
     <string name="title_activity_base_list">BaseListActivity</string>
     <string name="ingredient">Ingredients:</string>
     <string name="results">Search Results:</string>
+    <string name="title_activity_display_webpage">DisplayWebpageActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 
 </resources>
