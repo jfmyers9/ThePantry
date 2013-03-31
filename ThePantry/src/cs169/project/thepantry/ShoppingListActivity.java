@@ -1,5 +1,6 @@
 package cs169.project.thepantry;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 
@@ -34,8 +36,7 @@ public class ShoppingListActivity extends BaseListActivity {
 		children = new ArrayList<IngredientChild>();
 		
 		fillArrays();
-		
-		eAdapter = new NewAdapter(getApplicationContext(), groupItems);
+		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems);
 		eView.setAdapter(eAdapter);
 		
 		
@@ -45,6 +46,7 @@ public class ShoppingListActivity extends BaseListActivity {
 				ArrayAdapter.createFromResource(this,
 												R.array.ingredient_type_array,
 												android.R.layout.simple_spinner_item);
+		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, groupNames);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
 	}
@@ -59,9 +61,14 @@ public class ShoppingListActivity extends BaseListActivity {
 	/** Retrieves user input and adds the ingredient to the shopping list and database */
 	public void addShopItem(View view) {
 		EditText eText = (EditText) findViewById(R.id.shopping_list_text);
-		addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), "1");
+		try {
+			addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), "1");
+			((BaseExpandableListAdapter)eView.getExpandableListAdapter()).notifyDataSetChanged();
+		} catch (IOException e) {
+			Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
+			toast.show();
+		}
 		eText.setText("");
-		((BaseExpandableListAdapter)eView.getExpandableListAdapter()).notifyDataSetChanged();
 	}
 
 }

@@ -61,7 +61,10 @@
     <string name="ingredient">Ingredients:</string>
     <string name="results">Search Results:</string>
     <string name="title_activity_display_webpage">DisplayWebpageActivity</string>
+
     <string name="dialog_add_ingredients_to_shopping_list">Add Ingredients to Shopping List?</string>
     <string name="dialog_cancel">Cancel</string>
+
+    <string name="title_activity_profile">ProfileActivity</string>
 
 </resources>

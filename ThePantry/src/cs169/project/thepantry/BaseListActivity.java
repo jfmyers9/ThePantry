@@ -1,5 +1,6 @@
 package cs169.project.thepantry;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -19,8 +20,8 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 
 	public DatabaseModel dm;
 	public ExpandableListView eView;
-	NewAdapter eAdapter;
-	public String table;
+	BaseListAdapter eAdapter;
+	public String table = ThePantryContract.Ingredients.TABLE_NAME;
 	public static final String DATABASE_NAME = "thepantry";
 	public ArrayList<IngredientGroup> groupItems;
 	public ArrayList<String> groupNames;
@@ -47,7 +48,8 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 		}
 	}
 	
-	/** Display buttons with items of specified type */
+	/** Retrieves ingredient types from the database and
+	 *  returns an ArrayList with said types to be used for display */
 	public ArrayList<IngredientGroup> getTypes() {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor types = dm.findAllTypes(table);
@@ -64,7 +66,8 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 		return result;
 	}
 	
-	/** Display buttons with items of specified type */
+	/** Retrieves ingredients from the database and
+	 *  returns an ArrayList with said ingredients to be used for display */
 	public ArrayList<IngredientChild> getItems(String type) {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor items = dm.findTypeItems(table, type);
@@ -83,9 +86,13 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 		return result;
 	}
 	
-	/** Adds the given item to the list */
-	public void addItem(String item, String type, String amount) {
-		DatabaseModel dm = new DatabaseModel(this, DATABASE_NAME);	
+	/** Adds the given item to the list and the database
+	 * @throws IOException */
+	public void addItem(String item, String type, String amount) throws IOException {
+		if (item.equals("")) {
+			throw new IOException("Ingredient cannot be empty, please try again");
+		}
+		DatabaseModel dm = new DatabaseModel(this, DATABASE_NAME);
 		boolean success = dm.add(table, item, type, amount);
 		int groupPos = 0;
 		IngredientGroup temp = new IngredientGroup(type,new ArrayList<IngredientChild>());
@@ -96,29 +103,29 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 			} else {
 				eAdapter.addChild(new IngredientChild(item, type), temp);
 			}
-		} 
+		}
 	}
 	
-	/** Swipes to bring up the delete button for an item on the shopping list. */
+	/** Swipes to bring up the delete button for displayed in the list. */
 	public void swipeToRemove(View view) {
 		// TODO - implement this, brings up a button whose onClick=removeItem
 	}
 	
-	/** Removes the given item from the shopping list */
-	public void removeItem(String item) {
+	/** Removes the given item from the database and list 
+	 * @throws ThePantryException */
+	public void removeItem(String item) throws ThePantryException {
 		// TODO - get the item/View by finding it from layout
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		boolean success = dm.remove(table, item);
 		if (success) {
 			// TODO - remove item and its checkbox from display/layout
-		} else {
-			// do something else
 		}
 	}
 	
 	/** Adds all items to inventory database that have been checked 
-	 * Need to check if item is in inventory table -- can increment amount if is */
-	public void updateInventory(View view) {
+	 * Need to check if item is in inventory table -- can increment amount if is 
+	 * @throws ThePantryException */
+	public void updateInventory(View view) throws ThePantryException {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		for (IngredientChild c : children) {
 			if (c.isSelected()) {

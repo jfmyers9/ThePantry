@@ -39,7 +39,7 @@ public class SearchModel {
 		//q is either the recipe ID or the search query q in String format
 		//q is separated by commas: the first term is the search query q, after that terms are ingredients
 		this.type = sc.type;
-		this.q = sc.q;
+		this.q = sc.q.toLowerCase();
 		this.maxResults = sc.maxResults;
 		this.resultsToSkip = sc.resultsToSkip;
 		
