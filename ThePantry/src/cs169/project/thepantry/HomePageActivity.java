@@ -23,6 +23,7 @@ public class HomePageActivity extends BasicMenuActivity {
 	ListView listView;
 	DatabaseModel dm;
 	private static final String DATABASE_NAME = "thepantry";
+	final int NUM_RECOMMENDATIONS = 4;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,21 +67,33 @@ public class HomePageActivity extends BasicMenuActivity {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor youHave = dm.findAllItems(Inventory.TABLE_NAME);
 
+		String query = "";
 		SearchCriteria searchcriteria;
+		int numToPick;
 		if (youHave != null && youHave.moveToFirst()) {
-			//pick one of your inventory items at random and recommend recipes based on that
-			// TODO redo search for 0 results
 			int numItems = youHave.getCount();
-			int loc = (int)(Math.random() * (numItems));
-			while (loc > 0) {
-				youHave.moveToNext();
-				loc--;
+			// pick a random number between 1-5 or 1-#items to try a combination of items in your inventory to recommend recipes based on
+			if (numItems < 5) {
+				numToPick = (int)(Math.random() * numItems) + 1;
+			} else {
+				numToPick = (int)(Math.random() * 5) + 1;
 			}
-			searchcriteria = new SearchCriteria("home", youHave.getString(0), 4);
+			//pick numToPick inventory items at random and recommend recipes based on them
+			// TODO redo search for 0 results
+			for (int i = 0; i < numToPick; i++) {
+				int loc = (int)(Math.random() * (numItems));
+				while (loc > 0) {
+					youHave.moveToNext();
+					loc--;
+				}
+				query += ", " + youHave.getString(0);
+				youHave.moveToFirst();
+			}
+			searchcriteria = new SearchCriteria("home", query, NUM_RECOMMENDATIONS);
 		}
 		else {
-			//default is bacon
-			searchcriteria = new SearchCriteria("home", "bacon", 4);
+			//TODO: default is bacon
+			searchcriteria = new SearchCriteria("home", "bacon", NUM_RECOMMENDATIONS);
 		}
 		new HomeSearchTask(getApplicationContext()).execute(searchcriteria);
 	}

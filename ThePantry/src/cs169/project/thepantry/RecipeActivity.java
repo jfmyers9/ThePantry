@@ -3,15 +3,17 @@ package cs169.project.thepantry;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
-import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -53,7 +55,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		
 		//Display recipe picture if there is one.
 		picture = (SmartImageView)findViewById(R.id.recipePic);
-		if (info.images != null && info.images.hostedLargeUrl != null && isOnline()) { //might need online check
+		if (info.images != null && info.images.hostedLargeUrl != null && isOnline()) {
 			picture.setImageUrl(info.images.hostedLargeUrl);
 			picture.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		}
@@ -186,8 +188,6 @@ public class RecipeActivity extends BasicMenuActivity {
 			String ingred_name = ingred;
 			dm = new DatabaseModel(this, DATABASE_NAME);	
 			dm.add(ShoppingList.TABLE_NAME, ingred_name, "Other", amt);
-			Toast toast = Toast.makeText(getApplicationContext(), "Items added!", Toast.LENGTH_SHORT);
-			toast.show();
 		}
 		
 	}
@@ -210,7 +210,7 @@ public class RecipeActivity extends BasicMenuActivity {
 	}
 	
 	/* Class for asynchronously retrieving directions
-	 * 
+	 * calls DirectionParser on the recipe url
 	 */
 	public class ParseDirectionsTask extends AsyncTask<String, Void, ArrayList<String>> {
 		
@@ -234,5 +234,28 @@ public class RecipeActivity extends BasicMenuActivity {
 		}
 		
 	}
-
+	
+	/* Class for displaying popup dialog for adding ingredients
+	 * 
+	 */
+	public static class AddIngredientsDialogFragment extends DialogFragment {
+	    @Override
+	    public Dialog onCreateDialog(Bundle savedInstanceState) {
+	        // Use the Builder class for convenient dialog construction
+	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        builder.setTitle(R.string.dialog_add_ingredients_to_shopping_list)
+	               .setPositiveButton(R.string.add_item, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                       // FIRE ZE MISSILES!
+	                   }
+	               })
+	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                       // User cancelled the dialog
+	                   }
+	               });
+	        // Create the AlertDialog object and return it
+	        return builder.create();
+	    }
+	}
 }
