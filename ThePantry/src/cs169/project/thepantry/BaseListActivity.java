@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.view.Menu;
 
 import cs169.project.thepantry.ThePantryContract.Inventory;
+import cs169.project.thepantry.ThePantryContract.ShoppingList;
 
 public abstract class BaseListActivity extends BasicMenuActivity {
 
@@ -130,6 +131,11 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 		for (IngredientChild c : children) {
 			if (c.isSelected()) {
 				boolean success = dm.add(Inventory.TABLE_NAME, c.getName(),c.getGroup(),"1");
+				
+				// If the shopping list "updates" the ingredients are removed from list
+				if (table == ShoppingList.TABLE_NAME) {
+					dm.remove(table, c.getName());
+				}
 				if (!success) {
 					System.err.println("You Fucked Up");
 				}

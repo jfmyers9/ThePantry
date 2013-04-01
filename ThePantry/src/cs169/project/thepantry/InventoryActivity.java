@@ -15,7 +15,6 @@ import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class InventoryActivity extends BaseListActivity {
 
-	//CALL IT THE PANTRY!
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,7 +32,7 @@ public class InventoryActivity extends BaseListActivity {
 		
 		fillArrays();
 		
-		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems);
+		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems, table);
 		eView.setAdapter(eAdapter);
 		
 	}

@@ -36,7 +36,7 @@ public class ShoppingListActivity extends BaseListActivity {
 		children = new ArrayList<IngredientChild>();
 		
 		fillArrays();
-		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems);
+		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems, table);
 		eView.setAdapter(eAdapter);
 		
 		

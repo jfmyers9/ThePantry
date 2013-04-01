@@ -2,6 +2,8 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
+import cs169.project.thepantry.ThePantryContract.Inventory;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +17,14 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 	
 	private ArrayList<IngredientGroup> groups;
 	private Context context;
+	private String table;
+	private DatabaseModel dm;
+	private static final String DATABASE_NAME = "thepantry";
 	
-	public BaseListAdapter(Context context, ArrayList<IngredientGroup> groups) {
+	public BaseListAdapter(Context context, ArrayList<IngredientGroup> groups, String table) {
 		this.context = context;
 		this.groups = groups;
+		this.table = table;
 	}
 	
 	public void addChild(IngredientChild child, IngredientGroup group) {
@@ -30,6 +36,20 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		children.add(child);
 		groups.get(index).setChildren(children);
 	}
+	
+	public void removeChild(IngredientChild child, IngredientGroup group) {
+		// Pop up a window to ask if user wants to remove item
+		
+		int index = groups.indexOf(group);
+		ArrayList<IngredientChild> children = groups.get(index).getChildren();
+		children.remove(child);
+		if (children.size() <= 0) {
+			groups.remove(group);
+		}
+		notifyDataSetChanged();
+		dm = new DatabaseModel(context, DATABASE_NAME);
+		dm.remove(table, child.getName());
+	}
 
 	@Override
 	public IngredientChild getChild(int groupPosition, int childPosition) {
@@ -40,18 +60,27 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 	public long getChildId(int groupPosition, int childPosition) {
 		return childPosition;
 	}
+	
 
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-			convertView = infalInflater.inflate(R.layout.child_row, null);
+			if (table == Inventory.TABLE_NAME) {
+				// TODO: make it use child_row_inventory
+				//convertView = infalInflater.inflate(R.layout.child_row_inventory, null);
+				convertView = infalInflater.inflate(R.layout.child_row, null);
+			} else {
+				convertView = infalInflater.inflate(R.layout.child_row, null);
+			}
 		}
 		IngredientChild child = getChild(groupPosition, childPosition);
 		final ViewHolder childHolder = new ViewHolder((CheckBox)convertView.findViewById(R.id.checkBox1), child.isSelected());
+		final IngredientGroup group = getGroup(groupPosition);
 		childHolder.cb.setText(child.getName());
 
+		
 		// Detects if a given item was swiped
 		final SwipeDetector swipeDetector = new SwipeDetector();
 		convertView.setOnTouchListener(swipeDetector);
@@ -59,13 +88,13 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		convertView.setOnClickListener(new OnClickListener (){
 			@Override
 			public void onClick(View v) {
+				IngredientChild child = (IngredientChild) childHolder.cb
+						.getTag();
 				if (swipeDetector.swipeDetected()) {
-					System.out.println("YOOMP");
-				} else {
+					removeChild(child, group);
+				} else if (table != Inventory.TABLE_NAME) {
 					childHolder.cb.toggle();
-					IngredientChild item = (IngredientChild) childHolder.cb
-								.getTag();
-					item.setSelected(childHolder.cb.isChecked());
+					child.setSelected(childHolder.cb.isChecked());
 				}
 			}
 		});
@@ -80,7 +109,7 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public Object getGroup(int groupPosition) {
+	public IngredientGroup getGroup(int groupPosition) {
 		return groups.get(groupPosition);
 	}
 	
