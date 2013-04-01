@@ -14,11 +14,11 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -106,7 +106,7 @@ public class RecipeActivity extends BasicMenuActivity {
 	
 	public void displayIngreds(List<String> ingreds) {
 		for (String ingred : ingreds) {
-			TextView tv = new TextView(this);
+			CheckBox tv = new CheckBox(this);
 			tv.setText(ingred);
 			ll.addView(tv);
 		}

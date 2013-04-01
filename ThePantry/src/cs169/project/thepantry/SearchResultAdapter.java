@@ -92,8 +92,7 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 		    if (values.get(position).smallImageUrl != null) { //might need an online check
 		    	imageView.setImageUrl(values.get(position).smallImageUrl);
 		    }
-	    }
-	    
+	    }   
 	    return listItem;
 	  }
 }
