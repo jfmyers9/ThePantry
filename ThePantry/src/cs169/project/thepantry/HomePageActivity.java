@@ -115,6 +115,9 @@ public class HomePageActivity extends BasicMenuActivity {
 			return sm.search(sc[0]);
 		}
 		
+		//update list of recommendations using a SearchResultsAdapter
+		//or open a SearchResultsActivity if a search was made
+		//or open a recipe page if a recipe was selected
 		@Override
 		protected void onPostExecute(Storage result) {
 		if (result != null) {

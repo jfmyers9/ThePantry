@@ -184,8 +184,9 @@ public class RecipeActivity extends BasicMenuActivity {
 		// for each ingredient in list
 		for (String ingred : info.ingredientLines) {
 			// TODO: parse amount and item, check for ingredient and previous amount
-			String amt = "1";
-			String ingred_name = ingred;
+			String[] parsed = IngredientParser.parse(ingred);
+			String amt = parsed[0] + " " + parsed[1];
+			String ingred_name = parsed[3];
 			dm = new DatabaseModel(this, DATABASE_NAME);	
 			dm.add(ShoppingList.TABLE_NAME, ingred_name, "Other", amt);
 		}
@@ -202,7 +203,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	// open display webpage activity with the url
+	// display webpage activity with the url
 	public void displayWebpage(String url) {
 		Intent intent = new Intent(getApplicationContext(), DisplayWebpageActivity.class);
 		intent.putExtra("url", url);
@@ -244,9 +245,10 @@ public class RecipeActivity extends BasicMenuActivity {
 	        // Use the Builder class for convenient dialog construction
 	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 	        builder.setTitle(R.string.dialog_add_ingredients_to_shopping_list)
+	        	   .setMessage("Ingredients")
 	               .setPositiveButton(R.string.add_item, new DialogInterface.OnClickListener() {
 	                   public void onClick(DialogInterface dialog, int id) {
-	                       // FIRE ZE MISSILES!
+	                       //
 	                   }
 	               })
 	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {

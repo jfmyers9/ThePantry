@@ -39,7 +39,7 @@ public class SearchModel {
 		//q is either the recipe ID or the search query q in String format
 		//q is separated by commas: the first term is the search query q, after that terms are ingredients
 		this.type = sc.type;
-		this.q = sc.q.toLowerCase();
+		this.q = sc.q;
 		this.maxResults = sc.maxResults;
 		this.resultsToSkip = sc.resultsToSkip;
 		
@@ -55,6 +55,7 @@ public class SearchModel {
     			//parse query for mulitple ingredients separated by commas
     			//right now the first thing is treated as a normal search
     			getURL = URL_SEARCH;
+    			q = q.toLowerCase(); //ingredient queries should be lowercase
     			String[] qs = q.replaceAll(",\\s", ",").split(",");
     			getURL += "?q=" + URLEncoder.encode(qs[0], "UTF-8");
     			for (int i=1; i<qs.length; i++) {

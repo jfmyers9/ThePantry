@@ -46,6 +46,7 @@ public class IngredientParser {
 		    		ingredient = m.group(2); }
 		    }
 	    }
+	    
 	    String[] parsed = {number, measurement, additional, ingredient};
 	    return parsed;
 	}
