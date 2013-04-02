@@ -14,7 +14,9 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,6 +37,7 @@ public class RecipeActivity extends BasicMenuActivity {
 	ImageButton star;
 	ImageButton check;
 	LinearLayout ll;
+	LinearLayout ings;
 	
 	boolean faved;
 	boolean cooked;
@@ -65,20 +68,15 @@ public class RecipeActivity extends BasicMenuActivity {
 		name.setText(info.name);
 		
 		//Render the ingredients list to view.
-		ll = (LinearLayout)findViewById(R.id.ingList);
+		ings = (LinearLayout)findViewById(R.id.ingList);
 		displayIngreds(info.ingredientLines);
 		
 		//Render directions to view.
-		ll = (LinearLayout)findViewById(R.id.dirList);
-		TextView title = new TextView(this);
-		title.setText("Directions:");
-		title.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10);
-		ll.addView(title);
 		//fetch and parse directions aynchronously
 		new ParseDirectionsTask().execute(info.source.sourceRecipeUrl);
 		
 		//display the source and link to the web page source, open in a webview inside the app if clicked
-		TextView source = new TextView(this);
+		Button source = (Button)findViewById(R.id.source);
 		source.setText("Source: " + info.source.sourceDisplayName);
 		source.setOnClickListener(new OnClickListener() {
             @Override
@@ -86,7 +84,6 @@ public class RecipeActivity extends BasicMenuActivity {
                 displayWebpage(info.source.sourceRecipeUrl);
             }
         });
-		ll.addView(source);
 		
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		
@@ -108,7 +105,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		for (String ingred : ingreds) {
 			CheckBox tv = new CheckBox(this);
 			tv.setText(ingred);
-			ll.addView(tv);
+			ings.addView(tv);
 		}
 	}
 	
@@ -215,6 +212,14 @@ public class RecipeActivity extends BasicMenuActivity {
 	 */
 	public class ParseDirectionsTask extends AsyncTask<String, Void, ArrayList<String>> {
 		
+		FrameLayout mFrameOverlay;
+		
+		@Override
+	    protected void onPreExecute() {
+			mFrameOverlay = (FrameLayout)findViewById(R.id.overlay);
+			mFrameOverlay.setVisibility(View.VISIBLE);
+	    };
+		
 		@Override
 		protected ArrayList<String> doInBackground(String... url) {
 			return DirectionParser.getDirections(url[0]);
@@ -222,15 +227,17 @@ public class RecipeActivity extends BasicMenuActivity {
 		
 		@Override
 		protected void onPostExecute(ArrayList<String> directionsList) {
+			
+			mFrameOverlay.setVisibility(View.GONE);
+			
 			if (directionsList.size() > 0) {
 				String directionsText = "";
 				for (String dir : directionsList) {
 					directionsText += dir + "\n\n";
 				}
-				TextView directions = new TextView(RecipeActivity.this);
+				TextView directions = (TextView)findViewById(R.id.dirList);
 				directions.setText(directionsText);
 				directions.setTextSize(TypedValue.COMPLEX_UNIT_PT, 7);
-				ll.addView(directions);
 			}
 		}
 		
