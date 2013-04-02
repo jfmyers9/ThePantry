@@ -42,12 +42,12 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			if (!findItem(table, item)) {
 				try {
 					newRowId = db.insertOrThrow(table, null, values);
-					db.close();
+					//db.close();
 					if (newRowId != -1) {
 						return true;
 					}
 				} catch (SQLiteException e) {
-					db.close();
+					//db.close();
 					System.out.println(e.getMessage());
 					//do something
 				}
@@ -73,7 +73,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] selectionArgs = {item};
 			
 			int val = db.delete(table, selection, selectionArgs);
-			db.close();
+			//db.close();
 			
 			if (val != 0) {
 				return true;
@@ -93,7 +93,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			qb.setTables(table);
 			
 			Cursor c = qb.query(db, null, null, null, null, null, null, null);
-			db.close();
+			//db.close();
 			
 			if (c.moveToFirst()) {
 				return c;
@@ -139,7 +139,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] selectionArgs = {item};
 			
 			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
-			db.close();
+			//db.close();
 			
 			if(c.moveToFirst()) {
 				return true;
@@ -163,7 +163,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] selectionArgs = {type};
 			
 			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			db.close();
+			//db.close();
 			
 			if (c.moveToFirst()) {
 				return c;
@@ -187,7 +187,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] selectionArgs = {item};
 			
 			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			db.close();
+			//db.close();
 			
 			if (c.moveToFirst()) {
 				return c;
@@ -211,7 +211,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] selectionArgs = {item};
 			
 			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			db.close();
+			//db.close();
 			
 			if (c.moveToFirst()) {
 				return c;
@@ -234,7 +234,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] columns = {ThePantryContract.TYPE};
 			
 			Cursor c = qb.query(db, columns, null, null, null, null, null);
-			db.close();
+			//db.close();
 			
 			if (c.moveToFirst()) {
 				return c;
@@ -270,7 +270,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			}
 			values.put(col, newCheck);
 			int rows = db.update(table, values, selection, selectionArgs);
-			db.close();
+			//db.close();
 			
 			if (rows != 0) {
 				return true;
@@ -295,7 +295,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 
 
 			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
-			db.close();
+			//db.close();
 			
 			if (c.moveToFirst()) {
 				return c;
@@ -322,7 +322,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] selectionArgs = {recipe_name};
 			
 			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			db.close();
+			//db.close();
 			
 			if (c.moveToFirst()) {
 				String data = c.getString(0);
