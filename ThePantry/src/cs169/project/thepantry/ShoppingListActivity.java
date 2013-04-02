@@ -38,7 +38,6 @@ public class ShoppingListActivity extends BaseListActivity {
 		fillArrays();
 		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems, table);
 		eView.setAdapter(eAdapter);
-		System.out.println(groupItems.get(0));
 		
 		// Creates and populates the ingredient type drop-down menu
 		spinner = (Spinner) findViewById(R.id.add_sl_types);
