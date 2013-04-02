@@ -105,31 +105,32 @@
         	android:layout_marginBottom="20dp"
         	android:text="@string/directions" />
 		    
-		    <TextView 
+		    <LinearLayout
         	android:id="@+id/dirList"
         	android:layout_height="wrap_content" 
         	android:layout_width="match_parent" 
         	android:layout_marginBottom="20dp"
+        	android:orientation="vertical"
         	android:layout_below="@id/directionstext" />
 		    
 		    <Button
         	android:id="@+id/source"
         	android:layout_height="wrap_content" 
         	android:layout_width="wrap_content"
-        	android:layout_below="@id/dirList" />
+        	android:layout_below="@id/overlay" />
 		    
 			<FrameLayout
         	android:id="@+id/overlay"
         	android:layout_width="match_parent"
         	android:layout_height="match_parent"
         	android:visibility="gone" 
-        	android:layout_below="@id/directionstext" >
+        	android:layout_below="@id/dirList" >
 
         	<ProgressBar
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|center"
+            android:layout_gravity="left"
             android:indeterminate="true" />
     
     		</FrameLayout>

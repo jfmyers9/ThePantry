@@ -6,11 +6,13 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -230,14 +232,19 @@ public class RecipeActivity extends BasicMenuActivity {
 			
 			mFrameOverlay.setVisibility(View.GONE);
 			
-			if (directionsList.size() > 0) {
-				String directionsText = "";
-				for (String dir : directionsList) {
-					directionsText += dir + "\n\n";
-				}
-				TextView directions = (TextView)findViewById(R.id.dirList);
-				directions.setText(directionsText);
-				directions.setTextSize(TypedValue.COMPLEX_UNIT_PT, 7);
+			LinearLayout directionsll = (LinearLayout)findViewById(R.id.dirList);
+			
+			for (int i = 0; i < directionsList.size(); i++) {
+				LayoutInflater inflater = (LayoutInflater)getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				View thisDirection = inflater.inflate(R.layout.direction, null);
+				
+				TextView number = (TextView)thisDirection.findViewById(R.id.number);
+				number.setText(i+1+"");				
+				
+				TextView directions = (TextView)thisDirection.findViewById(R.id.direction);
+				directions.setText(directionsList.get(i));
+				
+				directionsll.addView(thisDirection);
 			}
 		}
 		
