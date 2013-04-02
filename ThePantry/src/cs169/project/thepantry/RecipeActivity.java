@@ -3,20 +3,22 @@ package cs169.project.thepantry;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
-import android.webkit.WebView;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -53,7 +55,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		
 		//Display recipe picture if there is one.
 		picture = (SmartImageView)findViewById(R.id.recipePic);
-		if (info.images != null && info.images.hostedLargeUrl != null && isOnline()) { //might need online check
+		if (info.images != null && info.images.hostedLargeUrl != null && isOnline()) {
 			picture.setImageUrl(info.images.hostedLargeUrl);
 			picture.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		}
@@ -104,7 +106,7 @@ public class RecipeActivity extends BasicMenuActivity {
 	
 	public void displayIngreds(List<String> ingreds) {
 		for (String ingred : ingreds) {
-			TextView tv = new TextView(this);
+			CheckBox tv = new CheckBox(this);
 			tv.setText(ingred);
 			ll.addView(tv);
 		}
@@ -182,12 +184,11 @@ public class RecipeActivity extends BasicMenuActivity {
 		// for each ingredient in list
 		for (String ingred : info.ingredientLines) {
 			// TODO: parse amount and item, check for ingredient and previous amount
-			String amt = "1";
-			String ingred_name = ingred;
+			String[] parsed = IngredientParser.parse(ingred);
+			String amt = parsed[0] + " " + parsed[1];
+			String ingred_name = parsed[3];
 			dm = new DatabaseModel(this, DATABASE_NAME);	
 			dm.add(ShoppingList.TABLE_NAME, ingred_name, "Other", amt);
-			Toast toast = Toast.makeText(getApplicationContext(), "Items added!", Toast.LENGTH_SHORT);
-			toast.show();
 		}
 		
 	}
@@ -202,7 +203,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	// open display webpage activity with the url
+	// display webpage activity with the url
 	public void displayWebpage(String url) {
 		Intent intent = new Intent(getApplicationContext(), DisplayWebpageActivity.class);
 		intent.putExtra("url", url);
@@ -210,7 +211,7 @@ public class RecipeActivity extends BasicMenuActivity {
 	}
 	
 	/* Class for asynchronously retrieving directions
-	 * 
+	 * calls DirectionParser on the recipe url
 	 */
 	public class ParseDirectionsTask extends AsyncTask<String, Void, ArrayList<String>> {
 		
@@ -234,5 +235,29 @@ public class RecipeActivity extends BasicMenuActivity {
 		}
 		
 	}
-
+	
+	/* Class for displaying popup dialog for adding ingredients
+	 * 
+	 */
+	public static class AddIngredientsDialogFragment extends DialogFragment {
+	    @Override
+	    public Dialog onCreateDialog(Bundle savedInstanceState) {
+	        // Use the Builder class for convenient dialog construction
+	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        builder.setTitle(R.string.dialog_add_ingredients_to_shopping_list)
+	        	   .setMessage("Ingredients")
+	               .setPositiveButton(R.string.add_item, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                       //
+	                   }
+	               })
+	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                       // User cancelled the dialog
+	                   }
+	               });
+	        // Create the AlertDialog object and return it
+	        return builder.create();
+	    }
+	}
 }

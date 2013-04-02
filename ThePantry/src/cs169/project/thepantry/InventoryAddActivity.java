@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnGroupClickListener;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -37,7 +37,7 @@ public class InventoryAddActivity extends BaseListActivity {
 		
 		fillArrays();
 		
-		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems);
+		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems, table);
 		eView.setAdapter(eAdapter);	
 	}
 	

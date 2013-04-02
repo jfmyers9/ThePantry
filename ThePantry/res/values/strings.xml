@@ -52,7 +52,7 @@
     <string name="title_activity_menu">MenuActivity</string>
     <string name="title_activity_navigation">NavigationActivity</string>
     <string name="InventoryAddTitle">Add Ingredients</string>
-    <string name="InventoryTitle">Your Inventory</string>
+    <string name="InventoryTitle">Your Pantry</string>
     <string name="title_activity_nav_menu_fragment">NavMenuFragment</string>
     <string name="update_inventory">Update Inventory</string>
     <string name="title_activity_basic_menu">BasicMenuActivity</string>
@@ -61,6 +61,10 @@
     <string name="ingredient">Ingredients:</string>
     <string name="results">Search Results:</string>
     <string name="title_activity_display_webpage">DisplayWebpageActivity</string>
+
+    <string name="dialog_add_ingredients_to_shopping_list">Add Ingredients to Shopping List?</string>
+    <string name="dialog_cancel">Cancel</string>
+
     <string name="title_activity_profile">ProfileActivity</string>
 
 </resources>

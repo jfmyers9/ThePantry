@@ -55,6 +55,7 @@ public class SearchModel {
     			//parse query for mulitple ingredients separated by commas
     			//right now the first thing is treated as a normal search
     			getURL = URL_SEARCH;
+    			q = q.toLowerCase(); //ingredient queries should be lowercase
     			String[] qs = q.replaceAll(",\\s", ",").split(",");
     			getURL += "?q=" + URLEncoder.encode(qs[0], "UTF-8");
     			for (int i=1; i<qs.length; i++) {
