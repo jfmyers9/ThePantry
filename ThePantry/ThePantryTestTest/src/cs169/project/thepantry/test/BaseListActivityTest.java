@@ -18,6 +18,7 @@ public class BaseListActivityTest extends ActivityInstrumentationTestCase2<BaseL
 	
 	protected void setUp() throws Exception {
 		super.setUp();
+		act = getActivity();
 	}
 
 	protected void tearDown() throws Exception {
@@ -30,7 +31,6 @@ public class BaseListActivityTest extends ActivityInstrumentationTestCase2<BaseL
 
 	/** Helper method to convert IngredientGroup arrays into their String representations */
 	protected ArrayList<String> groupToName(ArrayList<IngredientGroup> group) {
-		act = getActivity();
 		ArrayList<String> result = new ArrayList<String>();
 		for (IngredientGroup g : group) {
 			result.add(g.getGroup());
