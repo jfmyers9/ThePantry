@@ -89,7 +89,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	/** Adds the given item to the list and the database
 	 * @throws IOException */
 	public void addItem(String item, String type, String amount) throws IOException {
-		if (item.equals("")) {
+		if (item.matches("[\\s]*")) {
 			throw new IOException("Ingredient cannot be empty, please try again");
 		}
 		DatabaseModel dm = new DatabaseModel(this, DATABASE_NAME);
