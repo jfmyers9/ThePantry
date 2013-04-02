@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +9,7 @@
     tools:context=".SearchResultsActivity" 
     android:orientation="vertical">
 
-    <LinearLayout android:id="@+id/search_bar"
+    <LinearLayout android:id="@+id/searchbar"
   	    android:layout_width="fill_parent"
   	    android:layout_height="wrap_content"
   	    android:orientation="horizontal" >
@@ -30,21 +30,44 @@
     
     </LinearLayout>
     
+    <RelativeLayout
+  	    android:id="@+id/searchresults"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_below="@id/searchbar" >
+    
     <TextView
+        android:id="@+id/searchresultstext"
     	android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="25px"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="20dp"
-        android:text="@string/results" />
+        android:text="@string/results"
+        android:layout_below="@id/searchresults" />
     
     <ListView 
         android:id="@+id/resultList"
         android:layout_height="match_parent" 
         android:layout_width="fill_parent"
-		>
+        android:layout_below="@id/searchresultstext" />
         
-    </ListView>
+    <FrameLayout
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" >
 
-</LinearLayout>
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center"
+            android:indeterminate="true" />
+    
+    </FrameLayout>
+
+	</RelativeLayout>
+	
+</RelativeLayout>
