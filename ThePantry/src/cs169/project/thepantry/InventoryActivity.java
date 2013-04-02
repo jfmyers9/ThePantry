@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.actionbarsherlock.view.Menu;
 
@@ -21,7 +23,11 @@ public class InventoryActivity extends BaseListActivity {
 		setTitle(getString(R.string.InventoryTitle));
 		setContentView(R.layout.activity_inventory);
 		table = Inventory.TABLE_NAME;
-		eView = (ExpandableListView)findViewById(R.id.exp_view);
+		
+		lView = (ListView) findViewById(R.id.inv_list);
+		lView.setVisibility(View.INVISIBLE);
+		
+		eView = (ExpandableListView) findViewById(R.id.exp_view);
 		eView.setFocusable(true);
 		eView.setDividerHeight(2);
 		eView.setClickable(true);
@@ -29,12 +35,13 @@ public class InventoryActivity extends BaseListActivity {
 		groupItems = new ArrayList<IngredientGroup>();
 		groupNames = new ArrayList<String>();
 		children = new ArrayList<IngredientChild>();
-		
 		fillArrays();
 		
+		mSearchView = (SearchView) findViewById(R.id.search);
 		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems, table);
 		eView.setAdapter(eAdapter);
 		
+	    setupSearchView();
 	}
 	
 
@@ -53,19 +60,6 @@ public class InventoryActivity extends BaseListActivity {
 		startActivity(intent);
 	}
 	
-	/** Display item searched for if it is in the table 
-	 * Eventually display items dynamically as a letter is added to query*/
-	public void search(View view) {
-		//for now just have it return true if item is in table, false otherwise
-		dm = new DatabaseModel(this, DATABASE_NAME);
-		
-		/*
-		boolean found = dm.findItem(table, item);
-		if (found) {
-			//displays item
-		} else {
-			//display message -- item not in inventory
-		}*/
-	}
+
 	
 }

@@ -83,16 +83,34 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 	}
 
+	/** Finds all items is in the specified TABLE that contain given text */
+	public Cursor search(String table, String query) {
+		SQLiteDatabase db = getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(table);
+		
+		String selection = ThePantryContract.ITEM + " LIKE ?";
+		String[] selectionArgs = {"%"+query+"%"};
+		
+		Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
+		if (c.moveToFirst()) {
+			return c;
+		} else {
+			return null;
+		}
+	}
+	
 	/** Finds if an item is in the specified TABLE. */
 	public boolean findItem(String table, String item) {
 		SQLiteDatabase db = getReadableDatabase();
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(table);
 		
+		String[] columns = {ThePantryContract.ITEM};
 		String selection = ThePantryContract.ITEM + " = ?";
 		String[] selectionArgs = {item};
 		
-		Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
+		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
 		if(c.moveToFirst()) {
 			return true;
 		} else {
