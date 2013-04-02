@@ -8,9 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
 
@@ -22,7 +20,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	public DatabaseModel dm;
 	public ExpandableListView eView;
 	BaseListAdapter eAdapter;
-	public String table = ThePantryContract.Ingredients.TABLE_NAME;
+	public String table;
 	public static final String DATABASE_NAME = "thepantry";
 	public ArrayList<IngredientGroup> groupItems;
 	public ArrayList<String> groupNames;
@@ -42,17 +40,18 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	
 	/** Fills the arrays with database data. */
 	public void fillArrays() {
-		groupItems = getTypes();
+		groupItems = getTypes(table);
 		for (IngredientGroup g : groupItems) {
 			groupNames.add(g.getGroup());
-			g.setChildren(getItems(g.getGroup()));
+			g.setChildren(getItems(table, g.getGroup()));
 		}
 	}
 	
 	/** Retrieves ingredient types from the database and
 	 *  returns an ArrayList with said types to be used for display */
-	public ArrayList<IngredientGroup> getTypes() {
+	public ArrayList<IngredientGroup> getTypes(String table) {
 		dm = new DatabaseModel(this, DATABASE_NAME);
+		System.out.println("getTypes table is " + table);
 		Cursor types = dm.findAllTypes(table);
 		ArrayList<IngredientGroup> result = new ArrayList<IngredientGroup>();
 		if (types!=null){
@@ -69,7 +68,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	
 	/** Retrieves ingredients from the database and
 	 *  returns an ArrayList with said ingredients to be used for display */
-	public ArrayList<IngredientChild> getItems(String type) {
+	public ArrayList<IngredientChild> getItems(String table, String type) {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor items = dm.findTypeItems(table, type);
 		
@@ -89,7 +88,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	
 	/** Adds the given item to the list and the database
 	 * @throws IOException */
-	public void addItem(String item, String type, String amount) throws IOException {
+	public void addItem(String table, String item, String type, String amount) throws IOException {
 		if (item.matches("[\\s]*")) {
 			throw new IOException("Ingredient cannot be empty, please try again");
 		}
@@ -114,7 +113,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	
 	/** Removes the given item from the database and list 
 	 * @throws ThePantryException */
-	public void removeItem(String item) throws ThePantryException {
+	public void removeItem(String table, String item) throws ThePantryException {
 		// TODO - get the item/View by finding it from layout
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		boolean success = dm.remove(table, item);
@@ -126,7 +125,7 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 	/** Adds all items to inventory database that have been checked 
 	 * Need to check if item is in inventory table -- can increment amount if is 
 	 * @throws ThePantryException */
-	public void updateInventory(View view) throws ThePantryException {
+	public void updateInventory(View view, String table) throws ThePantryException {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		for (IngredientChild c : children) {
 			if (c.isSelected()) {

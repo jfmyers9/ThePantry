@@ -16,7 +16,8 @@ import cs169.project.thepantry.ThePantryContract.Ingredients;
 
 public class InventoryAddActivity extends BaseListActivity {
 
-
+	//private String table = Ingredients.TABLE_NAME;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
