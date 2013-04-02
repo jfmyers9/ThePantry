@@ -20,9 +20,9 @@ public class DirectionParserTest extends TestCase {
 	}
 
 	public void testParseIngredients() {
-		//String ingredientLine = "1 1/2 pounds unsalted beets, with bacon strips";
+		String ingredientLine = "1 1/2 pounds unsalted beets, with bacon strips";
 		//String ingredientLine = "2 rounded teaspoons prepared dijon style mustard";
-		String ingredientLine = "3 pretty good sized pumpkins";
+		//String ingredientLine = "3 pretty good sized pumpkins";
 		String[] result = IngredientParser.parse(ingredientLine);
 		System.out.println("Results:");
 			System.out.println("Number: " + result[0]);

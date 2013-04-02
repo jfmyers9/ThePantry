@@ -29,11 +29,6 @@
         <activity
             android:name="cs169.project.thepantry.InventoryActivity"
             android:label="@string/title_activity_inventory" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="cs169.project.thepantry.HomePageActivity"
@@ -42,11 +37,6 @@
         <activity
             android:name="cs169.project.thepantry.ShoppingListActivity"
             android:label="@string/title_activity_shopping_list" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="cs169.project.thepantry.SearchResultsActivity"
@@ -55,11 +45,6 @@
         <activity
             android:name="cs169.project.thepantry.InventoryAddActivity"
             android:label="@string/title_activity_inventory_add" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="cs169.project.thepantry.RecipeActivity"

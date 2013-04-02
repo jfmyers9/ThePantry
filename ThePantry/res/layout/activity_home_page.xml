@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +9,7 @@
     android:orientation="vertical"
     tools:context=".HomePageActivity" >
 
-  	<LinearLayout android:id="@+id/search_bar"
+  	<LinearLayout android:id="@+id/searchbar"
   	    android:layout_width="fill_parent"
   	    android:layout_height="wrap_content"
   	    android:orientation="horizontal" >
@@ -29,22 +29,45 @@
         android:layout_weight="1"/>
     
     </LinearLayout>
+  	
+  	<RelativeLayout
+  	    android:id="@+id/recommendations"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_below="@id/searchbar" >
     
     <TextView
+        android:id="@+id/recommendationstext"
     	android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="25px"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="20dp"
-        android:text="@string/recommendations" />
-        
+        android:text="@string/recommendations"
+        android:layout_below="@id/recommendations" />
+    
     <ListView 
         android:id="@+id/recsList"
-        android:layout_height="match_parent" 
-        android:layout_width="fill_parent"
-		>
+        android:layout_height="wrap_content" 
+        android:layout_width="match_parent" 
+        android:layout_below="@id/recommendationstext"/>
         
-    </ListView>
+    <FrameLayout
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" >
 
-</LinearLayout>
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center"
+            android:indeterminate="true" />
+    
+    </FrameLayout>
+    
+    </RelativeLayout>
+
+</RelativeLayout>

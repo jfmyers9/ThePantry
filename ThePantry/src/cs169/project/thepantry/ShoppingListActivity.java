@@ -14,11 +14,15 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 
+import cs169.project.thepantry.ThePantryContract.Ingredients;
 import cs169.project.thepantry.ThePantryContract.ShoppingList;
 
 public class ShoppingListActivity extends BaseListActivity {
 
 	private Spinner spinner;
+	//private String table = ShoppingList.TABLE_NAME;
+	private ArrayList<IngredientGroup> spinnerGroups;
+	private ArrayList<String> spinnerTypes;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,11 +45,13 @@ public class ShoppingListActivity extends BaseListActivity {
 		
 		// Creates and populates the ingredient type drop-down menu
 		spinner = (Spinner) findViewById(R.id.add_sl_types);
-		ArrayAdapter<CharSequence> adapter = 
-				ArrayAdapter.createFromResource(this,
-												R.array.ingredient_type_array,
-												android.R.layout.simple_spinner_item);
-		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, groupNames);
+		spinnerGroups = getTypes(Ingredients.TABLE_NAME);
+		spinnerTypes = new ArrayList<String>();
+		for (IngredientGroup group : spinnerGroups) {
+			spinnerTypes.add(group.getGroup());
+		}
+		spinnerTypes.add("Other");
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerTypes);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
 	}
@@ -61,7 +67,7 @@ public class ShoppingListActivity extends BaseListActivity {
 	public void addShopItem(View view) {
 		EditText eText = (EditText) findViewById(R.id.shopping_list_text);
 		try {
-			addItem(eText.getText().toString(), spinner.getSelectedItem().toString(), "1");
+			addItem(table, eText.getText().toString(), spinner.getSelectedItem().toString(), "1");
 			((BaseExpandableListAdapter)eView.getExpandableListAdapter()).notifyDataSetChanged();
 		} catch (IOException e) {
 			Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
