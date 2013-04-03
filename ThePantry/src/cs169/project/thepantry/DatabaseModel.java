@@ -20,7 +20,6 @@ import cs169.project.thepantry.ThePantryContract.Ingredients;
 */
 public class DatabaseModel extends SQLiteAssetHelper {
 
-    //private static final String DATABASE_NAME = "thepantry";
     private static final int DATABASE_VERSION = 1;
 
     public DatabaseModel(Context context, String databaseName) {
@@ -419,25 +418,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 	}
 	
-	public boolean clear(String table) {
-		try {
-			SQLiteDatabase db = getWritableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
-			
-			int val = db.delete(table, null, null);			
-			if (val != 0) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch(SQLiteException e) {
-			System.err.println(e.getMessage());
-			return false;
-		}
-	}
-	
-	public void removeAllBut(String table, ArrayList<String> ingredients) {
+	public boolean removeAllBut(String table, ArrayList<String> ingredients) {
+		boolean success = false;
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(table);
 		
@@ -453,8 +435,27 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 		for (String item : result) {
 			if (!ingredients.contains(item)) {
-				remove(table, item);
+				success = remove(table, item);
 			}
+		}
+		return success;
+	}
+	
+	public boolean clear(String table) {
+		try {
+			SQLiteDatabase db = getWritableDatabase();
+			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+			qb.setTables(table);
+			
+			int val = db.delete(table, null, null);			
+			if (val != 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch(SQLiteException e) {
+			System.err.println(e.getMessage());
+			return false;
 		}
 	}
 }

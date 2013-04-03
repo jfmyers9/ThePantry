@@ -5,6 +5,9 @@ import android.provider.BaseColumns;
 /** Contract/Schema class for our database table entries. */
 public class ThePantryContract {
 	
+	/** The name of the database */
+    public static final String DATABASE_NAME = "thepantry";
+	
 	/** Column names that are central to every table */
 	public static final String ITEM = "item";
 	public static final String TYPE = "type";
