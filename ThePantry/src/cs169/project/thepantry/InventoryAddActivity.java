@@ -6,7 +6,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnGroupClickListener;
+import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -27,6 +28,10 @@ public class InventoryAddActivity extends BaseListActivity {
 		
 		SlidingMenu sm = getSlidingMenu();
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+		
+		lView = (ListView) findViewById(R.id.inv_add_list);
+		lView.setVisibility(View.INVISIBLE);
+		
 		eView = (ExpandableListView)findViewById(R.id.exp_inv_add_list);
 		eView.setFocusable(false);
 		eView.setDividerHeight(2);
@@ -38,8 +43,11 @@ public class InventoryAddActivity extends BaseListActivity {
 		
 		fillArrays();
 		
+		mSearchView = (SearchView) findViewById(R.id.search);
 		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems, table);
 		eView.setAdapter(eAdapter);	
+		
+	    setupSearchView();
 	}
 	
 	@Override

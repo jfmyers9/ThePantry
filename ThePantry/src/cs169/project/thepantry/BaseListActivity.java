@@ -7,24 +7,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
+import android.widget.SearchView;
+
 
 import com.actionbarsherlock.view.Menu;
 
 import cs169.project.thepantry.ThePantryContract.Inventory;
 import cs169.project.thepantry.ThePantryContract.ShoppingList;
 
-public class BaseListActivity extends BasicMenuActivity {
+public abstract class BaseListActivity extends BasicMenuActivity implements SearchView.OnQueryTextListener {
 
 	public DatabaseModel dm;
 	public ExpandableListView eView;
+	public ListView lView;
 	BaseListAdapter eAdapter;
 	public String table;
 	public static final String DATABASE_NAME = "thepantry";
 	public ArrayList<IngredientGroup> groupItems;
 	public ArrayList<String> groupNames;
 	public ArrayList<IngredientChild> children;
+	public SearchView mSearchView;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,37 @@ public class BaseListActivity extends BasicMenuActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getSupportMenuInflater().inflate(R.menu.base_list, menu);
 		return true;
+	}
+
+	public void setupSearchView() {
+		mSearchView.setIconifiedByDefault(false);
+		mSearchView.setOnQueryTextListener(this);
+		mSearchView.setSubmitButtonEnabled(false);
+		mSearchView.setQueryHint(getString(R.string.ingredient_search));
+	}
+
+	public boolean onQueryTextChange(String newText) {
+		if (TextUtils.isEmpty(newText)) {
+			lView.setVisibility(View.INVISIBLE);
+			eView.setVisibility(View.VISIBLE);
+		} else {
+			ArrayList<IngredientChild> tmpItems = search(newText);
+			ArrayList<IngredientChild> items = new ArrayList<IngredientChild>();
+			for (IngredientChild c : children) {
+				if (tmpItems.contains(c)){
+					items.add(c);
+				}
+			}
+			BaseListViewAdapter lAdapter = new BaseListViewAdapter(this,  items);
+			lView.setAdapter(lAdapter);
+			eView.setVisibility(View.INVISIBLE);
+			lView.setVisibility(View.VISIBLE);
+		}
+		return true;
+	}
+
+	public boolean onQueryTextSubmit(String query) {
+		return false;
 	}
 	
 	/** Fills the arrays with database data. */
@@ -104,6 +142,25 @@ public class BaseListActivity extends BasicMenuActivity {
 				eAdapter.addChild(new IngredientChild(item, type), temp);
 			}
 		}
+	}
+	
+	/** Search database with a given string */
+	public ArrayList<IngredientChild> search(String query) {
+		// might return ingredient child if I make a custom adapter for listView
+		dm = new DatabaseModel(this, DATABASE_NAME);
+		Cursor items = dm.search(table, query);
+		
+		ArrayList<IngredientChild> result = new ArrayList<IngredientChild>();
+		if (items != null){
+			while(!items.isAfterLast()){
+				String data = items.getString(0);
+				IngredientChild item = new IngredientChild(data,"tmp"); // I'm lazy change this to the right type
+				result.add(item);
+				items.moveToNext();
+			}
+			items.close();
+		}
+		return result;
 	}
 	
 	/** Removes the given item from the database and list 

@@ -24,6 +24,8 @@
     <string name="edit">Edit</string>
     <string name="search">Search</string>
     <string name="ShoppingListTitle">Your Shopping List</string>
+    <string name="sign_in">Sign In</string>
+    <string name="register">Register</string>
 
     <string-array name="ingredient_type_array">
         <item>Grain</item>
@@ -36,7 +38,7 @@
         <item>Other</item>
     </string-array>
 
-    <string name="add_shopping_list_ingredient">Enter an ingredient</string>
+    <string name="ingredient_search">Enter an ingredient</string>
     <string name="add_to_shopping_list">Add to Shopping List</string>
     <string name="tutorial_title">Welcome To the Pantry!</string>
     <string name="setup_inventory">Setup Inventory</string>
@@ -66,5 +68,6 @@
     <string name="dialog_cancel">Cancel</string>
 
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="directions">Directions:</string>
 
 </resources>
