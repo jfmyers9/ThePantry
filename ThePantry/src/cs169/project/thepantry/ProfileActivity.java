@@ -56,6 +56,12 @@ public class ProfileActivity extends Activity {
 		if (login_status != null) {
 			setContentView(R.layout.activity_profile);
 			
+			IngredientSyncTask slSync = new IngredientSyncTask(this);
+			slSync.execute(ThePantryContract.ShoppingList.TABLE_NAME, login_status);
+			DatabaseModel dm = new DatabaseModel(this, "thepantry");
+			IngredientSyncTask invSync = new IngredientSyncTask(this);
+			invSync.execute(ThePantryContract.Inventory.TABLE_NAME, login_status);
+			
 			// set text for textviews
 			TextView favorite_text = (TextView)findViewById(R.id.user_faves_text);
 			favorite_text.setText("Favorites");

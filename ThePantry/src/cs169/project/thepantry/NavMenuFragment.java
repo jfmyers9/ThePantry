@@ -3,12 +3,12 @@ package cs169.project.thepantry;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
@@ -82,6 +82,20 @@ public class NavMenuFragment extends ListFragment {
 			intent = new Intent(context, SettingsActivity.class);
 			break;
 		case 5:
+			IngredientSyncTask slSync = new IngredientSyncTask(getActivity());
+			slSync.execute(ThePantryContract.ShoppingList.TABLE_NAME, auth_token);
+			try {
+				slSync.get(3000, TimeUnit.MILLISECONDS);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			IngredientSyncTask invSync = new IngredientSyncTask(getActivity());
+			invSync.execute(ThePantryContract.Inventory.TABLE_NAME, auth_token);
+			try {
+				invSync.get(3000, TimeUnit.MILLISECONDS);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			logout();
 			if (context instanceof HomePageActivity) {
 				open = false;
@@ -143,6 +157,9 @@ private class LogoutTask extends AsyncTask<String, String, JSONObject> {
 				boolean success = (Boolean)result.get("success");
 				String info = (String)result.get("info");
 				if (success) {
+					DatabaseModel dm = new DatabaseModel(getActivity(), "thepantry");
+					dm.clear(ThePantryContract.ShoppingList.TABLE_NAME);
+					dm.clear(ThePantryContract.Inventory.TABLE_NAME);
 					SharedPreferences.Editor editor = shared_pref.edit();
 					editor.putString(LOGGED_IN, null);
 					editor.commit();
