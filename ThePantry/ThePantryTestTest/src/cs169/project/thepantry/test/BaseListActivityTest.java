@@ -2,14 +2,14 @@ package cs169.project.thepantry.test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
+import android.test.ActivityInstrumentationTestCase2;
 import cs169.project.thepantry.BaseListActivity;
 import cs169.project.thepantry.IngredientChild;
 import cs169.project.thepantry.IngredientGroup;
-import android.test.ActivityInstrumentationTestCase2;
+import cs169.project.thepantry.ShoppingListActivity;
 
-public class BaseListActivityTest extends ActivityInstrumentationTestCase2<BaseListActivity> {
+public class BaseListActivityTest extends ActivityInstrumentationTestCase2<ShoppingListActivity> {
 
 	private String table = "ingredients";
 	private String database = "testdatabase";
@@ -26,11 +26,13 @@ public class BaseListActivityTest extends ActivityInstrumentationTestCase2<BaseL
 	}
 	
 	public BaseListActivityTest() {
-		super(BaseListActivity.class);
+		super(ShoppingListActivity.class);
 	}
 
+	
 	/** Helper method to convert IngredientGroup arrays into their String representations */
 	protected ArrayList<String> groupToName(ArrayList<IngredientGroup> group) {
+		act = getActivity();
 		ArrayList<String> result = new ArrayList<String>();
 		for (IngredientGroup g : group) {
 			result.add(g.getGroup());
@@ -102,5 +104,4 @@ public class BaseListActivityTest extends ActivityInstrumentationTestCase2<BaseL
 	public void testUpdateInventory() {
 		fail("Not yet implemented");
 	}
-
 }

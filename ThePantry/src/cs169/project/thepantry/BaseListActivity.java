@@ -57,7 +57,13 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			lView.setVisibility(View.INVISIBLE);
 			eView.setVisibility(View.VISIBLE);
 		} else {
-			ArrayList<IngredientChild> items = search(newText);
+			ArrayList<IngredientChild> tmpItems = search(newText);
+			ArrayList<IngredientChild> items = new ArrayList<IngredientChild>();
+			for (IngredientChild c : children) {
+				if (tmpItems.contains(c)){
+					items.add(c);
+				}
+			}
 			BaseListViewAdapter lAdapter = new BaseListViewAdapter(this,  items);
 			lView.setAdapter(lAdapter);
 			eView.setVisibility(View.INVISIBLE);
@@ -171,7 +177,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	/** Adds all items to inventory database that have been checked 
 	 * Need to check if item is in inventory table -- can increment amount if is 
 	 * @throws ThePantryException */
-	public void updateInventory(View view, String table) throws ThePantryException {
+	public void updateInventory(View view) throws ThePantryException {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		for (IngredientChild c : children) {
 			if (c.isSelected()) {

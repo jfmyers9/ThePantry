@@ -37,5 +37,13 @@ public class IngredientChild {
 	public boolean isSelected() {
 		return selected;
 	}
+	
+	public boolean equals(Object o) {
+		boolean result = false;
+		if (o instanceof IngredientChild) {
+			result = name.equals(((IngredientChild)o).getName());
+		}
+		return result;
+	}
 
 }
