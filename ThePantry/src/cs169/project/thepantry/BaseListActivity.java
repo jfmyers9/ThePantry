@@ -82,6 +82,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		dialog.context = this;
 		dialog.message = query;
 		dialog.show(getFragmentManager(), "dialog");
+		return true;
 	}
 	
 	/** Fills the arrays with database data. */
