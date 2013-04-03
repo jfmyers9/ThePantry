@@ -53,6 +53,7 @@ public class LoginActivity extends Activity {
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
 	private GetJsonObject gsjo = null;
+	private DatabaseModel dm;
 	
 	SharedPreferences logged_in;
 	
@@ -80,6 +81,7 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 		
 		logged_in = PreferenceManager.getDefaultSharedPreferences(this);
+		dm = new DatabaseModel(this, "thepantry");
 
 		// Set up the login form.
 		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
@@ -303,6 +305,8 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 						Toast toast = Toast.makeText(context, text, duration);
 						toast.show();
 					}
+					dm.clear(ThePantryContract.ShoppingList.TABLE_NAME);
+					dm.clear(ThePantryContract.Inventory.TABLE_NAME);
 					Context context = getApplicationContext();
 					Intent intent = new Intent(context, ProfileActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
