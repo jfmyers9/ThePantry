@@ -55,8 +55,7 @@ public class LoginActivity extends Activity {
 	public final static String EXTRA_USER = "cs169.warmup.warmupproject.USER";
 	public final static String EXTRA_COUNT = "cs169.warmup.warmupproject.COUNT";
 	
-	String urlAdd = "http://cockamamy-island-1557.herokuapp.com/registration";
-	String urlLogin = "http://cockamamy-island-1557.herokuapp.com/session";
+	private final String urlLogin = "http://cockamamy-island-1557.herokuapp.com/session";
 
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
@@ -128,7 +127,12 @@ public class LoginActivity extends Activity {
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptRegister() {
-		//TODO Open up registration activity.
+		Context context = getApplicationContext();
+		Intent intent = new Intent(context, RegistrationActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+		
 	}
 	
 	public void attemptLogin() {
@@ -187,7 +191,6 @@ public class LoginActivity extends Activity {
 				Context context = getApplicationContext();
 				CharSequence text = "Something went wrong.";
 				int duration = Toast.LENGTH_LONG;
-
 				Toast toast = Toast.makeText(context, text, duration);
 				toast.show();
 	    	}
@@ -284,12 +287,11 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 				String info = (String)result.get("info");
 				JSONObject user = (JSONObject)result.get("data");
 				if (success) {
-					//TODO Launch the UserProfile Activity
 					Context context = getApplicationContext();
-					CharSequence text = "This Seems to Be Working.";
-					int duration = Toast.LENGTH_LONG;
-					Toast toast = Toast.makeText(context, text, duration);
-					toast.show();
+					Intent intent = new Intent(context, ProfileActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
 				} else if (!success) {
 					Context context = getApplicationContext();
 					CharSequence text = info;
