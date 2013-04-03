@@ -42,8 +42,9 @@ public class DatabaseModel extends SQLiteAssetHelper {
 					|| table.equals(ThePantryContract.Inventory.TABLE_NAME)) {
 				values.put(ThePantryContract.ADDFLAG, "true");
 				values.put(ThePantryContract.REMOVEFLAG, "false");
+			} if(!table.equals(ThePantryContract.Inventory.TABLE_NAME)){
+				values.put(ThePantryContract.CHECKED, "false");
 			}
-			
 			long newRowId;
 			if (!findItem(table, item)) {
 				try {
@@ -368,11 +369,9 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	 * favorited and cooked recipe
 	 */
 	public boolean isItemChecked(String table, String name, String col) {
-			System.out.println("fuk");
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
-			System.out.println("this");
 			
 			String[] columns = {col};
 			String selection;

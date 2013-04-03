@@ -1099,7 +1099,7 @@ containing a value of this type.
         public static final int abs__up=0x7f05000b;
         public static final int action_forgot_password=0x7f05007e;
         public static final int action_settings=0x7f05007d;
-        public static final int add_sl_types=0x7f05006c;
+        public static final int add_sl_types=0x7f05006d;
         public static final int addtoshop=0x7f050060;
         public static final int checkBox1=0x7f050072;
         public static final int checkedText1=0x7f050076;
@@ -1157,8 +1157,8 @@ containing a value of this type.
         public static final int searchresultstext=0x7f050068;
         public static final int selected_view=0x7f050014;
         public static final int setup_inventory_button=0x7f050070;
-        public static final int shopping_list_button=0x7f05006b;
-        public static final int shopping_list_text=0x7f05006a;
+        public static final int shopping_list_button=0x7f05006c;
+        public static final int shopping_list_text=0x7f05006b;
         public static final int showCustom=0x7f050008;
         public static final int showHome=0x7f050005;
         public static final int showTitle=0x7f050007;
@@ -1175,7 +1175,7 @@ containing a value of this type.
         public static final int title_activity_logout=0x7f050082;
         public static final int title_activity_register=0x7f050083;
         public static final int update_button=0x7f050045;
-        public static final int update_inventory_button=0x7f05006d;
+        public static final int update_inventory_button=0x7f05006a;
         public static final int useLogo=0x7f050004;
         public static final int user_allergic=0x7f050052;
         public static final int user_cook_history=0x7f050056;

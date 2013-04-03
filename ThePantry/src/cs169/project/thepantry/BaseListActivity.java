@@ -53,7 +53,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	public void setupSearchView() {
 		mSearchView.setIconifiedByDefault(false);
 		mSearchView.setOnQueryTextListener(this);
-		mSearchView.setSubmitButtonEnabled(false);
+		mSearchView.setSubmitButtonEnabled(true);
 		mSearchView.setQueryHint(getString(R.string.ingredient_search));
 	}
 
@@ -69,7 +69,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 					items.add(c);
 				}
 			}
-			BaseListViewAdapter lAdapter = new BaseListViewAdapter(this,  items);
+			BaseListViewAdapter lAdapter = new BaseListViewAdapter(this,  items, table);
 			lView.setAdapter(lAdapter);
 			eView.setVisibility(View.INVISIBLE);
 			lView.setVisibility(View.VISIBLE);
@@ -78,7 +78,10 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	}
 
 	public boolean onQueryTextSubmit(String query) {
-		return false;
+		AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
+		dialog.context = this;
+		dialog.message = query;
+		dialog.show(getFragmentManager(), "dialog");
 	}
 	
 	/** Fills the arrays with database data. */
@@ -120,6 +123,10 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			while(!items.isAfterLast()){
 				String data = items.getString(0);
 				IngredientChild temp = new IngredientChild(data,type);
+				if (table != ThePantryContract.Inventory.TABLE_NAME) {
+					boolean checked = dm.isItemChecked(table, data, ThePantryContract.CHECKED);
+					temp.setSelected(checked);
+				}
 				children.add(temp);
 				result.add(temp);
 				items.moveToNext();
@@ -190,9 +197,10 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 				boolean success = dm.add(Inventory.TABLE_NAME, c.getName(),c.getGroup(),"1");
 				message += c.getName() + "\n";
 				// If the shopping list "updates" the ingredients are removed from list
+				dm.check(table, c.getName(), ThePantryContract.CHECKED, false);
 				if (table == ShoppingList.TABLE_NAME) {
 					dm.check(table, c.getName(), ThePantryContract.REMOVEFLAG, true);
-				}
+				} 
 				if (!success) {
 					System.err.println("You Fucked Up");
 				}
@@ -211,6 +219,37 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	 * 
 	 */
 	public static class AddIngredientsDialogFragment extends DialogFragment {
+		
+		Context context;
+		String message;
+		
+	    @Override
+	    public Dialog onCreateDialog(Bundle savedInstanceState) {
+	        // Use the Builder class for convenient dialog construction
+	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        builder.setTitle(R.string.dialog_update_inventory)
+	        	   .setMessage(message) 
+	        	   .setPositiveButton(R.string.inventory_go, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                	   //go to inventory
+	                  		Intent intent = new Intent(context, InventoryActivity.class);
+	                  		startActivity(intent);
+	                   }
+	               })
+	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	               		
+	                   }
+	               });
+	        // Create the AlertDialog object and return it
+	        return builder.create();
+	    }
+	}
+	
+	/* Class for displaying popup dialog for adding new ingredients
+	 * 
+	 */
+	public static class AddIngredientsTempDialogFragment extends DialogFragment {
 		
 		Context context;
 		String message;

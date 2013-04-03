@@ -78,10 +78,8 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 			dm = new DatabaseModel(context, DATABASE_NAME);
 			LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
 			if (table == Inventory.TABLE_NAME) {
-				// TODO: make it use child_row_inventory
 				convertView = infalInflater.inflate(R.layout.child_row_inventory, null);
 			} else {
-				System.out.println("XXXXXXXXXXXXXXX");
 				convertView = infalInflater.inflate(R.layout.child_row, null);
 			}
 		}
@@ -91,16 +89,10 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		if (table != Inventory.TABLE_NAME) {
 			childHolder = new ViewHolder((CheckBox)convertView.findViewById(R.id.checkBox1), child.isSelected());
 			childHolder.cb.setText(child.getName());
-			System.out.println("Table: " + table);
-			System.out.println("checked: " + ThePantryContract.CHECKED);
-			System.out.println("child: " + child.getName());
-			dm.isItemChecked(table, child.getName(), ThePantryContract.CHECKED);
-			//System.out.println(dm.isItemChecked(table, child.getName(), ThePantryContract.CHECKED));
 		} else {
 			childHolder = new ViewHolder((TextView)convertView.findViewById(R.id.textView));
 			childHolder.cb.setText(child.getName());
 		}
-		System.out.println("FDYYDYY");
 		// Detects if a given item was swiped
 		final SwipeDetector swipeDetector = new SwipeDetector();
 		convertView.setOnTouchListener(swipeDetector);
@@ -111,7 +103,7 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 				IngredientChild child = (IngredientChild) childHolder.cb
 						.getTag();
 				if (swipeDetector.swipeDetected()) {
-					//showDialog();
+					//showDialog(); // currently not working will display a box to ask user if they want to delete
 					
 					removeChild(child, group);
 				} else if (table != Inventory.TABLE_NAME) {
