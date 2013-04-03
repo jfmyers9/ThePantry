@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 
@@ -62,8 +63,7 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
     	if (items != null) {
     		while (!items.isAfterLast()) {
     			String ingredient = items.getString(1);
-    			String group = "Other";
-    			System.out.println(group);
+    			String group = items.getString(2);
     			String status = "add";
     			JSONObject ingr = new JSONObject();
     			dbModel.check(tableName, ingredient, ThePantryContract.ADDFLAG, false);
@@ -83,8 +83,7 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
     	if (items != null) {
     		while (!items.isAfterLast()) {
     			String ingredient = items.getString(1);
-    			String group = "Other";
-    			System.out.println(group);
+    			String group = items.getString(2);
     			String status = "remove";
     			JSONObject ingr = new JSONObject();
     			try {
