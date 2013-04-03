@@ -48,7 +48,7 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		}
 		notifyDataSetChanged();
 		dm = new DatabaseModel(context, DATABASE_NAME);
-		dm.remove(table, child.getName());
+		dm.check(table, child.getName(), ThePantryContract.REMOVEFLAG, true);
 	}
 
 	@Override
