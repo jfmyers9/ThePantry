@@ -104,6 +104,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		
 	}
 	
+	// show all the ingredients in the ings layout
 	public void displayIngreds(List<String> ingreds) {
 		for (String ingred : ingreds) {
 			CheckBox tv = new CheckBox(this);
@@ -113,6 +114,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		}
 	}
 	
+	// return a string of all checked items
 	public static String getCheckedIngredientsString() {
 		String message = "";
 		for (CheckBox cb : ingChecks) {
@@ -131,7 +133,7 @@ public class RecipeActivity extends BasicMenuActivity {
 	// open the ingredient adding dialog
 	public void openIngDialog(View v) {
 		AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
-		dialog.context = getApplicationContext();
+		dialog.context = this;
 		dialog.show(getFragmentManager(), "dialog");
 	}
 	
