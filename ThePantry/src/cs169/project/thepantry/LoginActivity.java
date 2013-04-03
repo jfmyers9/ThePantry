@@ -55,8 +55,8 @@ public class LoginActivity extends Activity {
 	public final static String EXTRA_USER = "cs169.warmup.warmupproject.USER";
 	public final static String EXTRA_COUNT = "cs169.warmup.warmupproject.COUNT";
 	
-	String urlAdd = "http://desolate-savannah-2939.herokuapp.com/users/add";
-	String urlLogin = "http://desolate-savannah-2939.herokuapp.com/users/login";
+	String urlAdd = "http://cockamamy-island-1557.herokuapp.com/registration";
+	String urlLogin = "http://cockamamy-island-1557.herokuapp.com/session";
 
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
@@ -98,11 +98,19 @@ public class LoginActivity extends Activity {
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
-		findViewById(R.id.sign_in_button).setOnClickListener(
+		findViewById(R.id.log_in_button).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
 						attemptLogin();
+					}
+				});
+		
+		findViewById(R.id.register).setOnClickListener(
+				new View.OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						attemptRegister();
 					}
 				});
 	}
@@ -119,6 +127,10 @@ public class LoginActivity extends Activity {
 	 * If there are form errors (invalid email, missing fields, etc.), the
 	 * errors are presented and no actual login attempt is made.
 	 */
+	public void attemptRegister() {
+		//TODO Open up registration activity.
+	}
+	
 	public void attemptLogin() {
 		if (gsjo != null) {
 			return;
@@ -168,11 +180,12 @@ public class LoginActivity extends Activity {
 	    	try {
 	    		obj.put("user", user);
 	    		obj.put("password", password);
+	    		obj.put("password_confirmation", password);
 	    		gsjo = new GetJsonObject(obj);
-	    		gsjo.execute(urlAdd);
+	    		gsjo.execute(urlLogin);
 	    	} catch (Exception e) {
 				Context context = getApplicationContext();
-				CharSequence text = "Fuck Me";
+				CharSequence text = "Something went wrong.";
 				int duration = Toast.LENGTH_LONG;
 
 				Toast toast = Toast.makeText(context, text, duration);
@@ -180,6 +193,8 @@ public class LoginActivity extends Activity {
 	    	}
 		}
 	}
+	
+	
 
 	/**
 	 * Shows the progress UI and hides the login form.
@@ -265,49 +280,27 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 		@Override
 		protected void onPostExecute(JSONObject result) {
 			try {
-				int errCode = (Integer)result.get("errCode");
-				if (errCode == 1) {
-					int count = (Integer) result.get("count");
+				boolean success = (Boolean)result.get("success");
+				String info = (String)result.get("info");
+				JSONObject user = (JSONObject)result.get("data");
+				if (success) {
+					//TODO Launch the UserProfile Activity
 					Context context = getApplicationContext();
-					CharSequence text = "Yay, you logged in..";
+					CharSequence text = "This Seems to Be Working.";
 					int duration = Toast.LENGTH_LONG;
-
 					Toast toast = Toast.makeText(context, text, duration);
 					toast.show();
-				} else if (errCode == -1) {
+				} else if (!success) {
 					Context context = getApplicationContext();
-					CharSequence text = "Invalid username and password combination. Please try again.";
+					CharSequence text = info;
 					int duration = Toast.LENGTH_LONG;
-
-					Toast toast = Toast.makeText(context, text, duration);
-					toast.show();
-				} else if (errCode == -2) {
-					Context context = getApplicationContext();
-					CharSequence text = "User Already Exists, Try Again.";
-					int duration = Toast.LENGTH_LONG;
-
-					Toast toast = Toast.makeText(context, text, duration);
-					toast.show();
-				} else if (errCode == -3) {
-					Context context = getApplicationContext();
-					CharSequence text = "Invalid UserName, Try Again.";
-					int duration = Toast.LENGTH_LONG;
-
-					Toast toast = Toast.makeText(context, text, duration);
-					toast.show();
-				} else if (errCode == -4) {
-					Context context = getApplicationContext();
-					CharSequence text = "Invalid Password, Try Again.";
-					int duration = Toast.LENGTH_LONG;
-
 					Toast toast = Toast.makeText(context, text, duration);
 					toast.show();
 				}
 			} catch (Exception e) {
 				Context context = getApplicationContext();
-				CharSequence text = "You Fucked UP.";
+				CharSequence text = "Something went horribly wrong.";
 				int duration = Toast.LENGTH_LONG;
-
 				Toast toast = Toast.makeText(context, text, duration);
 				toast.show();
 			}

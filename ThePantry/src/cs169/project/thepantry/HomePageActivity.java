@@ -31,14 +31,16 @@ public class HomePageActivity extends BasicMenuActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home_page);
-		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);	
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+		
+		//setup recommendations listview and adapter
 		recommendations = new ArrayList<SearchMatch>();
 		listView = (ListView) findViewById(R.id.recsList);
 		srAdapter = new SearchResultAdapter(getApplicationContext(), recommendations);          
 		listView.setAdapter(srAdapter);
 		srAdapter.notifyDataSetChanged();
 		
-		//when a search result item is clicked
+		//when a search result item (recipe) is clicked
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -52,6 +54,8 @@ public class HomePageActivity extends BasicMenuActivity {
 		
 		if (isOnline()) {
 			getRecommendations();
+		} else {
+			//TODO: display an "offline" message
 		}
 		
 	}
@@ -94,8 +98,8 @@ public class HomePageActivity extends BasicMenuActivity {
 			searchcriteria = new SearchCriteria("home", query, NUM_RECOMMENDATIONS);
 		}
 		else {
-			//TODO: default is bacon
-			searchcriteria = new SearchCriteria("home", "bacon", NUM_RECOMMENDATIONS);
+			//default
+			searchcriteria = new SearchCriteria("home", "", NUM_RECOMMENDATIONS);
 		}
 		new HomeSearchTask(getApplicationContext(), "home").execute(searchcriteria);
 	}
