@@ -16,6 +16,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 
@@ -23,11 +25,19 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
 	
 	private String tableName, authToken;
 	private DatabaseModel dbModel;
-	private String baseURL = "http://cocamamy-island-1557.herokuapp.com/";
+	private String baseURL = "http://cockamamy-island-1557.herokuapp.com/";
 	private Activity act;
+	private ProgressDialog dialog;
 	
 	public IngredientSyncTask(Activity act) {
 		this.act = act;
+		dialog = new ProgressDialog(act);		
+	}
+	
+	@Override
+	protected void onPreExecute() {
+		this.dialog.setMessage("Syncing Databases");
+		this.dialog.show();
 	}
 
 	@Override
@@ -36,10 +46,11 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
 		tableName = params[0];
 		authToken = params[1];
 		String urlAddon = "";
+		System.out.println(authToken);
 		if (tableName.equals(ThePantryContract.ShoppingList.TABLE_NAME)) {
-			urlAddon = "shoplist?auth_token=" + authToken;
+			urlAddon = "shoplist/?auth_token=" + authToken;
 		} else if (tableName.equals(ThePantryContract.Inventory.TABLE_NAME)) {
-			urlAddon = "inventory?auth_token=" + authToken;
+			urlAddon = "inventory/?auth_token=" + authToken;
 		}
 		String url = baseURL + urlAddon;
 	   	HttpClient client = new DefaultHttpClient();
@@ -47,16 +58,18 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
     	HttpResponse resp;
     	post.addHeader("Content-type", "application/json");
     	JSONObject obj = new JSONObject();
-    	dbModel = new DatabaseModel(act, tableName);
+    	dbModel = new DatabaseModel(act, "thepantry");
     	Cursor items = dbModel.checkedItems(tableName, ThePantryContract.ADDFLAG);
     	if (items != null) {
     		while (!items.isAfterLast()) {
-    			String ingredient = items.getString(0);
+    			String ingredient = items.getString(1);
+    			String group = items.getString(2);
     			String status = "add";
     			JSONObject ingr = new JSONObject();
     			dbModel.check(tableName, ingredient, ThePantryContract.ADDFLAG, false);
     			try {
     				ingr.put("ingredient", ingredient);
+    				ingr.put("group", group);
     				ingr.put("status", status);
     			} catch (JSONException e) {
     				e.printStackTrace();
@@ -64,17 +77,18 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
     			ingrs.put(ingr);
     			items.moveToNext();
     		}
+    		items.close();
     	}
-    	items.close();
     	items = dbModel.checkedItems(tableName, ThePantryContract.REMOVEFLAG);
     	if (items != null) {
     		while (!items.isAfterLast()) {
-    			String ingredient = items.getString(0);
+    			String ingredient = items.getString(1);
+    			String group = items.getString(2);
     			String status = "remove";
-    			dbModel.remove(tableName, ingredient);
     			JSONObject ingr = new JSONObject();
     			try {
     				ingr.put("ingredient", ingredient);
+    				ingr.put("group", group);
     				ingr.put("status", status);
     			} catch (JSONException e) {
     				e.printStackTrace();
@@ -82,14 +96,14 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
     			ingrs.put(ingr);
     			items.moveToNext();
     		}
+    		items.close();
     	}
-    	items.close();
     	try {
     		obj.put("ingredients", ingrs);
     	} catch (JSONException e) {
     		e.printStackTrace();
     	}
-    	
+    	System.out.println(obj.toString());
     	try {
     		post.setEntity(new StringEntity(obj.toString()));
     		resp = client.execute(post);
@@ -104,6 +118,7 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
             }
             instream.close();
             String result = builder.toString();
+            System.out.println(result);
             JSONArray respObj = new JSONArray(result);
             return respObj;
     	} catch (Exception e) {
@@ -114,16 +129,25 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
 	
 	@Override
 	public void onPostExecute(JSONArray response) {
+		if (dialog.isShowing()) {
+			dialog.dismiss();
+		}
 		ArrayList<String> ingredients = new ArrayList<String>();
+		ArrayList<String> groups = new ArrayList<String>();
 		for (int i = 0; i < response.length(); i++) {
 			try {
-				ingredients.add(((JSONObject)response.get(i)).getString("ingredient"));
+				JSONObject resp = (JSONObject) response.get(i);
+				ingredients.add(resp.getString("ingredient"));
+				groups.add(resp.getString("group"));
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
-		dbModel = new DatabaseModel(act, tableName);
-		//dbModel.removeAllBut(tableName, ingredients);
+		dbModel = new DatabaseModel(act, "thepantry");
+		dbModel.clear(tableName);
+		for (int i = 0; i < ingredients.size(); i++) {
+			dbModel.add(tableName, ingredients.get(i), groups.get(i), "1");
+		}
 	}
 
 }
