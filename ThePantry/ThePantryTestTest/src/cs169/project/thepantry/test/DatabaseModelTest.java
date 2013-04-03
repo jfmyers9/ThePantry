@@ -134,6 +134,17 @@ public class DatabaseModelTest extends AndroidTestCase {
 			assertTrue("Error: Incorrect type " + type, contains);
 		}
 	}
+	
+	public void testSearch() {
+		String table = "ingredients";
+		Cursor cItems = testdm.search(table, "c");
+		ArrayList<String> items = parseCursor(cItems);
+		String[] match = {"Chicken", "Carrots", "Lettuce"};
+		for (String item : items) {
+			boolean contains = Arrays.asList(match).contains(item);
+			assertTrue("Error: Incorrect item " + item, contains);
+		}
+	}
 
 	public void testChecked() {
 		String table = "recipe";

@@ -26,6 +26,13 @@
         android:layout_height="fill_parent"
         android:layout_below="@+id/edit" />
 
+     <ListView 
+        android:id="@+id/inv_list"
+        android:layout_below = "@+id/search"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" 
+        android:descendantFocusability="blocksDescendants" />
+        
     <SearchView
         android:id="@+id/search"
         android:layout_width="wrap_content"

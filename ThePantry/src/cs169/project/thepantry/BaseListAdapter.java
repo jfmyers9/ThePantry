@@ -2,8 +2,6 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-import cs169.project.thepantry.ThePantryContract.Inventory;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class BaseListAdapter extends BaseExpandableListAdapter {
 	
@@ -20,6 +19,7 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 	private String table;
 	private DatabaseModel dm;
 	private static final String DATABASE_NAME = "thepantry";
+	private static final String TAG = "BaseListAdapter";
 	
 	public BaseListAdapter(Context context, ArrayList<IngredientGroup> groups, String table) {
 		this.context = context;

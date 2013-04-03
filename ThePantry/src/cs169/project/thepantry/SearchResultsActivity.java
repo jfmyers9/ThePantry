@@ -3,6 +3,7 @@ package cs169.project.thepantry;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -13,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 public class SearchResultsActivity extends BasicMenuActivity {
@@ -29,8 +31,10 @@ public class SearchResultsActivity extends BasicMenuActivity {
 		setContentView(R.layout.activity_search_results);
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 		
+		//set past search text, move cursor to end
 		EditText searchText = (EditText) findViewById(R.id.search_text);
 		searchText.setText((String)getIntent().getStringExtra("currentSearch"));
+		searchText.setSelection(searchText.getText().length());
 		
 		SearchResult result = (SearchResult)getIntent().getExtras().getSerializable("result");
 		matches = result.matches;
@@ -47,7 +51,7 @@ public class SearchResultsActivity extends BasicMenuActivity {
 			    // When clicked
 				if (isOnline()){
 		    		SearchCriteria searchcriteria = new SearchCriteria("recipe", (String)view.getTag());
-		    		new SearchTask(getApplicationContext()).execute(searchcriteria);
+		    		new SearchTask(getApplicationContext(), "recipe").execute(searchcriteria);
 				}
 			}
 		});
@@ -58,19 +62,34 @@ public class SearchResultsActivity extends BasicMenuActivity {
     	String search = searchText.getText().toString();
     	if (isOnline()) {
     		SearchCriteria searchcriteria = new SearchCriteria("search", search);
-    		new SearchTask(getApplicationContext()).execute(searchcriteria);
+    		new SearchTask(getApplicationContext(), "search").execute(searchcriteria);
     	}
 	}
 	
 public class SearchTask extends AsyncTask<SearchCriteria, String, Storage> {
 		
-		String type;
+		String type = "";
 		String q;
 		Context context;
+		FrameLayout mFrameOverlay;
+		ProgressDialog progressDialog;
 		
 		public SearchTask(Context context) {
 		    	this.context = context;
 		}
+		
+		public SearchTask(Context context, String type) {
+	    	this.context = context;
+	    	this.type = type;
+		}
+		
+		//show progress wheel
+		@Override
+	    protected void onPreExecute() {
+			progressDialog = new ProgressDialog(SearchResultsActivity.this);
+			progressDialog.setMessage("Loading " + this.type + "...");
+			progressDialog.show();
+	    };
 		
 		@Override
 		protected Storage doInBackground(SearchCriteria... sc) {
@@ -81,6 +100,10 @@ public class SearchTask extends AsyncTask<SearchCriteria, String, Storage> {
 		
 		@Override
 		protected void onPostExecute(Storage result) {
+			
+		progressDialog.dismiss();
+			
+		//TODO: bug if results list goes from small to smaller? index out of bounds
 		if (result != null) {
 			if (this.type == "search") {
 				if (srAdapter.values.size() == 0) {
