@@ -7,11 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.WindowManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -20,10 +21,6 @@ import android.widget.TextView;
 import cs169.project.thepantry.HomePageActivity.HomeSearchTask;
 
 public class ProfileActivity extends Activity {
-	
-	// login status of the user
-	SharedPreferences shared_pref = PreferenceManager.getDefaultSharedPreferences(this);
-	Boolean login_status = shared_pref.getBoolean("loggedin", false);
 	
 	// assumes that when profile clicked, then extra holds username
 	String username;
@@ -45,9 +42,14 @@ public class ProfileActivity extends Activity {
 	SearchResultAdapter favesAdapter;
 	SearchResultAdapter cookAdapter;
 	
+	SearchModel sm = new SearchModel();
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// login status of the user
+		SharedPreferences shared_pref = PreferenceManager.getDefaultSharedPreferences(this);
+		Boolean login_status = shared_pref.getBoolean("loggedin", false);
 		
 		// check if the user is logged in, if not take user to login screen
 		if (login_status) {
@@ -86,13 +88,15 @@ public class ProfileActivity extends Activity {
 			cookAdapter.notifyDataSetChanged();
 			
 			// when recipes are clicked
-			/*favorites.setOnItemClickListener(new OnItemClickListener() {
+			favorites.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 				    // When clicked
 					if (isOnline()){
 			    		SearchCriteria searchcriteria = new SearchCriteria("recipe", (String)view.getTag());
-			    		new HomeSearchTask(getApplicationContext(), "recipe").execute(searchcriteria);
+			    		HomePageActivity hpActivity = new HomePageActivity();
+			    		HomeSearchTask hstask = hpActivity.new HomeSearchTask(getApplicationContext(), "recipe");
+			    		hstask.execute(searchcriteria);
 					}
 				}
 			});
@@ -103,10 +107,12 @@ public class ProfileActivity extends Activity {
 				    // When clicked
 					if (isOnline()){
 			    		SearchCriteria searchcriteria = new SearchCriteria("recipe", (String)view.getTag());
-			    		new HomeSearchTask(getApplicationContext(), "recipe").execute(searchcriteria);
+			    		HomePageActivity hpActivity = new HomePageActivity();
+			    		HomeSearchTask hstask = hpActivity.new HomeSearchTask(getApplicationContext(), "recipe");
+			    		hstask.execute(searchcriteria);
 					}
 				}
-			});*/
+			});
 		} else {
 			Intent i = new Intent(this, LoginActivity.class);
 			startActivity(i);
@@ -129,6 +135,16 @@ public class ProfileActivity extends Activity {
 		// TODO: add button or link to layout
 	}
 	
+	public boolean isOnline() {
+	    ConnectivityManager cm =
+	        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    if (netInfo != null && netInfo.isConnected()) {
+	        return true;
+	    }
+	    return false;
+	}
+	
 	/**
 	 * Gets the user's favorite recipes and adds each to the table layout favorites
 	 */
@@ -144,8 +160,8 @@ public class ProfileActivity extends Activity {
 			while (!faves.isAfterLast()) {
 				String recipe_name = faves.getString(0);
 				System.out.println(recipe_name);
-				//SearchCriteria sc = new SearchCriteria("recipe", recipe_name);
-				//new HomeSearchTask(this, "search").execute(sc);
+				SearchCriteria sc = new SearchCriteria("recipe", recipe_name);
+				new ProfileSearchTask(this, "fave").execute(sc);
 				faves.moveToNext();
 			}
 			faves.close();
@@ -160,6 +176,75 @@ public class ProfileActivity extends Activity {
 		// TODO
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor cooked = dm.checkedItems(ThePantryContract.Recipe.TABLE_NAME, ThePantryContract.Recipe.COOKED);
+		
+		if (cooked != null) {
+			while (!cooked.isAfterLast()) {
+				String recipe_name = cooked.getString(0);
+				System.out.println(recipe_name);
+				SearchCriteria sc = new SearchCriteria("recipe", recipe_name);
+				new ProfileSearchTask(this, "cook").execute(sc);
+				cooked.moveToNext();
+			}
+			cooked.close();
+		}
+	}
+	
+	
+	public class ProfileSearchTask extends AsyncTask<SearchCriteria, String, Storage> {
+		
+		String type = "";
+		String q;
+		Context context;
+		
+		public ProfileSearchTask(Context context) {
+	    	this.context = context;
+		}
+		
+		public ProfileSearchTask(Context context, String type) {
+		    	this.context = context;
+		    	this.type = type;
+		}
+		
+		
+		@Override
+		protected Storage doInBackground(SearchCriteria... sc) {
+			this.type = sc[0].type;
+			this.q = sc[0].q;
+			return sm.search(sc[0]);
+		}
+		
+		//update list of recommendations using a SearchResultsAdapter
+		//or open a SearchResultsActivity if a search was made
+		//or open a recipe page if a recipe was selected
+		@Override
+		protected void onPostExecute(Storage result) {
+
+	        
+			if (result != null) {
+				if (this.type == "fave") {
+					if (favesAdapter.values.size() == 0) {
+						faves = ((SearchResult)result).matches;
+						favesAdapter = new SearchResultAdapter(ProfileActivity.this, faves);   
+						favorites.setAdapter(favesAdapter);
+					} else {
+						favesAdapter.values = ((SearchResult)result).matches; 
+						favesAdapter.notifyDataSetChanged();
+					}
+				}
+				else if (this.type == "cook") {
+					if (cookAdapter.values.size() == 0) {
+						cooked = ((SearchResult)result).matches;
+						cookAdapter = new SearchResultAdapter(ProfileActivity.this, cooked);   
+						favorites.setAdapter(cookAdapter);
+					} else {
+						cookAdapter.values = ((SearchResult)result).matches; 
+						cookAdapter.notifyDataSetChanged();
+					}
+				}
+			}
+			
+		}
+		
 	}
 	
 }
