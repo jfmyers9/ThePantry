@@ -57,6 +57,13 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				}
 				return false;
 			} else {
+				if(table != Ingredients.TABLE_NAME) {	
+					if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
+						check(table, item, ThePantryContract.ADDFLAG, true);
+						check(table, item, ThePantryContract.REMOVEFLAG, false);
+						return true;
+					}
+				}
 				// increment amount
 				// add a popup to ask if they want amount to be incremented?
 				return true;
@@ -166,18 +173,17 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
-
-			System.out.println("*************");
 				String selection = ThePantryContract.ITEM + " = ?";
 				String[] selectionArgs = {item};
 				
 				Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
 				if(c.moveToFirst()) {
+					/*
 					if(table != Ingredients.TABLE_NAME) {	
 						if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
 							return false;
 						}
-					}
+					}*/
 					return true;
 				}else {
 					return false;
@@ -380,7 +386,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
 			
 			if (c.moveToFirst()) {
-				System.out.println("XXXXXXXXXXXXXXXXXX");
 				String data = c.getString(0);
 				System.out.println(data);
 				if (data.equals("true")) {
