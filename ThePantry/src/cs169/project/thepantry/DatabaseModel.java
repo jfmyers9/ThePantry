@@ -34,7 +34,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			values.put(ThePantryContract.AMOUNT, amount);
 			if (table.equals(ThePantryContract.ShoppingList.TABLE_NAME)
 					|| table.equals(ThePantryContract.Ingredients.TABLE_NAME)) {
-				values.put(ThePantryContract.CHECKED, false);
+				values.put(ThePantryContract.ADDFLAG, true);
+				values.put(ThePantryContract.REMOVEFLAG, false);
 			}
 			
 			long newRowId;
@@ -78,7 +79,10 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
 			
-			Cursor c = qb.query(db, null, null, null, null, null, null, null);
+			String selection = ThePantryContract.REMOVEFLAG + " = ?";
+			String[] selectionArgs = {"false"};
+			
+			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null, null);
 			if (c.moveToFirst()) {
 				return c;
 			} else {
@@ -92,8 +96,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(table);
 		
-		String selection = ThePantryContract.ITEM + " LIKE ?";
-		String[] selectionArgs = {"%"+query+"%"};
+		String selection = ThePantryContract.ITEM + " LIKE ?" + " AND " + ThePantryContract.REMOVEFLAG + " = ?";
+		String[] selectionArgs = {"%"+query+"%", "false"};
 		
 		Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
 		if (c.moveToFirst()) {
@@ -108,16 +112,19 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
-			
-			String selection = ThePantryContract.ITEM + " = ?";
-			String[] selectionArgs = {item};
-			
-			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
-			if(c.moveToFirst()) {
-				return true;
-			}else {
-				return false;
-			}
+			System.out.println("*************");
+				String selection = ThePantryContract.ITEM + " = ?";
+				String[] selectionArgs = {item};
+				
+				Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
+				if(c.moveToFirst()) {
+					if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
+						return false;
+					}
+					return true;
+				}else {
+					return false;
+				}
 	}
 
 	/** Returns all items of the TYPE from the specified TABLE. */
@@ -144,16 +151,19 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
 			
-			String[] columns = {ThePantryContract.TYPE};
-			String selection = ThePantryContract.ITEM + " = ?";
-			String[] selectionArgs = {item};
-			
-			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			if (c.moveToFirst()) {
-				return c;
-			} else {
-				return null;
-			}
+				String[] columns = {ThePantryContract.TYPE};
+				String selection = ThePantryContract.ITEM + " = ?";
+				String[] selectionArgs = {item};
+				
+				Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
+				if (c.moveToFirst()) {
+					if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
+						return null;
+					}
+					return c;
+				} else {
+					return null;
+				}
 	}
 
 	/** Returns the amount of the ITEM from the specified TABLE. */
@@ -161,13 +171,16 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
-			
+
 			String[] columns = {ThePantryContract.AMOUNT};
 			String selection = ThePantryContract.ITEM + " = ?";
 			String[] selectionArgs = {item};
-			
+
 			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
 			if (c.moveToFirst()) {
+				if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
+					return null;
+				}
 				return c;
 			} else {
 				return null;
@@ -181,9 +194,12 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			qb.setTables(table);
 			qb.setDistinct(true);
 			
+			String selection = ThePantryContract.REMOVEFLAG + " = ?";
+			String[] selectionArgs = {"false"};
+			
 			String[] columns = {ThePantryContract.TYPE};
 			
-			Cursor c = qb.query(db, columns, null, null, null, null, null);
+			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
 			if (c.moveToFirst()) {
 				return c;
 			} else {
@@ -193,7 +209,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 
 
 	/** Sets the check value of the item to whatever checked it */
-	public boolean checked(String table, String item, String col, boolean checked) {
+	public boolean check(String table, String item, String col, boolean checked) {
 			SQLiteDatabase db = getWritableDatabase();
 			String selection;
 			if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
@@ -242,15 +258,21 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	/** Returns false if item is not checked and true if item is checked for
 	 * favorited and cooked recipe
 	 */
-	public boolean isItemChecked(String table, String recipe_name, String col) {
+	public boolean isItemChecked(String table, String name, String col) {
+			
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
 			
-			String[] columns = {col};
-			String selection = ThePantryContract.Recipe.RECIPE + " = ?";
-			String[] selectionArgs = {recipe_name};
 			
+			String[] columns = {col};
+			String selection;
+			if (table == ThePantryContract.Recipe.TABLE_NAME) {
+				selection = ThePantryContract.Recipe.RECIPE + " = ?";
+			} else {
+				selection = ThePantryContract.ITEM + " = ?";
+			}
+			String[] selectionArgs = {name};
 			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
 			if (c.moveToFirst()) {
 				String data = c.getString(0);

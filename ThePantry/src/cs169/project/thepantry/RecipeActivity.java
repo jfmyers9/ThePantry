@@ -150,10 +150,10 @@ public class RecipeActivity extends BasicMenuActivity {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		if (faved) {
 			faved = false;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, false);
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, false);
 		} else {
 			faved = true;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, true);
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, true);
 		}
 		setStarButton(faved);
 	}
@@ -167,10 +167,10 @@ public class RecipeActivity extends BasicMenuActivity {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		if (cooked) {
 			cooked = false;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, false);
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, false);
 		} else {
 			cooked = true;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, true);
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, true);
 		}
 		setCheckButton(cooked);
 	}

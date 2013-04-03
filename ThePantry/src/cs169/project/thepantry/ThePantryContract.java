@@ -9,7 +9,8 @@ public class ThePantryContract {
 	public static final String ITEM = "item";
 	public static final String TYPE = "type";
 	public static final String AMOUNT = "amount";
-	public static final String CHECKED = "checked";
+	public static final String ADDFLAG = "addFlag";
+	public static final String REMOVEFLAG = "removeFlag";
 	
 	/** Private constructor method to make class static. */
 	private ThePantryContract() {}
