@@ -24,6 +24,8 @@
     <string name="edit">Edit</string>
     <string name="search">Search</string>
     <string name="ShoppingListTitle">Your Shopping List</string>
+    <string name="sign_in">Sign In</string>
+    <string name="register">Register</string>
 
     <string-array name="ingredient_type_array">
         <item>Grain</item>
@@ -66,5 +68,6 @@
     <string name="dialog_cancel">Cancel</string>
 
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="directions">Directions:</string>
 
 </resources>
