@@ -23,6 +23,7 @@ public class ShoppingListActivity extends BaseListActivity {
 	//private String table = ShoppingList.TABLE_NAME;
 	private ArrayList<IngredientGroup> spinnerGroups;
 	private ArrayList<String> spinnerTypes;
+	private ArrayAdapter<String> adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class ShoppingListActivity extends BaseListActivity {
 		groupNames = new ArrayList<String>();
 		children = new ArrayList<IngredientChild>();
 		
-		fillArrays();
+		//fillArrays();
 		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems, table);
 		eView.setAdapter(eAdapter);
 		
@@ -51,7 +52,7 @@ public class ShoppingListActivity extends BaseListActivity {
 			spinnerTypes.add(group.getGroup());
 		}
 		spinnerTypes.add("Other");
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerTypes);
+		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerTypes);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
 	}
@@ -67,7 +68,14 @@ public class ShoppingListActivity extends BaseListActivity {
 	public void addShopItem(View view) {
 		EditText eText = (EditText) findViewById(R.id.shopping_list_text);
 		try {
-			addItem(table, eText.getText().toString(), spinner.getSelectedItem().toString(), "1");
+			String type = spinner.getSelectedItem().toString();
+			if (type.equals("Other")) {
+				//popup option to add this new type and add it to the adapter
+				// reset type and add it
+				//adapter.add(type);
+				//adapter.notifyDataSetChanged();
+			}
+			addItem(table, eText.getText().toString(), type, "1");
 			((BaseExpandableListAdapter)eView.getExpandableListAdapter()).notifyDataSetChanged();
 		} catch (IOException e) {
 			Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);

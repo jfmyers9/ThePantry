@@ -87,6 +87,10 @@
             android:name="cs169.project.thepantry.ProfileActivity"
             android:label="@string/title_activity_profile" >
         </activity>
+        <activity
+            android:name="cs169.project.thepantry.RegistrationActivity"
+            android:label="@string/title_activity_registration" >
+        </activity>
     </application>
 
 </manifest>
