@@ -14,6 +14,7 @@ public class ThePantryContract {
 	public static final String AMOUNT = "amount";
 	public static final String ADDFLAG = "addFlag";
 	public static final String REMOVEFLAG = "removeFlag";
+	public static final String CHECKED = "checked";
 	
 	/** Private constructor method to make class static. */
 	private ThePantryContract() {}
@@ -29,11 +30,22 @@ public class ThePantryContract {
 	/** Inner class that defines the Inventory table */
 	public static abstract class Inventory implements BaseColumns {
 	    public static final String TABLE_NAME = "inventory";
+	    public static final int REMOVEFLAGIND = 0;
+	    public static final int ADDFLAGIND = 1;
+	    public static final int ITEMIND = 2;
+	    public static final int TYPEIND = 3;
+	    public static final int AMOUNTIND = 4;
 	}
 	
 	/** Inner class that defines the Shopping List table */
 	public static abstract class ShoppingList implements BaseColumns {
 	    public static final String TABLE_NAME = "shoppinglist";
+	    public static final int CHECKEDIND = 0;
+	    public static final int REMOVEFLAGIND = 1;
+	    public static final int ITEMIND = 2;
+	    public static final int TYPEIND = 3;
+	    public static final int AMOUNTIND = 4;
+	    public static final int ADDFLAGIND = 5;
 	}
 	/** Inner class that defines the Shopping List table */
 	public static abstract class Recipe implements BaseColumns {
