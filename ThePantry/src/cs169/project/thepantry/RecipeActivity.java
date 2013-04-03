@@ -100,6 +100,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		//check if recipe is in db or not cooked
 		check = (ImageButton)findViewById(R.id.cooked);
 		cooked = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED);
+		dm.close();
 		setCheckButton(cooked);
 		
 	}
@@ -177,9 +178,11 @@ public class RecipeActivity extends BasicMenuActivity {
 		if (faved) {
 			faved = false;
 			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, false);
+			dm.close();
 		} else {
 			faved = true;
 			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, true);
+			dm.close();
 		}
 		setStarButton(faved);
 	}
@@ -194,9 +197,11 @@ public class RecipeActivity extends BasicMenuActivity {
 		if (cooked) {
 			cooked = false;
 			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, false);
+			dm.close();
 		} else {
 			cooked = true;
 			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, true);
+			dm.close();
 		}
 		setCheckButton(cooked);
 	}
@@ -216,6 +221,7 @@ public class RecipeActivity extends BasicMenuActivity {
 				String ingred_name = parsed[3];
 				dm = new DatabaseModel(context, DATABASE_NAME);	
 				dm.add(ShoppingList.TABLE_NAME, ingred_name, "Other", amt);
+				dm.close();
 			}
 		}
 	}
