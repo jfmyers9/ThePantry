@@ -15,7 +15,7 @@ import com.actionbarsherlock.view.Menu;
 import cs169.project.thepantry.ThePantryContract.Inventory;
 import cs169.project.thepantry.ThePantryContract.ShoppingList;
 
-public abstract class BaseListActivity extends BasicMenuActivity {
+public class BaseListActivity extends BasicMenuActivity {
 
 	public DatabaseModel dm;
 	public ExpandableListView eView;
@@ -106,26 +106,20 @@ public abstract class BaseListActivity extends BasicMenuActivity {
 		}
 	}
 	
-	/** Swipes to bring up the delete button for displayed in the list. */
-	public void swipeToRemove(View view) {
-		// TODO - implement this, brings up a button whose onClick=removeItem
-	}
-	
 	/** Removes the given item from the database and list 
 	 * @throws ThePantryException */
 	public void removeItem(String table, String item) throws ThePantryException {
-		// TODO - get the item/View by finding it from layout
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		boolean success = dm.remove(table, item);
-		if (success) {
-			// TODO - remove item and its checkbox from display/layout
+		if (!success) {
+			//throw new ThePantryException(item + " could not be removed from database");
 		}
 	}
 	
 	/** Adds all items to inventory database that have been checked 
 	 * Need to check if item is in inventory table -- can increment amount if is 
 	 * @throws ThePantryException */
-	public void updateInventory(View view, String table) throws ThePantryException {
+	public void updateInventory(View view) throws ThePantryException {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		for (IngredientChild c : children) {
 			if (c.isSelected()) {

@@ -54,7 +54,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			} else {
 				// increment amount
 				// add a popup to ask if they want amount to be incremented?
-				return true;
+				return false;
 			}
 		} catch (SQLiteException e) {
 			System.out.println(e.getMessage());

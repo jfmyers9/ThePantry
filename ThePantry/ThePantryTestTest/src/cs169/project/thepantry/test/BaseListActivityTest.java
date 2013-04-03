@@ -9,7 +9,7 @@ import cs169.project.thepantry.IngredientChild;
 import cs169.project.thepantry.IngredientGroup;
 import android.test.ActivityInstrumentationTestCase2;
 
-public class BaseListActivityTest extends ActivityInstrumentationTestCase2<BaseListActivity> {
+public abstract class BaseListActivityTest extends ActivityInstrumentationTestCase2<BaseListActivity> {
 
 	private String table = "ingredients";
 	private String database = "testdatabase";
@@ -64,7 +64,15 @@ public class BaseListActivityTest extends ActivityInstrumentationTestCase2<BaseL
 	}
 
 	public void testAddItem() {
-		fail("Not yet implemented");
+		String item = "Pasta";
+		String type = "Grain";
+		boolean thrown = false;
+		try {
+			act.addItem(table, item, type, amount);
+		} catch (IOException e) {
+			thrown = true;
+		}
+		assertFalse("Pasta should not cause IOException", thrown);
 	}
 	
 	public void testAddItemEmptyInput() {
@@ -89,14 +97,6 @@ public class BaseListActivityTest extends ActivityInstrumentationTestCase2<BaseL
 			thrown = true;
 		}
 		assertTrue("Expecting IOException, spaces input not allowed", thrown);
-	}
-
-	public void testSwipeToRemove() {
-		fail("Not yet implemented");
-	}
-
-	public void testRemoveItem() {
-		fail("Not yet implemented");
 	}
 
 	public void testUpdateInventory() {
