@@ -43,14 +43,23 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
 	@Override
 	protected JSONArray doInBackground(String... params) {
 		JSONArray ingrs = new JSONArray();
+		
+		// A little bit cutty
+		int itemInd = 1;
+		int typeInd = 2;
+		
 		tableName = params[0];
 		authToken = params[1];
 		String urlAddon = "";
 		System.out.println(authToken);
 		if (tableName.equals(ThePantryContract.ShoppingList.TABLE_NAME)) {
 			urlAddon = "shoplist/?auth_token=" + authToken;
+			itemInd = ThePantryContract.ShoppingList.ITEMIND;
+			typeInd = ThePantryContract.ShoppingList.TYPEIND;
 		} else if (tableName.equals(ThePantryContract.Inventory.TABLE_NAME)) {
 			urlAddon = "inventory/?auth_token=" + authToken;
+			itemInd = ThePantryContract.Inventory.ITEMIND;
+			typeInd = ThePantryContract.Inventory.TYPEIND;
 		}
 		String url = baseURL + urlAddon;
 	   	HttpClient client = new DefaultHttpClient();
@@ -62,8 +71,8 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
     	Cursor items = dbModel.checkedItems(tableName, ThePantryContract.ADDFLAG);
     	if (items != null) {
     		while (!items.isAfterLast()) {
-    			String ingredient = items.getString(1);
-    			String group = items.getString(2);
+    			String ingredient = items.getString(itemInd);
+    			String group = items.getString(typeInd);
     			String status = "add";
     			JSONObject ingr = new JSONObject();
     			dbModel.check(tableName, ingredient, ThePantryContract.ADDFLAG, false);

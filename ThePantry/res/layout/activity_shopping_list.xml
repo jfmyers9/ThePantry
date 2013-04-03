@@ -43,7 +43,7 @@
     	android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
     	android:layout_below="@id/update_inventory_button"
-    	android:layout_marginBottom="15dp"
+    	android:layout_marginBottom="20dp"
     	android:layout_toRightOf="@id/shopping_list_button" />
     
 
@@ -51,6 +51,7 @@
     <ExpandableListView android:id="@+id/exp_shop_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_marginTop="20dp"
         android:layout_below="@id/shopping_list_text"/>
         
 </RelativeLayout>
