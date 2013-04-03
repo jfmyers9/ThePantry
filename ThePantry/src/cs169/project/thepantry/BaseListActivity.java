@@ -197,6 +197,5 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		Intent intent = new Intent(context, InventoryActivity.class);
 		startActivity(intent);
 	}
-	
 
 }
