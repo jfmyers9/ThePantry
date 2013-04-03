@@ -39,6 +39,7 @@ public class RecipeActivity extends BasicMenuActivity {
 	ImageButton check;
 	LinearLayout ll;
 	LinearLayout ings;
+	ArrayList<CheckBox> ingChecks;
 	
 	boolean faved;
 	boolean cooked;
@@ -69,6 +70,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		name.setText(info.name);
 		
 		//Render the ingredients list to view.
+		ingChecks = new ArrayList<CheckBox>();
 		ings = (LinearLayout)findViewById(R.id.ingList);
 		displayIngreds(info.ingredientLines);
 		
@@ -107,6 +109,7 @@ public class RecipeActivity extends BasicMenuActivity {
 			CheckBox tv = new CheckBox(this);
 			tv.setText(ingred);
 			ings.addView(tv);
+			ingChecks.add(tv);
 		}
 	}
 	
@@ -180,15 +183,17 @@ public class RecipeActivity extends BasicMenuActivity {
 	 */
 	public void addToShopping(View v) {
 		// for each ingredient in list
-		for (String ingred : info.ingredientLines) {
-			// TODO: parse amount and item, check for ingredient and previous amount
-			String[] parsed = IngredientParser.parse(ingred);
-			String amt = parsed[0] + " " + parsed[1];
-			String ingred_name = parsed[3];
-			dm = new DatabaseModel(this, DATABASE_NAME);	
-			dm.add(ShoppingList.TABLE_NAME, ingred_name, "Other", amt);
+		for (CheckBox cb : ingChecks) {
+			String ingred = (String) cb.getText();
+			if (cb.isChecked()) {
+				// TODO: parse amount and item, check for ingredient and previous amount
+				String[] parsed = IngredientParser.parse(ingred);
+				String amt = parsed[0] + " " + parsed[1];
+				String ingred_name = parsed[3];
+				dm = new DatabaseModel(this, DATABASE_NAME);	
+				dm.add(ShoppingList.TABLE_NAME, ingred_name, "Other", amt);
+			}
 		}
-		
 	}
 	
 	@Override
