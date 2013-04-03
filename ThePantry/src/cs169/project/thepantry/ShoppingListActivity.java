@@ -2,6 +2,7 @@ package cs169.project.thepantry;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import android.os.Bundle;
 import android.view.View;
@@ -75,7 +76,7 @@ public class ShoppingListActivity extends BaseListActivity {
 				//adapter.add(type);
 				//adapter.notifyDataSetChanged();
 			}
-			String item = eText.getText().toString().trim();
+			String item = eText.getText().toString().toLowerCase().trim();
 			addItem(table, item, type, "1");
 			((BaseExpandableListAdapter)eView.getExpandableListAdapter()).notifyDataSetChanged();
 		} catch (IOException e) {

@@ -20,7 +20,6 @@ import cs169.project.thepantry.ThePantryContract.Ingredients;
 */
 public class DatabaseModel extends SQLiteAssetHelper {
 
-    //private static final String DATABASE_NAME = "thepantry";
     private static final int DATABASE_VERSION = 1;
 
     public DatabaseModel(Context context, String databaseName) {
@@ -57,6 +56,13 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				}
 				return false;
 			} else {
+				if(table != Ingredients.TABLE_NAME) {	
+					if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
+						check(table, item, ThePantryContract.ADDFLAG, true);
+						check(table, item, ThePantryContract.REMOVEFLAG, false);
+						return true;
+					}
+				}
 				// increment amount
 				// add a popup to ask if they want amount to be incremented?
 				return true;
@@ -166,18 +172,17 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
-
-			System.out.println("*************");
 				String selection = ThePantryContract.ITEM + " = ?";
 				String[] selectionArgs = {item};
 				
 				Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
 				if(c.moveToFirst()) {
+					/*
 					if(table != Ingredients.TABLE_NAME) {	
 						if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
 							return false;
 						}
-					}
+					}*/
 					return true;
 				}else {
 					return false;
@@ -380,7 +385,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
 			
 			if (c.moveToFirst()) {
-				System.out.println("XXXXXXXXXXXXXXXXXX");
 				String data = c.getString(0);
 				System.out.println(data);
 				if (data.equals("true")) {
@@ -414,25 +418,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 	}
 	
-	public boolean clear(String table) {
-		try {
-			SQLiteDatabase db = getWritableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
-			
-			int val = db.delete(table, null, null);			
-			if (val != 0) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch(SQLiteException e) {
-			System.err.println(e.getMessage());
-			return false;
-		}
-	}
-	
-	public void removeAllBut(String table, ArrayList<String> ingredients) {
+	public boolean removeAllBut(String table, ArrayList<String> ingredients) {
+		boolean success = false;
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(table);
 		
@@ -448,8 +435,27 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 		for (String item : result) {
 			if (!ingredients.contains(item)) {
-				remove(table, item);
+				success = remove(table, item);
 			}
+		}
+		return success;
+	}
+	
+	public boolean clear(String table) {
+		try {
+			SQLiteDatabase db = getWritableDatabase();
+			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+			qb.setTables(table);
+			
+			int val = db.delete(table, null, null);			
+			if (val != 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch(SQLiteException e) {
+			System.err.println(e.getMessage());
+			return false;
 		}
 	}
 }

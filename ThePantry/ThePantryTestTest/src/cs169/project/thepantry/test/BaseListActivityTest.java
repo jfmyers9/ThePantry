@@ -100,8 +100,4 @@ public class BaseListActivityTest extends ActivityInstrumentationTestCase2<BaseL
 		}
 		assertTrue("Expecting IOException, spaces input not allowed", thrown);
 	}
-
-	public void testUpdateInventory() {
-		fail("Not yet implemented");
-	}
 }
