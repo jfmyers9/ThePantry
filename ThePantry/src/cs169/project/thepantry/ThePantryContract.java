@@ -14,6 +14,7 @@ public class ThePantryContract {
 	public static final String AMOUNT = "amount";
 	public static final String ADDFLAG = "addFlag";
 	public static final String REMOVEFLAG = "removeFlag";
+	public static final String CHECKED = "checked";
 	
 	/** Private constructor method to make class static. */
 	private ThePantryContract() {}
