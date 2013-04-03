@@ -105,7 +105,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	}
 	
 	/** Retrieves ingredients from the database and
-	 *  returns an ArrayList with said ingredients to be used for display */
+	 *  returns an ArrayList with the ingredients to be used for display */
 	public ArrayList<IngredientChild> getItems(String table, String type) {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		Cursor items = dm.findTypeItems(table, type);
@@ -184,7 +184,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 				
 				// If the shopping list "updates" the ingredients are removed from list
 				if (table == ShoppingList.TABLE_NAME) {
-					dm.remove(table, c.getName());
+					dm.check(table, c.getName(), ThePantryContract.REMOVEFLAG, true);
 				}
 				if (!success) {
 					System.err.println("You Fucked Up");
