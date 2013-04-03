@@ -268,7 +268,15 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	        	   .setMessage(message) 
 	        	   .setPositiveButton(R.string.inventory_go, new DialogInterface.OnClickListener() {
 	                   public void onClick(DialogInterface dialog, int id) {
-	                	   
+	                	    /*ListView lv = (ListView) content.findViewById(R.id.child_row);
+	                	    lv.setAdapter(new ArrayAdapter<String>(this,
+	                	            android.R.layout.simple_list_item_single_choice, ITEMS));
+	                	    lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+	                	    builder.setView(content).setPositiveButton("OK", this).setNegativeButton("Cancel", this);
+
+	                	    AlertDialog alert = builder.create();
+	                	    alert.show();*/
 	                   }
 	               })
 	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
