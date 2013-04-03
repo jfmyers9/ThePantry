@@ -91,9 +91,9 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
 	    	items = dbModel.checkedItems(tableName, ThePantryContract.REMOVEFLAG);
 	    	if (items != null) {
 	    		while (!items.isAfterLast()) {
-	    			String ingredient = items.getString(1);
-	    			String group = items.getString(2);
-	    			String status = "remove";
+	    			String ingredient = items.getString(itemInd);
+	    			String group = items.getString(typeInd);
+	    			String status = "delete";
 	    			JSONObject ingr = new JSONObject();
 	    			try {
 	    				ingr.put("ingredient", ingredient);
@@ -144,6 +144,8 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
 		if (dialog.isShowing()) {
 			dialog.dismiss();
 		}
+		System.out.println(tableName);
+		System.out.println(response.toString());
 		ArrayList<String> ingredients = new ArrayList<String>();
 		ArrayList<String> groups = new ArrayList<String>();
 		for (int i = 0; i < response.length(); i++) {
@@ -159,6 +161,7 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
 		dbModel.clear(tableName);
 		for (int i = 0; i < ingredients.size(); i++) {
 			dbModel.add(tableName, ingredients.get(i), groups.get(i), "1");
+			dbModel.check(tableName, ingredients.get(i),ThePantryContract.ADDFLAG, false);
 		}
 	}
 

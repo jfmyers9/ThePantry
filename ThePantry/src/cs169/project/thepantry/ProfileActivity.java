@@ -170,7 +170,7 @@ public class ProfileActivity extends BasicMenuActivity {
 				String recipe_name = faves.getString(0);
 				System.out.println(recipe_name);
 				SearchCriteria sc = new SearchCriteria("recipe", recipe_name);
-				new ProfileSearchTask(this, "fave").execute(sc);
+				//new ProfileSearchTask(this, "fave").execute(sc);
 				faves.moveToNext();
 			}
 			faves.close();
@@ -191,7 +191,7 @@ public class ProfileActivity extends BasicMenuActivity {
 				String recipe_name = cooked.getString(0);
 				System.out.println(recipe_name);
 				SearchCriteria sc = new SearchCriteria("recipe", recipe_name);
-				new ProfileSearchTask(this, "cook").execute(sc);
+				//new ProfileSearchTask(this, "cook").execute(sc);
 				cooked.moveToNext();
 			}
 			cooked.close();
@@ -199,61 +199,61 @@ public class ProfileActivity extends BasicMenuActivity {
 	}
 	
 	
-	public class ProfileSearchTask extends AsyncTask<SearchCriteria, String, Storage> {
-		
-		String type = "";
-		String q;
-		Context context;
-		
-		public ProfileSearchTask(Context context) {
-	    	this.context = context;
-		}
-		
-		public ProfileSearchTask(Context context, String type) {
-		    	this.context = context;
-		    	this.type = type;
-		}
-		
-		
-		@Override
-		protected Storage doInBackground(SearchCriteria... sc) {
-			this.type = sc[0].type;
-			this.q = sc[0].q;
-			return sm.search(sc[0]);
-		}
-		
-		//update list of recommendations using a SearchResultsAdapter
-		//or open a SearchResultsActivity if a search was made
-		//or open a recipe page if a recipe was selected
-		@Override
-		protected void onPostExecute(Storage result) {
-
-	        
-			if (result != null) {
-				if (this.type == "fave") {
-					if (favesAdapter.values.size() == 0) {
-						faves = ((SearchResult)result).matches;
-						favesAdapter = new SearchResultAdapter(ProfileActivity.this, faves);   
-						favorites.setAdapter(favesAdapter);
-					} else {
-						favesAdapter.values = ((SearchResult)result).matches; 
-						favesAdapter.notifyDataSetChanged();
-					}
-				}
-				else if (this.type == "cook") {
-					if (cookAdapter.values.size() == 0) {
-						cooked = ((SearchResult)result).matches;
-						cookAdapter = new SearchResultAdapter(ProfileActivity.this, cooked);   
-						favorites.setAdapter(cookAdapter);
-					} else {
-						cookAdapter.values = ((SearchResult)result).matches; 
-						cookAdapter.notifyDataSetChanged();
-					}
-				}
-			}
-			
-		}
-		
-	}
+//	public class ProfileSearchTask extends AsyncTask<SearchCriteria, String, Storage> {
+//		
+//		String type = "";
+//		String q;
+//		Context context;
+//		
+//		public ProfileSearchTask(Context context) {
+//	    	this.context = context;
+//		}
+//		
+//		public ProfileSearchTask(Context context, String type) {
+//		    	this.context = context;
+//		    	this.type = type;
+//		}
+//		
+//		
+//		@Override
+//		protected Storage doInBackground(SearchCriteria... sc) {
+//			this.type = sc[0].type;
+//			this.q = sc[0].q;
+//			return sm.search(sc[0]);
+//		}
+//		
+//		//update list of recommendations using a SearchResultsAdapter
+//		//or open a SearchResultsActivity if a search was made
+//		//or open a recipe page if a recipe was selected
+//		@Override
+//		protected void onPostExecute(Storage result) {
+//
+//	        
+//			if (result != null) {
+//				if (this.type == "fave") {
+//					if (favesAdapter.values.size() == 0) {
+//						faves = ((SearchResult)result).matches;
+//						favesAdapter = new SearchResultAdapter(ProfileActivity.this, faves);   
+//						favorites.setAdapter(favesAdapter);
+//					} else {
+//						favesAdapter.values = ((SearchResult)result).matches; 
+//						favesAdapter.notifyDataSetChanged();
+//					}
+//				}
+//				else if (this.type == "cook") {
+//					if (cookAdapter.values.size() == 0) {
+//						cooked = ((SearchResult)result).matches;
+//						cookAdapter = new SearchResultAdapter(ProfileActivity.this, cooked);   
+//						favorites.setAdapter(cookAdapter);
+//					} else {
+//						cookAdapter.values = ((SearchResult)result).matches; 
+//						cookAdapter.notifyDataSetChanged();
+//					}
+//				}
+//			}
+//			
+//		}
+//		
+//	}
 	
 }

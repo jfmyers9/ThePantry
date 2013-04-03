@@ -171,6 +171,7 @@ public class RegistrationActivity extends Activity {
 	    		gsjo = new GetJsonObject(obj);
 	    		gsjo.execute(urlAdd);
 	    	} catch (Exception e) {
+	    		e.printStackTrace();
 				Context context = getApplicationContext();
 				CharSequence text = "Something went wrong1.";
 				int duration = Toast.LENGTH_LONG;
@@ -190,18 +191,10 @@ public class RegistrationActivity extends Activity {
 private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
     	
     	private JSONObject mjson;
-    	private ProgressDialog dialog;
     	
         public GetJsonObject(JSONObject json) {
             mjson = json;
-            this.dialog = new ProgressDialog(getApplicationContext());
         }
-        
-    	@Override
-    	protected void onPreExecute() {
-    		this.dialog.setMessage("Registering User");
-    		this.dialog.show();
-    	}
 
 		@Override
 		protected JSONObject doInBackground(String... urls) {
@@ -235,9 +228,6 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 		
 		@Override
 		protected void onPostExecute(JSONObject result) {
-			if (dialog.isShowing()) {
-				dialog.dismiss();
-			}
 			try {
 				boolean success = (Boolean)result.get("success");
 				String info = (String)result.get("info");
