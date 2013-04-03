@@ -7,6 +7,7 @@
         <item>Shopping List</item>
         <item>Profile</item>
         <item>Settings</item>
+        <item>Logout</item>
     </string-array>
 
 </resources>
