@@ -70,7 +70,7 @@ public class ShoppingListActivity extends BaseListActivity {
 		try {
 			String type = spinner.getSelectedItem().toString();
 			if (type.equals("Other")) {
-				//popup option to add this new type and add it to the adapter
+				//TODO - popup option to add this new type and add it to the adapter
 				// reset type and add it
 				//adapter.add(type);
 				//adapter.notifyDataSetChanged();

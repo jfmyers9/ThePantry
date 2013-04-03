@@ -7,10 +7,9 @@ import android.test.ActivityInstrumentationTestCase2;
 import cs169.project.thepantry.BaseListActivity;
 import cs169.project.thepantry.IngredientChild;
 import cs169.project.thepantry.IngredientGroup;
-import cs169.project.thepantry.ShoppingListActivity;
 
 
-public class BaseListActivityTest extends ActivityInstrumentationTestCase2<ShoppingListActivity> {
+public class BaseListActivityTest extends ActivityInstrumentationTestCase2<BaseListActivity> {
 
 	private String table = "ingredients";
 	private String database = "testdatabase";
@@ -27,7 +26,7 @@ public class BaseListActivityTest extends ActivityInstrumentationTestCase2<Shopp
 	}
 	
 	public BaseListActivityTest() {
-		super(ShoppingListActivity.class);
+		super(BaseListActivity.class);
 	}
 
 	
