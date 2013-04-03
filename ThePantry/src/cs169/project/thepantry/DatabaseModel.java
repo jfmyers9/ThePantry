@@ -25,7 +25,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
     public DatabaseModel(Context context, String databaseName) {
         super(context, databaseName, null, DATABASE_VERSION);
     }
-
+    //TODO: MAKE IT SO IT IS CASE INSENSITIVE (.toLowerCase().trim())
+    
 	/** Adds the ITEM, its TYPE and given AMOUNT to the specified TABLE.
 	 * Returns true if the modification was successful, false otherwise
 	 * If a SQLiteException is thrown, returns false and prints out the error

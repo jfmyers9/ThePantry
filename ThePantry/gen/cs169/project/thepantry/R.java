@@ -1097,15 +1097,15 @@ containing a value of this type.
         public static final int abs__title=0x7f050020;
         public static final int abs__titleDivider=0x7f050021;
         public static final int abs__up=0x7f05000b;
-        public static final int action_forgot_password=0x7f05007e;
-        public static final int action_settings=0x7f05007d;
+        public static final int action_forgot_password=0x7f05007f;
+        public static final int action_settings=0x7f05007e;
         public static final int add_sl_types=0x7f05006d;
         public static final int addtoshop=0x7f050060;
-        public static final int checkBox1=0x7f050072;
-        public static final int checkedText1=0x7f050076;
+        public static final int checkBox1=0x7f050073;
+        public static final int checkedText1=0x7f050077;
         public static final int cooked=0x7f05005b;
         public static final int dirList=0x7f050063;
-        public static final int direction=0x7f050075;
+        public static final int direction=0x7f050076;
         public static final int directions=0x7f050061;
         public static final int directionstext=0x7f050062;
         public static final int disableHome=0x7f050009;
@@ -1117,9 +1117,10 @@ containing a value of this type.
         public static final int exp_shop_list=0x7f05006e;
         public static final int exp_view=0x7f050042;
         public static final int favorite=0x7f05005a;
+        public static final int first_register=0x7f050071;
         public static final int fullscreen=0x7f050013;
         public static final int homeAsUp=0x7f050006;
-        public static final int image=0x7f050077;
+        public static final int image=0x7f050078;
         public static final int ingButtons=0x7f05005f;
         public static final int ingList=0x7f05005d;
         public static final int ingredientstitle=0x7f05005e;
@@ -1134,9 +1135,9 @@ containing a value of this type.
         public static final int login_status_message=0x7f050049;
         public static final int main=0x7f050057;
         public static final int margin=0x7f050012;
-        public static final int menu_frame=0x7f05007b;
+        public static final int menu_frame=0x7f05007c;
         public static final int normal=0x7f050001;
-        public static final int number=0x7f050074;
+        public static final int number=0x7f050075;
         public static final int overlay=0x7f05003f;
         public static final int password=0x7f05004c;
         public static final int password_confirmation=0x7f050065;
@@ -1162,18 +1163,18 @@ containing a value of this type.
         public static final int showCustom=0x7f050008;
         public static final int showHome=0x7f050005;
         public static final int showTitle=0x7f050007;
-        public static final int skip_button=0x7f050071;
-        public static final int slidingmenumain=0x7f05007c;
+        public static final int skip_button=0x7f050072;
+        public static final int slidingmenumain=0x7f05007d;
         public static final int source=0x7f050064;
         public static final int tabMode=0x7f050003;
-        public static final int textView=0x7f050073;
+        public static final int textView=0x7f050074;
         public static final int textView1=0x7f050040;
-        public static final int title=0x7f050078;
-        public static final int title_activity_home_page=0x7f05007f;
-        public static final int title_activity_inventory=0x7f050080;
-        public static final int title_activity_login=0x7f050081;
-        public static final int title_activity_logout=0x7f050082;
-        public static final int title_activity_register=0x7f050083;
+        public static final int title=0x7f050079;
+        public static final int title_activity_home_page=0x7f050080;
+        public static final int title_activity_inventory=0x7f050081;
+        public static final int title_activity_login=0x7f050082;
+        public static final int title_activity_logout=0x7f050083;
+        public static final int title_activity_register=0x7f050084;
         public static final int update_button=0x7f050045;
         public static final int update_inventory_button=0x7f05006a;
         public static final int useLogo=0x7f050004;
@@ -1187,8 +1188,8 @@ containing a value of this type.
         public static final int webview=0x7f050039;
         public static final int welcome_text=0x7f05006f;
         public static final int wrap_content=0x7f050000;
-        public static final int you_have=0x7f050079;
-        public static final int you_need=0x7f05007a;
+        public static final int you_have=0x7f05007a;
+        public static final int you_need=0x7f05007b;
     }
     public static final class integer {
         public static final int abs__max_action_buttons=0x7f090000;
@@ -1310,7 +1311,7 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f0a0009;
-        public static final int action_forgot_password=0x7f0a004c;
+        public static final int action_forgot_password=0x7f0a004d;
         public static final int action_home_page=0x7f0a001b;
         public static final int action_inventory=0x7f0a0019;
         public static final int action_login=0x7f0a001c;
@@ -1318,8 +1319,9 @@ containing a value of this type.
         public static final int action_register=0x7f0a001e;
         public static final int action_settings=0x7f0a0011;
         public static final int action_shopping_list=0x7f0a001a;
-        public static final int action_sign_in_register=0x7f0a004a;
-        public static final int action_sign_in_short=0x7f0a004b;
+        public static final int action_sign_in_register=0x7f0a004b;
+        public static final int action_sign_in_short=0x7f0a004c;
+        public static final int add=0x7f0a0047;
         public static final int add_item=0x7f0a001f;
         public static final int add_to_shopping_list=0x7f0a0029;
         public static final int app_name=0x7f0a000f;
@@ -1332,10 +1334,10 @@ containing a value of this type.
         public static final int directions=0x7f0a0042;
         public static final int edit=0x7f0a0023;
         public static final int enter_search_query=0x7f0a0030;
-        public static final int error_field_required=0x7f0a0051;
-        public static final int error_incorrect_password=0x7f0a0050;
-        public static final int error_invalid_email=0x7f0a004e;
-        public static final int error_invalid_password=0x7f0a004f;
+        public static final int error_field_required=0x7f0a0052;
+        public static final int error_incorrect_password=0x7f0a0051;
+        public static final int error_invalid_email=0x7f0a004f;
+        public static final int error_invalid_password=0x7f0a0050;
         public static final int hello_world=0x7f0a0012;
         public static final int ingredient=0x7f0a003b;
         public static final int ingredient_search=0x7f0a0022;
@@ -1344,32 +1346,32 @@ containing a value of this type.
         public static final int ingredientsTable=0x7f0a002f;
         public static final int inventoryTable=0x7f0a002d;
         public static final int inventory_go=0x7f0a0044;
-        public static final int login_progress_signing_in=0x7f0a004d;
-        public static final int pref_default_display_name=0x7f0a0057;
-        public static final int pref_description_social_recommendations=0x7f0a0055;
+        public static final int login_progress_signing_in=0x7f0a004e;
+        public static final int pref_default_display_name=0x7f0a0058;
+        public static final int pref_description_social_recommendations=0x7f0a0056;
         /**  Example settings for Data & Sync 
          */
-        public static final int pref_header_data_sync=0x7f0a0059;
+        public static final int pref_header_data_sync=0x7f0a005a;
         /**  Strings related to Settings 
  Example General settings 
          */
-        public static final int pref_header_general=0x7f0a0053;
+        public static final int pref_header_general=0x7f0a0054;
         /**  Example settings for Notifications 
          */
-        public static final int pref_header_notifications=0x7f0a005c;
-        public static final int pref_ringtone_silent=0x7f0a005f;
-        public static final int pref_title_add_friends_to_messages=0x7f0a0058;
-        public static final int pref_title_display_name=0x7f0a0056;
-        public static final int pref_title_new_message_notifications=0x7f0a005d;
-        public static final int pref_title_ringtone=0x7f0a005e;
-        public static final int pref_title_social_recommendations=0x7f0a0054;
-        public static final int pref_title_sync_frequency=0x7f0a005a;
-        public static final int pref_title_system_sync_settings=0x7f0a005b;
-        public static final int pref_title_vibrate=0x7f0a0060;
+        public static final int pref_header_notifications=0x7f0a005d;
+        public static final int pref_ringtone_silent=0x7f0a0060;
+        public static final int pref_title_add_friends_to_messages=0x7f0a0059;
+        public static final int pref_title_display_name=0x7f0a0057;
+        public static final int pref_title_new_message_notifications=0x7f0a005e;
+        public static final int pref_title_ringtone=0x7f0a005f;
+        public static final int pref_title_social_recommendations=0x7f0a0055;
+        public static final int pref_title_sync_frequency=0x7f0a005b;
+        public static final int pref_title_system_sync_settings=0x7f0a005c;
+        public static final int pref_title_vibrate=0x7f0a0061;
         /**  Strings related to login 
          */
-        public static final int prompt_email=0x7f0a0048;
-        public static final int prompt_password=0x7f0a0049;
+        public static final int prompt_email=0x7f0a0049;
+        public static final int prompt_password=0x7f0a004a;
         public static final int prompt_password_confirmation=0x7f0a0028;
         public static final int recommendations=0x7f0a0039;
         public static final int register=0x7f0a0027;
@@ -1385,7 +1387,7 @@ containing a value of this type.
         public static final int title_activity_home_page=0x7f0a0014;
         public static final int title_activity_inventory=0x7f0a0013;
         public static final int title_activity_inventory_add=0x7f0a0017;
-        public static final int title_activity_login=0x7f0a0047;
+        public static final int title_activity_login=0x7f0a0048;
         public static final int title_activity_menu=0x7f0a0032;
         public static final int title_activity_nav_menu_fragment=0x7f0a0036;
         public static final int title_activity_navigation=0x7f0a0033;
@@ -1393,7 +1395,7 @@ containing a value of this type.
         public static final int title_activity_recipe=0x7f0a0018;
         public static final int title_activity_registration=0x7f0a0043;
         public static final int title_activity_search_results=0x7f0a0016;
-        public static final int title_activity_settings=0x7f0a0052;
+        public static final int title_activity_settings=0x7f0a0053;
         public static final int title_activity_shopping_list=0x7f0a0015;
         public static final int title_activity_tutorial=0x7f0a0010;
         public static final int tutorial_title=0x7f0a002a;

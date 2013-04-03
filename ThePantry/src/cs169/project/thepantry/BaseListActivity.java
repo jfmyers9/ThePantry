@@ -12,7 +12,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 
+import cs169.project.thepantry.ThePantryContract.Ingredients;
 import cs169.project.thepantry.ThePantryContract.Inventory;
 import cs169.project.thepantry.ThePantryContract.ShoppingList;
 
@@ -85,8 +88,20 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			return true;
 		} else {
 			AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
+		    ListView lv = new ListView(this);
+		    
+		    ArrayList<IngredientGroup> gTypes = getTypes(table);
+		    ArrayList<String> types = new ArrayList<String>();
+		    for (IngredientGroup g : gTypes) {
+		    	types.add(g.getGroup());
+			}
+		    
+		    lv.setAdapter(new ArrayAdapter<String>(this,
+		            android.R.layout.simple_list_item_checked, types));
+			
 			dialog.context = this;
-			dialog.message = query;
+			dialog.message = "Add " + query + " to your pantry?";
+			dialog.content = lv;
 			dialog.show(getFragmentManager(), "dialog");
 			return true;
 		}
@@ -155,11 +170,13 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		int groupPos = 0;
 		IngredientGroup temp = new IngredientGroup(type,new ArrayList<IngredientChild>());
 		if (success) {
+			IngredientChild child = new IngredientChild(item, type);
+			children.add(child);
 			if (groupItems.contains(temp)) {
 				groupPos = groupItems.indexOf(temp);
-				eAdapter.addChild(new IngredientChild(item, type), groupItems.get(groupPos));
+				eAdapter.addChild(child, groupItems.get(groupPos));
 			} else {
-				eAdapter.addChild(new IngredientChild(item, type), temp);
+				eAdapter.addChild(child, temp);
 			}
 		}
 	}
@@ -259,24 +276,18 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		
 		Context context;
 		String message;
+		ListView content;
 		
 	    @Override
 	    public Dialog onCreateDialog(Bundle savedInstanceState) {
 	        // Use the Builder class for convenient dialog construction
 	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	        builder.setTitle(R.string.dialog_update_inventory)
-	        	   .setMessage(message) 
-	        	   .setPositiveButton(R.string.inventory_go, new DialogInterface.OnClickListener() {
+	        builder.setTitle(message)
+	        	   .setMessage("Select a type below: ") // Figure out how to resize text
+	        	   .setView(content)
+	        	   .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
 	                   public void onClick(DialogInterface dialog, int id) {
-	                	    /*ListView lv = (ListView) content.findViewById(R.id.child_row);
-	                	    lv.setAdapter(new ArrayAdapter<String>(this,
-	                	            android.R.layout.simple_list_item_single_choice, ITEMS));
-	                	    lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-	                	    builder.setView(content).setPositiveButton("OK", this).setNegativeButton("Cancel", this);
-
-	                	    AlertDialog alert = builder.create();
-	                	    alert.show();*/
+	                	   // find which category was clicked and add it to the database
 	                   }
 	               })
 	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
