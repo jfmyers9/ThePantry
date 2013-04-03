@@ -108,7 +108,7 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
             return respObj;
     	} catch (Exception e) {
     		e.printStackTrace();
-    		//return new JSONObject();
+    		return new JSONArray();
     	}
 	}
 	
@@ -116,10 +116,14 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
 	public void onPostExecute(JSONArray response) {
 		ArrayList<String> ingredients = new ArrayList<String>();
 		for (int i = 0; i < response.length(); i++) {
-			ingredients.add(((JSONObject)response.get(i)).getString("ingredient"));
+			try {
+				ingredients.add(((JSONObject)response.get(i)).getString("ingredient"));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 		}
 		dbModel = new DatabaseModel(act, tableName);
-		dbModel.removeAllBut(tableName, ingredients);
+		//dbModel.removeAllBut(tableName, ingredients);
 	}
 
 }
