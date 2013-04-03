@@ -47,6 +47,13 @@ public class TutorialActivity extends Activity {
 		startActivity(intent);
 	}
 	
+	public void register(View view) {
+		Context context = getApplicationContext();
+		RegistrationActivity regAct = new RegistrationActivity();
+		Intent intent = new Intent(context, regAct.getClass());
+		startActivity(intent);
+	}
+	
 	public void skipTutorial(View view) {
 		Context context = getApplicationContext();
 		Intent intent = new Intent(context, HomePageActivity.class);

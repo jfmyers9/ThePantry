@@ -16,6 +16,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,11 +24,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -192,10 +190,18 @@ public class RegistrationActivity extends Activity {
 private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
     	
     	private JSONObject mjson;
+    	private ProgressDialog dialog;
     	
         public GetJsonObject(JSONObject json) {
             mjson = json;
+            this.dialog = new ProgressDialog(getApplicationContext());
         }
+        
+    	@Override
+    	protected void onPreExecute() {
+    		this.dialog.setMessage("Registering User");
+    		this.dialog.show();
+    	}
 
 		@Override
 		protected JSONObject doInBackground(String... urls) {
@@ -229,6 +235,9 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 		
 		@Override
 		protected void onPostExecute(JSONObject result) {
+			if (dialog.isShowing()) {
+				dialog.dismiss();
+			}
 			try {
 				boolean success = (Boolean)result.get("success");
 				String info = (String)result.get("info");
@@ -248,7 +257,7 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 						toast.show();
 					}
 					Context context = getApplicationContext();
-					Intent intent = new Intent(context, ProfileActivity.class);
+					Intent intent = new Intent(context, TutorialActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);

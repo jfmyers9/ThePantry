@@ -23,6 +23,15 @@
         android:text="@string/setup_inventory"
         android:onClick="setupInventory" />
     
+    <Button android:id="@+id/first_register"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/setup_inventory_button"
+        android:layout_centerHorizontal="true"
+        android:text="@string/register"
+        android:onClick="register" />
+    
     <Button android:id="@+id/skip_button"
         android:layout_below="@id/setup_inventory_button"
         android:layout_width="wrap_content"

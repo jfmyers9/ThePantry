@@ -164,7 +164,10 @@ private class LogoutTask extends AsyncTask<String, String, JSONObject> {
 					editor.putString(LOGGED_IN, null);
 					editor.commit();
 				} else {
-					CharSequence text = "Error Logging Out";
+					SharedPreferences.Editor editor = shared_pref.edit();
+					editor.putString(LOGGED_IN, null);
+					editor.commit();
+					CharSequence text = "Already Logged Out";
 					int duration = Toast.LENGTH_LONG;
 					Toast toast = Toast.makeText(getActivity(), text, duration);
 				}
