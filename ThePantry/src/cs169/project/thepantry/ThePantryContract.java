@@ -9,7 +9,8 @@ public class ThePantryContract {
 	public static final String ITEM = "item";
 	public static final String TYPE = "type";
 	public static final String AMOUNT = "amount";
-	public static final String CHECKED = "checked";
+	public static final String ADDFLAG = "addFlag";
+	public static final String REMOVEFLAG = "removeFlag";
 	
 	/** Private constructor method to make class static. */
 	private ThePantryContract() {}
@@ -33,7 +34,7 @@ public class ThePantryContract {
 	}
 	/** Inner class that defines the Shopping List table */
 	public static abstract class Recipe implements BaseColumns {
-	    public static final String TABLE_NAME = "recipe"; //change to "recipes" in database
+	    public static final String TABLE_NAME = "recipes"; 
 	    public static final String RECIPE = "recipe";
 		public static final String COOKED = "cooked";
 		public static final String FAVORITE = "favorite";	    

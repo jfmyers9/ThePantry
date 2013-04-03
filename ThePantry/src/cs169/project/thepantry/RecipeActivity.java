@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,6 +39,7 @@ public class RecipeActivity extends BasicMenuActivity {
 	ImageButton check;
 	LinearLayout ll;
 	LinearLayout ings;
+	ArrayList<CheckBox> ingChecks;
 	
 	boolean faved;
 	boolean cooked;
@@ -70,6 +70,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		name.setText(info.name);
 		
 		//Render the ingredients list to view.
+		ingChecks = new ArrayList<CheckBox>();
 		ings = (LinearLayout)findViewById(R.id.ingList);
 		displayIngreds(info.ingredientLines);
 		
@@ -91,15 +92,15 @@ public class RecipeActivity extends BasicMenuActivity {
 		
 		//set favorite button to grayscale or colored image based on state in db
 		//check if recipe in database or if not favorited
-		star = (ImageButton)findViewById(R.id.favorite);
-		faved = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE);
-		setStarButton(faved);
+		//star = (ImageButton)findViewById(R.id.favorite);
+		//faved = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE);
+		//setStarButton(faved);
 		
 		//set cooked button to grayscale or colored image based on state in db
 		//check if recipe is in db or not cooked
-		check = (ImageButton)findViewById(R.id.cooked);
-		cooked = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED);
-		setCheckButton(cooked);
+		//check = (ImageButton)findViewById(R.id.cooked);
+		//cooked = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED);
+		//setCheckButton(cooked);
 		
 	}
 	
@@ -108,6 +109,7 @@ public class RecipeActivity extends BasicMenuActivity {
 			CheckBox tv = new CheckBox(this);
 			tv.setText(ingred);
 			ings.addView(tv);
+			ingChecks.add(tv);
 		}
 	}
 	
@@ -150,10 +152,10 @@ public class RecipeActivity extends BasicMenuActivity {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		if (faved) {
 			faved = false;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, false);
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, false);
 		} else {
 			faved = true;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, true);
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, true);
 		}
 		setStarButton(faved);
 	}
@@ -167,10 +169,10 @@ public class RecipeActivity extends BasicMenuActivity {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		if (cooked) {
 			cooked = false;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, false);
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, false);
 		} else {
 			cooked = true;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, true);
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, true);
 		}
 		setCheckButton(cooked);
 	}
@@ -181,15 +183,17 @@ public class RecipeActivity extends BasicMenuActivity {
 	 */
 	public void addToShopping(View v) {
 		// for each ingredient in list
-		for (String ingred : info.ingredientLines) {
-			// TODO: parse amount and item, check for ingredient and previous amount
-			String[] parsed = IngredientParser.parse(ingred);
-			String amt = parsed[0] + " " + parsed[1];
-			String ingred_name = parsed[3];
-			dm = new DatabaseModel(this, DATABASE_NAME);	
-			dm.add(ShoppingList.TABLE_NAME, ingred_name, "Other", amt);
+		for (CheckBox cb : ingChecks) {
+			String ingred = (String) cb.getText();
+			if (cb.isChecked()) {
+				// TODO: parse amount and item, check for ingredient and previous amount
+				String[] parsed = IngredientParser.parse(ingred);
+				String amt = parsed[0] + " " + parsed[1];
+				String ingred_name = parsed[3];
+				dm = new DatabaseModel(this, DATABASE_NAME);	
+				dm.add(ShoppingList.TABLE_NAME, ingred_name, "Other", amt);
+			}
 		}
-		
 	}
 	
 	@Override

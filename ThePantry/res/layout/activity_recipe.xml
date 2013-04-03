@@ -102,14 +102,14 @@
       	  	android:gravity="left"
         	android:textSize="25px"
         	android:layout_marginTop="15dp"
-        	android:layout_marginBottom="20dp"
+        	android:layout_marginBottom="15dp"
         	android:text="@string/directions" />
 		    
 		    <LinearLayout
         	android:id="@+id/dirList"
         	android:layout_height="wrap_content" 
         	android:layout_width="match_parent" 
-        	android:layout_marginBottom="20dp"
+        	android:layout_marginBottom="15dp"
         	android:orientation="vertical"
         	android:layout_below="@id/directionstext" />
 		    
