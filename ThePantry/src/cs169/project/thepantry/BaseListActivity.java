@@ -178,8 +178,10 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	 * @throws ThePantryException */
 	public void updateInventory(View view) throws ThePantryException {
 		dm = new DatabaseModel(this, DATABASE_NAME);
+		System.out.println("FDKSLNLKDSJFLSKDJSLDK");
 		for (IngredientChild c : children) {
 			if (c.isSelected()) {
+				System.out.println(c.getName());
 				boolean success = dm.add(Inventory.TABLE_NAME, c.getName(),c.getGroup(),"1");
 				
 				// If the shopping list "updates" the ingredients are removed from list
