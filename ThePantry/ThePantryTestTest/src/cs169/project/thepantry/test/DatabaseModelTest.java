@@ -49,10 +49,10 @@ public class DatabaseModelTest extends AndroidTestCase {
 	}
 	
 	/** Helper method to check if an item is in the specified table */
-	/*protected boolean isChecked(String table, String item, String col) {
+	protected boolean isChecked(String table, String item, String col) {
 		boolean success = testdm.isItemChecked(table, item, col);
 		return success;
-	}*/
+	}
 	
 	/** Tests the add method in the DatabaseModel by adding eggs to the
 	 *  ingredients table. Asserts that the method returns true and eggs
@@ -67,7 +67,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 		assertTrue("Error: Eggs not added to database", findItem(table, item));
 	}
 	
-	/*
+	
 	public void testAddFail() {
 		String table = "helloworld";
 		String item = "Eggs";
@@ -83,7 +83,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 	 *  and asserts that the remove method returned true and strawberries can no
 	 *  longer be found in the database.
 	 */
-	/*public void testRemove() {
+	public void testRemove() {
 		String table = "ingredients";
 		String item = "Strawberries";
 		assertTrue("Strawberries should still be in the database", findItem(table, item));
@@ -109,7 +109,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 	/** Tests the find all items method in the DatabaseModel.
 	 *  For each item in the returned Cursor, asserts that it is in known items.
 	 */
-	/*public void testFindAllItems() {
+	public void testFindAllItems() {
 		String table = "ingredients";
 		Cursor citems = testdm.findAllItems(table);
 		ArrayList<String> items = parseCursor(citems);
@@ -130,7 +130,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 	 *  Tries to look for cookies, which do not exist.
 	 *  Asserts the method returns false.
 	 */
-	/*public void testFindItem1() {
+	public void testFindItem1() {
 		String table = "ingredients";
 		String item = "Cookies";
 		boolean success = testdm.findItem(table, item);
@@ -141,7 +141,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 	 *  Tries to look for milk, which does exist.
 	 *  Asserts the method returns true.
 	 */
-	/*public void testFindItem2() {
+	public void testFindItem2() {
 		String table = "ingredients";
 		String item = "Milk";
 		boolean success = testdm.findItem(table, item);
@@ -159,7 +159,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 	 *  Searches for all ingredients of type produce and
 	 *  asserts the items returned are Strawberries and Lettuce.
 	 */
-	/*public void testFindTypeItems() {
+	public void testFindTypeItems() {
 		String table = "ingredients";
 		String type = "Dairy";
 		Cursor citems = testdm.findTypeItems(table, type);
@@ -177,7 +177,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 	/** Tests the findType method in DatabaseModel.
 	 *  Asserts that Strawberries are of type produce.
 	 */
-	/*public void testFindType() {
+	public void testFindType() {
 		String table = "ingredients";
 		String item = "Milk";
 		Cursor ctype = testdm.findType(table, item);
@@ -190,7 +190,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 	 *  Tries to find bananas in the database, which do not exist.
 	 *  Asserts the returned Cursor is null.
 	 */
-	/*public void testFindTypeFail() {
+	public void testFindTypeFail() {
 		String table = "ingredients";
 		String item = "Bananas";
 		Cursor ctype = testdm.findType(table, item);
@@ -200,7 +200,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 	/** Tests the findAmount method in DatabaseModel.
 	 *  Asserts that Chicken has amount 4.
 	 */
-	/*public void testFindAmount() {
+	public void testFindAmount() {
 		String table = "ingredients";
 		String item = "Chicken";
 		Cursor camount = testdm.findAmount(table, item);
@@ -220,7 +220,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 	 *  Asserts that each type returned by the Cursor parser is a member
 	 *  of the known types.
 	 */
-	/*public void testFindAllTypes() {
+	public void testFindAllTypes() {
 		String table = "ingredients";
 		Cursor ctypes = testdm.findAllTypes(table);
 		ArrayList<String> types = parseCursor(ctypes);
@@ -291,6 +291,6 @@ public class DatabaseModelTest extends AndroidTestCase {
 		String recipe = "Fried Rice";
 		boolean checked2 = testdm.isItemChecked(table, recipe, "cooked");
 		assertTrue("Error: Fried Rice has been cooked", checked2);
-	}*/
+	}
 
 }
