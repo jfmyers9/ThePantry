@@ -17,11 +17,13 @@ public class DatabaseModelTest extends AndroidTestCase {
 	
 	/** Set up method for DatabaseModelTest module */
 	protected void setUp() throws Exception {
+		super.setUp();
 		testdm = new DatabaseModel(getContext(), "testdatabase");
 	}
 
 	/** Tear down method for DatabaseModelTest module */
 	protected void tearDown() throws Exception {
+		super.tearDown();
 		testdm.close();
 		testdm = null;
 	}
@@ -85,11 +87,11 @@ public class DatabaseModelTest extends AndroidTestCase {
 	 */
 	public void testRemove() {
 		String table = "ingredients";
-		String item = "Strawberries";
-		assertTrue("Strawberries should still be in the database", findItem(table, item));
+		String item = "Eggs";
+		assertTrue("Eggs should still be in the database", findItem(table, item));
 		boolean success = testdm.remove(table, item);
 		assertTrue("DatabaseModel.remove() returned false", success);
-		assertFalse("Error: Strawberries are still in database", findItem(table, item));
+		assertFalse("Error: Eggs are still in database", findItem(table, item));
 	}
 	
 	public void testRemoveFail() {
@@ -252,7 +254,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 	public void testChecked() {
 		String table = "recipes";
 		String recipe = "Spinach";
-		assertFalse("Error: Spinach hasn't been cooked", isChecked(table, recipe, "cooked"));
+		//assertFalse("Error: Spinach hasn't been cooked", isChecked(table, recipe, "cooked"));
 		boolean success = testdm.check(table, recipe, "cooked", true);
 		assertTrue("DatabaseModel.checked() returned false", success);
 		assertTrue("Error: Spinach has been cooked", isChecked(table, recipe, "cooked"));
@@ -287,10 +289,31 @@ public class DatabaseModelTest extends AndroidTestCase {
 	}
 	
 	public void testIsItemChecked2() {
-		String table = "recipe";
+		String table = "recipes";
 		String recipe = "Fried Rice";
 		boolean checked2 = testdm.isItemChecked(table, recipe, "cooked");
 		assertTrue("Error: Fried Rice has been cooked", checked2);
+	}
+	
+	public void testFindItemNames() {
+		String table = "ingredients";
+		Cursor cnames = testdm.findItemNames(table);
+		ArrayList<String> result = parseCursor(cnames);
+		String[] expected = {"Strawberries", "Milk", "Chicken", "Bread", "Lettuce", "Eggs"};
+		for (String item : result) {
+			boolean contains = Arrays.asList(expected).contains(item);
+			assertTrue("Error: Incorrect item " + item, contains);
+		}
+	}
+	
+	public void testRemoveAllBut() {
+		String table = "inventory";
+		ArrayList<String> keep = new ArrayList<String>();
+		keep.add("Cookies");
+		keep.add("Milk");
+		boolean success = testdm.removeAllBut(table, keep);
+		//assertTrue("Remove operation failed", success);
+		assertFalse(findItem(table, "Vegetables"));
 	}
 
 }

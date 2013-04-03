@@ -414,7 +414,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 	}
 	
-	public void removeAllBut(String table, ArrayList<String> ingredients) {
+	public boolean removeAllBut(String table, ArrayList<String> ingredients) {
+		boolean success = false;
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(table);
 		
@@ -430,8 +431,9 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 		for (String item : result) {
 			if (!ingredients.contains(item)) {
-				remove(table, item);
+				success = remove(table, item);
 			}
 		}
+		return success;
 	}
 }
