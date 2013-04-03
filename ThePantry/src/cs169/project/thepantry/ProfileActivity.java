@@ -35,6 +35,7 @@ public class ProfileActivity extends Activity {
 	// database access
 	DatabaseModel dm;
 	private static final String DATABASE_NAME = "thepantry";
+	private final String LOGGED_IN = "log_in";
 	
 	// set up listview for favorites and history
 	ArrayList<SearchMatch> faves = new ArrayList<SearchMatch>();
@@ -49,10 +50,10 @@ public class ProfileActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		// login status of the user
 		SharedPreferences shared_pref = PreferenceManager.getDefaultSharedPreferences(this);
-		Boolean login_status = shared_pref.getBoolean("loggedin", false);
+		String login_status = shared_pref.getString(LOGGED_IN, null);
 		
 		// check if the user is logged in, if not take user to login screen
-		if (login_status) {
+		if (login_status != null) {
 			setContentView(R.layout.activity_profile);
 			
 			// set text for textviews

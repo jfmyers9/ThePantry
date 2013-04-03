@@ -67,6 +67,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 		assertTrue("Error: Eggs not added to database", findItem(table, item));
 	}
 	
+	
 	public void testAddFail() {
 		String table = "helloworld";
 		String item = "Eggs";
@@ -238,6 +239,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 
 	public void testSearch() {
 		String table = "ingredients";
+		testdm.check(table, "Lettuce", "removeFlag", true);
 		Cursor cItems = testdm.search(table, "c");
 		ArrayList<String> items = parseCursor(cItems);
 		String[] match = {"Chicken", "Carrots", "Lettuce"};
@@ -248,10 +250,10 @@ public class DatabaseModelTest extends AndroidTestCase {
 	}
 
 	public void testChecked() {
-		String table = "recipe";
+		String table = "recipes";
 		String recipe = "Spinach";
-		//assertFalse("Error: Spinach hasn't been cooked", isChecked(table, recipe, "cooked"));
-		boolean success = testdm.checked(table, recipe, "cooked", true);
+		assertFalse("Error: Spinach hasn't been cooked", isChecked(table, recipe, "cooked"));
+		boolean success = testdm.check(table, recipe, "cooked", true);
 		assertTrue("DatabaseModel.checked() returned false", success);
 		assertTrue("Error: Spinach has been cooked", isChecked(table, recipe, "cooked"));
 	}
@@ -259,7 +261,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 	public void testCheckedFail() {
 		String table = "ingredients";
 		String recipe = "Spinach";
-		boolean success = testdm.checked(table, recipe, "cooked", true);
+		boolean success = testdm.check(table, recipe, "cooked", true);
 		assertFalse("Spinach should not be in the ingredients table", success);
 	}
 		
@@ -270,15 +272,15 @@ public class DatabaseModelTest extends AndroidTestCase {
 	}
 	
 	public void testCheckedItems2() {
-		String table = "recipe";
+		String table = "recipes";
 		Cursor c = testdm.checkedItems(table, "favorite");
 		ArrayList<String> checked = parseCursor(c);
 		String item = checked.get(0);
 		assertEquals("Error: Bacon is not " + item, item, "Bacon");
 	}
 
-	public void testIsItemChecked1() {
-		String table = "recipe";
+	public void testIsItemChecked() {
+		String table = "recipes";
 		String recipe = "Fried Rice";
 		boolean checked1 = testdm.isItemChecked(table, recipe, "favorite");
 		assertFalse("Error: Fried Rice is not a favorite", checked1);

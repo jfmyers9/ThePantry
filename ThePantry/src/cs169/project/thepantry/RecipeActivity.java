@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,11 +39,12 @@ public class RecipeActivity extends BasicMenuActivity {
 	ImageButton check;
 	LinearLayout ll;
 	LinearLayout ings;
+	static ArrayList<CheckBox> ingChecks;
 	
 	boolean faved;
 	boolean cooked;
 	
-	DatabaseModel dm;
+	static DatabaseModel dm;
 	
 	private static final String DATABASE_NAME = "thepantry";
 
@@ -70,6 +70,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		name.setText(info.name);
 		
 		//Render the ingredients list to view.
+		ingChecks = new ArrayList<CheckBox>();
 		ings = (LinearLayout)findViewById(R.id.ingList);
 		displayIngreds(info.ingredientLines);
 		
@@ -99,16 +100,42 @@ public class RecipeActivity extends BasicMenuActivity {
 		//check if recipe is in db or not cooked
 		check = (ImageButton)findViewById(R.id.cooked);
 		cooked = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED);
+		dm.close();
 		setCheckButton(cooked);
 		
 	}
 	
+	// show all the ingredients in the ings layout
 	public void displayIngreds(List<String> ingreds) {
 		for (String ingred : ingreds) {
 			CheckBox tv = new CheckBox(this);
 			tv.setText(ingred);
 			ings.addView(tv);
+			ingChecks.add(tv);
 		}
+	}
+	
+	// return a string of all checked items
+	public static String getCheckedIngredientsString() {
+		String message = "";
+		for (CheckBox cb : ingChecks) {
+			String ingred = (String) cb.getText();
+			if (cb.isChecked()) {
+				// TODO: parse amount and item, check for ingredient and previous amount
+				String[] parsed = IngredientParser.parse(ingred);
+				String amt = parsed[0] + " " + parsed[1];
+				String ingred_name = parsed[3];
+				message += "Ingredient: " + ingred_name + ", Amount: " + amt + "\n";
+			}
+		}
+		return message;
+	}
+	
+	// open the ingredient adding dialog
+	public void openIngDialog(View v) {
+		AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
+		dialog.context = this;
+		dialog.show(getFragmentManager(), "dialog");
 	}
 	
 	@Override
@@ -150,10 +177,12 @@ public class RecipeActivity extends BasicMenuActivity {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		if (faved) {
 			faved = false;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, false);
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, false);
+			dm.close();
 		} else {
 			faved = true;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, true);
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, true);
+			dm.close();
 		}
 		setStarButton(faved);
 	}
@@ -167,10 +196,12 @@ public class RecipeActivity extends BasicMenuActivity {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		if (cooked) {
 			cooked = false;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, false);
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, false);
+			dm.close();
 		} else {
 			cooked = true;
-			dm.checked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, true);
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, true);
+			dm.close();
 		}
 		setCheckButton(cooked);
 	}
@@ -179,17 +210,20 @@ public class RecipeActivity extends BasicMenuActivity {
 	 * checks inventory for ingredients and adds missing ingredients to
 	 * shopping list
 	 */
-	public void addToShopping(View v) {
+	public static void addToShopping(Context context) {
 		// for each ingredient in list
-		for (String ingred : info.ingredientLines) {
-			// TODO: parse amount and item, check for ingredient and previous amount
-			String[] parsed = IngredientParser.parse(ingred);
-			String amt = parsed[0] + " " + parsed[1];
-			String ingred_name = parsed[3];
-			dm = new DatabaseModel(this, DATABASE_NAME);	
-			dm.add(ShoppingList.TABLE_NAME, ingred_name, "Other", amt);
+		for (CheckBox cb : ingChecks) {
+			String ingred = (String) cb.getText();
+			if (cb.isChecked()) {
+				// TODO: parse amount and item, check for ingredient and previous amount
+				String[] parsed = IngredientParser.parse(ingred);
+				String amt = parsed[0] + " " + parsed[1];
+				String ingred_name = parsed[3];
+				dm = new DatabaseModel(context, DATABASE_NAME);	
+				dm.add(ShoppingList.TABLE_NAME, ingred_name, "Other", amt);
+				dm.close();
+			}
 		}
-		
 	}
 	
 	@Override
@@ -254,15 +288,18 @@ public class RecipeActivity extends BasicMenuActivity {
 	 * 
 	 */
 	public static class AddIngredientsDialogFragment extends DialogFragment {
+		
+		Context context;
+		
 	    @Override
 	    public Dialog onCreateDialog(Bundle savedInstanceState) {
 	        // Use the Builder class for convenient dialog construction
 	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 	        builder.setTitle(R.string.dialog_add_ingredients_to_shopping_list)
-	        	   .setMessage("Ingredients")
+	        	   .setMessage(getCheckedIngredientsString()) // TODO: change to editable view
 	               .setPositiveButton(R.string.add_item, new DialogInterface.OnClickListener() {
 	                   public void onClick(DialogInterface dialog, int id) {
-	                       //
+	                       addToShopping(context);
 	                   }
 	               })
 	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
