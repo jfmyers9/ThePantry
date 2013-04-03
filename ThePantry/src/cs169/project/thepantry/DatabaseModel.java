@@ -393,5 +393,45 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				return false;
 			}		
 	}
-
+	
+	public Cursor findItemNames(String table) {
+		try {
+			SQLiteDatabase db = getReadableDatabase();
+			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+			qb.setTables(table);
+			
+			String[] columns = {"item"};
+			
+			Cursor c = qb.query(db, columns, null, null, null, null, null, null);
+			if (c.moveToFirst()) {
+				return c;
+			} else {
+				return null;
+			}
+		} catch (SQLiteException e) {
+			System.err.println(e.getMessage());
+			return null;
+		}
+	}
+	
+	public void removeAllBut(String table, ArrayList<String> ingredients) {
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(table);
+		
+		ArrayList<String> result = new ArrayList<String>();
+		Cursor currentItems = findItemNames(table);
+		if (currentItems != null) {
+			while(!currentItems.isAfterLast()) {
+				String item = currentItems.getString(0);
+				result.add(item);
+				currentItems.moveToNext();
+			}
+			currentItems.close();
+		}
+		for (String item : result) {
+			if (!ingredients.contains(item)) {
+				remove(table, item);
+			}
+		}
+	}
 }

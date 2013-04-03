@@ -40,7 +40,7 @@ public class ShoppingListActivity extends BaseListActivity {
 		groupNames = new ArrayList<String>();
 		children = new ArrayList<IngredientChild>();
 		
-		//fillArrays();
+		fillArrays();
 		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems, table);
 		eView.setAdapter(eAdapter);
 		
@@ -75,7 +75,8 @@ public class ShoppingListActivity extends BaseListActivity {
 				//adapter.add(type);
 				//adapter.notifyDataSetChanged();
 			}
-			addItem(table, eText.getText().toString(), type, "1");
+			String item = eText.getText().toString().trim();
+			addItem(table, item, type, "1");
 			((BaseExpandableListAdapter)eView.getExpandableListAdapter()).notifyDataSetChanged();
 		} catch (IOException e) {
 			Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT);
