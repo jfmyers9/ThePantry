@@ -18,9 +18,11 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -52,10 +54,13 @@ public class LoginActivity extends Activity {
 	 */
 	private GetJsonObject gsjo = null;
 	
+	SharedPreferences logged_in;
+	
 	public final static String EXTRA_USER = "cs169.warmup.warmupproject.USER";
 	public final static String EXTRA_COUNT = "cs169.warmup.warmupproject.COUNT";
 	
 	private final String urlLogin = "http://cockamamy-island-1557.herokuapp.com/session";
+	private final String LOGGED_IN= "log_in";
 
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
@@ -73,6 +78,8 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_login);
+		
+		logged_in = PreferenceManager.getDefaultSharedPreferences(this);
 
 		// Set up the login form.
 		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
@@ -184,7 +191,6 @@ public class LoginActivity extends Activity {
 	    	try {
 	    		obj.put("user", user);
 	    		obj.put("password", password);
-	    		obj.put("password_confirmation", password);
 	    		gsjo = new GetJsonObject(obj);
 	    		gsjo.execute(urlLogin);
 	    	} catch (Exception e) {
@@ -285,8 +291,18 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 			try {
 				boolean success = (Boolean)result.get("success");
 				String info = (String)result.get("info");
-				JSONObject user = (JSONObject)result.get("data");
 				if (success) {
+					String auth_token = (String)((JSONObject)result.get("data")).get("auth_token");
+					if (logged_in.getString(LOGGED_IN, null) == null) {
+						SharedPreferences.Editor editor = logged_in.edit();
+						editor.putString(LOGGED_IN, auth_token);
+					} else {
+						Context context = getApplicationContext();
+						CharSequence text = "Something went horribly wrong.";
+						int duration = Toast.LENGTH_LONG;
+						Toast toast = Toast.makeText(context, text, duration);
+						toast.show();
+					}
 					Context context = getApplicationContext();
 					Intent intent = new Intent(context, ProfileActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
