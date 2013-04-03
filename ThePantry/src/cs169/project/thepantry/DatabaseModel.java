@@ -414,6 +414,24 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 	}
 	
+	public boolean clear(String table) {
+		try {
+			SQLiteDatabase db = getWritableDatabase();
+			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+			qb.setTables(table);
+			
+			int val = db.delete(table, null, null);			
+			if (val != 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch(SQLiteException e) {
+			System.err.println(e.getMessage());
+			return false;
+		}
+	}
+	
 	public void removeAllBut(String table, ArrayList<String> ingredients) {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(table);

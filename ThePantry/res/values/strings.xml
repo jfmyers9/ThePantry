@@ -65,9 +65,11 @@
     <string name="results">Search Results:</string>
     <string name="title_activity_display_webpage">DisplayWebpageActivity</string>
     <string name="dialog_add_ingredients_to_shopping_list">Add Ingredients to Shopping List?</string>
+    <string name="dialog_update_inventory">Ingredients Added to your Pantry</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="directions">Directions:</string>
     <string name="title_activity_registration">RegistrationActivity</string>
+    <string name="inventory_go">Go to your Pantry</string>
 
 </resources>

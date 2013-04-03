@@ -292,5 +292,12 @@ public class DatabaseModelTest extends AndroidTestCase {
 		boolean checked2 = testdm.isItemChecked(table, recipe, "cooked");
 		assertTrue("Error: Fried Rice has been cooked", checked2);
 	}
+	
+	public void testClear() {
+		String table = "ingredients";
+		boolean success = testdm.clear(table);
+		assertTrue("Error: Database not cleared", success);
+		assertFalse("Error: shouldn't have anything in table", testdm.findItem(table, "milk"));
+	}
 
 }
