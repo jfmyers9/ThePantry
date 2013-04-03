@@ -27,7 +27,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	 * Returns true if the modification was successful, false otherwise.
 	 */
 	public boolean add(String table, String item, String type, String amount) {
-		try {
 			SQLiteDatabase db = getWritableDatabase();
 			ContentValues values = new ContentValues();
 			values.put(ThePantryContract.ITEM, item);
@@ -42,72 +41,52 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			if (!findItem(table, item)) {
 				try {
 					newRowId = db.insertOrThrow(table, null, values);
-					//db.close();
 					if (newRowId != -1) {
 						return true;
 					}
 				} catch (SQLiteException e) {
-					//db.close();
-					System.out.println(e.getMessage());
 					//do something
 				}
+				return false;
 			} else {
 				// increment amount
 				// add a popup to ask if they want amount to be incremented?
 				return true;
-			}
-		} catch (SQLiteException e) {
-			System.out.println(e.getMessage());
-			// add more stuff
-		}
-		return false;
+			} 
 	}
 
 	/** Removes the ITEM from the specified TABLE.
 	 * Returns true if the modification was successful, false otherwise.
 	 */
 	public boolean remove(String table, String item) {
-		try {
 			SQLiteDatabase db = getWritableDatabase();
 			String selection = ThePantryContract.ITEM + " = ?";
 			String[] selectionArgs = {item};
 			
-			int val = db.delete(table, selection, selectionArgs);
-			//db.close();
-			
+			int val = db.delete(table, selection, selectionArgs);			
 			if (val != 0) {
 				return true;
+			} else {
+				return false;
 			}
-		} catch (SQLiteException e) {
-			System.out.println(e.getMessage());
-			// add more stuff
-		}
-		return false;
 	}
 	
 	/** Returns all items from the specified TABLE. */
 	public Cursor findAllItems(String table) {
-		try {
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
 			
 			Cursor c = qb.query(db, null, null, null, null, null, null, null);
-			//db.close();
-			
 			if (c.moveToFirst()) {
 				return c;
-			}
-		} catch (SQLiteException e) {
-			System.out.println(e.getMessage());
-			// add more stuff
+			} else {
+			return null;
 		}
-		return null;
 	}
 
 	/** Finds all items is in the specified TABLE that contain given text */
 	public Cursor search(String table, String query) {
-		try {
 		SQLiteDatabase db = getReadableDatabase();
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(table);
@@ -121,16 +100,10 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		} else {
 			return null;
 		}
-		}catch (SQLiteException e) {
-			System.out.println(e.getMessage());
-			// add more stuff
-		}
-		return null;
 	}
 	
 	/** Finds if an item is in the specified TABLE. */
 	public boolean findItem(String table, String item) {
-		try {
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
@@ -139,21 +112,15 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] selectionArgs = {item};
 			
 			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
-			//db.close();
-			
 			if(c.moveToFirst()) {
 				return true;
+			}else {
+				return false;
 			}
-		} catch (SQLiteException e) {
-			System.out.println(e.getMessage());
-			// add more stuff
-		}
-		return false;
 	}
 
 	/** Returns all items of the TYPE from the specified TABLE. */
 	public Cursor findTypeItems(String table, String type) {
-		try {
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
@@ -163,21 +130,15 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] selectionArgs = {type};
 			
 			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			//db.close();
-			
 			if (c.moveToFirst()) {
 				return c;
+			} else {
+				return null;
 			}
-		} catch (SQLiteException e) {
-			System.out.println(e.getMessage());
-			// add more stuff
-		}
-		return null;
 	}
 
 	/** Returns the type of the ITEM from the specified TABLE. */
 	public Cursor findType(String table, String item) {
-		try {
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
@@ -187,21 +148,15 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] selectionArgs = {item};
 			
 			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			//db.close();
-			
 			if (c.moveToFirst()) {
 				return c;
+			} else {
+				return null;
 			}
-		} catch (SQLiteException e) {
-			System.out.println(e.getMessage());
-			// add more stuff
-		}
-		return null;
 	}
 
 	/** Returns the amount of the ITEM from the specified TABLE. */
 	public Cursor findAmount(String table, String item) {
-		try {
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
@@ -211,21 +166,15 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] selectionArgs = {item};
 			
 			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			//db.close();
-			
 			if (c.moveToFirst()) {
 				return c;
+			} else {
+				return null;
 			}
-		} catch (SQLiteException e) {
-			System.out.println(e.getMessage());
-			// add more stuff
-		}
-		return null;
 	}
 
 	/** Returns all types from the specified TABLE. */
 	public Cursor findAllTypes(String table) {
-		try {
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
@@ -234,16 +183,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] columns = {ThePantryContract.TYPE};
 			
 			Cursor c = qb.query(db, columns, null, null, null, null, null);
-			//db.close();
-			
 			if (c.moveToFirst()) {
 				return c;
-			}
-		} catch (SQLiteException e) {
-			System.out.println(e.getMessage());
-			// add more stuff
+			} else {
+			return null;
 		}
-		return null;
 	}
 
 	// TODO -- Figure out if we can use android's UI to reference checked items instead of database
@@ -251,7 +195,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 
 	/** Sets the check value of the item to whatever checked it */
 	public boolean checked(String table, String item, String col, boolean checked) {
-		try {
 			SQLiteDatabase db = getWritableDatabase();
 			String selection;
 			if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
@@ -270,22 +213,16 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			}
 			values.put(col, newCheck);
 			int rows = db.update(table, values, selection, selectionArgs);
-			//db.close();
-			
 			if (rows != 0) {
 				return true;
+			} else {
+				return false;
 			}
-		} catch (SQLiteException e) {
-			System.out.println(e.getMessage());
-			// add more stuff
-		}
-		return false;
 	}
 	
 
 	/** Returns list of all items (preferably entries) checked */
 	public Cursor checkedItems(String table, String col) {
-		try {
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
@@ -295,16 +232,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 
 
 			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
-			//db.close();
-			
 			if (c.moveToFirst()) {
 				return c;
-			}
-		} catch (SQLiteException e) {
-			System.out.println(e.getMessage());
-			// add more stuff
+			} else {
+			return null;
 		}
-		return null;
 	}
 	
 	
@@ -312,7 +244,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	 * favorited and cooked recipe
 	 */
 	public boolean isItemChecked(String table, String recipe_name, String col) {
-		try {
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
@@ -322,8 +253,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] selectionArgs = {recipe_name};
 			
 			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			//db.close();
-			
 			if (c.moveToFirst()) {
 				String data = c.getString(0);
 				System.out.println(data);
@@ -333,13 +262,10 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				}
 				c.close();
 				return false;
+			} else {
+				c.close();
+				return false;
 			}
-			c.close();
-		} catch (SQLiteException e) {
-			System.out.println(e.getMessage());
-			// add more stuff
-		}
-		return false;
 	}
 
 }
