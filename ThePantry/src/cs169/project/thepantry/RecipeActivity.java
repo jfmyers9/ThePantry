@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -91,15 +90,15 @@ public class RecipeActivity extends BasicMenuActivity {
 		
 		//set favorite button to grayscale or colored image based on state in db
 		//check if recipe in database or if not favorited
-		star = (ImageButton)findViewById(R.id.favorite);
-		faved = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE);
-		setStarButton(faved);
+		//star = (ImageButton)findViewById(R.id.favorite);
+		//faved = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE);
+		//setStarButton(faved);
 		
 		//set cooked button to grayscale or colored image based on state in db
 		//check if recipe is in db or not cooked
-		check = (ImageButton)findViewById(R.id.cooked);
-		cooked = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED);
-		setCheckButton(cooked);
+		//check = (ImageButton)findViewById(R.id.cooked);
+		//cooked = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED);
+		//setCheckButton(cooked);
 		
 	}
 	
