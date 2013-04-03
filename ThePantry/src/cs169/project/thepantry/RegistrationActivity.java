@@ -24,8 +24,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,9 +45,11 @@ public class RegistrationActivity extends Activity {
 	
 	private String mEmail;
 	private String mPassword;
+	private String mPasswordConf;
 	
 	private EditText mEmailView;
 	private EditText mPasswordView;
+	private EditText mPasswordConfView;
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
@@ -59,9 +63,11 @@ public class RegistrationActivity extends Activity {
 		
 		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
 		mEmailView = (EditText) findViewById(R.id.email);
+		mPasswordView = (EditText) findViewById(R.id.password);
+		mPasswordConfView = (EditText) findViewById(R.id.password_confirmation);
 		mEmailView.setText(mEmail);
 		
-		findViewById(R.id.register).setOnClickListener(
+		findViewById(R.id.registerButton).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
@@ -112,38 +118,40 @@ public class RegistrationActivity extends Activity {
 	}
 	
 	public void attemptRegister() {
-		if (gsjo != null) {
-			return;
-		}
 
-		// Reset errors.
 		mEmailView.setError(null);
 		mPasswordView.setError(null);
+		mPasswordConfView.setError(null);
 
 		// Store values at the time of the login attempt.
 		mEmail = mEmailView.getText().toString();
 		mPassword = mPasswordView.getText().toString();
+		mPasswordConf = mPasswordConfView.getText().toString();
 
 		boolean cancel = false;
 		View focusView = null;
-
-		// Check for a valid password.
-		if (TextUtils.isEmpty(mPassword)) {
-			mPasswordView.setError(getString(R.string.error_field_required));
-			focusView = mPasswordView;
-			cancel = true;
-		} else if (mPassword.length() < 4) {
-			mPasswordView.setError(getString(R.string.error_invalid_password));
-			focusView = mPasswordView;
-			cancel = true;
-		}
+//
+//		// Check for a valid password.
+//		if (TextUtils.isEmpty(mPassword)) {
+//			mPasswordView.setError(getString(R.string.error_field_required));
+//			focusView = mPasswordView;
+//			cancel = true;
+//		} else if (mPassword.length() < 8) {
+//			mPasswordView.setError(getString(R.string.error_invalid_password));
+//			focusView = mPasswordView;
+//			cancel = true;
+//		} else if (mPasswordConf.length() < 8) {
+//			mPasswordConfView.setError(getString(R.string.error_invalid_password));
+//			focusView = mPasswordView;
+//			cancel = true;
+//		}
 
 		// Check for a valid email address.
-		if (TextUtils.isEmpty(mEmail)) {
-			mEmailView.setError(getString(R.string.error_field_required));
-			focusView = mEmailView;
-			cancel = true;
-		} 
+//		if (TextUtils.isEmpty(mEmail)) {
+//			mEmailView.setError(getString(R.string.error_field_required));
+//			focusView = mEmailView;
+//			cancel = true;
+//		} 
 
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
@@ -152,20 +160,21 @@ public class RegistrationActivity extends Activity {
 		} else {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
-			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
-			showProgress(true);
 	    	String user = mEmail;
 	    	String password = mPassword;
+	    	String passConf = mPasswordConf;
 	    	JSONObject obj = new JSONObject();
 	    	try {
-	    		obj.put("user", user);
-	    		obj.put("password", password);
-	    		obj.put("password_confirmation", password);
+	    		JSONObject userObj = new JSONObject();
+	    		userObj.put("email", user);
+	    		userObj.put("password", password);
+	    		userObj.put("password_confirmation", passConf);
+	    		obj.put("user", userObj);
 	    		gsjo = new GetJsonObject(obj);
 	    		gsjo.execute(urlAdd);
 	    	} catch (Exception e) {
 				Context context = getApplicationContext();
-				CharSequence text = "Something went wrong.";
+				CharSequence text = "Something went wrong1.";
 				int duration = Toast.LENGTH_LONG;
 				Toast toast = Toast.makeText(context, text, duration);
 				toast.show();
@@ -191,6 +200,7 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 		@Override
 		protected JSONObject doInBackground(String... urls) {
 		   	HttpClient client = new DefaultHttpClient();
+		   	System.out.print(urls[0]);
 	    	HttpPost post = new HttpPost(urls[0]);
 	    	HttpResponse resp;
 	    	post.addHeader("Content-type", "application/json");
@@ -208,6 +218,7 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 	            }
 	            instream.close();
 	            String result = builder.toString();
+	            System.out.println(result);
 	            JSONObject respObj = new JSONObject(result);
 	            return respObj;
 	    	} catch (Exception e) {
@@ -222,14 +233,16 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 				boolean success = (Boolean)result.get("success");
 				String info = (String)result.get("info");
 				if (success) {
-					String auth_token = (String)((JSONObject)result.get("data")).get("auth_token");
-					JSONObject user = (JSONObject)((JSONObject)result.get("data")).get("user");
+					JSONObject data = (JSONObject)result.get("data");
+					JSONObject user = (JSONObject)data.get("user");
+					String auth_token = (String)data.get("auth_token");
 					if (logged_in.getString(LOGGED_IN, null) == null) {
 						SharedPreferences.Editor editor = logged_in.edit();
 						editor.putString(LOGGED_IN, auth_token);
+						editor.commit();
 					} else {
 						Context context = getApplicationContext();
-						CharSequence text = "Something went horribly wrong.";
+						CharSequence text = "Something went horribly wrong3.";
 						int duration = Toast.LENGTH_LONG;
 						Toast toast = Toast.makeText(context, text, duration);
 						toast.show();
@@ -247,8 +260,9 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 					toast.show();
 				}
 			} catch (Exception e) {
+				System.out.println(e.getMessage());
 				Context context = getApplicationContext();
-				CharSequence text = "Something went horribly wrong.";
+				CharSequence text = "Something went horribly wrong2.";
 				int duration = Toast.LENGTH_LONG;
 				Toast toast = Toast.makeText(context, text, duration);
 				toast.show();
