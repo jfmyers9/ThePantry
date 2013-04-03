@@ -166,11 +166,10 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	/** Removes the given item from the database and list 
 	 * @throws ThePantryException */
 	public void removeItem(String table, String item) throws ThePantryException {
-		// TODO - get the item/View by finding it from layout
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		boolean success = dm.remove(table, item);
-		if (success) {
-			// TODO - remove item and its checkbox from display/layout
+		if (!success) {
+			//throw new ThePantryException(item + " could not be removed from database");
 		}
 	}
 	
