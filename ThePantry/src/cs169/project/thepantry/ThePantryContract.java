@@ -5,6 +5,9 @@ import android.provider.BaseColumns;
 /** Contract/Schema class for our database table entries. */
 public class ThePantryContract {
 	
+	/** The name of the database */
+    public static final String DATABASE_NAME = "thepantry";
+	
 	/** Column names that are central to every table */
 	public static final String ITEM = "item";
 	public static final String TYPE = "type";
@@ -34,7 +37,7 @@ public class ThePantryContract {
 	}
 	/** Inner class that defines the Shopping List table */
 	public static abstract class Recipe implements BaseColumns {
-	    public static final String TABLE_NAME = "recipes"; //s
+	    public static final String TABLE_NAME = "recipes"; 
 	    public static final String RECIPE = "recipe";
 		public static final String COOKED = "cooked";
 		public static final String FAVORITE = "favorite";	    

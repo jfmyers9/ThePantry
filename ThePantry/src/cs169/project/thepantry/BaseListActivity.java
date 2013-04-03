@@ -3,7 +3,11 @@ package cs169.project.thepantry;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -17,6 +21,7 @@ import android.widget.SearchView;
 
 import com.actionbarsherlock.view.Menu;
 
+import cs169.project.thepantry.RecipeActivity.AddIngredientsDialogFragment;
 import cs169.project.thepantry.ThePantryContract.Inventory;
 import cs169.project.thepantry.ThePantryContract.ShoppingList;
 
@@ -178,10 +183,12 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	 * @throws ThePantryException */
 	public void updateInventory(View view) throws ThePantryException {
 		dm = new DatabaseModel(this, DATABASE_NAME);
+		String message = "";
 		for (IngredientChild c : children) {
 			if (c.isSelected()) {
+				System.out.println(c.getName());
 				boolean success = dm.add(Inventory.TABLE_NAME, c.getName(),c.getGroup(),"1");
-				
+				message += c.getName() + "\n";
 				// If the shopping list "updates" the ingredients are removed from list
 				if (table == ShoppingList.TABLE_NAME) {
 					dm.check(table, c.getName(), ThePantryContract.REMOVEFLAG, true);
@@ -192,10 +199,43 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			}
 		}
 		
-		//For now it takes you to inventory -- next iteration it will pop toast?
-		Context context = getApplicationContext();
-		Intent intent = new Intent(context, InventoryActivity.class);
-		startActivity(intent);
+		
+				
+		AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
+		dialog.context = this;
+		dialog.message = message;
+		dialog.show(getFragmentManager(), "dialog");
+	}
+	
+	/* Class for displaying popup dialog for adding ingredients
+	 * 
+	 */
+	public static class AddIngredientsDialogFragment extends DialogFragment {
+		
+		Context context;
+		String message;
+		
+	    @Override
+	    public Dialog onCreateDialog(Bundle savedInstanceState) {
+	        // Use the Builder class for convenient dialog construction
+	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        builder.setTitle(R.string.dialog_update_inventory)
+	        	   .setMessage(message) 
+	        	   .setPositiveButton(R.string.inventory_go, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                	   //go to inventory
+	                  		Intent intent = new Intent(context, InventoryActivity.class);
+	                  		startActivity(intent);
+	                   }
+	               })
+	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	               		
+	                   }
+	               });
+	        // Create the AlertDialog object and return it
+	        return builder.create();
+	    }
 	}
 
 }

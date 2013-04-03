@@ -20,7 +20,6 @@ import cs169.project.thepantry.ThePantryContract.Ingredients;
 */
 public class DatabaseModel extends SQLiteAssetHelper {
 
-    //private static final String DATABASE_NAME = "thepantry";
     private static final int DATABASE_VERSION = 1;
 
     public DatabaseModel(Context context, String databaseName) {
@@ -435,5 +434,23 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			}
 		}
 		return success;
+	}
+	
+	public boolean clear(String table) {
+		try {
+			SQLiteDatabase db = getWritableDatabase();
+			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+			qb.setTables(table);
+			
+			int val = db.delete(table, null, null);			
+			if (val != 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch(SQLiteException e) {
+			System.err.println(e.getMessage());
+			return false;
+		}
 	}
 }
