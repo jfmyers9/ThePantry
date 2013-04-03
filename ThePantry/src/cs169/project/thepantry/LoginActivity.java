@@ -143,9 +143,6 @@ public class LoginActivity extends Activity {
 	}
 	
 	public void attemptLogin() {
-		if (gsjo != null) {
-			return;
-		}
 
 		// Reset errors.
 		mEmailView.setError(null);
@@ -189,8 +186,10 @@ public class LoginActivity extends Activity {
 	    	String password = mPassword;
 	    	JSONObject obj = new JSONObject();
 	    	try {
-	    		obj.put("user", user);
-	    		obj.put("password", password);
+	    		JSONObject userObj = new JSONObject();
+	    		userObj.put("email", user);
+	    		userObj.put("password", password);
+	    		obj.put("user", userObj);
 	    		gsjo = new GetJsonObject(obj);
 	    		gsjo.execute(urlLogin);
 	    	} catch (Exception e) {
@@ -296,6 +295,7 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 					if (logged_in.getString(LOGGED_IN, null) == null) {
 						SharedPreferences.Editor editor = logged_in.edit();
 						editor.putString(LOGGED_IN, auth_token);
+						editor.commit();
 					} else {
 						Context context = getApplicationContext();
 						CharSequence text = "Something went horribly wrong.";

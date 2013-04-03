@@ -1,14 +1,14 @@
 package cs169.project.thepantry;
 
 
-import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteQueryBuilder;
+
+import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 /** Interface class called by the activities to interact with our database.
 * Uses the DatabaseModelHelper class to create the database.
@@ -61,7 +61,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			return false;
 		}
 	}
-
+	
+	
 	/** Removes the ITEM from the specified TABLE.
 	 * Returns true if the modification was successful, false otherwise.
 	 * If a SQLiteException is thrown, returns false and prints out the error
@@ -247,8 +248,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 	}
 
-	// TODO -- Figure out if we can use android's UI to reference checked items instead of database
-	// TODO -- Figure out way to extract an entire entry and add it to a new table
 
 	/** Sets the check value of the item to whatever checked it */
 	public boolean checked(String table, String item, String col, boolean checked) {

@@ -33,7 +33,7 @@ public class ThePantryContract {
 	}
 	/** Inner class that defines the Shopping List table */
 	public static abstract class Recipe implements BaseColumns {
-	    public static final String TABLE_NAME = "recipe"; //change to "recipes" in database
+	    public static final String TABLE_NAME = "recipes"; 
 	    public static final String RECIPE = "recipe";
 		public static final String COOKED = "cooked";
 		public static final String FAVORITE = "favorite";	    

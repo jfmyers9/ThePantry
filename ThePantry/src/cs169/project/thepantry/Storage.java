@@ -89,13 +89,22 @@ public class Storage implements Serializable {
 class Recipe extends Storage implements Serializable {
 	String id;
 	String name;
+	Boolean cooked;
+	Boolean favorite;
 	Attribution attribution;
 	ArrayList<String> ingredientLines; //in order
 	RecipeImages images; //not always present
 	RecipeSource source; //not always present
 
+	protected Recipe() {
+		cooked=false;
+		favorite=false;
+	}
+	
 	protected Recipe(JSONObject results) {
 		// images and source not necessarily included
+		cooked=false;
+		favorite=false;
 		try {
 			this.images = new RecipeImages((JSONObject)((JSONArray)results.get("images")).get(0));
 		} catch (JSONException e) {}
