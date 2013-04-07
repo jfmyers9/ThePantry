@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import cs169.project.thepantry.ThePantryContract.Ingredients;
 import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class BaseListAdapter extends BaseExpandableListAdapter {
@@ -57,7 +58,11 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		}
 		notifyDataSetChanged();
 		dm = new DatabaseModel(context, DATABASE_NAME);
-		dm.check(table, child.getName(), ThePantryContract.REMOVEFLAG, true);
+		if (table != Ingredients.TABLE_NAME) {
+			dm.check(table, child.getName(), ThePantryContract.REMOVEFLAG, true);
+		} else {
+			dm.remove(table, child.getName());
+		}
 	}
 
 	@Override
@@ -88,11 +93,10 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		final ViewHolder childHolder;
 		if (table != Inventory.TABLE_NAME) {
 			childHolder = new ViewHolder((CheckBox)convertView.findViewById(R.id.checkBox1), child.isSelected());
-			childHolder.cb.setText(child.getName());
 		} else {
 			childHolder = new ViewHolder((TextView)convertView.findViewById(R.id.textView));
-			childHolder.cb.setText(child.getName());
 		}
+		childHolder.cb.setText(child.getName());
 		// Detects if a given item was swiped
 		final SwipeDetector swipeDetector = new SwipeDetector();
 		convertView.setOnTouchListener(swipeDetector);
@@ -104,7 +108,7 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 						.getTag();
 				if (swipeDetector.swipeDetected()) {
 					//showDialog(); // currently not working will display a box to ask user if they want to delete
-					
+					//System.out.println(dm.isItemChecked(table, child.getName(), ThePantryContract.REMOVEFLAG));
 					removeChild(child, group);
 				} else if (table != Inventory.TABLE_NAME) {
 					((CheckBox)childHolder.cb).toggle();

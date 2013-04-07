@@ -154,7 +154,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			
 			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
 			if (c.moveToFirst()) {
-				System.out.println("XXXXXXXXXXXXXXX");
 				System.out.println(c.getString(0));
 				return c;
 			} else {
@@ -205,8 +204,18 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			qb.setTables(table);
 			
 			String[] columns = {ThePantryContract.ITEM};
-			String selection = ThePantryContract.TYPE + " = ?";
-			String[] selectionArgs = {type};
+			
+			String selection;
+			ArrayList<String> selectionArgsList = new ArrayList<String>();
+			if(table == Ingredients.TABLE_NAME) {
+				selection = ThePantryContract.TYPE + " = ?";
+				selectionArgsList.add(type);
+			} else {
+				selection = ThePantryContract.TYPE + " = ?" + " AND " + ThePantryContract.REMOVEFLAG + " = ?";
+				selectionArgsList.add(type);
+				selectionArgsList.add("false");
+			}
+			String[] selectionArgs = selectionArgsList.toArray(new String[0]);
 			
 			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
 			if (c.moveToFirst()) {

@@ -232,6 +232,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			}
 		}
 		
+		// Opens pop up window with items being added to the pantry
 		UpdateIngredientsDialogFragment dialog = new UpdateIngredientsDialogFragment();
 		dialog.context = this;
 		dialog.message = message;
