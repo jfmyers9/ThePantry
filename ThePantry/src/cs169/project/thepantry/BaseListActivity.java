@@ -308,8 +308,8 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	                	   // call context function
 	                	   // adds selected category to the database
 	                	   
-	                	   DatabaseModel dm = new DatabaseModel(context, ThePantryContract.DATABASE_NAME);
-	                	   dm.add(table, item, selectedType, "1");
+	                	   //DatabaseModel dm = new DatabaseModel(context, ThePantryContract.DATABASE_NAME);
+	                	   //dm.add(table, item, selectedType, "1");
 	                   }
 	               })
 	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
