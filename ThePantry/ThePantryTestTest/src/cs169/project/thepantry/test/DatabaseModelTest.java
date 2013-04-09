@@ -1,14 +1,19 @@
 package cs169.project.thepantry.test;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import android.content.pm.ApplicationInfo;
-import android.content.res.AssetManager;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.database.Cursor;
 import android.test.AndroidTestCase;
 import cs169.project.thepantry.DatabaseModel;
+import cs169.project.thepantry.Storage;
+import cs169.project.thepantry.ThePantryContract;
 
 public class DatabaseModelTest extends AndroidTestCase {
 
@@ -322,5 +327,110 @@ public class DatabaseModelTest extends AndroidTestCase {
 		assertTrue("Error: Database not cleared", success);
 		assertFalse("Error: shouldn't have anything in table", testdm.findItem(table, "milk"));
 	}
+	
+	// Doesn't work because privacy with recipe class, really annoying!
+	public void testRecipe() {
+		Recipe recipe = new Recipe();
+		recipe.id = "testID";
+		recipe.name = "testName";
+		
+		Attribution att = new Attribution("testURL", "testText", "testLogo");
+		recipe.attribution = att;
+		
+		ArrayList<String> ingredients = new ArrayList<String>();
+		ingredients.add("testIng1");
+		ingredients.add("testIng2");
+		recipe.ingredientLines = ingredients;
+		
+		RecipeImages img = new RecipeImages("testLargeUrl", "testSmallUrl");
+		recipe.images = img;
+		
+		RecipeSource src = new RecipeSource("testRecipeUrl", "testSiteUrl", "testSourceName");
+		recipe.source = src;
+		
+		//boolean success = testdm.addRecipe((Recipe)recipe);
+		//assertTrue("Remove operation failed", success);
+		
+		/* Test should be like this
+		 * dm = new DatabaseModel(this, ThePantryContract.DATABASE_NAME);
+		ArrayList<Recipe> recipes = dm.getCookOrFav(ThePantryContract.Recipe.COOKED);
+		Recipe recipe = recipes.get(0);
+		System.out.println("Size should be 1: " + recipes.size());
+		System.out.println("Should be bacon: " + recipe.name);
+		System.out.println("Should be Bacon with tons of bacon: " + recipe.name);
+		System.out.println("Should be testID: " + recipe.id);
+		
+		System.out.println("Should be Bacon: " + recipe.ingredientLines.get(0));
+		System.out.println("Should be Beets: " + recipe.ingredientLines.get(1));
+		System.out.println("Should be Carrots: " + recipe.ingredientLines.get(2));
+		
+		System.out.println("Should be testLargeURL: " + recipe.images.hostedLargeUrl);
+		System.out.println("Should be testSmallURL: " + recipe.images.hostedSmallUrl);
+		
+		System.out.println("Should be testURL: " + recipe.attribution.url);
+		System.out.println("Should be testText: " + recipe.attribution.text);
+		System.out.println("Should be testLogo: " + recipe.attribution.logo);
+	
+		System.out.println("Should be testRecipeURL: " + recipe.source.sourceRecipeUrl);
+		System.out.println("Should be testSiteURL: " + recipe.source.sourceSiteUrl);
+		System.out.println("Should be testSourceName: " + recipe.source.sourceDisplayName);
+		 */
+	}
+}
 
+
+
+/** All Recipes below added from Storage in order to test Recipe Database
+ */
+class Recipe extends Storage implements Serializable {
+	String id;
+	String name;
+	Boolean cooked; // can probably take out, leave until caching works properly
+	Boolean favorite; // can probably take out, leave until caching works properly
+	Attribution attribution;
+	ArrayList<String> ingredientLines; //in order
+	RecipeImages images; //not always present
+	RecipeSource source; //not always present
+
+	Recipe() {
+		cooked=false;
+		favorite=false;
+	}
+	public String getId() {
+		return id;
+	}
+}
+
+class Attribution extends Storage implements Serializable {
+	String url;
+	String text;
+	String logo;
+	
+	Attribution (String url, String text, String logo) {
+		this.url = url;
+		this.text = text;
+		this.logo = logo;
+	}
+}
+
+class RecipeImages extends Storage implements Serializable {
+	String hostedLargeUrl;
+	String hostedSmallUrl;
+	
+	RecipeImages(String lrgUrl, String smlUrl) {
+		hostedLargeUrl = lrgUrl;
+		hostedSmallUrl = smlUrl;
+	}
+}
+
+class RecipeSource extends Storage implements Serializable {
+	String sourceRecipeUrl;
+	String sourceSiteUrl;
+	String sourceDisplayName;
+	
+	RecipeSource(String recipeUrl, String siteUrl, String name) {
+		sourceRecipeUrl = recipeUrl;
+		sourceSiteUrl = siteUrl;
+		sourceDisplayName = name;
+	}
 }
