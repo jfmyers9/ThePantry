@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -32,7 +33,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	public ExpandableListView eView;
 	public ListView lView;
 	BaseListAdapter eAdapter;
-	public String table;
+	public static String table;
 	public static final String DATABASE_NAME = "thepantry";
 	public ArrayList<IngredientGroup> groupItems;
 	public ArrayList<String> groupNames;
@@ -90,17 +91,21 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
 		    ListView lv = new ListView(this);
 		    
-		    ArrayList<IngredientGroup> gTypes = getTypes(table);
+		    ArrayList<IngredientGroup> gTypes = getTypes(Ingredients.TABLE_NAME);
 		    ArrayList<String> types = new ArrayList<String>();
 		    for (IngredientGroup g : gTypes) {
 		    	types.add(g.getGroup());
 			}
+		    types.add("Other");
 		    
-		    lv.setAdapter(new ArrayAdapter<String>(this,
-		            android.R.layout.simple_list_item_checked, types));
+		    ListAdapter listTypes = new ArrayAdapter<String>(this,
+		            android.R.layout.simple_list_item_checked, types);
+		    lv.setAdapter(listTypes);
 			
 			dialog.context = this;
-			dialog.message = "Add " + query + " to your pantry?";
+			dialog.message = "Select a category to add " + query + " to your pantry?";
+			dialog.types = types.toArray(new String[0]);
+			dialog.item = query;
 			dialog.content = lv;
 			dialog.show(getFragmentManager(), "dialog");
 			return true;
@@ -277,6 +282,9 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		
 		Context context;
 		String message;
+		String[] types;
+		String item;
+		String selectedType;
 		ListView content;
 		
 	    @Override
@@ -284,11 +292,24 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	        // Use the Builder class for convenient dialog construction
 	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 	        builder.setTitle(message)
-	        	   .setMessage("Select a type below: ") // Figure out how to resize text
-	        	   .setView(content)
+	        	   .setSingleChoiceItems(types, 0,
+	        			   new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if (which == -1) {
+							selectedType = "Other";
+						} else {
+							selectedType = types[which];
+						}
+					}
+	        	   })
 	        	   .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
 	                   public void onClick(DialogInterface dialog, int id) {
-	                	   // find which category was clicked and add it to the database
+	                	   // call context function
+	                	   // adds selected category to the database
+	                	   
+	                	   DatabaseModel dm = new DatabaseModel(context, ThePantryContract.DATABASE_NAME);
+	                	   dm.add(table, item, selectedType, "1");
 	                   }
 	               })
 	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {

@@ -176,7 +176,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			qb.setTables(table);
 			String selection;
 			if (table == ThePantryContract.Recipe.TABLE_NAME) {
-				selection = ThePantryContract.Recipe.RECIPE + " = ?";
+				selection = ThePantryContract.Recipe.ID + " = ?";
 			} else {
 				selection = ThePantryContract.ITEM + " = ?";
 			}
@@ -473,6 +473,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 	}
 
+	/**
+	 * Returns all cooked or favorited recipes in recipe table
+	 * @param column -- cooked or favorited
+	 * @return ArrayList of recipes
+	 */
 	public ArrayList<Recipe> getCookOrFav(String column) {
 		SQLiteDatabase db = getReadableDatabase();
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
@@ -485,7 +490,32 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		ArrayList<Recipe> recipes = makeRecipe(cRecipe);
 		return recipes;
 	}
+	
+	/**
+	 * Finds the recipe with the associated ID
+	 * @param id -- ID of a specific recipe
+	 * @return Recipe object
+	 */
+	public Recipe getRecipe(String id) {
+		SQLiteDatabase db = getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(ThePantryContract.Recipe.TABLE_NAME);
 
+		String selection = ThePantryContract.Recipe.ID + " = ?";
+		String[] selectionArgs = {id};
+		
+		Cursor cRecipe = qb.query(db, null, selection, selectionArgs, null, null, null, null);
+		ArrayList<Recipe> recipes = makeRecipe(cRecipe);
+		
+		Recipe recipe = recipes.get(0);
+		return recipe;
+	}
+
+	/**
+	 * Adds a given recipe to the database
+	 * @param recipe -- a recipe object
+	 * @return boolean -- signifies successful database insert
+	 */
 	public boolean addRecipe(Recipe recipe) {
 		String id = recipe.id;
 		String name = recipe.name;
@@ -514,7 +544,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			values.put(ThePantryContract.Recipe.SOURCE, source);
 
 			long newRowId;
-			if (!findItem(ThePantryContract.Recipe.TABLE_NAME, recipe.name)) {
+			if (!findItem(ThePantryContract.Recipe.TABLE_NAME, recipe.id)) {
 				try {
 					newRowId = db.insertOrThrow(ThePantryContract.Recipe.TABLE_NAME, null, values);
 					if (newRowId != -1) {

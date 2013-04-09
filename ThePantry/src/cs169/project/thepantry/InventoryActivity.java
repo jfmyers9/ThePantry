@@ -12,7 +12,6 @@ import android.widget.SearchView;
 
 import com.actionbarsherlock.view.Menu;
 
-import cs169.project.thepantry.ThePantryContract.Ingredients;
 import cs169.project.thepantry.ThePantryContract.Inventory;
 
 
