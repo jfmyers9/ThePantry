@@ -48,7 +48,7 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	    		found = false;
 	    		if (invItems != null && invItems.moveToFirst()) {
 	    			do {
-	    				if (invItems.getString(0).toLowerCase().equals(values.get(position).ingredients.get(i).toLowerCase())) {
+	    				if (invItems.getString(Inventory.ITEMIND).toLowerCase().equals(values.get(position).ingredients.get(i).toLowerCase())) {
 	    					found = true;
 	    					break;
 	    				}
