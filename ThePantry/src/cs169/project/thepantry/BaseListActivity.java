@@ -196,7 +196,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		if (items != null){
 			while(!items.isAfterLast()){
 				String data = items.getString(0);
-				IngredientChild item = new IngredientChild(data,"tmp"); // I'm lazy change this to the right type
+				IngredientChild item = new IngredientChild(data);
 				result.add(item);
 				items.moveToNext();
 			}
