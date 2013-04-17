@@ -16,6 +16,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,11 +24,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -173,6 +171,7 @@ public class RegistrationActivity extends Activity {
 	    		gsjo = new GetJsonObject(obj);
 	    		gsjo.execute(urlAdd);
 	    	} catch (Exception e) {
+	    		e.printStackTrace();
 				Context context = getApplicationContext();
 				CharSequence text = "Something went wrong1.";
 				int duration = Toast.LENGTH_LONG;
@@ -248,7 +247,7 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 						toast.show();
 					}
 					Context context = getApplicationContext();
-					Intent intent = new Intent(context, ProfileActivity.class);
+					Intent intent = new Intent(context, TutorialActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);

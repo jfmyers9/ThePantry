@@ -12,16 +12,18 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 
-import cs169.project.thepantry.RecipeActivity.AddIngredientsDialogFragment;
+import cs169.project.thepantry.ThePantryContract.Ingredients;
 import cs169.project.thepantry.ThePantryContract.Inventory;
 import cs169.project.thepantry.ThePantryContract.ShoppingList;
 
@@ -31,7 +33,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	public ExpandableListView eView;
 	public ListView lView;
 	BaseListAdapter eAdapter;
-	public String table;
+	public static String table;
 	public static final String DATABASE_NAME = "thepantry";
 	public ArrayList<IngredientGroup> groupItems;
 	public ArrayList<String> groupNames;
@@ -53,7 +55,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	public void setupSearchView() {
 		mSearchView.setIconifiedByDefault(false);
 		mSearchView.setOnQueryTextListener(this);
-		mSearchView.setSubmitButtonEnabled(false);
+		mSearchView.setSubmitButtonEnabled(true);
 		mSearchView.setQueryHint(getString(R.string.ingredient_search));
 	}
 
@@ -69,7 +71,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 					items.add(c);
 				}
 			}
-			BaseListViewAdapter lAdapter = new BaseListViewAdapter(this,  items);
+			BaseListViewAdapter lAdapter = new BaseListViewAdapter(this,  items, table);
 			lView.setAdapter(lAdapter);
 			eView.setVisibility(View.INVISIBLE);
 			lView.setVisibility(View.VISIBLE);
@@ -78,7 +80,36 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	}
 
 	public boolean onQueryTextSubmit(String query) {
-		return false;
+		String message;
+		if(dm.findItem(table, query)) {
+			// TODO: Make this popup window to increment amount
+			message = "You already have this item";
+			Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+			toast.show();
+			return true;
+		} else {
+			AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
+		    ListView lv = new ListView(this);
+		    
+		    ArrayList<IngredientGroup> gTypes = getTypes(Ingredients.TABLE_NAME);
+		    ArrayList<String> types = new ArrayList<String>();
+		    for (IngredientGroup g : gTypes) {
+		    	types.add(g.getGroup());
+			}
+		    types.add("Other");
+		    
+		    ListAdapter listTypes = new ArrayAdapter<String>(this,
+		            android.R.layout.simple_list_item_checked, types);
+		    lv.setAdapter(listTypes);
+			
+			dialog.context = this;
+			dialog.message = "Select a category to add " + query + " to your pantry?";
+			dialog.types = types.toArray(new String[0]);
+			dialog.item = query;
+			dialog.content = lv;
+			dialog.show(getFragmentManager(), "dialog");
+			return true;
+		}
 	}
 	
 	/** Fills the arrays with database data. */
@@ -100,7 +131,6 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		if (types!=null){
 			while(!types.isAfterLast()){
 				String data = types.getString(0);
-				System.out.println(data);
 				result.add(new IngredientGroup(data, new ArrayList<IngredientChild>()));
 				types.moveToNext();
 			}
@@ -120,6 +150,10 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			while(!items.isAfterLast()){
 				String data = items.getString(0);
 				IngredientChild temp = new IngredientChild(data,type);
+				if (table != ThePantryContract.Inventory.TABLE_NAME) {
+					boolean checked = dm.isItemChecked(table, data, ThePantryContract.CHECKED);
+					temp.setSelected(checked);
+				}
 				children.add(temp);
 				result.add(temp);
 				items.moveToNext();
@@ -140,11 +174,13 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		int groupPos = 0;
 		IngredientGroup temp = new IngredientGroup(type,new ArrayList<IngredientChild>());
 		if (success) {
+			IngredientChild child = new IngredientChild(item, type);
+			children.add(child);
 			if (groupItems.contains(temp)) {
 				groupPos = groupItems.indexOf(temp);
-				eAdapter.addChild(new IngredientChild(item, type), groupItems.get(groupPos));
+				eAdapter.addChild(child, groupItems.get(groupPos));
 			} else {
-				eAdapter.addChild(new IngredientChild(item, type), temp);
+				eAdapter.addChild(child, temp);
 			}
 		}
 	}
@@ -159,7 +195,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		if (items != null){
 			while(!items.isAfterLast()){
 				String data = items.getString(0);
-				IngredientChild item = new IngredientChild(data,"tmp"); // I'm lazy change this to the right type
+				IngredientChild item = new IngredientChild(data);
 				result.add(item);
 				items.moveToNext();
 			}
@@ -190,18 +226,18 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 				boolean success = dm.add(Inventory.TABLE_NAME, c.getName(),c.getGroup(),"1");
 				message += c.getName() + "\n";
 				// If the shopping list "updates" the ingredients are removed from list
+				dm.check(table, c.getName(), ThePantryContract.CHECKED, false);
 				if (table == ShoppingList.TABLE_NAME) {
 					dm.check(table, c.getName(), ThePantryContract.REMOVEFLAG, true);
-				}
+				} 
 				if (!success) {
 					System.err.println("You Fucked Up");
 				}
 			}
 		}
 		
-		
-				
-		AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
+		// Opens pop up window with items being added to the pantry
+		UpdateIngredientsDialogFragment dialog = new UpdateIngredientsDialogFragment();
 		dialog.context = this;
 		dialog.message = message;
 		dialog.show(getFragmentManager(), "dialog");
@@ -210,7 +246,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	/* Class for displaying popup dialog for adding ingredients
 	 * 
 	 */
-	public static class AddIngredientsDialogFragment extends DialogFragment {
+	public static class UpdateIngredientsDialogFragment extends DialogFragment {
 		
 		Context context;
 		String message;
@@ -225,7 +261,56 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	                   public void onClick(DialogInterface dialog, int id) {
 	                	   //go to inventory
 	                  		Intent intent = new Intent(context, InventoryActivity.class);
+	                  		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	                  		startActivity(intent);
+	                   }
+	               })
+	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	               		
+	                   }
+	               });
+	        // Create the AlertDialog object and return it
+	        return builder.create();
+	    }
+	}
+	
+	/* Class for displaying popup dialog for adding new ingredients
+	 * 
+	 */
+	public static class AddIngredientsDialogFragment extends DialogFragment {
+		
+		Context context;
+		String message;
+		String[] types;
+		String item;
+		String selectedType;
+		ListView content;
+		
+	    @Override
+	    public Dialog onCreateDialog(Bundle savedInstanceState) {
+	        // Use the Builder class for convenient dialog construction
+	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        builder.setTitle(message)
+	        	   .setSingleChoiceItems(types, 0,
+	        			   new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if (which == -1) {
+							selectedType = "Other";
+						} else {
+							selectedType = types[which];
+						}
+					}
+	        	   })
+	        	   .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                	   // call context function
+	                	   // adds selected category to the database
+	                	   
+	                	   //DatabaseModel dm = new DatabaseModel(context, ThePantryContract.DATABASE_NAME);
+	                	   //dm.add(table, item, selectedType, "1");
 	                   }
 	               })
 	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {

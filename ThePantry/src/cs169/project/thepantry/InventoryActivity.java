@@ -12,13 +12,10 @@ import android.widget.SearchView;
 
 import com.actionbarsherlock.view.Menu;
 
-import cs169.project.thepantry.ThePantryContract.Ingredients;
 import cs169.project.thepantry.ThePantryContract.Inventory;
 
 
 public class InventoryActivity extends BaseListActivity {
-
-	//private String table = Inventory.TABLE_NAME;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

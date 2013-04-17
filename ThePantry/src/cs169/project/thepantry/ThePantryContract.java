@@ -8,12 +8,18 @@ public class ThePantryContract {
 	/** The name of the database */
     public static final String DATABASE_NAME = "thepantry";
 	
-	/** Column names that are central to every table */
+	/** Column names that are central to every table (but recipes) */
 	public static final String ITEM = "item";
 	public static final String TYPE = "type";
 	public static final String AMOUNT = "amount";
 	public static final String ADDFLAG = "addFlag";
 	public static final String REMOVEFLAG = "removeFlag";
+	public static final String CHECKED = "checked";
+	
+	/** String used to separate different strings in database
+	 * that will be parsed when it is retrieved
+	 */
+	public static final String SEPERATOR = ";!*";
 	
 	/** Private constructor method to make class static. */
 	private ThePantryContract() {}
@@ -24,23 +30,83 @@ public class ThePantryContract {
 	/** Inner class that defines the Ingredients table */
 	public static abstract class Ingredients implements BaseColumns {
 	    public static final String TABLE_NAME = "ingredients";
+	    
+	    // DATABASE COLUMN INDEXS
+	    public static final int ITEMIND = 0;
+	    public static final int TYPEIND = 1;
+	    public static final int AMOUNTIND = 2;
+	    public static final int CHECKEDIND = 3;
 	}
 	
 	/** Inner class that defines the Inventory table */
 	public static abstract class Inventory implements BaseColumns {
 	    public static final String TABLE_NAME = "inventory";
+	    
+	    // DATABASE COLUMN INDEXS
+	    public static final int REMOVEFLAGIND = 0;
+	    public static final int ADDFLAGIND = 1;
+	    public static final int ITEMIND = 2;
+	    public static final int TYPEIND = 3;
+	    public static final int AMOUNTIND = 4;
 	}
 	
 	/** Inner class that defines the Shopping List table */
 	public static abstract class ShoppingList implements BaseColumns {
 	    public static final String TABLE_NAME = "shoppinglist";
-	}
-	/** Inner class that defines the Shopping List table */
-	public static abstract class Recipe implements BaseColumns {
-	    public static final String TABLE_NAME = "recipes"; 
-	    public static final String RECIPE = "recipe";
-		public static final String COOKED = "cooked";
-		public static final String FAVORITE = "favorite";	    
 	    
+	 // DATABASE COLUMN INDEXS
+	    public static final int CHECKEDIND = 0;
+	    public static final int REMOVEFLAGIND = 1;
+	    public static final int ITEMIND = 2;
+	    public static final int TYPEIND = 3;
+	    public static final int AMOUNTIND = 4;
+	    public static final int ADDFLAGIND = 5;
+	}
+	
+	public static abstract class Storage implements BaseColumns {
+		public static final String RECIPE = "recipe";
+	    public static final String ID = "id";
+	    public static final String COOKED = "cooked";
+		public static final String FAVORITE = "favorite";	
+	}
+	
+	/** Inner class that defines the Recipe table */
+	public static abstract class Recipe extends Storage implements BaseColumns {
+	    public static final String TABLE_NAME = "recipes";
+	    
+	    // DATABASE COLUMN NAMES
+	    public static final String INGLINES = "ingredientLines";
+	    public static final String IMAGE = "image";
+	    public static final String ATTRIBUTE = "attribute";
+	    public static final String SOURCE = "source";
+		
+		// DATABASE COLUMN INDEXS
+		public static final int RECIPEIND = 0;
+		public static final int IDIND = 1;
+		public static final int INGLINESIND = 2;
+		public static final int IMGIND = 3;
+		public static final int ATTIND = 4;
+		public static final int SOURCEIND = 5;
+		public static final int COOKEDIND = 6;
+		public static final int FAVORITEIND = 7;
+	}
+	
+	/** Inner class that defines the Search Match table */
+	public static abstract class SearchMatch extends Storage implements BaseColumns {
+	    public static final String TABLE_NAME = "searchMatch";
+	    
+	    // DATABASE COLUMN NAMES
+	    public static final String INGREDIENTS = "ingredients";
+	    public static final String IMAGEURL = "imageUrl";
+	    public static final String SOURCENAME = "sourceName";
+		
+		// DATABASE COLUMN INDEXS
+		public static final int RECIPEIND = 0;
+		public static final int IDIND = 1;
+		public static final int INGREDIENTSIND = 2;
+		public static final int IMGIND = 3;
+		public static final int SOURCEIND = 5;
+		public static final int COOKEDIND = 6;
+		public static final int FAVORITEIND = 7;
 	}
 }

@@ -9,20 +9,32 @@
     tools:context=".ShoppingListActivity" >
     
     
+        <Button
+        android:id="@+id/update_inventory_button"
+    	android:layout_height="wrap_content"
+     	android:layout_width="wrap_content"
+     	android:layout_centerHorizontal="true"
+    	android:text="@string/update_inventory"
+    	android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" 
+     	android:onClick="updateInventory" 
+     	/>
+        
     <EditText
         android:id= "@+id/shopping_list_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/ingredient_search"
         android:inputType="text"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
+        android:layout_below="@id/update_inventory_button"
+        />
     
     <Button
         android:id="@+id/shopping_list_button"
     	android:layout_height="wrap_content"
      	android:layout_width="wrap_content"
     	android:text="@string/add_item"
+    	android:layout_below="@id/update_inventory_button"
      	android:onClick="addShopItem"
      	android:layout_toRightOf="@id/shopping_list_text"/>
    
@@ -30,20 +42,16 @@
     	android:id="@+id/add_sl_types"
     	android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
+    	android:layout_below="@id/update_inventory_button"
+    	android:layout_marginBottom="20dp"
     	android:layout_toRightOf="@id/shopping_list_button" />
     
-    <Button
-        android:id="@+id/update_inventory_button"
-    	android:layout_height="wrap_content"
-     	android:layout_width="wrap_content"
-     	android:layout_below="@id/shopping_list_button"
-     	android:layout_centerHorizontal="true"
-    	android:text="@string/update_inventory"
-     	android:onClick="updateInventory" />
+
     
     <ExpandableListView android:id="@+id/exp_shop_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/update_inventory_button"/>
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/shopping_list_text"/>
         
 </RelativeLayout>

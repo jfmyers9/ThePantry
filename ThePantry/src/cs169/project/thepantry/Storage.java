@@ -89,14 +89,14 @@ public class Storage implements Serializable {
 class Recipe extends Storage implements Serializable {
 	String id;
 	String name;
-	Boolean cooked;
-	Boolean favorite;
+	Boolean cooked; // can probably take out, leave until caching works properly
+	Boolean favorite; // can probably take out, leave until caching works properly
 	Attribution attribution;
 	ArrayList<String> ingredientLines; //in order
 	RecipeImages images; //not always present
 	RecipeSource source; //not always present
 
-	protected Recipe() {
+	Recipe() {
 		cooked=false;
 		favorite=false;
 	}
@@ -142,6 +142,11 @@ class Attribution extends Storage implements Serializable {
 	String text;
 	String logo;
 	
+	Attribution (String url, String text, String logo) {
+		this.url = url;
+		this.text = text;
+		this.logo = logo;
+	}
 	protected Attribution(JSONObject att) {
 		try {
 			this.url = att.getString("url");
@@ -161,6 +166,11 @@ class RecipeImages extends Storage implements Serializable {
 	String hostedLargeUrl;
 	String hostedSmallUrl;
 	
+	RecipeImages(String lrgUrl, String smlUrl) {
+		hostedLargeUrl = lrgUrl;
+		hostedSmallUrl = smlUrl;
+	}
+	
 	protected RecipeImages(JSONObject ims) {
 		try {
 			this.hostedLargeUrl = ims.getString("hostedLargeUrl");
@@ -178,6 +188,12 @@ class RecipeSource extends Storage implements Serializable {
 	String sourceRecipeUrl;
 	String sourceSiteUrl;
 	String sourceDisplayName;
+	
+	RecipeSource(String recipeUrl, String siteUrl, String name) {
+		sourceRecipeUrl = recipeUrl;
+		sourceSiteUrl = siteUrl;
+		sourceDisplayName = name;
+	}
 	
 	protected RecipeSource(JSONObject src) {
 		try {
@@ -225,6 +241,7 @@ class SearchMatch extends Storage implements Serializable {
 	String smallImageUrl; //not always present
 	String sourceDisplayName; //not always present but defaults to Unknown
 	
+	SearchMatch(){}
 	protected SearchMatch(JSONObject info) {
 		// smallImageUrl not always present
 		try {

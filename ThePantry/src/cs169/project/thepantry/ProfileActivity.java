@@ -2,7 +2,6 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,15 +11,16 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import cs169.project.thepantry.HomePageActivity.HomeSearchTask;
 
-public class ProfileActivity extends Activity {
+import com.actionbarsherlock.view.Menu;
+
+import cs169.project.thepantry.HomePageActivity.HomeSearchTask;
+public class ProfileActivity extends BasicMenuActivity {
 	
 	// assumes that when profile clicked, then extra holds username
 	String username;
@@ -46,8 +46,10 @@ public class ProfileActivity extends Activity {
 	SearchModel sm = new SearchModel();
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_profile);
 		// login status of the user
 		SharedPreferences shared_pref = PreferenceManager.getDefaultSharedPreferences(this);
 		String login_status = shared_pref.getString(LOGGED_IN, null);
@@ -55,6 +57,12 @@ public class ProfileActivity extends Activity {
 		// check if the user is logged in, if not take user to login screen
 		if (login_status != null) {
 			setContentView(R.layout.activity_profile);
+			
+			IngredientSyncTask slSync = new IngredientSyncTask(this);
+			slSync.execute(ThePantryContract.ShoppingList.TABLE_NAME, login_status);
+			DatabaseModel dm = new DatabaseModel(this, "thepantry");
+			IngredientSyncTask invSync = new IngredientSyncTask(this);
+			invSync.execute(ThePantryContract.Inventory.TABLE_NAME, login_status);
 			
 			// set text for textviews
 			TextView favorite_text = (TextView)findViewById(R.id.user_faves_text);
@@ -124,7 +132,7 @@ public class ProfileActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.profile, menu);
+		getSupportMenuInflater().inflate(R.menu.profile, menu);
 		return true;
 	}
 	
@@ -162,7 +170,7 @@ public class ProfileActivity extends Activity {
 				String recipe_name = faves.getString(0);
 				System.out.println(recipe_name);
 				SearchCriteria sc = new SearchCriteria("recipe", recipe_name);
-				new ProfileSearchTask(this, "fave").execute(sc);
+				//new ProfileSearchTask(this, "fave").execute(sc);
 				faves.moveToNext();
 			}
 			faves.close();
@@ -183,7 +191,7 @@ public class ProfileActivity extends Activity {
 				String recipe_name = cooked.getString(0);
 				System.out.println(recipe_name);
 				SearchCriteria sc = new SearchCriteria("recipe", recipe_name);
-				new ProfileSearchTask(this, "cook").execute(sc);
+				//new ProfileSearchTask(this, "cook").execute(sc);
 				cooked.moveToNext();
 			}
 			cooked.close();
@@ -191,61 +199,61 @@ public class ProfileActivity extends Activity {
 	}
 	
 	
-	public class ProfileSearchTask extends AsyncTask<SearchCriteria, String, Storage> {
-		
-		String type = "";
-		String q;
-		Context context;
-		
-		public ProfileSearchTask(Context context) {
-	    	this.context = context;
-		}
-		
-		public ProfileSearchTask(Context context, String type) {
-		    	this.context = context;
-		    	this.type = type;
-		}
-		
-		
-		@Override
-		protected Storage doInBackground(SearchCriteria... sc) {
-			this.type = sc[0].type;
-			this.q = sc[0].q;
-			return sm.search(sc[0]);
-		}
-		
-		//update list of recommendations using a SearchResultsAdapter
-		//or open a SearchResultsActivity if a search was made
-		//or open a recipe page if a recipe was selected
-		@Override
-		protected void onPostExecute(Storage result) {
-
-	        
-			if (result != null) {
-				if (this.type == "fave") {
-					if (favesAdapter.values.size() == 0) {
-						faves = ((SearchResult)result).matches;
-						favesAdapter = new SearchResultAdapter(ProfileActivity.this, faves);   
-						favorites.setAdapter(favesAdapter);
-					} else {
-						favesAdapter.values = ((SearchResult)result).matches; 
-						favesAdapter.notifyDataSetChanged();
-					}
-				}
-				else if (this.type == "cook") {
-					if (cookAdapter.values.size() == 0) {
-						cooked = ((SearchResult)result).matches;
-						cookAdapter = new SearchResultAdapter(ProfileActivity.this, cooked);   
-						favorites.setAdapter(cookAdapter);
-					} else {
-						cookAdapter.values = ((SearchResult)result).matches; 
-						cookAdapter.notifyDataSetChanged();
-					}
-				}
-			}
-			
-		}
-		
-	}
+//	public class ProfileSearchTask extends AsyncTask<SearchCriteria, String, Storage> {
+//		
+//		String type = "";
+//		String q;
+//		Context context;
+//		
+//		public ProfileSearchTask(Context context) {
+//	    	this.context = context;
+//		}
+//		
+//		public ProfileSearchTask(Context context, String type) {
+//		    	this.context = context;
+//		    	this.type = type;
+//		}
+//		
+//		
+//		@Override
+//		protected Storage doInBackground(SearchCriteria... sc) {
+//			this.type = sc[0].type;
+//			this.q = sc[0].q;
+//			return sm.search(sc[0]);
+//		}
+//		
+//		//update list of recommendations using a SearchResultsAdapter
+//		//or open a SearchResultsActivity if a search was made
+//		//or open a recipe page if a recipe was selected
+//		@Override
+//		protected void onPostExecute(Storage result) {
+//
+//	        
+//			if (result != null) {
+//				if (this.type == "fave") {
+//					if (favesAdapter.values.size() == 0) {
+//						faves = ((SearchResult)result).matches;
+//						favesAdapter = new SearchResultAdapter(ProfileActivity.this, faves);   
+//						favorites.setAdapter(favesAdapter);
+//					} else {
+//						favesAdapter.values = ((SearchResult)result).matches; 
+//						favesAdapter.notifyDataSetChanged();
+//					}
+//				}
+//				else if (this.type == "cook") {
+//					if (cookAdapter.values.size() == 0) {
+//						cooked = ((SearchResult)result).matches;
+//						cookAdapter = new SearchResultAdapter(ProfileActivity.this, cooked);   
+//						favorites.setAdapter(cookAdapter);
+//					} else {
+//						cookAdapter.values = ((SearchResult)result).matches; 
+//						cookAdapter.notifyDataSetChanged();
+//					}
+//				}
+//			}
+//			
+//		}
+//		
+//	}
 	
 }

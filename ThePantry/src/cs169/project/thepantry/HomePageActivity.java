@@ -92,7 +92,7 @@ public class HomePageActivity extends BasicMenuActivity {
 					youHave.moveToNext();
 					loc--;
 				}
-				query += ", " + youHave.getString(0);
+				query += ", " + youHave.getString(Inventory.ITEMIND);
 				youHave.moveToFirst();
 			}
 			searchcriteria = new SearchCriteria("home", query, NUM_RECOMMENDATIONS);
