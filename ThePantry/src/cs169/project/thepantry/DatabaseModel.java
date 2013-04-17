@@ -339,6 +339,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
 				// Should this be id instead?
 				selection = ThePantryContract.Recipe.RECIPE + " = ?";
+				check(ThePantryContract.SearchMatch.TABLE_NAME, item, col, checked);
+			} else if (table.equals(ThePantryContract.SearchMatch.TABLE_NAME)){
+				// Should this be id instead?
+				selection = ThePantryContract.SearchMatch.RECIPE + " = ?";
+				check(ThePantryContract.Recipe.TABLE_NAME, item, col, checked);
 			} else {
 				selection = ThePantryContract.ITEM + " = ?";	
 			}

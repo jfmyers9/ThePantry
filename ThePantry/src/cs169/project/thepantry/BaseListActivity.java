@@ -131,7 +131,6 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		if (types!=null){
 			while(!types.isAfterLast()){
 				String data = types.getString(0);
-				System.out.println(data);
 				result.add(new IngredientGroup(data, new ArrayList<IngredientChild>()));
 				types.moveToNext();
 			}
@@ -262,6 +261,8 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	                   public void onClick(DialogInterface dialog, int id) {
 	                	   //go to inventory
 	                  		Intent intent = new Intent(context, InventoryActivity.class);
+	                  		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	                  		startActivity(intent);
 	                   }
 	               })
