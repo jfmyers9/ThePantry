@@ -71,8 +71,12 @@
     <string name="directions">Directions:</string>
     <string name="title_activity_registration">RegistrationActivity</string>
     <string name="inventory_go">Go to your Pantry</string>
-	<string name="delete">Delete</string>
-	<string name="delete_check">Are you sure you want to delete</string>
-	<string name="add">Add</string>
+    <string name="delete">Delete</string>
+    <string name="delete_check">Are you sure you want to delete</string>
+    <string name="add">Add</string>
+    <string name="title_activity_test_tabs">TestTabsActivity</string>
+    <string name="title_recommended">Recommended</string>
+    <string name="title_recent">Recent</string>
+    <string name="title_favorited">Favorited</string>
 
 </resources>

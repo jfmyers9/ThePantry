@@ -91,6 +91,10 @@
             android:name="cs169.project.thepantry.RegistrationActivity"
             android:label="@string/title_activity_registration" >
         </activity>
+        <activity
+            android:name="cs169.project.thepantry.TestTabsActivity"
+            android:label="@string/title_activity_test_tabs" >
+        </activity>
     </application>
 
 </manifest>
