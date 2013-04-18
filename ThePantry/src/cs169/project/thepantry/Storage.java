@@ -241,6 +241,7 @@ class SearchMatch extends Storage implements Serializable {
 	String smallImageUrl; //not always present
 	String sourceDisplayName; //not always present but defaults to Unknown
 	
+	SearchMatch(){}
 	protected SearchMatch(JSONObject info) {
 		// smallImageUrl not always present
 		try {

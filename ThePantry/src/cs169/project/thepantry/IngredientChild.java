@@ -13,6 +13,10 @@ public class IngredientChild {
 		this.group = group;
 		this.selected = false;
 	}
+	public IngredientChild(String name) {
+		this.name = name;
+		this.selected = false;
+	}
 	
 	public String getName() {
 		return name;

@@ -131,7 +131,6 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		if (types!=null){
 			while(!types.isAfterLast()){
 				String data = types.getString(0);
-				System.out.println(data);
 				result.add(new IngredientGroup(data, new ArrayList<IngredientChild>()));
 				types.moveToNext();
 			}
@@ -196,7 +195,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		if (items != null){
 			while(!items.isAfterLast()){
 				String data = items.getString(0);
-				IngredientChild item = new IngredientChild(data,"tmp"); // I'm lazy change this to the right type
+				IngredientChild item = new IngredientChild(data);
 				result.add(item);
 				items.moveToNext();
 			}
@@ -262,6 +261,8 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	                   public void onClick(DialogInterface dialog, int id) {
 	                	   //go to inventory
 	                  		Intent intent = new Intent(context, InventoryActivity.class);
+	                  		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	                  		startActivity(intent);
 	                   }
 	               })
@@ -308,8 +309,8 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	                	   // call context function
 	                	   // adds selected category to the database
 	                	   
-	                	   DatabaseModel dm = new DatabaseModel(context, ThePantryContract.DATABASE_NAME);
-	                	   dm.add(table, item, selectedType, "1");
+	                	   //DatabaseModel dm = new DatabaseModel(context, ThePantryContract.DATABASE_NAME);
+	                	   //dm.add(table, item, selectedType, "1");
 	                   }
 	               })
 	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {

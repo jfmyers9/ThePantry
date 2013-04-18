@@ -1394,6 +1394,7 @@ containing a value of this type.
         public static final int title_activity_home_page=0x7f0a0014;
         public static final int title_activity_inventory=0x7f0a0013;
         public static final int title_activity_inventory_add=0x7f0a0017;
+        public static final int title_activity_inventory_add_grid=0x7f0a004b;
         public static final int title_activity_login=0x7f0a004c;
         public static final int title_activity_menu=0x7f0a0032;
         public static final int title_activity_nav_menu_fragment=0x7f0a0036;
@@ -1404,11 +1405,10 @@ containing a value of this type.
         public static final int title_activity_search_results=0x7f0a0016;
         public static final int title_activity_settings=0x7f0a0057;
         public static final int title_activity_shopping_list=0x7f0a0015;
-        public static final int title_activity_test_tabs=0x7f0a0048;
         public static final int title_activity_tutorial=0x7f0a0010;
-        public static final int title_favorited=0x7f0a004b;
-        public static final int title_recent=0x7f0a004a;
-        public static final int title_recommended=0x7f0a0049;
+        public static final int title_favorited=0x7f0a004a;
+        public static final int title_recent=0x7f0a0049;
+        public static final int title_recommended=0x7f0a0048;
         public static final int tutorial_title=0x7f0a002a;
         public static final int update_inventory=0x7f0a0037;
     }

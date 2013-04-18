@@ -32,6 +32,8 @@ public class IngredientGroup {
 		boolean result = false;
 		if (o instanceof IngredientGroup) {
 			result = name.equals(((IngredientGroup)o).getGroup());
+		}else if (o instanceof String) {
+			result = name.equals((String) o);
 		}
 		return result;
 	}

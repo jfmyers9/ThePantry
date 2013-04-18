@@ -92,8 +92,13 @@
             android:label="@string/title_activity_registration" >
         </activity>
         <activity
-            android:name="cs169.project.thepantry.TestTabsActivity"
-            android:label="@string/title_activity_test_tabs" >
+            android:name="cs169.project.thepantry.InventoryAddGrid"
+            android:label="@string/title_activity_inventory_add_grid" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
