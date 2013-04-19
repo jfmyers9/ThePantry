@@ -1,4 +1,4 @@
-package cs169.project.thepantry.test;
+/*package cs169.project.thepantry.test;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class BaseListActivityTest extends ActivityInstrumentationTestCase2<BaseL
 
 	
 	/** Helper method to convert IngredientGroup arrays into their String representations */
-	protected ArrayList<String> groupToName(ArrayList<IngredientGroup> group) {
+	/*protected ArrayList<String> groupToName(ArrayList<IngredientGroup> group) {
 		act = getActivity();
 		ArrayList<String> result = new ArrayList<String>();
 		for (IngredientGroup g : group) {
@@ -100,4 +100,4 @@ public class BaseListActivityTest extends ActivityInstrumentationTestCase2<BaseL
 		}
 		assertTrue("Expecting IOException, spaces input not allowed", thrown);
 	}
-}
+}*/
