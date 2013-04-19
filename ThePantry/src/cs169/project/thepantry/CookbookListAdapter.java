@@ -34,7 +34,8 @@ public class CookbookListAdapter extends ArrayAdapter<Recipe> {
 	    if (values.size() > 0) {
     		TextView tv = (TextView) listItem.findViewById(R.id.recipe_name);
     		Recipe rec = values.get(position);
-    		String title = "" + position + ". " + rec.name;
+    		int index = position +1;
+    		String title = "" + index + ". " + rec.name;
     		System.out.println(title);
     		listItem.setTag(rec);
     		tv.setText(title);
