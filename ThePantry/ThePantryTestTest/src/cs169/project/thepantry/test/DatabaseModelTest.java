@@ -105,6 +105,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 		String[] values = {"40"};
 		MatrixCursor cursor = new MatrixCursor(colNames);
 		cursor.addRow(values);
+		cursor.moveToFirst();
 		assertEquals(testdm.cursorToAmount(cursor), "40");
 	}
 	
@@ -119,6 +120,8 @@ public class DatabaseModelTest extends AndroidTestCase {
 		String[] values = {"40"};
 		MatrixCursor cursor = new MatrixCursor(colNames);
 		cursor.addRow(values);
+		cursor.moveToFirst();
+		System.out.println(cursor.getCount());
 		String result = (String) testdm.cursorToObject(cursor, ThePantryContract.Ingredients.TABLE_NAME, ThePantryContract.AMOUNTVAL);
 		assertEquals(result, "40");
 	}
@@ -129,6 +132,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 		String[] values = {"marshmallows", "dessert", "40", "false"};
 		MatrixCursor cursor = new MatrixCursor(colNames);
 		cursor.addRow(values);
+		cursor.moveToFirst();
 		String table = ThePantryContract.Ingredients.TABLE_NAME;
 		ArrayList<IngredientChild> result = 
 				(ArrayList<IngredientChild>) testdm.cursorToObject(cursor, table, ThePantryContract.CHILDLIST);
@@ -144,6 +148,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 		MatrixCursor cursor = new MatrixCursor(colNames);
 		cursor.addRow(values);
 		cursor.addRow(values2);
+		cursor.moveToFirst();
 		ArrayList<IngredientGroup> groups =
 				(ArrayList<IngredientGroup>) testdm.cursorToObject(cursor, table, ThePantryContract.GROUPLIST);
 		assertEquals(groups.get(0).getGroup(), "dessert");
@@ -158,8 +163,9 @@ public class DatabaseModelTest extends AndroidTestCase {
 		String table = ThePantryContract.Ingredients.TABLE_NAME;
 		MatrixCursor cursor = new MatrixCursor(colNames);
 		cursor.addRow(values);
+		cursor.moveToFirst();
 		IngredientGroup group =
-				(IngredientGroup) testdm.cursorToObject(cursor, table, ThePantryContract.GROUPLIST);
+				(IngredientGroup) testdm.cursorToObject(cursor, table, ThePantryContract.GROUP);
 		assertEquals(group.getGroup(), "dessert");
 	}
 	
@@ -173,6 +179,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 		cursor.addRow(value1);
 		cursor.addRow(value2);
 		cursor.addRow(value3);
+		cursor.moveToFirst();
 		ArrayList<String> names =
 				(ArrayList<String>)testdm.cursorToObject(cursor, ThePantryContract.Ingredients.TABLE_NAME, ThePantryContract.STRINGLIST);
 		assertEquals(names.get(0), "alice");
@@ -186,6 +193,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 		String[] values = {"marshmallows", "dessert", "40", "false"};
 		MatrixCursor cursor = new MatrixCursor(colNames);
 		cursor.addRow(values);
+		cursor.moveToFirst();
 	}
 
 	/** Unit test for cursorToStringList */
@@ -196,7 +204,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 
 	/** Functional test */
 	public void testFindAllItems() {
-		String table = ThePantryContract.SearchMatch.TABLE_NAME;
+		String table = ThePantryContract.Ingredients.TABLE_NAME;
 		ArrayList<IngredientChild> items = testdm.findAllItems(table);
 		String[] match = {"candied bacon", "spinach salad", "german chocolate cake"};
 		for (IngredientChild item : items) {
@@ -255,7 +263,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 		String table = ThePantryContract.Ingredients.TABLE_NAME;
 		String item = "milk";
 		IngredientGroup type = testdm.findType(table, item);
-		assertEquals("Error: Milk is not " + type.getGroup(), type.getGroup(), "Dairy");
+		assertEquals("Error: Milk is not " + type.getGroup(), type.getGroup(), "dairy");
 	}
 
 	/** Functional test */
@@ -263,7 +271,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 		String table = ThePantryContract.Ingredients.TABLE_NAME;
 		String type = "dairy";
 		ArrayList<IngredientChild> items = testdm.findTypeItems(table, type);
-		assertEquals("Error: Milk is not ", items.get(0).getName(), "Milk");
+		assertEquals("Error: Milk is not ", items.get(0).getName(), "milk");
 	}
 
 	public void testGetAllRecipes() {
@@ -291,12 +299,15 @@ public class DatabaseModelTest extends AndroidTestCase {
 		String[] colNames = {"item", "type", "amount", "checked"};
 		String[] values = {"marshmallows", "dessert", "40", "false"};
 		Integer[] indices = {0, 1};
-		String table = "helloworld";
+		String table = ThePantryContract.Inventory.TABLE_NAME;
 		MatrixCursor cursor = new MatrixCursor(colNames);
 		cursor.addRow(values);
+		cursor.moveToFirst();
 		ArrayList<IngredientChild> result = testdm.makeIngredientChildren(cursor, indices, table);
 		assertEquals("marshamllows", result.get(0).getName());
 	}
+	
+	// Test Make IngredientChild on One with a remove set to true and one with each table
 	
 	public void testMakeIngredientChildrenNull() {
 		ArrayList<IngredientChild> result = testdm.makeIngredientChildren(null, null, null);
@@ -309,6 +320,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 		Integer[] indices = {0, 1};
 		MatrixCursor cursor = new MatrixCursor(colNames);
 		cursor.addRow(values);
+		cursor.moveToFirst();
 		ArrayList<IngredientGroup> result = testdm.makeIngredientGroups(cursor, indices);
 		assertEquals("dessert", result.get(0).getGroup());
 	}
@@ -330,26 +342,27 @@ public class DatabaseModelTest extends AndroidTestCase {
 		//fail("Not yet implemented");
 	}
 
+	/*
 	public void testQueryToChecked() {
 		SQLiteDatabase db = testdm.getReadableDatabase();
 		boolean checked = testdm.queryToChecked(db, false, ThePantryContract.Ingredients.TABLE_NAME,
-												new String[]{"item"}, "common", new String[]{"chicken"});
+												new String[]{"common"}, ThePantryContract.ITEM, new String[]{"chicken"});
 		assertTrue("Chicken should be common", checked);
 	}
 	
 	public void testQueryToCheckedFalse() {
 		SQLiteDatabase db = testdm.getReadableDatabase();
 		boolean checked = testdm.queryToChecked(db, false, ThePantryContract.Ingredients.TABLE_NAME,
-												new String[]{"item"}, "checked", new String[]{"chicken"});
+												new String[]{ThePantryContract.CHECKED}, ThePantryContract.ITEM, new String[]{"chicken"});
 		assertTrue("Chicken should not be checked", checked);
 	}
 
 	public void testQueryToCursor() {
 		SQLiteDatabase db = testdm.getReadableDatabase();
 		Cursor checked = testdm.queryToCursor(db, false, ThePantryContract.Ingredients.TABLE_NAME,
-				new String[]{"item"}, "checked", new String[]{"sandwiches"});
+				new String[]{ThePantryContract.CHECKED}, ThePantryContract.ITEM, new String[]{"sandwiches"});
 		assertNull(checked);
-	}
+	} */
 
 	/** Unit test for removing items from the database */
 	public void testRemove() {

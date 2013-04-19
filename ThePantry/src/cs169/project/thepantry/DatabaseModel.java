@@ -237,8 +237,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		String amount = ThePantryContract.DEFAULTAMOUNT;
 		if (cursor != null) {
 			amount = cursor.getString(0);
-		}
-		cursor.close();
+			cursor.close();
+		} 
 		return amount;
 	}
 	
@@ -407,11 +407,24 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	public IngredientGroup findType(String table, String item) {
 		try {
 			SQLiteDatabase db = getReadableDatabase();
+			
 
 			String[] columns = {ThePantryContract.TYPE};
-			String selection = ThePantryContract.ITEM + " = ?" + " AND " + ThePantryContract.REMOVEFLAG + " = ?";
+			String selection = "";
 			item = item.toLowerCase().trim();
-			String[] selectionArgs = {item, "false"};
+			
+			// TODO Turn this into helper function
+			ArrayList<String> selectionArgsList = new ArrayList<String>();
+			if(table == Ingredients.TABLE_NAME) {
+				selection = ThePantryContract.ITEM + " = ?";
+				selectionArgsList.add(item);
+			} else {
+				selection = ThePantryContract.ITEM + " = ?" + " AND " + ThePantryContract.REMOVEFLAG + " = ?";
+				selectionArgsList.add(item);
+				selectionArgsList.add("false");
+			}
+			String[] selectionArgs = selectionArgsList.toArray(new String[0]);
+			
 
 			Cursor cursor = queryToCursor(db, false, table, columns, selection, selectionArgs);
 			return ((IngredientGroup)cursorToObject(cursor, table, ThePantryContract.GROUP));
@@ -443,10 +456,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] selectionArgs = selectionArgsList.toArray(new String[0]);
 
 			Cursor cursor = queryToCursor(db, false, table, null, selection, selectionArgs);
-			System.out.println("@@@@@@@@@@@");
-			System.out.println(cursor.getString(ThePantryContract.Inventory.ITEMIND));
-			System.out.println(cursor.getString(ThePantryContract.Inventory.TYPEIND));
-			System.out.println("@@@@@@@@@@@");
 			return ((ArrayList<IngredientChild>)cursorToObject(cursor, table, ThePantryContract.CHILDLIST));
 		} catch (SQLiteException e) {
 			System.err.println("13");
@@ -718,8 +727,10 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] columns, String selection, String[] selectionArgs) {
 		Cursor c = db.query(distinct, table, columns, selection, selectionArgs, null, null, null, null);
 		if (c.moveToFirst()) {
+			System.out.println("%%%%%#*#*#*#*#*#%%");
 			return c;
 		} else {
+			System.out.println("%eowiohew%");
 			return null;
 		}
 	}
