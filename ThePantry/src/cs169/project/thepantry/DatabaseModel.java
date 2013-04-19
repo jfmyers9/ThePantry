@@ -165,11 +165,13 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 	}
 
-	public ArrayList<String> childrenToString(ArrayList<IngredientChild> children) {
+	public ArrayList<String> cursorToString(Cursor cursor) {
 		ArrayList<String> result = new ArrayList<String>();
-		for (IngredientChild child : children) {
-			result.add(child.getName());
+		while (!cursor.isAfterLast()) {
+			result.add(cursor.getString(0));
+			cursor.moveToNext();
 		}
+		cursor.close();
 		return result;
 	}
 
@@ -217,14 +219,14 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		} if (objectType.equals(ThePantryContract.STORAGE)) {
 			result = ((ArrayList<Storage>)result).get(0);
 		} else if (objectType.equals(ThePantryContract.CHILDLIST)) {
-			result = makeIngredientChildren(cursor, indices);
+			result = makeIngredientChildren(cursor, indices, table);
 			// can also add case for just one IngredientChild later if we need to 
 		} else if (objectType.equals(ThePantryContract.GROUPLIST)) {
 			result = makeIngredientGroups(cursor, indices);
 		} else if (objectType.equals(ThePantryContract.GROUP)) {
 			result = makeIngredientGroups(cursor, indices).get(0);
 		} else if (objectType.equals(ThePantryContract.STRINGLIST)) {
-			result = childrenToString(makeIngredientChildren(cursor, indices));
+			result = cursorToString(cursor);
 		} else if (objectType.equals(ThePantryContract.AMOUNTVAL)) {
 			result = cursorToAmount(cursor);
 		}
@@ -468,14 +470,22 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}		
 	}
 
-	/** Creates an ArrayList<IngredientChild> from a cursor and specifies indices */
-	public ArrayList<IngredientChild> makeIngredientChildren(Cursor cursor, int[] indices) {
+	/** Creates an ArrayList<IngredientChild> from a cursor and specifies indices 
+	 * @param table TODO*/
+	public ArrayList<IngredientChild> makeIngredientChildren(Cursor cursor, int[] indices, String table) {
 		ArrayList<IngredientChild> children = new ArrayList<IngredientChild>();
+		System.out.println(cursor.moveToFirst());
 		while(!cursor.isAfterLast()){
 			String data = cursor.getString(indices[0]);
 			String type = cursor.getString(indices[1]);
 			IngredientChild child = new IngredientChild(data,type);
-			children.add(child);
+			if(table != Ingredients.TABLE_NAME) {
+				if(!isItemChecked(table, child.getName(), ThePantryContract.REMOVEFLAG)) {
+					children.add(child);
+				}
+			} else {
+				children.add(child);
+			}
 			cursor.moveToNext();
 		}
 		cursor.close();
@@ -635,11 +645,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] columns, String selection, String[] selectionArgs) {
 		Cursor c = db.query(distinct, table, columns, selection, selectionArgs, null, null, null, null);
 		if (c.moveToFirst()) {
-			if(table != Ingredients.TABLE_NAME) {
-				if(isItemChecked(table, selection, ThePantryContract.REMOVEFLAG)){
-					return null;
-				}
-			}
 			return c;
 		} else {
 			return null;
