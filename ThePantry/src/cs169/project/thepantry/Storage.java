@@ -15,6 +15,8 @@ import org.json.JSONObject;
  */
 public class Storage implements Serializable {
 	private static final long serialVersionUID = 0L; //change this each version to remain consistent
+	String id;
+	String name;
 	
 	public static Recipe recipe;
 	public static Attribution att;
@@ -87,24 +89,15 @@ public class Storage implements Serializable {
  * Call the constructor using the JSON response returned by Yummly after a request for a certain recipe.
  */
 class Recipe extends Storage implements Serializable {
-	String id;
-	String name;
-	Boolean cooked; // can probably take out, leave until caching works properly
-	Boolean favorite; // can probably take out, leave until caching works properly
 	Attribution attribution;
 	ArrayList<String> ingredientLines; //in order
 	RecipeImages images; //not always present
 	RecipeSource source; //not always present
 
-	Recipe() {
-		cooked=false;
-		favorite=false;
-	}
+	Recipe() {}
 	
 	protected Recipe(JSONObject results) {
 		// images and source not necessarily included
-		cooked=false;
-		favorite=false;
 		try {
 			this.images = new RecipeImages((JSONObject)((JSONArray)results.get("images")).get(0));
 		} catch (JSONException e) {}
@@ -235,8 +228,6 @@ class SearchResult extends Storage implements Serializable {
 /** SearchMatch stores all the info that will be displayed for each recipe on SearchResultsActivity.
  */
 class SearchMatch extends Storage implements Serializable {
-	String id;
-	String name;
 	ArrayList<String> ingredients;
 	String smallImageUrl; //not always present
 	String sourceDisplayName; //not always present but defaults to Unknown
