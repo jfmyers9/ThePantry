@@ -92,4 +92,6 @@
     <string name="title_searchresults">Search Results</string>
     <string name="title_activity_cook_book">CookBookActivity</string>
     <string name="title_activity_add_recipe">AddRecipeActivity</string>
+    <string name="title_you_have">You have: </string>
+    <string name="title_you_need">You need: </string>
 </resources>

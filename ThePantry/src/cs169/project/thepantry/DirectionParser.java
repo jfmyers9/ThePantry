@@ -13,10 +13,8 @@ public class DirectionParser {
 	public static ArrayList<String> getDirections(String url) {
 		try {
 			Document doc = Jsoup.connect(url).timeout(10000).get();
-			System.out.println("connected");
 			// get host site and call correct parser
 			String site = new URL(url).getHost();
-			System.out.println(site);
 			if (site.equals("www.allrecipes.com") || site.equals("allrecipes.com")) {
 				return getAllRecipesDirections(doc);
 			} else if (site.equals("www.foodrepublic.com") || site.equals("foodrepublic.com")) {
@@ -74,13 +72,13 @@ public class DirectionParser {
 	}
 	
 	/* SIMPLYRECIPES.COM */
-	//TODO: remove preceding numbers & yield
+	//TODO: remove yield ?
 	private static ArrayList<String> getSimplyRecipesDirections(Document doc) {
 		ArrayList<String> directions = new ArrayList<String>();
 		Elements content = doc.getElementsByClass("instructions");
 		Elements dirs = content.get(0).getElementsByTag("p");
 		for (Element dir : dirs) {
-			  String dirText = dir.text();
+			  String dirText = dir.text().substring(2); // remove preceding numbers
 			  directions.add(dirText);
 			}
 		return directions;
@@ -125,13 +123,12 @@ public class DirectionParser {
 	}
 	
 	/* SERIOUSEATS.COM */
-	// TODO: remove preceding numbers
 	private static ArrayList<String> getSeriousEatsDirections(Document doc) {
 		ArrayList<String> directions = new ArrayList<String>();
 		Elements content = doc.getElementsByClass("instructions");
 		Elements dirs = content.get(0).getElementsByTag("li");
 		for (Element dir : dirs) {
-			  String dirText = dir.text();
+			  String dirText = dir.text().substring(2); //remove preceding numbers
 			  directions.add(dirText);
 			}
 		return directions;
@@ -162,13 +159,12 @@ public class DirectionParser {
 	}
 	
 	/* FOOD.COM */
-	// TODO: remove preceding numbers
 	private static ArrayList<String> getFoodDirections(Document doc) {
 		ArrayList<String> directions = new ArrayList<String>();
 		Elements content = doc.getElementsByClass("directions");
 		Elements dirs = content.get(0).getElementsByTag("ol").get(0).getElementsByTag("li");
 		for (Element dir : dirs) {
-			  String dirText = dir.text();
+			  String dirText = dir.text().substring(2); //remove preceding numbers
 			  directions.add(dirText);
 			}
 		return directions;

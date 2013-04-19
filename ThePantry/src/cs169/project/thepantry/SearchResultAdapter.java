@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,12 +62,16 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	    		}
 	    	}
 	    	
-	    	//take off trailing commas
+	    	//take off trailing commas, or recognize that there are no items
 	    	if (youHave.length() > 0) {
 	    		youHave = youHave.substring(0, youHave.length()-2);
+	    	} else {
+	    		youHave = "nothing useful..";
 	    	}
 	    	if (youNeed.length() > 0) {
 	    		youNeed = youNeed.substring(0, youNeed.length()-2);
+	    	} else {
+	    		youNeed = "nothing more..";
 	    	}
 	    
 	    	listItem.setTag(values.get(position).id);
@@ -79,10 +82,12 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 		    
 		    //set you have and you need
 		    TextView youHaveView = (TextView) listItem.findViewById(R.id.you_have);
-		    youHaveView.setText("You have: " + youHave);
+		    youHaveView.setText(youHave);
+		    youHaveView.setSelected(true); //scroll marquee
 		    
 		    TextView youNeedView = (TextView) listItem.findViewById(R.id.you_need);
-		    youNeedView.setText("You need: " + youNeed);
+		    youNeedView.setText(youNeed);
+		    youNeedView.setSelected(true);
 		    
 		    // display the source
 		    TextView timeView = (TextView) listItem.findViewById(R.id.source);

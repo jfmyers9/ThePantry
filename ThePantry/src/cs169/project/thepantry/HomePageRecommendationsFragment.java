@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -138,8 +137,12 @@ public class HomePageRecommendationsFragment extends Fragment {
 		//update list of recommendations
 		@Override
 		protected void onPostExecute(Storage result) {
-			//remove the overlay
-			mFrameOverlay.setVisibility(View.GONE);
+			if (type == "home") {
+				//remove the overlay
+				mFrameOverlay.setVisibility(View.GONE);
+			} else if (type == "recipe") {
+				progressDialog.dismiss();
+			}
 	        //display recommendation results
 			if (result != null) {
 				if (this.type == "home") {

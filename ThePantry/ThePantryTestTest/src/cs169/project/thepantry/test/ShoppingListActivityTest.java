@@ -57,29 +57,29 @@ public class ShoppingListActivityTest extends ActivityInstrumentationTestCase2<S
 	}
 	
 	public void testFillArrays() {
-		listAct.table = "ingredients";
-		listAct.fillArrays();
-		int itemCount = listAct.groupItems.size();
-		int childrenCount = listAct.children.size();
-		int nameCount = listAct.groupNames.size();
+		act.table = "ingredients";
+		act.fillArrays();
+		int itemCount = act.groupItems.size();
+		int childrenCount = act.children.size();
+		int nameCount = act.groupNames.size();
 		assertFalse("Item array should not be empty", itemCount == 0);
 		assertFalse("Children array should not be empty", childrenCount == 0);
 		assertFalse("Name array should not be empty", nameCount == 0);
 	}
 	
-	public void testGetTypes() {
+	/*public void testGetTypes() {
 		ArrayList<IngredientGroup> types = act.getTypes(table);
 		String[] names = (String[]) groupToName(types).toArray();
 		String[] known = {"produce", "dairy", "poultry", "grain"};
 		assertEquals(known, names);
-	}
+	}*/
 
-	public void testGetItems() {
+	/*public void testGetItems() {
 		String type = "dairy";
 		ArrayList<IngredientChild> types = act.getItems(table, type);
 		String item = types.get(0).getName();
 		assertEquals("milk", item);
-	}
+	}*/
 
 	/** Functional test for adding an item from the shopping list to the Database */
 	public void testAddItem() {
