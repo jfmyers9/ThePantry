@@ -21,6 +21,11 @@ public class CookbookListAdapter extends ArrayAdapter<Recipe> {
 	}
 	
 	@Override
+	public int getCount() {
+		return values.size();
+	}
+	
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -28,7 +33,7 @@ public class CookbookListAdapter extends ArrayAdapter<Recipe> {
 	    
 	    if (values.size() > 0) {
     		TextView tv = (TextView) listItem.findViewById(R.id.recipe_name);
-    		Recipe rec = (Recipe) values.get(position);
+    		Recipe rec = values.get(position);
     		String title = "" + position + ". " + rec.name;
     		System.out.println(title);
     		listItem.setTag(rec);

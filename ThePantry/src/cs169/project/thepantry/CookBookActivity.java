@@ -33,8 +33,8 @@ public class CookBookActivity extends BasicMenuActivity {
 		context = this;
 		
 		recipes = getRecipes();
-		for (Storage s : recipes) {
-			System.out.println(((Recipe)s).name);
+		if (recipes == null) {
+			recipes = new ArrayList<Recipe> ();
 		}
 		
 		setTitle(TITLE);
@@ -62,7 +62,6 @@ public class CookBookActivity extends BasicMenuActivity {
 		dm = new DatabaseModel(this, DATABASE);
 		ArrayList<Recipe> recipes = dm.getAllRecipes(tableName);
 		dm.close();
-		System.out.println(recipes);
 		return recipes;
 	}
 
