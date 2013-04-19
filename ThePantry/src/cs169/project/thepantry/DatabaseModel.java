@@ -375,8 +375,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		try {
 			SQLiteDatabase db = getReadableDatabase();
 
-			String[] columns = {ThePantryContract.ITEM};
-
 			String selection;
 			type = type.toLowerCase().trim();
 			ArrayList<String> selectionArgsList = new ArrayList<String>();
@@ -390,7 +388,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			}
 			String[] selectionArgs = selectionArgsList.toArray(new String[0]);
 
-			Cursor cursor = queryToCursor(db, false, table, columns, selection, selectionArgs);
+			Cursor cursor = queryToCursor(db, false, table, null, selection, selectionArgs);
 			return ((ArrayList<IngredientChild>)cursorToObject(cursor, table, ThePantryContract.CHILDLIST));
 		} catch (SQLiteException e) {
 			System.err.println("13");
@@ -456,14 +454,14 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	
 	public boolean queryToChecked(SQLiteDatabase db, boolean distinct, String table,
 								  String[] columns, String selection, String[] selectionArgs) {
-		Cursor c = db.query(distinct, table, columns, selection, selectionArgs, null, null, null, null);
-		if (c != null) {
-			String data = c.getString(0);
+		Cursor cursor = db.query(distinct, table, columns, selection, selectionArgs, null, null, null, null);
+		if (cursor.moveToFirst()) {
+			String data = cursor.getString(0);
 			if (data.equals("true")) {
-				c.close();
+				cursor.close();
 				return true;
 			}
-			c.close();
+			cursor.close();
 			return false;
 		} else {
 			return false;
