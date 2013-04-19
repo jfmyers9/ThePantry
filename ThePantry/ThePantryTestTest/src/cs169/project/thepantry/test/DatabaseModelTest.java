@@ -290,7 +290,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 	public void testMakeIngredientChildren() {
 		String[] colNames = {"item", "type", "amount", "checked"};
 		String[] values = {"marshmallows", "dessert", "40", "false"};
-		int[] indices = {0, 1};
+		Integer[] indices = {0, 1};
 		String table = "helloworld";
 		MatrixCursor cursor = new MatrixCursor(colNames);
 		cursor.addRow(values);
@@ -306,7 +306,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 	public void testMakeIngredientGroups() {
 		String[] colNames = {"type"};
 		String[] values = {"dessert"};
-		int[] indices = {0, 1};
+		Integer[] indices = {0, 1};
 		MatrixCursor cursor = new MatrixCursor(colNames);
 		cursor.addRow(values);
 		ArrayList<IngredientGroup> result = testdm.makeIngredientGroups(cursor, indices);
@@ -368,21 +368,21 @@ public class DatabaseModelTest extends AndroidTestCase {
 	/** Unit test for setting indices in the ingredients table */
 	public void testSetIndicesIngredients() {
 		int[] answer = {0, 1};
-		int[] indices = testdm.setIndices(ThePantryContract.Ingredients.TABLE_NAME);
+		Integer[] indices = testdm.setIndices(ThePantryContract.Ingredients.TABLE_NAME);
 		assertEquals(answer, indices);
 	}
 	
 	/** Unit test for setting indices in the inventory table */
 	public void testSetIndicesInventory() {
 		int[] answer = {2, 3};
-		int[] indices = testdm.setIndices(ThePantryContract.Inventory.TABLE_NAME);
+		Integer[] indices = testdm.setIndices(ThePantryContract.Inventory.TABLE_NAME);
 		assertEquals(answer, indices);
 	}
 	
 	/** Unit test for setting indices in the shopping list table */
 	public void testSetIndicesShoppingList() {
 		int[] answer = {1, 2};
-		int[] indices = testdm.setIndices(ThePantryContract.ShoppingList.TABLE_NAME);
+		Integer[] indices = testdm.setIndices(ThePantryContract.ShoppingList.TABLE_NAME);
 		assertEquals(answer, indices);
 	}
 
