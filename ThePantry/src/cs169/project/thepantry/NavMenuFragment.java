@@ -101,6 +101,13 @@ public class NavMenuFragment extends ListFragment {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			UserRecipeSyncTask urSync = new UserRecipeSyncTask(getActivity());
+			urSync.execute(ThePantryContract.Inventory.TABLE_NAME, auth_token);
+			try {
+				urSync.get(3000, TimeUnit.MILLISECONDS);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			logout();
 			if (context instanceof HomePageActivity) {
 				open = false;
@@ -175,6 +182,7 @@ private class LogoutTask extends AsyncTask<String, String, JSONObject> {
 					DatabaseModel dm = new DatabaseModel(getActivity(), "thepantry");
 					dm.clear(ThePantryContract.ShoppingList.TABLE_NAME);
 					dm.clear(ThePantryContract.Inventory.TABLE_NAME);
+					dm.clear(ThePantryContract.CookBook.TABLE_NAME);
 					SharedPreferences.Editor editor = shared_pref.edit();
 					editor.putString(LOGGED_IN, null);
 					editor.commit();

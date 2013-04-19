@@ -53,9 +53,11 @@ public class ProfileActivity extends BasicMenuActivity {
 			
 			IngredientSyncTask slSync = new IngredientSyncTask(this);
 			slSync.execute(ThePantryContract.ShoppingList.TABLE_NAME, login_status);
-			DatabaseModel dm = new DatabaseModel(this, "thepantry");
 			IngredientSyncTask invSync = new IngredientSyncTask(this);
 			invSync.execute(ThePantryContract.Inventory.TABLE_NAME, login_status);
+			UserRecipeSyncTask urSync = new UserRecipeSyncTask(this);
+			urSync.execute(ThePantryContract.CookBook.TABLE_NAME, login_status);
+			DatabaseModel dm = new DatabaseModel(this, "thepantry");
 			
 			// set text for textviews
 			TextView cooked_text = (TextView)findViewById(R.id.user_cooked_text);

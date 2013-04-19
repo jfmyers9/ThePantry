@@ -117,10 +117,12 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		try {
 			SQLiteDatabase db = getWritableDatabase();
 			String selection;
-			if (table.equals(ThePantryContract.Recipe.TABLE_NAME) || table.equals(ThePantryContract.CookBook.TABLE_NAME)) {
+			if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
 				selection = ThePantryContract.Recipe.ID + " = ?";
 				check(ThePantryContract.SearchMatch.TABLE_NAME, query, col, checked);
 				// if we want to check the SearchMatch, we can add it in here later
+			} else if (table.equals(ThePantryContract.CookBook.TABLE_NAME)) {
+				selection = ThePantryContract.Recipe.ID + " = ?";
 			} else {
 				selection = ThePantryContract.ITEM + " = ?";	
 			}
@@ -162,6 +164,56 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			System.err.println("5");
 			System.err.println(e.getMessage());
 			return null;
+		}
+	}
+	
+	public ArrayList<Recipe> checkedRecipes(String table, String select) {
+		try {
+			SQLiteDatabase db = getReadableDatabase();
+			String selection = select + " = ?";
+			String[] selectionArgs = {"true"};
+			Cursor cursor = queryToCursor(db, false, table, null, selection, selectionArgs);
+			return (ArrayList<Recipe>)cursorToObject(cursor, table, ThePantryContract.STORAGELIST);
+		} catch (SQLiteException e) {
+			System.err.println("20");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public String isCooked(String table, String id) {
+		try {
+			SQLiteDatabase db = getReadableDatabase();
+			String selection = ThePantryContract.Storage.COOKED + " = ?";
+			String[] selectionArgs = {"true"};
+			Cursor cursor = queryToCursor(db, false, table, null, selection, selectionArgs);
+			if (((ArrayList<Recipe>)cursorToObject(cursor, table, ThePantryContract.STORAGELIST)).size() == 0) {
+				return "true";
+			} else {
+				return "false";
+			}
+		} catch (SQLiteException e) {
+			System.err.println("21");
+			e.printStackTrace();
+			return "false";
+		}
+	}
+	
+	public String isFavorite(String table, String id) {
+		try {
+			SQLiteDatabase db = getReadableDatabase();
+			String selection = ThePantryContract.Storage.FAVORITE + " = ?";
+			String[] selectionArgs = {"true"};
+			Cursor cursor = queryToCursor(db, false, table, null, selection, selectionArgs);
+			if (((ArrayList<Recipe>)cursorToObject(cursor, table, ThePantryContract.STORAGELIST)).size() == 0) {
+				return "true";
+			} else {
+				return "false";
+			}
+		} catch (SQLiteException e) {
+			System.err.println("21");
+			e.printStackTrace();
+			return "false";
 		}
 	}
 
@@ -521,6 +573,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 
 					ArrayList<String> ingredientLines = new ArrayList<String>(Arrays.asList(cursor.getString(ThePantryContract.CookBook.INGLINESIND).split(ThePantryContract.SEPERATOR)));
 					recipe.ingredientLines = ingredientLines;
+					ArrayList<String> directionLines = new ArrayList<String>(Arrays.asList(cursor.getString(ThePantryContract.CookBook.DIRECTIONSIND).split(ThePantryContract.SEPERATOR)));
+					recipe.directionLines = directionLines;
 
 					String[] imgArray = cursor.getString(ThePantryContract.CookBook.IMGIND).split(ThePantryContract.SEPERATOR);
 					RecipeImages img;
