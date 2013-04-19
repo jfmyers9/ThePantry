@@ -22,7 +22,7 @@ public class ThePantryContract {
 	/** String used to separate different strings in database
 	 * that will be parsed when it is retrieved
 	 */
-	public static final String SEPERATOR = ";!*";
+	public static final String SEPERATOR = ";;;;";
 	
 	public static final String DEFAULTAMOUNT = "1";
 	
@@ -37,6 +37,14 @@ public class ThePantryContract {
 	public static final String GROUPLIST = "grouplist";
 	public static final String AMOUNTVAL = "amountval";
 	public static final String STRINGLIST = "stringlist";
+	
+	/** Fragment types */
+	public static final int RECENT = 0;
+	public static final int FAVORITED = 1;
+	public static final int COOKED = 2;
+	public static final int RECOMMENDED = 3;
+	public static final int RESULTS = 4;
+	public static final int USERRESULTS = 5;
 	
 	/** Inner class that defines the CookBook table */
 	public static abstract class CookBook extends Storage implements BaseColumns {

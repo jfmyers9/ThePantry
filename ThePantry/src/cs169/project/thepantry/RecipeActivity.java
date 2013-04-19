@@ -76,7 +76,12 @@ public class RecipeActivity extends BasicMenuActivity {
 		
 		//Render directions to view.
 		//fetch and parse directions aynchronously
-		new ParseDirectionsTask().execute(recipe.source.sourceRecipeUrl);
+		dm = new DatabaseModel(this, DATABASE_NAME);
+		if (dm.findItem(ThePantryContract.Recipe.TABLE_NAME, recipe.id)) {
+			displayDirections(recipe.directionLines);
+		} else {
+			new ParseDirectionsTask().execute(recipe.source.sourceRecipeUrl);
+		}
 		
 		//display the source and link to the web page source, open in a webview inside the app if clicked
 		Button source = (Button)findViewById(R.id.source);
@@ -90,8 +95,8 @@ public class RecipeActivity extends BasicMenuActivity {
 		
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		// check if recipe is in database and get favorite and cooked values true or false
-		faved = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, recipe.name, ThePantryContract.Recipe.FAVORITE);
-		cooked = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, recipe.name, ThePantryContract.Recipe.COOKED);
+		faved = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, recipe.id, ThePantryContract.Recipe.FAVORITE);
+		cooked = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, recipe.id, ThePantryContract.Recipe.COOKED);
 		
 		//set favorite button to grayscale or colored image based on state in db
 		//check if recipe in database or if not favorited
@@ -172,19 +177,15 @@ public class RecipeActivity extends BasicMenuActivity {
 	
 	/** 
 	 * saves this recipe to the favorites list.
+	 * TODO -=--need to add in refreshing the favs fragment adapter
 	*/
 	public void toggleFavorites(View v) {
 		// update recipe table of database so favorited column is yes/no
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		// need to add recipe to database if not already in it
 		dm.addStorage(ThePantryContract.Recipe.TABLE_NAME, recipe);
-		if (faved) {
-			faved = false;
-			dm.check(ThePantryContract.Recipe.TABLE_NAME, recipe.name, ThePantryContract.Recipe.FAVORITE, false);
-		} else {
-			faved = true;
-			dm.check(ThePantryContract.Recipe.TABLE_NAME, recipe.name, ThePantryContract.Recipe.FAVORITE, true);
-		}
+		faved = !faved;
+		dm.check(ThePantryContract.Recipe.TABLE_NAME, recipe.id, ThePantryContract.Recipe.FAVORITE, faved);
 		setStarButton(faved);
 		dm.close();
 	}
@@ -192,19 +193,15 @@ public class RecipeActivity extends BasicMenuActivity {
 	/**
 	 * marks this recipe as having been cooked before and updates inventory
 	 * according to ingredients list.
+	 * TODO -=--need to add in refreshing the cooked fragment adapter
 	 */
 	public void toggleCooked(View v) {
 		// update recipe table of database so cooked column is true
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		// need to add recipe if not already in database
 		dm.addStorage(ThePantryContract.Recipe.TABLE_NAME, recipe);
-		if (cooked) {
-			cooked = false;
-			dm.check(ThePantryContract.Recipe.TABLE_NAME, recipe.name, ThePantryContract.Recipe.COOKED, false);
-		} else {
-			cooked = true;
-			dm.check(ThePantryContract.Recipe.TABLE_NAME, recipe.name, ThePantryContract.Recipe.COOKED, true);
-		}
+		cooked = !cooked;
+		dm.check(ThePantryContract.Recipe.TABLE_NAME, recipe.id, ThePantryContract.Recipe.COOKED, cooked);
 		setCheckButton(cooked);
 		dm.close();
 	}
@@ -246,6 +243,27 @@ public class RecipeActivity extends BasicMenuActivity {
 		startActivity(intent);
 	}
 	
+	public void displayDirections(ArrayList<String> directionsList) {
+		if (directionsList != null || directionsList.size() > 0 || !directionsList.get(0).equals(" ")){
+			for (int i = 0; i < directionsList.size(); i++) {
+				System.out.println("*#@#*#*#*#*#");
+				System.out.println(directionsList.get(0));
+				System.out.println("*#*#*#*#*#");
+				LinearLayout directionsll = (LinearLayout)findViewById(R.id.dirList);
+				LayoutInflater inflater = (LayoutInflater)getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				View thisDirection = inflater.inflate(R.layout.direction, null);
+				
+				TextView number = (TextView)thisDirection.findViewById(R.id.number);
+				number.setText(i+1+"");				
+				
+				TextView directions = (TextView)thisDirection.findViewById(R.id.direction);
+				directions.setText(directionsList.get(i));
+				
+				directionsll.addView(thisDirection);
+			}
+		}
+	}
+	
 	/* Class for asynchronously retrieving directions
 	 * calls DirectionParser on the recipe url
 	 */
@@ -267,22 +285,16 @@ public class RecipeActivity extends BasicMenuActivity {
 		@Override
 		protected void onPostExecute(ArrayList<String> directionsList) {
 			
+			//store these directions in the recipe database
+			//also store the recipe
+			dm = new DatabaseModel(RecipeActivity.this, DATABASE_NAME);
+			recipe.directionLines = directionsList;
+			dm.addStorage(ThePantryContract.Recipe.TABLE_NAME, recipe);
+			dm.close();
+			
 			mFrameOverlay.setVisibility(View.GONE);
 			
-			LinearLayout directionsll = (LinearLayout)findViewById(R.id.dirList);
-			
-			for (int i = 0; i < directionsList.size(); i++) {
-				LayoutInflater inflater = (LayoutInflater)getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				View thisDirection = inflater.inflate(R.layout.direction, null);
-				
-				TextView number = (TextView)thisDirection.findViewById(R.id.number);
-				number.setText(i+1+"");				
-				
-				TextView directions = (TextView)thisDirection.findViewById(R.id.direction);
-				directions.setText(directionsList.get(i));
-				
-				directionsll.addView(thisDirection);
-			}
+			displayDirections(directionsList);
 		}
 		
 	}

@@ -6,6 +6,6 @@
 	<classpathentry kind="lib" path="libs/android-smart-image-view-1.0.0.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="/home/jfmyers9/git/ThePantry/ThePantry/libs/aws-android-sdk-1.5.0-debug.jar"/>
+	<classpathentry kind="lib" path="/Users/justinkay/Documents/workspace/ThePantry/ThePantry/libs/aws-android-sdk-1.5.0-debug.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

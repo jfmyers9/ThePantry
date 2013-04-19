@@ -93,8 +93,6 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		final ViewHolder childHolder;
 		if (table != Inventory.TABLE_NAME) {
 			childHolder = new ViewHolder((CheckBox)convertView.findViewById(R.id.checkBox1), child.isSelected());
-			System.out.println(child.getName());
-			System.out.println(child.isSelected());
 		} else {
 			childHolder = new ViewHolder((TextView)convertView.findViewById(R.id.textView));
 		}
@@ -115,7 +113,6 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 				} else if (table != Inventory.TABLE_NAME) {
 					((CheckBox)childHolder.cb).toggle();
 					child.setSelected(((CheckBox)childHolder.cb).isChecked());
-					System.out.println(child.isSelected());
 					dm.check(table, child.getName(), ThePantryContract.CHECKED, ((CheckBox)childHolder.cb).isChecked());
 				}
 			}

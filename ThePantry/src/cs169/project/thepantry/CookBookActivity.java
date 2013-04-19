@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-
+import cs169.project.thepantry.Storage;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
@@ -18,7 +18,7 @@ public class CookBookActivity extends BasicMenuActivity {
 	private final String TITLE = "Cook Book";
 	private final String DATABASE = ThePantryContract.DATABASE_NAME;
 	private String tableName;
-	private ArrayList<Recipe> recipes;
+	private ArrayList<Storage> recipes;
 	private DatabaseModel dm;
 	private CookbookListAdapter cbAdapter;
 	private Context context;
@@ -29,7 +29,7 @@ public class CookBookActivity extends BasicMenuActivity {
 		setContentView(R.layout.activity_cook_book);
 		
 		tableName = ThePantryContract.CookBook.TABLE_NAME;
-		recipes = new ArrayList<Recipe>();
+		recipes = new ArrayList<Storage>();
 		context = this;
 		
 		recipes = getRecipes();
@@ -56,9 +56,9 @@ public class CookBookActivity extends BasicMenuActivity {
 		});
 	}
 	
-	private ArrayList<Recipe> getRecipes() {
+	private ArrayList<Storage> getRecipes() {
 		dm = new DatabaseModel(this, DATABASE);
-		ArrayList<Recipe> recipes = dm.getAllRecipes(tableName);
+		ArrayList<Storage> recipes = dm.getAllStorage(tableName);
 		dm.close();
 		return recipes;
 	}

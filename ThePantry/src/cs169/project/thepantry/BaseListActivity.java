@@ -201,10 +201,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		String message = "";
 		for (IngredientChild c : children) {
-			System.out.println(c.getName());
-			System.out.println(c.isSelected());
 			if (c.isSelected()) {
-				System.out.println(c.getName());
 				boolean success = dm.addIngredient(Inventory.TABLE_NAME, c.getName(),c.getGroup(),"1");
 				message += c.getName() + "\n";
 				// If the shopping list "updates" the ingredients are removed from list
@@ -213,6 +210,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 					dm.check(table, c.getName(), ThePantryContract.REMOVEFLAG, true);
 				} 
 				if (!success) {
+					// Pantry Exception instead
 					System.err.println("You Fucked Up");
 				}
 			}

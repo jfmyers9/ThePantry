@@ -46,12 +46,42 @@ public class SearchResultsFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 			    // online check?
-		    	SearchCriteria searchcriteria = new SearchCriteria("recipe", (String)view.getTag());
+				String recipeID = (String)view.getTag();
+				dm = new DatabaseModel(getActivity(), ThePantryContract.DATABASE_NAME);
+		    	SearchCriteria searchcriteria = new SearchCriteria("recipe", recipeID);
+		    	Recipe recipe = (Recipe) dm.getStorage(ThePantryContract.Recipe.TABLE_NAME, recipeID);
+		    	
+		    	if (recipe != null) {
+		    		openRecipe(recipe);
+		    	} else {
+		    		SearchMatch sm = findSearchMatch(recipeID);
+		    		if (sm != null) {
+		    			dm.addStorage(ThePantryContract.SearchMatch.TABLE_NAME, findSearchMatch(recipeID));
+		    		}
 		    	new SearchTask(getActivity(), "recipe").execute(searchcriteria);
+		    	}
+		    	dm.close();
 			}
 		});
 		
 		return rootView;
+	}
+	
+	public void openRecipe(Recipe recipe) {
+		Intent intent = new Intent(getActivity(), RecipeActivity.class);
+		intent.putExtra("result", recipe);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+	}
+	
+	public SearchMatch findSearchMatch(String recipeID) {
+		for (SearchMatch searchmatch : matches) {
+			if (searchmatch.id.equals(recipeID)) {
+				return searchmatch;
+			}
+		}
+		return null;
 	}
 	
 	/** AsyncTask for getting Yummly search results
@@ -105,11 +135,7 @@ public class SearchResultsFragment extends Fragment {
 						matchlist.smoothScrollToPosition(0);
 					}
 				} else if (this.type == "recipe") {
-					Intent intent = new Intent(context, RecipeActivity.class);
-					intent.putExtra("result", result);
-					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					startActivity(intent);
+					openRecipe((Recipe)result);
 				}
 			}
 		}

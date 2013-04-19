@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class CookbookListAdapter extends ArrayAdapter<Recipe> {
+public class CookbookListAdapter extends ArrayAdapter<Storage> {
 	
 	private Context context;
-	private List<Recipe> values;
+	private List<Storage> values;
 	
-	public CookbookListAdapter (Context context, List<Recipe> values) {
+	public CookbookListAdapter (Context context, List<Storage> values) {
 	    super(context, R.layout.cook_book_list, values);
 	    this.context = context;
 	    this.values = values;
@@ -33,7 +33,7 @@ public class CookbookListAdapter extends ArrayAdapter<Recipe> {
 	    
 	    if (values.size() > 0) {
     		TextView tv = (TextView) listItem.findViewById(R.id.recipe_name);
-    		Recipe rec = values.get(position);
+    		Recipe rec = (Recipe) values.get(position);
     		int index = position +1;
     		String title = "" + index + ". " + rec.name;
     		System.out.println(title);

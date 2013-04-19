@@ -52,8 +52,22 @@ public class HomePageRecommendationsFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 			    // online check?
-		    	SearchCriteria searchcriteria = new SearchCriteria("recipe", (String)view.getTag());
-		    	new GetRecommendationsTask(getActivity(), "recipe").execute(searchcriteria);
+				String recipeID = (String)view.getTag();
+		    	SearchCriteria searchcriteria = new SearchCriteria("recipe", recipeID);
+		    	dm = new DatabaseModel(getActivity(), ThePantryContract.DATABASE_NAME);
+		    	Recipe recipe = (Recipe) dm.getStorage(ThePantryContract.Recipe.TABLE_NAME, recipeID);
+		    	
+		    	if (recipe != null) {
+		    		openRecipe(recipe);
+		    	} else {
+		    		SearchMatch sm = findSearchMatch(recipeID);
+		    		if (sm != null) {
+		    			dm.addStorage(ThePantryContract.SearchMatch.TABLE_NAME, findSearchMatch(recipeID));
+		    			((HomePageActivity)getActivity()).recents.refresh(); // no idea if this will work
+		    		}
+		    		new GetRecommendationsTask(getActivity(), "recipe").execute(searchcriteria);
+		    	}
+		    	dm.close();
 			}
 		});
 		
@@ -63,6 +77,23 @@ public class HomePageRecommendationsFragment extends Fragment {
 			//TODO: display an "offline" message
 		}
 		return rootView;
+	}
+	
+	public void openRecipe(Recipe recipe) {
+		Intent intent = new Intent(getActivity(), RecipeActivity.class);
+		intent.putExtra("result", recipe);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+	}
+	
+	public SearchMatch findSearchMatch(String recipeID) {
+		for (SearchMatch searchmatch : recommendations) {
+			if (searchmatch.id.equals(recipeID)) {
+				return searchmatch;
+			}
+		}
+		return null;
 	}
 	
 	// create a search criteria for recommendations and search with it
@@ -83,8 +114,8 @@ public class HomePageRecommendationsFragment extends Fragment {
 				//pick numToPick inventory items at random and recommend recipes based on them
 				// TODO redo search for < 4 results
 				for (int i = 0; i < numToPick; i++) {
-					int loc = (int)(Math.random() * (numItems-1));
-					query += ", " + youHave.get(loc);
+					int loc = (int)(Math.random() * (numItems)); // numitems-1?
+					query += ", " + youHave.get(loc); 
 				}
 				searchcriteria = new SearchCriteria("home", query, NUM_RECOMMENDATIONS);
 			}
@@ -155,11 +186,7 @@ public class HomePageRecommendationsFragment extends Fragment {
 						srAdapter.notifyDataSetChanged();
 					}
 				} else if (this.type == "recipe") {
-					Intent intent = new Intent(context, RecipeActivity.class);
-					intent.putExtra("result", result);
-					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					startActivity(intent);
+					openRecipe((Recipe)result);
 				}
 			}
 		}

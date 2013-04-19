@@ -24,8 +24,8 @@ public class HomePageActivity extends BasicMenuActivity implements TabListener, 
 	
 	// fragments for the pages
 	HomePageRecommendationsFragment recs;
-	HomePageSectionFragment recents;
-	HomePageSectionFragment favs;
+	StoredResultFragment recents;
+	StoredResultFragment favs;
 	
 	// other stuff
 	SearchModel sm = new SearchModel();
@@ -42,8 +42,10 @@ public class HomePageActivity extends BasicMenuActivity implements TabListener, 
 		// set up fragments
 		ArrayList<Fragment> frags = new ArrayList<Fragment>();
 		recs = new HomePageRecommendationsFragment();
-		recents = new HomePageSectionFragment();
-		favs = new HomePageSectionFragment();
+		recents = new StoredResultFragment();
+		recents.setType(ThePantryContract.RECENT);
+		favs = new StoredResultFragment();
+		favs.setType(ThePantryContract.FAVORITED);
 		frags.add(recs);
 		frags.add(recents);
 		frags.add(favs);
