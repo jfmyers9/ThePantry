@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class CookbookListAdapter extends ArrayAdapter<Storage> {
+public class CookbookListAdapter extends ArrayAdapter<Recipe> {
 	
 	private Context context;
-	private List<Storage> values;
+	private List<Recipe> values;
 	
-	public CookbookListAdapter (Context context, List<Storage> values) {
+	public CookbookListAdapter (Context context, List<Recipe> values) {
 	    super(context, R.layout.cook_book_list, values);
 	    this.context = context;
 	    this.values = values;

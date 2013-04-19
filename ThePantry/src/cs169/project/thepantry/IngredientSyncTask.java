@@ -24,7 +24,7 @@ import android.os.AsyncTask;
 public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
 	
 	private String tableName, authToken;
-	private DatabaseModel dbModel;
+	private DatabaseModel dm;
 	private String baseURL = "http://cockamamy-island-1557.herokuapp.com/";
 	private Activity act;
 	private ProgressDialog dialog;
@@ -38,6 +38,45 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
 	protected void onPreExecute() {
 		this.dialog.setMessage("Syncing Databases");
 		this.dialog.show();
+	}
+	
+	public JSONArray updateFlags(String flag) {
+		JSONArray ingrs = new JSONArray();
+		dm = new DatabaseModel(act, "thepantry");
+    	ArrayList<IngredientChild> items = dm.checkedItems(tableName, flag);
+    	if (items != null) {
+    		for (IngredientChild child : items) {
+    			String ingredient = child.getName();
+    			String group = child.getGroup();
+    			String status = "add";
+    			if (flag.equals(ThePantryContract.REMOVEFLAG)) {
+    				status = "delete";
+    			}
+    			JSONObject ingr = new JSONObject();
+    			dm.check(tableName, ingredient, ThePantryContract.ADDFLAG, false);
+    			try {
+    				ingr.put("ingredient", ingredient);
+    				ingr.put("group", group);
+    				ingr.put("status", status);
+    			} catch (JSONException e) {
+    				e.printStackTrace();
+    			}
+    			ingrs.put(ingr);
+    		}
+    	}
+    	return ingrs;
+	}
+	
+	public JSONArray appendJson(JSONArray a1, JSONArray a2) {
+		for (int i = 0; i < a2.length(); i++) {
+			try {
+				a1.put(a2.getJSONObject(i));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return a1;
 	}
 
 	@Override
@@ -67,46 +106,8 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
 	    	HttpResponse resp;
 	    	post.addHeader("Content-type", "application/json");
 	    	JSONObject obj = new JSONObject();
-	    	dbModel = new DatabaseModel(act, "thepantry");
-	    	Cursor items = dbModel.checkedItems(tableName, ThePantryContract.ADDFLAG);
-	    	if (items != null) {
-	    		while (!items.isAfterLast()) {
-	    			String ingredient = items.getString(itemInd);
-	    			String group = items.getString(typeInd);
-	    			String status = "add";
-	    			JSONObject ingr = new JSONObject();
-	    			dbModel.check(tableName, ingredient, ThePantryContract.ADDFLAG, false);
-	    			try {
-	    				ingr.put("ingredient", ingredient);
-	    				ingr.put("group", group);
-	    				ingr.put("status", status);
-	    			} catch (JSONException e) {
-	    				e.printStackTrace();
-	    			}
-	    			ingrs.put(ingr);
-	    			items.moveToNext();
-	    		}
-	    		items.close();
-	    	}
-	    	items = dbModel.checkedItems(tableName, ThePantryContract.REMOVEFLAG);
-	    	if (items != null) {
-	    		while (!items.isAfterLast()) {
-	    			String ingredient = items.getString(itemInd);
-	    			String group = items.getString(typeInd);
-	    			String status = "delete";
-	    			JSONObject ingr = new JSONObject();
-	    			try {
-	    				ingr.put("ingredient", ingredient);
-	    				ingr.put("group", group);
-	    				ingr.put("status", status);
-	    			} catch (JSONException e) {
-	    				e.printStackTrace();
-	    			}
-	    			ingrs.put(ingr);
-	    			items.moveToNext();
-	    		}
-	    		items.close();
-	    	}
+	    	ingrs = appendJson(updateFlags(ThePantryContract.ADDFLAG), 
+	    					   updateFlags(ThePantryContract.REMOVEFLAG));
 	    	try {
 	    		obj.put("ingredients", ingrs);
 	    	} catch (JSONException e) {
@@ -157,11 +158,11 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
 				e.printStackTrace();
 			}
 		}
-		dbModel = new DatabaseModel(act, "thepantry");
-		dbModel.clear(tableName);
+		dm = new DatabaseModel(act, "thepantry");
+		dm.clear(tableName);
 		for (int i = 0; i < ingredients.size(); i++) {
-			dbModel.addIngredient(tableName, ingredients.get(i), groups.get(i), "1");
-			dbModel.check(tableName, ingredients.get(i),ThePantryContract.ADDFLAG, false);
+			dm.addIngredient(tableName, ingredients.get(i), groups.get(i), "1");
+			dm.check(tableName, ingredients.get(i),ThePantryContract.ADDFLAG, false);
 		}
 	}
 

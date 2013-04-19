@@ -24,6 +24,8 @@ public class ThePantryContract {
 	 */
 	public static final String SEPERATOR = ";!*";
 	
+	public static final String DEFAULTAMOUNT = "1";
+	
 	/** Need to figure out if this is chill -- may need specific id for each table*/
 	public static final String ID = "_id";
 	

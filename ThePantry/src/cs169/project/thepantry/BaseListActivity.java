@@ -119,49 +119,43 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			groupNames.add(g.getGroup());
 			g.setChildren(getItems(table, g.getGroup()));
 		}
+		fillChildren();
+		if (table != ThePantryContract.Inventory.TABLE_NAME) {
+			setChecked();
+		}
+	}
+	
+	public void fillChildren() {
+		dm = new DatabaseModel(this, DATABASE_NAME);
+		children = dm.findAllItems(table);
+		dm.close();
+	}
+	
+	public void setChecked() {
+		dm = new DatabaseModel(this, DATABASE_NAME);
+		for (IngredientChild child : children) {
+			boolean checked = dm.isItemChecked(table, child.getName(), ThePantryContract.CHECKED);
+			child.setSelected(checked);
+		}
+		dm.close();
 	}
 	
 	/** Retrieves ingredient types from the database and
 	 *  returns an ArrayList with said types to be used for display */
 	public ArrayList<IngredientGroup> getTypes(String table) {
 		dm = new DatabaseModel(this, DATABASE_NAME);
-		Cursor types = dm.findAllTypes(table);
-		ArrayList<IngredientGroup> result = new ArrayList<IngredientGroup>();
-		if (types!=null){
-			while(!types.isAfterLast()){
-				String data = types.getString(0);
-				result.add(new IngredientGroup(data, new ArrayList<IngredientChild>()));
-				types.moveToNext();
-			}
-		types.close();
-		}
+		ArrayList<IngredientGroup> types = dm.findAllTypes(table);
 		dm.close();
-		return result;
+		return types;
 	}
 	
 	/** Retrieves ingredients from the database and
 	 *  returns an ArrayList with the ingredients to be used for display */
 	public ArrayList<IngredientChild> getItems(String table, String type) {
 		dm = new DatabaseModel(this, DATABASE_NAME);
-		Cursor items = dm.findTypeItems(table, type);
-		
-		ArrayList<IngredientChild> result = new ArrayList<IngredientChild>();
-		if (items != null){
-			while(!items.isAfterLast()){
-				String data = items.getString(0);
-				IngredientChild temp = new IngredientChild(data,type);
-				if (table != ThePantryContract.Inventory.TABLE_NAME) {
-					boolean checked = dm.isItemChecked(table, data, ThePantryContract.CHECKED);
-					temp.setSelected(checked);
-				}
-				children.add(temp);
-				result.add(temp);
-				items.moveToNext();
-			}
-			items.close();
-		}
+		ArrayList<IngredientChild> items = dm.findTypeItems(table, type);
 		dm.close();
-		return result;
+		return items;
 	}
 	
 	/** Adds the given item to the list and the database
@@ -190,20 +184,9 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	public ArrayList<IngredientChild> search(String query) {
 		// might return ingredient child if I make a custom adapter for listView
 		dm = new DatabaseModel(this, DATABASE_NAME);
-		Cursor items = dm.search(table, query);
-		
-		ArrayList<IngredientChild> result = new ArrayList<IngredientChild>();
-		if (items != null){
-			while(!items.isAfterLast()){
-				String data = items.getString(0);
-				IngredientChild item = new IngredientChild(data);
-				result.add(item);
-				items.moveToNext();
-			}
-			items.close();
-		}
+		ArrayList<IngredientChild> items = dm.search(table, query);
 		dm.close();
-		return result;
+		return items;
 	}
 	
 	/** Removes the given item from the database and list 

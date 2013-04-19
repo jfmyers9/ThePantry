@@ -69,12 +69,12 @@ public class HomePageRecommendationsFragment extends Fragment {
 	// create a search criteria for recommendations and search with it
 		public void getRecommendations() {		
 			dm = new DatabaseModel(getActivity(), DATABASE_NAME);
-			Cursor youHave = dm.findAllItems(Inventory.TABLE_NAME);
+			ArrayList<String> youHave = dm.findItemNames(Inventory.TABLE_NAME);
 			String query = "";
 			SearchCriteria searchcriteria;
 			int numToPick;
-			if (youHave != null && youHave.moveToFirst()) {
-				int numItems = youHave.getCount();
+			if (youHave != null) {
+				int numItems = youHave.size();
 				// pick a random number between 1-5 or 1-#items to try a combination of items in your inventory to recommend recipes based on
 				if (numItems < 5) {
 					numToPick = (int)(Math.random() * numItems) + 1;
@@ -85,12 +85,7 @@ public class HomePageRecommendationsFragment extends Fragment {
 				// TODO redo search for < 4 results
 				for (int i = 0; i < numToPick; i++) {
 					int loc = (int)(Math.random() * (numItems));
-					while (loc > 0) {
-						youHave.moveToNext();
-						loc--;
-					}
-					query += ", " + youHave.getString(Inventory.ITEMIND);
-					youHave.moveToFirst();
+					query += ", " + youHave.get(loc);
 				}
 				searchcriteria = new SearchCriteria("home", query, NUM_RECOMMENDATIONS);
 			}

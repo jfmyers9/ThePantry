@@ -18,7 +18,7 @@ public class CookBookActivity extends BasicMenuActivity {
 	private final String TITLE = "Cook Book";
 	private final String DATABASE = "thepantry";
 	private String tableName;
-	private ArrayList<Storage> recipes;
+	private ArrayList<Recipe> recipes;
 	private DatabaseModel dm;
 	private CookbookListAdapter cbAdapter;
 	private Context context;
@@ -29,7 +29,7 @@ public class CookBookActivity extends BasicMenuActivity {
 		setContentView(R.layout.activity_cook_book);
 		
 		tableName = ThePantryContract.CookBook.TABLE_NAME;
-		recipes = new ArrayList<Storage>();
+		recipes = new ArrayList<Recipe>();
 		context = this;
 		
 		recipes = getRecipes();
@@ -55,9 +55,9 @@ public class CookBookActivity extends BasicMenuActivity {
 		});
 	}
 	
-	private ArrayList<Storage> getRecipes() {
+	private ArrayList<Recipe> getRecipes() {
 		dm = new DatabaseModel(this, DATABASE);
-		ArrayList<Storage> recipes = dm.getAllRecipes(tableName);
+		ArrayList<Recipe> recipes = dm.getAllRecipes(tableName);
 		dm.close();
 		return recipes;
 	}
