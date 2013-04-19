@@ -79,106 +79,19 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		} //Make this ThePantryException, change later
 	}
 
-	public ContentValues makeStorageValue(String table, Storage storage) {
-		String id = storage.id;
-		String name = storage.name;
-		ContentValues values = new ContentValues();
-		values.put(ThePantryContract.Storage.ID, id);
-		values.put(ThePantryContract.Storage.RECIPE, name);
-		values.put(ThePantryContract.Storage.FAVORITE, "false");
-		values.put(ThePantryContract.Storage.COOKED, "false");
-		
-		if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
-			String attribution = ((Recipe) storage).attribution.url + ThePantryContract.SEPERATOR
-					+ ((Recipe) storage).attribution.text 
-					+ ThePantryContract.SEPERATOR + ((Recipe) storage).attribution.logo;
-
-			String ingredientLines = "";
-			for (String ingredient : ((Recipe) storage).ingredientLines) {
-				if (!ingredientLines.equals("")) {
-					ingredientLines += ThePantryContract.SEPERATOR;
-				}
-				ingredientLines += ingredient;
-			}
-
-			String image = ((Recipe) storage).images.hostedLargeUrl + ThePantryContract.SEPERATOR
-					+ ((Recipe) storage).images.hostedSmallUrl; //not always present
-			String source = ((Recipe) storage).source.sourceDisplayName + ThePantryContract.SEPERATOR
-					+ ((Recipe) storage).source.sourceRecipeUrl + ThePantryContract.SEPERATOR
-					+ ((Recipe) storage).source.sourceSiteUrl;
-
-			values.put(ThePantryContract.Recipe.ATTRIBUTE, attribution);
-			values.put(ThePantryContract.Recipe.INGLINES, ingredientLines);
-			values.put(ThePantryContract.Recipe.IMAGE, image);
-			values.put(ThePantryContract.Recipe.SOURCE, source);
-		} else {
-			String image = ((SearchMatch) storage).smallImageUrl;
-			String source = ((SearchMatch) storage).sourceDisplayName;
-			
-			String ingredients = "";
-			for (String ingredient : ((SearchMatch) storage).ingredients) {
-				if (!ingredients.equals("")) {
-					ingredients += ThePantryContract.SEPERATOR;
-				}
-				ingredients += ingredient;
-			}
-			
-			values.put(ThePantryContract.SearchMatch.INGREDIENTS, ingredients);
-			values.put(ThePantryContract.SearchMatch.IMAGEURL, image);
-			values.put(ThePantryContract.SearchMatch.SOURCENAME, source);
-		}
-		return values;
-	}
 	
 	/**
-	 * Adds a given recipe to the database
-	 * @param recipe -- a recipe object
-	 * @return boolean -- signifies successful database insert
+	 * Adds a given storage to the database
+	 * @param table specifies the table to add storage to
+	 * @param storage a recipe object
+	 * @return boolean signifies successful database insert
 	 */
-	public boolean addRecipe(Recipe recipe) {
-		//String id = recipe.id;
-		//String name = recipe.name;
-
-		String attribution = recipe.attribution.url + ThePantryContract.SEPERATOR + recipe.attribution.text 
-				+ ThePantryContract.SEPERATOR + recipe.attribution.logo;
-
-		String ingredientLines = "";
-		for (String ingredient : recipe.ingredientLines) {
-			if (!ingredientLines.equals("")) {
-				ingredientLines += ThePantryContract.SEPERATOR;
-			}
-			ingredientLines += ingredient;
-		}
-
-		String image = recipe.images.hostedLargeUrl + ThePantryContract.SEPERATOR + recipe.images.hostedSmallUrl; //not always present
-		String source = recipe.source.sourceDisplayName + ThePantryContract.SEPERATOR
-				+ recipe.source.sourceRecipeUrl + ThePantryContract.SEPERATOR + recipe.source.sourceSiteUrl;
-
+	public boolean addStorage(String table, Storage storage) {
+		String id = storage.id;
+		ContentValues values = makeStorageValue(table, storage);
+		
 		try {
-			SQLiteDatabase db = getWritableDatabase();
-			ContentValues values = new ContentValues();
-			values.put(ThePantryContract.Recipe.ID, id);
-			values.put(ThePantryContract.Recipe.RECIPE, name);
-			values.put(ThePantryContract.Recipe.ATTRIBUTE, attribution);
-			values.put(ThePantryContract.Recipe.INGLINES, ingredientLines);
-			values.put(ThePantryContract.Recipe.IMAGE, image);
-			values.put(ThePantryContract.Recipe.SOURCE, source);
-			values.put(ThePantryContract.Recipe.FAVORITE, "false");
-			values.put(ThePantryContract.Recipe.COOKED, "false");
-
-			addToDatabase(ThePantryContract.Recipe.TABLE_NAME, id, values);
-			/*long newRowId;
-			if (!findItem(ThePantryContract.Recipe.TABLE_NAME, id)) {
-				try {
-					newRowId = db.insertOrThrow(ThePantryContract.Recipe.TABLE_NAME, null, values);
-					if (newRowId != -1) {
-						return true;
-					}
-				} catch (SQLiteException e) {
-					//do something
-				}
-				return false;
-			} */
+			addToDatabase(table, id, values);
 		} catch (SQLiteException e) {
 			System.err.println(e.getMessage());
 			return false;
@@ -186,44 +99,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		return true;
 	}
 	
-	/** Adds either a recipe, ingredient, or searchMatch to the given table.
-	 * @param table Database Table
-	 * @param query Recipe ID or an Item
-	 * @param values Information to be added as a row in the table
-	 * @return true or false based on success of addition
-	 */
-	public boolean addToDatabase(String table, String query, ContentValues values) {
-		SQLiteDatabase db = getWritableDatabase();
-		long newRowId;
-		if (!findItem(table, query)) {
-			try {
-				newRowId = db.insertOrThrow(table, null, values);
-				if (newRowId != -1) {
-					return true;
-				}
-			} catch (SQLiteException e) {
-				//throw ThePantryException
-			}
-			return false;
-		} else {
-			if(table != Ingredients.TABLE_NAME) {	
-				if(isItemChecked(table, query, ThePantryContract.REMOVEFLAG)){
-					check(table, query, ThePantryContract.ADDFLAG, true);
-					check(table, query, ThePantryContract.REMOVEFLAG, false);
-					return true;
-				}
-			}
-			// increment amount
-			// add a popup to ask if they want amount to be incremented?
-			return true;
-		}
-	}
-
 	/**
 	 * Adds a given searchMatch to the database
 	 * @param recipe -- a recipe object
 	 * @return boolean -- signifies successful database insert
-	 */
+	 */ /*
 	public boolean addSearchMatch(SearchMatch searchMatch) {
 		String id = searchMatch.id;
 		String name = searchMatch.name;
@@ -266,8 +146,41 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			return false;
 		}
 		return true;
-	}
+	}*/
 	
+	/** Adds either a recipe, ingredient, or searchMatch to the given table.
+	 * @param table Database Table
+	 * @param query Recipe ID or an Item
+	 * @param values Information to be added as a row in the table
+	 * @return true or false based on success of addition
+	 */
+	public boolean addToDatabase(String table, String query, ContentValues values) {
+		SQLiteDatabase db = getWritableDatabase();
+		long newRowId;
+		if (!findItem(table, query)) {
+			try {
+				newRowId = db.insertOrThrow(table, null, values);
+				if (newRowId != -1) {
+					return true;
+				}
+			} catch (SQLiteException e) {
+				//throw ThePantryException
+			}
+			return false;
+		} else {
+			if(table != Ingredients.TABLE_NAME) {	
+				if(isItemChecked(table, query, ThePantryContract.REMOVEFLAG)){
+					check(table, query, ThePantryContract.ADDFLAG, true);
+					check(table, query, ThePantryContract.REMOVEFLAG, false);
+					return true;
+				}
+			}
+			// increment amount
+			// add a popup to ask if they want amount to be incremented?
+			return true;
+		}
+	}
+
 	/** Sets the check value of the item to whatever checked it
 	 *  @query is either an item or a recipe id. */
 	public boolean check(String table, String query, String col, boolean checked) {
@@ -302,7 +215,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			return false;
 		}
 	}
-
+	
 	/** Returns list of all items checked */
 	public Cursor checkedItems(String table, String col) {
 		try {
@@ -406,7 +319,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			return null;
 		}
 	}
-	
+
 	/** Returns the amount of the ITEM from the specified TABLE. */
 	public Cursor findAmount(String table, String item) {
 		try {
@@ -435,7 +348,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			return null;
 		}
 	}
-
+	
 	/** Finds if an item is in the specified TABLE.
 	 *  If a SQLiteException is thrown, returns false and prints out the error
 	 *  message to System.err (could be due to no table or no column). */
@@ -556,6 +469,21 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 	}
 
+	public ArrayList<Storage> getAllRecipes(String table) {
+		SQLiteDatabase db = getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		if (table == ThePantryContract.Recipe.TABLE_NAME) {
+			qb.setTables(ThePantryContract.Recipe.TABLE_NAME);
+		} else {
+			qb.setTables(ThePantryContract.SearchMatch.TABLE_NAME);
+		}
+		
+		Cursor cStorage = qb.query(db, null, null, null, null, null, null, null);
+		
+		ArrayList<Storage> recipes = makeRecipe(cStorage);
+		return recipes;
+	}
+
 
 
 
@@ -619,7 +547,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 		return null;
 	}
-
+	
 	/** Returns false if item is not checked and true if item is checked for
 	 * favorited and cooked recipe
 	 */
@@ -710,6 +638,57 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 		cursSearchMatch.close();
 		return searchMatches;
+	}
+
+	public ContentValues makeStorageValue(String table, Storage storage) {
+		String id = storage.id;
+		String name = storage.name;
+		ContentValues values = new ContentValues();
+		values.put(ThePantryContract.Storage.ID, id);
+		values.put(ThePantryContract.Storage.RECIPE, name);
+		values.put(ThePantryContract.Storage.FAVORITE, "false");
+		values.put(ThePantryContract.Storage.COOKED, "false");
+		
+		if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
+			String attribution = ((Recipe) storage).attribution.url + ThePantryContract.SEPERATOR
+					+ ((Recipe) storage).attribution.text 
+					+ ThePantryContract.SEPERATOR + ((Recipe) storage).attribution.logo;
+
+			String ingredientLines = "";
+			for (String ingredient : ((Recipe) storage).ingredientLines) {
+				if (!ingredientLines.equals("")) {
+					ingredientLines += ThePantryContract.SEPERATOR;
+				}
+				ingredientLines += ingredient;
+			}
+
+			String image = ((Recipe) storage).images.hostedLargeUrl + ThePantryContract.SEPERATOR
+					+ ((Recipe) storage).images.hostedSmallUrl; //not always present
+			String source = ((Recipe) storage).source.sourceDisplayName + ThePantryContract.SEPERATOR
+					+ ((Recipe) storage).source.sourceRecipeUrl + ThePantryContract.SEPERATOR
+					+ ((Recipe) storage).source.sourceSiteUrl;
+
+			values.put(ThePantryContract.Recipe.ATTRIBUTE, attribution);
+			values.put(ThePantryContract.Recipe.INGLINES, ingredientLines);
+			values.put(ThePantryContract.Recipe.IMAGE, image);
+			values.put(ThePantryContract.Recipe.SOURCE, source);
+		} else {
+			String image = ((SearchMatch) storage).smallImageUrl;
+			String source = ((SearchMatch) storage).sourceDisplayName;
+			
+			String ingredients = "";
+			for (String ingredient : ((SearchMatch) storage).ingredients) {
+				if (!ingredients.equals("")) {
+					ingredients += ThePantryContract.SEPERATOR;
+				}
+				ingredients += ingredient;
+			}
+			
+			values.put(ThePantryContract.SearchMatch.INGREDIENTS, ingredients);
+			values.put(ThePantryContract.SearchMatch.IMAGEURL, image);
+			values.put(ThePantryContract.SearchMatch.SOURCENAME, source);
+		}
+		return values;
 	}
 	
 	/** Removes the ITEM from the specified TABLE.
