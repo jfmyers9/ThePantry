@@ -27,25 +27,31 @@ public class ThePantryContract {
 	/** Need to figure out if this is chill -- may need specific id for each table*/
 	public static final String ID = "_id";
 	
+	public static final String STORAGE = "storage";
+	public static final String STORAGELIST = "storagelist";
+	public static final String CHILD = "child";
+	public static final String CHILDLIST = "childlist";
+	public static final String GROUP = "group";
+	public static final String GROUPLIST = "grouplist";
+	public static final String AMOUNTVAL = "amountval";
+	public static final String STRINGLIST = "stringlist";
+	
 	/** Inner class that defines the CookBook table */
 	public static abstract class CookBook extends Storage implements BaseColumns {
 		
 		public static final String TABLE_NAME = "cookbook";
 	    public static final String INGLINES = "ingredientLines";
 	    public static final String IMAGE = "image";
-	    public static final String ATTRIBUTE = "attribute";
-	    public static final String SOURCE = "source";
 	    
 	    // DATABASE COLUMN INDEXS
-		public static final int RECIPEIND = 0;
-	    public static final int IDIND = 1;
-	    public static final int COOKEDIND = 2;
-		public static final int FAVORITEIND = 3;	
-	    public static final int INGLINESIND = 4;
-	    public static final int IMAGEIND = 5;
-	    public static final int ATTRIBUTEIND = 6;
-	    public static final int SOURCEIND = 7;
-		
+	    public static final int REMOVEFLAGIND = 0;
+	    public static final int ADDFLAGIND = 1;
+	    public static final int DIRECTIONSIND = 2;
+		public static final int RECIPEIND = 3;
+	    public static final int IDIND = 4;
+	    public static final int COOKEDIND = 5;
+		public static final int FAVORITEIND = 6;	
+	    public static final int INGLINESIND = 7;
 	}
 	
 	/** Inner class that defines the Ingredients table */
@@ -80,6 +86,7 @@ public class ThePantryContract {
 	    public static final String IMAGE = "image";
 	    public static final String ATTRIBUTE = "attribute";
 	    public static final String SOURCE = "source";
+	    public static final String DIRECTIONS = "directions";
 		
 		// DATABASE COLUMN INDEXS
 		public static final int RECIPEIND = 0;
@@ -88,8 +95,11 @@ public class ThePantryContract {
 		public static final int IMGIND = 3;
 		public static final int ATTIND = 4;
 		public static final int SOURCEIND = 5;
-		public static final int COOKEDIND = 6;
-		public static final int FAVORITEIND = 7;
+		public static final int DIRECTIONSIND = 6;
+		public static final int COOKEDIND = 7;
+		public static final int FAVORITEIND = 8;
+	    public static final int ADDFLAGIND = 9;
+	    public static final int REMOVEFLAGIND = 10;
 	}
 	
 	/** Inner class that defines the Search Match table */

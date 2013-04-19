@@ -117,7 +117,6 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		groupItems = getTypes(table);
 		for (IngredientGroup g : groupItems) {
 			groupNames.add(g.getGroup());
-			System.out.println(g.getGroup());
 			g.setChildren(getItems(table, g.getGroup()));
 		}
 	}
@@ -126,7 +125,6 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	 *  returns an ArrayList with said types to be used for display */
 	public ArrayList<IngredientGroup> getTypes(String table) {
 		dm = new DatabaseModel(this, DATABASE_NAME);
-		System.out.println("getTypes table is " + table);
 		Cursor types = dm.findAllTypes(table);
 		ArrayList<IngredientGroup> result = new ArrayList<IngredientGroup>();
 		if (types!=null){
@@ -137,6 +135,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			}
 		types.close();
 		}
+		dm.close();
 		return result;
 	}
 	
@@ -151,7 +150,6 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			while(!items.isAfterLast()){
 				String data = items.getString(0);
 				IngredientChild temp = new IngredientChild(data,type);
-				System.out.println(temp.getName());
 				if (table != ThePantryContract.Inventory.TABLE_NAME) {
 					boolean checked = dm.isItemChecked(table, data, ThePantryContract.CHECKED);
 					temp.setSelected(checked);
@@ -162,6 +160,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			}
 			items.close();
 		}
+		dm.close();
 		return result;
 	}
 	
@@ -203,6 +202,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			}
 			items.close();
 		}
+		dm.close();
 		return result;
 	}
 	
@@ -214,6 +214,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		if (!success) {
 			//throw new ThePantryException(item + " could not be removed from database");
 		}
+		dm.close();
 	}
 	
 	/** Adds all items to inventory database that have been checked 
@@ -236,6 +237,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 					System.err.println("You Fucked Up");
 				}
 			}
+			dm.close();
 		}
 		
 		// Opens pop up window with items being added to the pantry

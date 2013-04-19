@@ -180,9 +180,94 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			return true;
 		}
 	}
+	
+	/** Queries the given table following COLUMNS, SELECTION, SELECTIONARGS
+	 * @param distinct TODO
+	 * @return a Cursor object or null if it failed */
+	private Cursor queryToCursor(SQLiteDatabase db, boolean distinct, String table,
+								String[] columns, String selection, String[] selectionArgs) {
+		Cursor c = db.query(distinct, table, columns, selection, selectionArgs, null, null, null, null);
+		if (c.moveToFirst()) {
+			if(table != Ingredients.TABLE_NAME) {	
+				if(isItemChecked(table, selection, ThePantryContract.REMOVEFLAG)){
+					return null;
+				}
+			}
+			return c;
+		} else {
+			return null;
+		}
+	}
+	
+	/** Sets the item and type indices for cursorToObject method*/
+	public int[] setIndices(String table) {
+		int[] indices = new int[2];
+	
+		if (table.equals(ThePantryContract.Ingredients.TABLE_NAME)) {
+			indices[0] = ThePantryContract.Ingredients.ITEMIND;
+			indices[1] = ThePantryContract.Ingredients.TYPEIND;
+		} else if (table.equals(ThePantryContract.Ingredients.TABLE_NAME)) {
+			indices[0] = ThePantryContract.Inventory.ITEMIND;
+			indices[1] = ThePantryContract.Inventory.TYPEIND;
+		} else {
+			indices[0] = ThePantryContract.ShoppingList.ITEMIND;
+			indices[1] = ThePantryContract.ShoppingList.TYPEIND;
+		}
+		return indices;
+	}
+	
+	/** Creates an ArrayList<IngredientChild> from a cursor and specifies indices */
+	public ArrayList<IngredientChild> makeIngredientChildren(Cursor cursor, int[] indices) {
+		ArrayList<IngredientChild> children = new ArrayList<IngredientChild>();
+		while(!cursor.isAfterLast()){
+			String data = cursor.getString(indices[0]);
+			String type = cursor.getString(indices[1]);
+			IngredientChild child = new IngredientChild(data,type);
+			children.add(child);
+			cursor.moveToNext();
+		}
+		cursor.close();
+		return children;
+	}
+	
+	/** Creates an ArrayList<IngredientGroup> from a cursor and specifies indices */
+	public ArrayList<IngredientGroup> makeIngredientGroups(Cursor cursor, int[] indices) {
+		ArrayList<IngredientGroup> groups = new ArrayList<IngredientGroup>();
+		while(!cursor.isAfterLast()){
+			//Might need indices
+			String data = cursor.getString(0);
+			groups.add(new IngredientGroup(data, new ArrayList<IngredientChild>()));
+			cursor.moveToNext();
+		}
+		cursor.close();
+		return groups;
+	}
+	
+	public Object cursorToObject(Cursor cursor, String table, String objectType) {
+		Object result = new Object();
+		int[] indices = setIndices(table);
+		 
+		if (objectType.equals(ThePantryContract.STORAGELIST) || objectType.equals(ThePantryContract.STORAGE)) {
+			if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
+				ArrayList<Storage> recipes = makeRecipe(cursor);
+				result = recipes;
+			} else {
+				ArrayList<Storage> searchMatches = makeSearchMatch(cursor);
+				result = searchMatches;
+			}
+		} if (objectType.equals(ThePantryContract.STORAGE)) {
+			result = ((ArrayList<Storage>)result).get(0);
+		} else if (objectType.equals(ThePantryContract.CHILDLIST)) {
+			result = makeIngredientChildren(cursor, indices);
+			// can also add case for just one IngredientChild later if we need to 
+		} else if (objectType.equals(ThePantryContract.GROUPLIST)) {
+			result = makeIngredientGroups(cursor, indices);
+		}
+		return result;
+	}
 
 	/** Sets the check value of the item to whatever checked it
-	 *  @query is either an item or a recipe id. */
+	 *  @param query is either an item or a recipe id. */
 	public boolean check(String table, String query, String col, boolean checked) {
 		try {
 			SQLiteDatabase db = getWritableDatabase();
@@ -217,22 +302,21 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	}
 	
 	/** Returns list of all items checked */
-	public Cursor checkedItems(String table, String col) {
+	public Cursor checkedItems(String table, String select) {
 		try {
 			SQLiteDatabase db = getReadableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
 
-			String selection = col + " = ?";
+			String selection = select + " = ?";
 			String[] selectionArgs = {"true"};
 
-
-			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
+			// CursorToObject -> ObjectType == ??
+			return queryToCursor(db, false, table, null, selection, selectionArgs);
+			/*Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
 			if (c.moveToFirst()) {
 				return c;
 			} else {
 				return null;
-			}
+			}*/
 		} catch (SQLiteException e) {
 			System.err.println(e.getMessage());
 			return null;
@@ -242,8 +326,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	public boolean clear(String table) {
 		try {
 			SQLiteDatabase db = getWritableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
 
 			int val = db.delete(table, null, null);			
 			if (val != 0) {
@@ -263,8 +345,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	public Cursor findAllItems(String table) {
 		try {
 			SQLiteDatabase db = getReadableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
 
 			String selection;
 			String[] selectionArgs = new String[1];
@@ -275,13 +355,9 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				selection = ThePantryContract.REMOVEFLAG + " = ?";
 				selectionArgs[0] = "false";
 			}
-
-			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null, null);
-			if (c.moveToFirst()) {
-				return c;
-			} else {
-				return null;
-			}
+			
+			// CursorToObject -> ObjectType == CHILDLIST
+			return queryToCursor(db, false, table, null, selection, selectionArgs);
 		} catch (SQLiteException e) {
 			System.err.println(e.getMessage());
 			return null;
@@ -292,9 +368,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	public Cursor findAllTypes(String table) {
 		try {
 			SQLiteDatabase db = getReadableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
-			qb.setDistinct(true);
 
 			String selection;
 			String[] selectionArgs = new String[1];
@@ -308,12 +381,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 
 			String[] columns = {ThePantryContract.TYPE};
 
-			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			if (c.moveToFirst()) {
-				return c;
-			} else {
-				return null;
-			}
+			// CursorToObject -> ObjectType == GROUPLIST
+			return queryToCursor(db, true, table, columns, selection, selectionArgs);
 		} catch (SQLiteException e) {
 			System.err.println(e.getMessage());
 			return null;
@@ -324,15 +393,15 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	public Cursor findAmount(String table, String item) {
 		try {
 			SQLiteDatabase db = getReadableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
 
 			String[] columns = {ThePantryContract.AMOUNT};
-			String selection = ThePantryContract.ITEM + " = ?";
+			String selection = ThePantryContract.ITEM + " = ?" + " AND " + ThePantryContract.REMOVEFLAG + " = ?";
 			item = item.toLowerCase().trim();
-			String[] selectionArgs = {item};
+			String[] selectionArgs = {item, "false"};
 
-			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
+			// CursorToObject -> ObjectType == AMOUNTVAL
+			return queryToCursor(db, false, table, columns, selection, selectionArgs);
+			/*Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
 			if (c.moveToFirst()) {
 				if(table != Ingredients.TABLE_NAME) {	
 					if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
@@ -342,7 +411,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				return c;
 			} else {
 				return null;
-			}
+			}*/
 		} catch (SQLiteException e) {
 			System.err.println(e.getMessage());
 			return null;
@@ -355,8 +424,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	public boolean findItem(String table, String item) {
 		try {
 			SQLiteDatabase db = getReadableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
+
 			String selection;
 			if (table == ThePantryContract.Recipe.TABLE_NAME || table == ThePantryContract.SearchMatch.TABLE_NAME) {
 				selection = ThePantryContract.Recipe.ID + " = ?";
@@ -366,14 +434,9 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			}
 			String[] selectionArgs = {item};
 
-			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
-			if(c.moveToFirst()) {
-				/*
-					if(table != Ingredients.TABLE_NAME) {	
-						if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
-							return false;
-						}
-					}*/
+			Cursor c = queryToCursor(db, false, table, null, selection, selectionArgs);
+			//Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
+			if(!c.equals(null)) {
 				return true;
 			}else {
 				return false;
@@ -387,17 +450,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	public Cursor findItemNames(String table) {
 		try {
 			SQLiteDatabase db = getReadableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
 
 			String[] columns = {"item"};
 
-			Cursor c = qb.query(db, columns, null, null, null, null, null, null);
-			if (c.moveToFirst()) {
-				return c;
-			} else {
-				return null;
-			}
+			// CursorToObject -> ObjectType == STRINGLIST
+			return queryToCursor(db, false, table, columns, null, null);
 		} catch (SQLiteException e) {
 			System.err.println(e.getMessage());
 			return null;
@@ -408,25 +465,14 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	public Cursor findType(String table, String item) {
 		try {
 			SQLiteDatabase db = getReadableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
 
 			String[] columns = {ThePantryContract.TYPE};
-			String selection = ThePantryContract.ITEM + " = ?";
+			String selection = ThePantryContract.ITEM + " = ?" + " AND " + ThePantryContract.REMOVEFLAG + " = ?";
 			item = item.toLowerCase().trim();
-			String[] selectionArgs = {item};
+			String[] selectionArgs = {item, "false"};
 
-			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			if (c.moveToFirst()) {
-				if(table != Ingredients.TABLE_NAME) {	
-					if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
-						return null;
-					}
-				}
-				return c;
-			} else {
-				return null;
-			}
+			// CursorToObject -> ObjectType == STRINGLIST
+			return queryToCursor(db, false, table, columns, selection, selectionArgs);
 		} catch (SQLiteException e) {
 			System.err.println(e.getMessage());
 			return null;
@@ -439,13 +485,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	public Cursor findTypeItems(String table, String type) {
 		try {
 			SQLiteDatabase db = getReadableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
 
 			String[] columns = {ThePantryContract.ITEM};
 
 			String selection;
-			//type = type.toLowerCase().trim();
+			type = type.toLowerCase().trim();
 			ArrayList<String> selectionArgsList = new ArrayList<String>();
 			if(table == Ingredients.TABLE_NAME) {
 				selection = ThePantryContract.TYPE + " = ?";
@@ -457,12 +501,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			}
 			String[] selectionArgs = selectionArgsList.toArray(new String[0]);
 
-			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			if (c.moveToFirst()) {
-				return c;
-			} else {
-				return null;
-			}
+			// CursorToObject -> ObjectType == GROUPLIST
+			return queryToCursor(db, false, table, columns, selection, selectionArgs);
 		} catch (SQLiteException e) {
 			System.err.println(e.getMessage());
 			return null;
@@ -480,6 +520,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		
 		Cursor cStorage = qb.query(db, null, null, null, null, null, null, null);
 		
+		// CursorToObject -> ObjectType == STORAGELIST
 		ArrayList<Storage> recipes = makeRecipe(cStorage);
 		return recipes;
 	}
@@ -496,17 +537,12 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	 */
 	public ArrayList<Storage> getCookOrFav(String table, String column) {
 		SQLiteDatabase db = getReadableDatabase();
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		if (table == ThePantryContract.Recipe.TABLE_NAME) {
-			qb.setTables(ThePantryContract.Recipe.TABLE_NAME);
-		} else {
-			qb.setTables(ThePantryContract.SearchMatch.TABLE_NAME);
-		}
 
 		String selection = column + " = ?";
 		String[] selectionArgs = {"true"};
-		Cursor cStorage = qb.query(db, null, selection, selectionArgs, null, null, null, null);
+		Cursor cStorage = queryToCursor(db, false, table, null, selection, selectionArgs);
 
+		// CursorToObject -> ObjectType == STORAGELIST
 		if (table == ThePantryContract.Recipe.TABLE_NAME) {
 			ArrayList<Storage> recipes = makeRecipe(cStorage);
 			return recipes;
@@ -523,18 +559,13 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	 */
 	public Storage getRecipe(String table, String id) {
 		SQLiteDatabase db = getReadableDatabase();
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		if (table == ThePantryContract.Recipe.TABLE_NAME) {
-			qb.setTables(ThePantryContract.Recipe.TABLE_NAME);
-		} else {
-			qb.setTables(ThePantryContract.SearchMatch.TABLE_NAME);
-		}
 			
 		String selection = ThePantryContract.Recipe.ID + " = ?";
 		String[] selectionArgs = {id};
 		
-		Cursor cStorage = qb.query(db, null, selection, selectionArgs, null, null, null, null);
-		if (cStorage.moveToFirst()){
+		// CursorToObject -> ObjectType == STORAGE
+		Cursor cStorage = queryToCursor(db, false, table, null, selection, selectionArgs);
+		if (cStorage != null){
 			if (table == ThePantryContract.Recipe.TABLE_NAME) {
 				ArrayList<Storage> recipes = makeRecipe(cStorage);
 				Recipe recipe = (Recipe) recipes.get(0);
@@ -553,8 +584,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	 */
 	public boolean isItemChecked(String table, String name, String col) {
 		SQLiteDatabase db = getReadableDatabase();
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		qb.setTables(table);
 
 		String[] columns = {col};
 		String selection;
@@ -565,9 +594,9 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			selection = ThePantryContract.ITEM + " = ?";
 		}
 		String[] selectionArgs = {name};
-		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
+		Cursor c = queryToCursor(db, false, table, columns, selection, selectionArgs);
 
-		if (c.moveToFirst()) {
+		if (c != null) {
 			String data = c.getString(0);
 			if (data.equals("true")) {
 				c.close();
@@ -667,11 +696,20 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String source = ((Recipe) storage).source.sourceDisplayName + ThePantryContract.SEPERATOR
 					+ ((Recipe) storage).source.sourceRecipeUrl + ThePantryContract.SEPERATOR
 					+ ((Recipe) storage).source.sourceSiteUrl;
-
+			
+			String directions = "";
+			for (String direction : ((Recipe) storage).directionsLines) {
+				if (!directions.equals("")) {
+					directions += ThePantryContract.SEPERATOR;
+				}
+				directions += direction;
+			}
+			
 			values.put(ThePantryContract.Recipe.ATTRIBUTE, attribution);
 			values.put(ThePantryContract.Recipe.INGLINES, ingredientLines);
 			values.put(ThePantryContract.Recipe.IMAGE, image);
 			values.put(ThePantryContract.Recipe.SOURCE, source);
+			values.put(ThePantryContract.Recipe.DIRECTIONS, directions);
 		} else {
 			String image = ((SearchMatch) storage).smallImageUrl;
 			String source = ((SearchMatch) storage).sourceDisplayName;
@@ -714,31 +752,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			return false;
 		}
 	}
-
-	
-	
-	public boolean removeAllBut(String table, ArrayList<String> ingredients) {
-		boolean success = false;
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		qb.setTables(table);
-
-		ArrayList<String> result = new ArrayList<String>();
-		Cursor currentItems = findItemNames(table);
-		if (currentItems.moveToFirst()) {
-			while(!currentItems.isAfterLast()) {
-				String item = currentItems.getString(0);
-				result.add(item);
-				currentItems.moveToNext();
-			}
-			currentItems.close();
-		}
-		for (String item : result) {
-			if (!ingredients.contains(item)) {
-				success = remove(table, item);
-			}
-		}
-		return success;
-	}
 	
 	/** Finds all items in the specified TABLE that contain given text
 	 * If a SQLiteException is thrown, returns null and prints out the error
@@ -746,8 +759,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	public Cursor search(String table, String query) {
 		try {
 			SQLiteDatabase db = getReadableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
 
 			String selection;
 			String[] columns = {ThePantryContract.ITEM};
@@ -763,12 +774,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			}
 			String[] selectionArgs = selectionArgsList.toArray(new String[0]);
 
-			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			if (c.moveToFirst()) {
-				return c;
-			} else {
-				return null;
-			}
+			// CursorToObject -> ObjectType == CHILDLIST
+			return queryToCursor(db, false, table, columns, selection, selectionArgs);
 		} catch (SQLiteException e) {
 			System.err.println(e.getMessage());
 			return null;

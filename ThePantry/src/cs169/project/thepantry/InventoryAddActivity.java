@@ -66,32 +66,5 @@ public class InventoryAddActivity extends BaseListActivity {
 		}	
 		return super.onOptionsItemSelected(item);
 	}
-	
-	/** Same functionality as InventoryActivity search
-	 *  added ability to put it in ingredient table*/
-	public void search(View view) {
-		//eventually display items returned as buttons as each letters are added to query -- need to create a more detailed search method
-		//If item doesn't exist CustomItem button appears
-		dm = new DatabaseModel(this, DATABASE_NAME);
-		
-		/*
-		boolean found = dm.findItem(table, item);
-		if (found) {
-			//display button with given item
-		} else {
-			//display custom button
-			String type = customItem(); // retrieves the type user wants selected item to be
-			addEntry(item, type); // figure out a way to allow user to undo this if they screw up
-		}*/
-	}
-	
-	/** Display all types in a drop-down menu for user to select
-	 * Called from search if item doesn't exist */
-	public void customItem() {
-		Cursor types = dm.findAllTypes(table);
-		// displays types in spinner -- include custom button
-		// figure out how to retrieve what button user clicked
-		//return null;
-	}
 
 }
