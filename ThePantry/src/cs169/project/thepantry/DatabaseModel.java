@@ -683,7 +683,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			SQLiteDatabase db = getReadableDatabase();
 
 			String selection;
-			String[] columns = {ThePantryContract.ITEM};
 			ArrayList<String> selectionArgsList = new ArrayList<String>();
 			query = query.toLowerCase().trim();
 			if(table == Ingredients.TABLE_NAME) {
@@ -696,7 +695,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			}
 			String[] selectionArgs = selectionArgsList.toArray(new String[0]);
 
-			Cursor cursor = queryToCursor(db, false, table, columns, selection, selectionArgs);
+			Cursor cursor = queryToCursor(db, false, table, null, selection, selectionArgs);
 			return (ArrayList<IngredientChild>)cursorToObject(cursor, table, ThePantryContract.CHILDLIST);
 			
 		} catch (SQLiteException e) {
