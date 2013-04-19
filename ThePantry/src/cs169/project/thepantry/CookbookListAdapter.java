@@ -30,6 +30,7 @@ public class CookbookListAdapter extends ArrayAdapter<Storage> {
     		TextView tv = (TextView) listItem.findViewById(R.id.recipe_name);
     		Recipe rec = (Recipe) values.get(position);
     		String title = "" + position + ". " + rec.name;
+    		System.out.println(title);
     		listItem.setTag(rec);
     		tv.setText(title);
 	    }

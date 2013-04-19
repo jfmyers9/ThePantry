@@ -94,7 +94,6 @@ class Recipe extends Storage implements Serializable {
 	ArrayList<String> directionLines; //in order
 	RecipeImages images; //not always present
 	RecipeSource source; //not always present
-	ArrayList<String> directionsLines;
 
 	Recipe() {}
 	

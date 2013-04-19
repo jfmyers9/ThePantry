@@ -50,6 +50,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			}
 			return addToDatabase(table, item, values);
 		} catch (SQLiteException e) {
+			System.err.println("1");
 			System.err.println(e.getMessage());
 			return false;
 		} //Make this ThePantryException, change later
@@ -69,6 +70,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		try {
 			addToDatabase(table, id, values);
 		} catch (SQLiteException e) {
+			System.err.println("2");
 			System.err.println(e.getMessage());
 			return false;
 		} //also catch ThePantryException
@@ -92,6 +94,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				}
 			} catch (SQLiteException e) {
 				//throw ThePantryException
+				System.err.println("3");
 			}
 			return false;
 		} else {
@@ -225,6 +228,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				return false;
 			}
 		} catch (SQLiteException e) {
+			System.err.println("4");
 			System.err.println(e.getMessage());
 			return false;
 		}
@@ -241,6 +245,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			// CursorToObject -> ObjectType == ??
 			return queryToCursor(db, false, table, null, selection, selectionArgs);
 		} catch (SQLiteException e) {
+			System.err.println("5");
 			System.err.println(e.getMessage());
 			return null;
 		}
@@ -257,6 +262,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				return false;
 			}
 		} catch(SQLiteException e) {
+			System.err.println("6");
 			System.err.println(e.getMessage());
 			return false;
 		}
@@ -282,6 +288,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			// CursorToObject -> ObjectType == CHILDLIST
 			return queryToCursor(db, false, table, null, selection, selectionArgs);
 		} catch (SQLiteException e) {
+			System.err.println("7");
 			System.err.println(e.getMessage());
 			return null;
 		}
@@ -307,6 +314,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			// CursorToObject -> ObjectType == GROUPLIST
 			return queryToCursor(db, true, table, columns, selection, selectionArgs);
 		} catch (SQLiteException e) {
+			System.err.println("8");
 			System.err.println(e.getMessage());
 			return null;
 		}
@@ -325,6 +333,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			// CursorToObject -> ObjectType == AMOUNTVAL
 			return queryToCursor(db, false, table, columns, selection, selectionArgs);
 		} catch (SQLiteException e) {
+			System.err.println("9");
 			System.err.println(e.getMessage());
 			return null;
 		}
@@ -338,7 +347,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			SQLiteDatabase db = getReadableDatabase();
 
 			String selection;
-			if (table == ThePantryContract.Recipe.TABLE_NAME || table == ThePantryContract.SearchMatch.TABLE_NAME) {
+			if (table.equals(ThePantryContract.Recipe.TABLE_NAME) || table.equals(ThePantryContract.SearchMatch.TABLE_NAME) || table.equals(ThePantryContract.CookBook.TABLE_NAME)) {
 				selection = ThePantryContract.Recipe.ID + " = ?";
 			} else {
 				item = item.toLowerCase().trim();
@@ -348,12 +357,13 @@ public class DatabaseModel extends SQLiteAssetHelper {
 
 			Cursor c = queryToCursor(db, false, table, null, selection, selectionArgs);
 			//Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
-			if(!c.equals(null)) {
+			if(c != null) {
 				return true;
 			}else {
 				return false;
 			}
 		} catch (SQLiteException e) {
+			System.err.println("10");
 			System.err.println(e.getMessage());
 			return false;
 		}
@@ -368,6 +378,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			// CursorToObject -> ObjectType == STRINGLIST
 			return queryToCursor(db, false, table, columns, null, null);
 		} catch (SQLiteException e) {
+			System.err.println("11");
 			System.err.println(e.getMessage());
 			return null;
 		}
@@ -386,6 +397,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			// CursorToObject -> ObjectType == GROUP
 			return queryToCursor(db, false, table, columns, selection, selectionArgs);
 		} catch (SQLiteException e) {
+			System.err.println("12");
 			System.err.println(e.getMessage());
 			return null;
 		}
@@ -416,6 +428,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			// CursorToObject -> ObjectType == CHILDLIST
 			return queryToCursor(db, false, table, columns, selection, selectionArgs);
 		} catch (SQLiteException e) {
+			System.err.println("13");
 			System.err.println(e.getMessage());
 			return null;
 		}
@@ -424,8 +437,10 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	public ArrayList<Storage> getAllRecipes(String table) {
 		SQLiteDatabase db = getReadableDatabase();
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		if (table == ThePantryContract.Recipe.TABLE_NAME) {
+		if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
 			qb.setTables(ThePantryContract.Recipe.TABLE_NAME);
+		} else if (table.equals(ThePantryContract.CookBook.TABLE_NAME)) {
+			qb.setTables(ThePantryContract.CookBook.TABLE_NAME);
 		} else {
 			qb.setTables(ThePantryContract.SearchMatch.TABLE_NAME);
 		}
@@ -611,7 +626,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			}
 
 			String directions = "";
-			for (String direction : ((Recipe) storage).directionsLines) {
+			for (String direction : ((Recipe) storage).directionLines) {
 				if (!directions.equals("")) {
 					directions += ThePantryContract.SEPERATOR;
 				}
@@ -670,6 +685,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				return false;
 			}
 		} catch (SQLiteException e) {
+			System.err.println("15");
 			System.err.println(e.getMessage());
 			return false;
 		}
@@ -699,6 +715,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			// CursorToObject -> ObjectType == CHILDLIST
 			return queryToCursor(db, false, table, columns, selection, selectionArgs);
 		} catch (SQLiteException e) {
+			System.err.println("16");
 			System.err.println(e.getMessage());
 			return null;
 		}

@@ -8,13 +8,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.Menu;
@@ -73,39 +74,12 @@ public class AddRecipeActivity extends Activity {
 			String ingredients = ((EditText)findViewById(R.id.ingredients)).getText().toString();
 			String instructions = ((EditText)findViewById(R.id.instructions)).getText().toString();
 			String picName = recName + login_status;
-			s3Client.createBucket( MY_PICTURE_BUCKET );
-			PutObjectRequest por = new PutObjectRequest(MY_PICTURE_BUCKET, picName, new java.io.File(selectedImagePath));  
-			s3Client.putObject(por);
 			
-			ResponseHeaderOverrides override = new ResponseHeaderOverrides();
-			override.setContentType( "image/jpeg" );
-			GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(MY_PICTURE_BUCKET, picName);
-			urlRequest.setExpiration( new Date( System.currentTimeMillis() + 3600000 ) );  // Added an hour's worth of milliseconds to the current time.
-			urlRequest.setResponseHeaders(override);
-			URL url = s3Client.generatePresignedUrl(urlRequest);
-			
-			Recipe recipe = new Recipe();
-			recipe.name = recName;
-			recipe.id = recName;
-			RecipeImages img = new RecipeImages(url.toURI().toString(), url.toURI().toString());
-			recipe.images = img;
-			ArrayList<String> ingLines = new ArrayList<String>();
-			for (String s : ingredients.split(",")) {
-				ingLines.add(s);
-			}
-			recipe.ingredientLines = ingLines;
-			ArrayList<String> instLines = new ArrayList<String>();
-			for(String s : instructions.split("\\.")) {
-				instLines.add(s);
-			}
-			recipe.directionLines = instLines;
-			DatabaseModel dm = new DatabaseModel(this, ThePantryContract.DATABASE_NAME);
-			dm.addStorage(ThePantryContract.CookBook.TABLE_NAME, recipe);
-			dm.close();
-			Intent intent = new Intent(this, CookBookActivity.class);
-			startActivity(intent);
+			AmazonS3AsyncTask s3Task = new AmazonS3AsyncTask(picName, getApplicationContext(), recName, ingredients, instructions, this);
+			s3Task.execute();
 		} catch (Exception e) {
-			
+			System.out.println("2");
+			e.printStackTrace();
 		}		
 	}
 	
@@ -130,6 +104,8 @@ public class AddRecipeActivity extends Activity {
 			                startActivityForResult(cameraIntent, CAMERA_REQUEST);
 			                return true;
 						} catch (Exception e) {
+							System.out.println("1");
+							e.printStackTrace();
 							return false;
 						}
 					default:
@@ -168,12 +144,10 @@ public class AddRecipeActivity extends Activity {
     }
     
     public File getAlbumDir() {
-    	File storageDir = new File(
-    		    Environment.getExternalStoragePublicDirectory(
-    		        Environment.DIRECTORY_PICTURES
-    		    ), 
-    		    getAlbumName()
-    		);         
+    	File storageDir;
+    	storageDir = new File(android.os.Environment.getExternalStorageDirectory(),getAlbumName());
+    	if(!storageDir.exists())
+    	    storageDir.mkdirs();
     	return storageDir;
     }
     
@@ -188,6 +162,74 @@ public class AddRecipeActivity extends Activity {
                 .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         cursor.moveToFirst();
         return cursor.getString(column_index);
+    }
+    
+    private class AmazonS3AsyncTask extends AsyncTask<Void, URL, URL> {
+    	
+    	private String picName, recName, ingredients, instructions;
+    	private Context context;
+    	private ProgressDialog dialog;
+    	
+    	public AmazonS3AsyncTask(String picName, Context context, String recName, String ingredients, String instructions, Activity act) {
+    		this.picName = picName;
+    		this.context = context;
+    		this.recName = recName;
+    		this.ingredients = ingredients;
+    		this.instructions = instructions;
+    		dialog = new ProgressDialog(act);
+    	}
+    	
+    	@Override
+    	protected void onPreExecute() {
+    		this.dialog.setMessage("Adding Recipe");
+    		this.dialog.show();
+    	}
+
+		@Override
+		protected URL doInBackground(Void ... params) {
+			
+			PutObjectRequest por = new PutObjectRequest(MY_PICTURE_BUCKET, picName, new java.io.File(selectedImagePath));  
+			s3Client.putObject(por);
+			
+			ResponseHeaderOverrides override = new ResponseHeaderOverrides();
+			override.setContentType( "image/jpeg" );
+			GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(MY_PICTURE_BUCKET, picName);
+			urlRequest.setExpiration( new Date( System.currentTimeMillis() + 3600000 ) );  // Added an hour's worth of milliseconds to the current time.
+			urlRequest.setResponseHeaders(override);
+			URL url = s3Client.generatePresignedUrl(urlRequest);
+			
+			return url;
+		}
+		
+		@Override
+		protected void onPostExecute(URL url) {
+			try {
+				Recipe recipe = new Recipe();
+				recipe.name = recName;
+				recipe.id = recName;
+				RecipeImages img = new RecipeImages(url.toURI().toString(), url.toURI().toString());
+				recipe.images = img;
+				ArrayList<String> ingLines = new ArrayList<String>();
+				for (String s : ingredients.split(",")) {
+					ingLines.add(s);
+				}
+				recipe.ingredientLines = ingLines;
+				ArrayList<String> instLines = new ArrayList<String>();
+				for(String s : instructions.split("\\.")) {
+					instLines.add(s);
+				}
+				recipe.directionLines = instLines;
+				DatabaseModel dm = new DatabaseModel(context, ThePantryContract.DATABASE_NAME);
+				dm.addStorage(ThePantryContract.CookBook.TABLE_NAME, recipe);
+				dm.close();
+				Intent intent = new Intent(context, CookBookActivity.class);
+				dialog.dismiss();
+				startActivity(intent);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+    	
     }
 
 }

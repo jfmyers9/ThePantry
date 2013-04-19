@@ -16,7 +16,7 @@ import com.actionbarsherlock.view.MenuItem;
 public class CookBookActivity extends BasicMenuActivity {
 	
 	private final String TITLE = "Cook Book";
-	private final String DATABASE = "thepantry";
+	private final String DATABASE = ThePantryContract.DATABASE_NAME;
 	private String tableName;
 	private ArrayList<Storage> recipes;
 	private DatabaseModel dm;
@@ -33,6 +33,9 @@ public class CookBookActivity extends BasicMenuActivity {
 		context = this;
 		
 		recipes = getRecipes();
+		for (Storage s : recipes) {
+			System.out.println(((Recipe)s).name);
+		}
 		
 		setTitle(TITLE);
 		
@@ -59,6 +62,7 @@ public class CookBookActivity extends BasicMenuActivity {
 		dm = new DatabaseModel(this, DATABASE);
 		ArrayList<Storage> recipes = dm.getAllRecipes(tableName);
 		dm.close();
+		System.out.println(recipes);
 		return recipes;
 	}
 
@@ -88,7 +92,6 @@ public class CookBookActivity extends BasicMenuActivity {
 		}
 		
 		if (intent != null) {
-			System.out.println("FUCK THIS");
 			startActivity(intent);
 			return true;
 		}
