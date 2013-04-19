@@ -38,7 +38,7 @@ public class HomePageSectionFragment extends Fragment {
 					int position, long id) {
 			    // online check?
 		    	SearchCriteria searchcriteria = new SearchCriteria("recipe", (String)view.getTag());
-		    	((HomePageActivity)getActivity()).new HomeSearchTask(getActivity(), "recipe").execute(searchcriteria);
+		    	//((HomePageActivity)getActivity()).new HomeSearchTask(getActivity(), "recipe").execute(searchcriteria);
 			}
 		});
 		

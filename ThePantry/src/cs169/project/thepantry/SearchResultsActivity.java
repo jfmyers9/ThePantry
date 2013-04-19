@@ -2,15 +2,10 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-import android.app.ProgressDialog;
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -20,8 +15,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
-
-import cs169.project.thepantry.SearchResultsFragment.SearchTask;
 
 public class SearchResultsActivity extends BasicMenuActivity implements TabListener, OnQueryTextListener {
 
@@ -138,67 +131,4 @@ public class SearchResultsActivity extends BasicMenuActivity implements TabListe
 	public void onTabReselected(Tab tab,
 			android.support.v4.app.FragmentTransaction ft) {
 	}
-	
-/*public class SearchTask extends AsyncTask<SearchCriteria, String, Storage> {
-		
-		String type = "";
-		String q;
-		Context context;
-		FrameLayout mFrameOverlay;
-		ProgressDialog progressDialog;
-		
-		public SearchTask(Context context) {
-		    	this.context = context;
-		}
-		
-		public SearchTask(Context context, String type) {
-	    	this.context = context;
-	    	this.type = type;
-		}
-		
-		//show progress wheel
-		@Override
-	    protected void onPreExecute() {
-			progressDialog = new ProgressDialog(SearchResultsActivity.this);
-			progressDialog.setMessage("Loading " + this.type + "...");
-			progressDialog.show();
-	    };
-		
-		@Override
-		protected Storage doInBackground(SearchCriteria... sc) {
-			this.type = sc[0].type;
-			this.q = sc[0].q;
-			return sm.search(sc[0]);
-		}
-		
-		@Override
-		protected void onPostExecute(Storage result) {
-			
-		progressDialog.dismiss();
-			
-		//TODO: bug if results list goes from small to smaller? index out of bounds
-		if (result != null) {
-			if (this.type == "search") {
-				if (srAdapter.values.size() == 0) {
-					matches = ((SearchResult)result).matches;
-					srAdapter = new SearchResultAdapter(SearchResultsActivity.this, matches);   
-					listView.setAdapter(srAdapter);
-					listView.bringToFront();
-				}
-				else {
-					srAdapter.values = ((SearchResult)result).matches;
-					srAdapter.notifyDataSetChanged();
-					listView.smoothScrollToPosition(0);
-				}
-			}
-			else if (this.type == "recipe") {
-				Intent intent = new Intent(context, RecipeActivity.class);
-				intent.putExtra("result", result);
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
-			}
-		}
-		}
-	}*/
 }

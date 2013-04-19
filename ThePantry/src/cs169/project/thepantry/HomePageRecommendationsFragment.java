@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -53,7 +54,7 @@ public class HomePageRecommendationsFragment extends Fragment {
 					int position, long id) {
 			    // online check?
 		    	SearchCriteria searchcriteria = new SearchCriteria("recipe", (String)view.getTag());
-		    	((HomePageActivity)getActivity()).new HomeSearchTask(getActivity(), "recipe").execute(searchcriteria);
+		    	new GetRecommendationsTask(getActivity(), "recipe").execute(searchcriteria);
 			}
 		});
 		
@@ -62,7 +63,6 @@ public class HomePageRecommendationsFragment extends Fragment {
 		} else {
 			//TODO: display an "offline" message
 		}
-		
 		return rootView;
 	}
 	
@@ -70,7 +70,6 @@ public class HomePageRecommendationsFragment extends Fragment {
 		public void getRecommendations() {		
 			dm = new DatabaseModel(getActivity(), DATABASE_NAME);
 			Cursor youHave = dm.findAllItems(Inventory.TABLE_NAME);
-
 			String query = "";
 			SearchCriteria searchcriteria;
 			int numToPick;
@@ -99,7 +98,7 @@ public class HomePageRecommendationsFragment extends Fragment {
 				//default
 				searchcriteria = new SearchCriteria("home", "", NUM_RECOMMENDATIONS);
 			}
-			new GetRecommendationsTask(getActivity()).execute(searchcriteria);
+			new GetRecommendationsTask(getActivity(), "home").execute(searchcriteria);
 		}
 	
 	/** AsyncTask for getting recommendations
@@ -109,18 +108,30 @@ public class HomePageRecommendationsFragment extends Fragment {
 		
 		String q;
 		Context context;
+		String type = "";
 		ProgressDialog progressDialog;
 		
 		public GetRecommendationsTask(Context context) {
 	    	this.context = context;
 		}
 		
+		public GetRecommendationsTask(Context context, String type) {
+	    	this.context = context;
+	    	this.type = type;
+		}
+		
 		//show progress wheel
 		@Override
 	    protected void onPreExecute()
 	    {
-			// show the overlay with the progress bar
-			mFrameOverlay.setVisibility(View.VISIBLE);
+			if (type == "home") {
+				// show the overlay with the progress bar
+				mFrameOverlay.setVisibility(View.VISIBLE);
+			} else if (type == "recipe") {
+				progressDialog = new ProgressDialog(getActivity());
+				progressDialog.setMessage("Loading " + this.type + "...");
+				progressDialog.show();
+			}
 	    };
 		
 		@Override
@@ -136,6 +147,7 @@ public class HomePageRecommendationsFragment extends Fragment {
 			mFrameOverlay.setVisibility(View.GONE);
 	        //display recommendation results
 			if (result != null) {
+				if (this.type == "home") {
 					if (srAdapter.values.size() == 0) {
 						recommendations = ((SearchResult)result).matches;
 						srAdapter = new SearchResultAdapter(context, recommendations);   
@@ -144,6 +156,13 @@ public class HomePageRecommendationsFragment extends Fragment {
 						srAdapter.values = ((SearchResult)result).matches; 
 						srAdapter.notifyDataSetChanged();
 					}
+				} else if (this.type == "recipe") {
+					Intent intent = new Intent(context, RecipeActivity.class);
+					intent.putExtra("result", result);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
+				}
 			}
 		}
 	}
