@@ -121,7 +121,7 @@ public class ProfileActivity extends BasicMenuActivity {
 	 */
 	public void setHistory() {
 		// TODO
-		dm = new DatabaseModel(this, DATABASE_NAME);
+		//dm = new DatabaseModel(this, DATABASE_NAME);
 		/*
 		Cursor cooked = dm.checkedItems(ThePantryContract.Recipe.TABLE_NAME, ThePantryContract.Recipe.COOKED);
 		
@@ -135,11 +135,11 @@ public class ProfileActivity extends BasicMenuActivity {
 			}
 			cooked.close();
 		}*/
-		ArrayList<Storage> cookedRecipes = dm.getCookOrFav(ThePantryContract.SearchMatch.TABLE_NAME, ThePantryContract.SearchMatch.COOKED);
-		dm.close();
-		for (Storage recipe : cookedRecipes) {
-			cooked.add((SearchMatch)recipe);
-		}
+//		ArrayList<Storage> cookedRecipes = dm.getCookOrFav(ThePantryContract.SearchMatch.TABLE_NAME, ThePantryContract.SearchMatch.COOKED);
+//		dm.close();
+//		for (Storage recipe : cookedRecipes) {
+//			cooked.add((SearchMatch)recipe);
+//		}
 		System.out.println("Can I cast Recipe to SearchMatch object");
 	}
 	

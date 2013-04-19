@@ -16,9 +16,9 @@ import com.actionbarsherlock.view.MenuItem;
 public class CookBookActivity extends BasicMenuActivity {
 	
 	private final String TITLE = "Cook Book";
-	private final String DATABASE = "thepantry";
+	private final String DATABASE = ThePantryContract.DATABASE_NAME;
 	private String tableName;
-	private ArrayList<Storage> recipes;
+	private ArrayList<Recipe> recipes;
 	private DatabaseModel dm;
 	private CookbookListAdapter cbAdapter;
 	private Context context;
@@ -29,7 +29,7 @@ public class CookBookActivity extends BasicMenuActivity {
 		setContentView(R.layout.activity_cook_book);
 		
 		tableName = ThePantryContract.CookBook.TABLE_NAME;
-		recipes = new ArrayList<Storage>();
+		recipes = new ArrayList<Recipe>();
 		context = this;
 		
 		recipes = getRecipes();
@@ -44,6 +44,7 @@ public class CookBookActivity extends BasicMenuActivity {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				System.out.println("HI");
 				Recipe rec = (Recipe) view.getTag();
 				Intent intent = new Intent(context, RecipeActivity.class);
 				intent.putExtra("result", rec);
@@ -55,9 +56,10 @@ public class CookBookActivity extends BasicMenuActivity {
 		});
 	}
 	
-	private ArrayList<Storage> getRecipes() {
+	private ArrayList<Recipe> getRecipes() {
 		dm = new DatabaseModel(this, DATABASE);
-		ArrayList<Storage> recipes = dm.getAllRecipes(tableName);
+		ArrayList<Recipe> recipes = dm.getAllRecipes(tableName);
+		dm.close();
 		return recipes;
 	}
 
@@ -87,7 +89,6 @@ public class CookBookActivity extends BasicMenuActivity {
 		}
 		
 		if (intent != null) {
-			System.out.println("FUCK THIS");
 			startActivity(intent);
 			return true;
 		}

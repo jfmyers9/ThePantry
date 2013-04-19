@@ -91,6 +91,7 @@ public class Storage implements Serializable {
 class Recipe extends Storage implements Serializable {
 	Attribution attribution;
 	ArrayList<String> ingredientLines; //in order
+	ArrayList<String> directionLines; //in order
 	RecipeImages images; //not always present
 	RecipeSource source; //not always present
 

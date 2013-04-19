@@ -117,52 +117,39 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		groupItems = getTypes(table);
 		for (IngredientGroup g : groupItems) {
 			groupNames.add(g.getGroup());
-			System.out.println(g.getGroup());
 			g.setChildren(getItems(table, g.getGroup()));
 		}
+		if (table != ThePantryContract.Inventory.TABLE_NAME) {
+			setChecked();
+		}
+	}
+	
+	public void setChecked() {
+		dm = new DatabaseModel(this, DATABASE_NAME);
+		for (IngredientChild child : children) {
+			boolean checked = dm.isItemChecked(table, child.getName(), ThePantryContract.CHECKED);
+			child.setSelected(checked);
+		}
+		dm.close();
 	}
 	
 	/** Retrieves ingredient types from the database and
 	 *  returns an ArrayList with said types to be used for display */
 	public ArrayList<IngredientGroup> getTypes(String table) {
 		dm = new DatabaseModel(this, DATABASE_NAME);
-		System.out.println("getTypes table is " + table);
-		Cursor types = dm.findAllTypes(table);
-		ArrayList<IngredientGroup> result = new ArrayList<IngredientGroup>();
-		if (types!=null){
-			while(!types.isAfterLast()){
-				String data = types.getString(0);
-				result.add(new IngredientGroup(data, new ArrayList<IngredientChild>()));
-				types.moveToNext();
-			}
-		types.close();
-		}
-		return result;
+		ArrayList<IngredientGroup> types = dm.findAllTypes(table);
+		dm.close();
+		return types;
 	}
 	
 	/** Retrieves ingredients from the database and
 	 *  returns an ArrayList with the ingredients to be used for display */
 	public ArrayList<IngredientChild> getItems(String table, String type) {
 		dm = new DatabaseModel(this, DATABASE_NAME);
-		Cursor items = dm.findTypeItems(table, type);
-		
-		ArrayList<IngredientChild> result = new ArrayList<IngredientChild>();
-		if (items != null){
-			while(!items.isAfterLast()){
-				String data = items.getString(0);
-				IngredientChild temp = new IngredientChild(data,type);
-				System.out.println(temp.getName());
-				if (table != ThePantryContract.Inventory.TABLE_NAME) {
-					boolean checked = dm.isItemChecked(table, data, ThePantryContract.CHECKED);
-					temp.setSelected(checked);
-				}
-				children.add(temp);
-				result.add(temp);
-				items.moveToNext();
-			}
-			items.close();
-		}
-		return result;
+		ArrayList<IngredientChild> items = dm.findTypeItems(table, type);
+		dm.close();
+		children.addAll(items);
+		return items;
 	}
 	
 	/** Adds the given item to the list and the database
@@ -191,19 +178,9 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	public ArrayList<IngredientChild> search(String query) {
 		// might return ingredient child if I make a custom adapter for listView
 		dm = new DatabaseModel(this, DATABASE_NAME);
-		Cursor items = dm.search(table, query);
-		
-		ArrayList<IngredientChild> result = new ArrayList<IngredientChild>();
-		if (items != null){
-			while(!items.isAfterLast()){
-				String data = items.getString(0);
-				IngredientChild item = new IngredientChild(data);
-				result.add(item);
-				items.moveToNext();
-			}
-			items.close();
-		}
-		return result;
+		ArrayList<IngredientChild> items = dm.search(table, query);
+		dm.close();
+		return items;
 	}
 	
 	/** Removes the given item from the database and list 
@@ -214,6 +191,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		if (!success) {
 			//throw new ThePantryException(item + " could not be removed from database");
 		}
+		dm.close();
 	}
 	
 	/** Adds all items to inventory database that have been checked 
@@ -223,19 +201,22 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		String message = "";
 		for (IngredientChild c : children) {
+			System.out.println(c.getName());
+			System.out.println(c.isSelected());
 			if (c.isSelected()) {
 				System.out.println(c.getName());
 				boolean success = dm.addIngredient(Inventory.TABLE_NAME, c.getName(),c.getGroup(),"1");
 				message += c.getName() + "\n";
 				// If the shopping list "updates" the ingredients are removed from list
 				dm.check(table, c.getName(), ThePantryContract.CHECKED, false);
-				if (table == ShoppingList.TABLE_NAME) {
+				if (table.equals(ShoppingList.TABLE_NAME)) {
 					dm.check(table, c.getName(), ThePantryContract.REMOVEFLAG, true);
 				} 
 				if (!success) {
 					System.err.println("You Fucked Up");
 				}
 			}
+			dm.close();
 		}
 		
 		// Opens pop up window with items being added to the pantry

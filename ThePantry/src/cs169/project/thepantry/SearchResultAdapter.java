@@ -1,9 +1,9 @@
 package cs169.project.thepantry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,17 +42,17 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	    	// check which ingredients are in database
 	    	// add them to you have or you need accordingly
 	    	dm = new DatabaseModel(context, DATABASE_NAME);
-			Cursor invItems = dm.findAllItems(Inventory.TABLE_NAME);
+			ArrayList<IngredientChild> invItems = dm.findAllItems(Inventory.TABLE_NAME);
 			Boolean found;
 	    	for (int i=0; i < values.get(position).ingredients.size(); i++) {
 	    		found = false;
-	    		if (invItems != null && invItems.moveToFirst()) {
-	    			do {
-	    				if (invItems.getString(Inventory.ITEMIND).toLowerCase().equals(values.get(position).ingredients.get(i).toLowerCase())) {
+	    		if (invItems != null) {
+	    			for (IngredientChild child : invItems) {
+	    				if (child.getName().equals(values.get(position).ingredients.get(i).toLowerCase())) {
 	    					found = true;
 	    					break;
 	    				}
-	    			} while (invItems.moveToNext());
+	    			}
 	    		}
 	    		if (found) {
 	    			youHave += values.get(position).ingredients.get(i) + ", ";
