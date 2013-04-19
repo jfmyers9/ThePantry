@@ -24,27 +24,12 @@ public class ShoppingListActivityTest extends ActivityInstrumentationTestCase2<S
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		//setActivityInitialTouchMode(false);
 	    act = getActivity();
-	    //mSpinner =(Spinner) listAct.findViewById(cs169.project.thepantry.R.id.add_sl_types);
-	    //mPlanetData = mSpinner.getAdapter();
-	    //mText = (EditText) listAct.findViewById(cs169.project.thepantry.R.id.shopping_list_text);
 	}
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
-
-	/*public void testPreConditions() {
-	    assertTrue(mSpinner.getOnItemSelectedListener() != null);
-	    assertTrue(mPlanetData != null);
-	    assertEquals(mPlanetData.getCount(),ADAPTER_COUNT);
-	  } // end of testPreConditions() method definition
-
-	public void testAddShopItem() {
-		listAct.addShopItem(mText);
-		assertNull(mText.getText());
-	}*/
 	
 	/** Helper method to convert IngredientGroup arrays into their String representations */
 	protected ArrayList<String> groupToName(ArrayList<IngredientGroup> group) {
@@ -67,19 +52,22 @@ public class ShoppingListActivityTest extends ActivityInstrumentationTestCase2<S
 		assertFalse("Name array should not be empty", nameCount == 0);
 	}
 	
-	/*public void testGetTypes() {
+	public void testSetChecked() {
+	}
+	
+	public void testGetTypes() {
 		ArrayList<IngredientGroup> types = act.getTypes(table);
 		String[] names = (String[]) groupToName(types).toArray();
 		String[] known = {"produce", "dairy", "poultry", "grain"};
 		assertEquals(known, names);
-	}*/
+	}
 
-	/*public void testGetItems() {
+	public void testGetItems() {
 		String type = "dairy";
 		ArrayList<IngredientChild> types = act.getItems(table, type);
 		String item = types.get(0).getName();
 		assertEquals("milk", item);
-	}*/
+	}
 
 	/** Functional test for adding an item from the shopping list to the Database */
 	public void testAddItem() {
@@ -116,6 +104,14 @@ public class ShoppingListActivityTest extends ActivityInstrumentationTestCase2<S
 			thrown = true;
 		}
 		assertTrue("Expecting IOException, spaces input not allowed", thrown);
+	}
+	
+	public void testAddShopItem() {
+		//implement later
+	}
+	
+	public void testRetrieveType() {
+		//implement later
 	}
 
 }
