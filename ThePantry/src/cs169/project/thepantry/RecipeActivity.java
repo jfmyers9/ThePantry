@@ -31,7 +31,7 @@ import cs169.project.thepantry.ThePantryContract.ShoppingList;
 
 public class RecipeActivity extends BasicMenuActivity {
 	
-	Recipe info;
+	Recipe recipe;
 	
 	SmartImageView picture;
 	TextView name;
@@ -56,52 +56,53 @@ public class RecipeActivity extends BasicMenuActivity {
 		
 		//Get bundle with recipe information.
 		//Intent i = this.getIntent();
-		info = (Recipe)getIntent().getExtras().getSerializable("result");
+		recipe = (Recipe)getIntent().getExtras().getSerializable("result");
 		
 		//Display recipe picture if there is one.
 		picture = (SmartImageView)findViewById(R.id.recipePic);
-		if (info.images != null && info.images.hostedLargeUrl != null && isOnline()) {
-			picture.setImageUrl(info.images.hostedLargeUrl);
+		if (recipe.images != null && recipe.images.hostedLargeUrl != null && isOnline()) {
+			picture.setImageUrl(recipe.images.hostedLargeUrl);
 			picture.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		}
 		
 		//Display recipe name.
 		name = (TextView)findViewById(R.id.recipeName);
-		name.setText(info.name);
+		name.setText(recipe.name);
 		
 		//Render the ingredients list to view.
 		ingChecks = new ArrayList<CheckBox>();
 		ings = (LinearLayout)findViewById(R.id.ingList);
-		displayIngreds(info.ingredientLines);
+		displayIngreds(recipe.ingredientLines);
 		
 		//Render directions to view.
 		//fetch and parse directions aynchronously
-		new ParseDirectionsTask().execute(info.source.sourceRecipeUrl);
+		new ParseDirectionsTask().execute(recipe.source.sourceRecipeUrl);
 		
 		//display the source and link to the web page source, open in a webview inside the app if clicked
 		Button source = (Button)findViewById(R.id.source);
-		source.setText("Source: " + info.source.sourceDisplayName);
+		source.setText("Source: " + recipe.source.sourceDisplayName);
 		source.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayWebpage(info.source.sourceRecipeUrl);
+                displayWebpage(recipe.source.sourceRecipeUrl);
             }
         });
 		
 		dm = new DatabaseModel(this, DATABASE_NAME);
+		// check if recipe is in database and get favorite and cooked values true or false
+		faved = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, recipe.name, ThePantryContract.Recipe.FAVORITE);
+		cooked = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, recipe.name, ThePantryContract.Recipe.COOKED);
 		
 		//set favorite button to grayscale or colored image based on state in db
 		//check if recipe in database or if not favorited
 		star = (ImageButton)findViewById(R.id.favorite);
-		faved = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE);
 		setStarButton(faved);
 		
 		//set cooked button to grayscale or colored image based on state in db
 		//check if recipe is in db or not cooked
 		check = (ImageButton)findViewById(R.id.cooked);
-		cooked = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED);
-		dm.close();
 		setCheckButton(cooked);
+		dm.close();
 		
 	}
 	
@@ -176,16 +177,17 @@ public class RecipeActivity extends BasicMenuActivity {
 	public void toggleFavorites(View v) {
 		// update recipe table of database so favorited column is yes/no
 		dm = new DatabaseModel(this, DATABASE_NAME);
+		// need to add recipe to database if not already in it
+		dm.addRecipe(recipe);
 		if (faved) {
 			faved = false;
-			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, false);
-			dm.close();
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, recipe.name, ThePantryContract.Recipe.FAVORITE, false);
 		} else {
 			faved = true;
-			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.FAVORITE, true);
-			dm.close();
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, recipe.name, ThePantryContract.Recipe.FAVORITE, true);
 		}
 		setStarButton(faved);
+		dm.close();
 	}
 	
 	/**
@@ -195,16 +197,17 @@ public class RecipeActivity extends BasicMenuActivity {
 	public void toggleCooked(View v) {
 		// update recipe table of database so cooked column is true
 		dm = new DatabaseModel(this, DATABASE_NAME);
+		// need to add recipe if not already in database
+		dm.addRecipe(recipe);
 		if (cooked) {
 			cooked = false;
-			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, false);
-			dm.close();
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, recipe.name, ThePantryContract.Recipe.COOKED, false);
 		} else {
 			cooked = true;
-			dm.check(ThePantryContract.Recipe.TABLE_NAME, info.name, ThePantryContract.Recipe.COOKED, true);
-			dm.close();
+			dm.check(ThePantryContract.Recipe.TABLE_NAME, recipe.name, ThePantryContract.Recipe.COOKED, true);
 		}
 		setCheckButton(cooked);
+		dm.close();
 	}
 	
 	/**

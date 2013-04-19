@@ -181,9 +181,9 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			if (table == ThePantryContract.Recipe.TABLE_NAME || table == ThePantryContract.SearchMatch.TABLE_NAME) {
 				selection = ThePantryContract.Recipe.ID + " = ?";
 			} else {
+				item = item.toLowerCase().trim();
 				selection = ThePantryContract.ITEM + " = ?";
 			}
-			item = item.toLowerCase().trim();
 			String[] selectionArgs = {item};
 
 			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
@@ -339,11 +339,11 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
 				// Should this be id instead?
 				selection = ThePantryContract.Recipe.RECIPE + " = ?";
-				check(ThePantryContract.SearchMatch.TABLE_NAME, item, col, checked);
+				/*check(ThePantryContract.SearchMatch.TABLE_NAME, item, col, checked);
 			} else if (table.equals(ThePantryContract.SearchMatch.TABLE_NAME)){
 				// Should this be id instead?
 				selection = ThePantryContract.SearchMatch.RECIPE + " = ?";
-				check(ThePantryContract.Recipe.TABLE_NAME, item, col, checked);
+				check(ThePantryContract.Recipe.TABLE_NAME, item, col, checked); */
 			} else {
 				selection = ThePantryContract.ITEM + " = ?";	
 			}
@@ -407,14 +407,16 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		if (table == ThePantryContract.Recipe.TABLE_NAME) {
 			selection = ThePantryContract.Recipe.RECIPE + " = ?";
 		} else {
+			name = name.toLowerCase().trim();
 			selection = ThePantryContract.ITEM + " = ?";
 		}
-		name = name.toLowerCase().trim();
 		String[] selectionArgs = {name};
 		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
 
 		if (c.moveToFirst()) {
+			System.out.println("This recipe is in the database: " + name);
 			String data = c.getString(0);
+			System.out.println(data);
 			if (data.equals("true")) {
 				c.close();
 				return true;
@@ -422,6 +424,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			c.close();
 			return false;
 		} else {
+			System.out.println("This recipe is not in the database: " + name);
 			return false;
 		}		
 	}
@@ -510,6 +513,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			ArrayList<Storage> recipes = makeRecipe(cStorage);
 			return recipes;
 		} else {
+			System.out.println("Getting SearchMatches that are cooked!");
 			ArrayList<Storage> searchMatches = makeSearchMatch(cStorage);
 			return searchMatches;
 		}
@@ -529,20 +533,23 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			qb.setTables(ThePantryContract.SearchMatch.TABLE_NAME);
 		}
 			
-		String selection = ThePantryContract.Storage.ID + " = ?";
+		String selection = ThePantryContract.Recipe.ID + " = ?";
 		String[] selectionArgs = {id};
 		
 		Cursor cStorage = qb.query(db, null, selection, selectionArgs, null, null, null, null);
-		
-		if (table == ThePantryContract.Recipe.TABLE_NAME) {
-			ArrayList<Storage> recipes = makeRecipe(cStorage);
-			Recipe recipe = (Recipe) recipes.get(0);
-			return recipe;
-		} else {
-			ArrayList<Storage> searchMatches = makeSearchMatch(cStorage);
-			SearchMatch searchMatch = (SearchMatch) searchMatches.get(0);
-			return searchMatch;
+		System.out.println("There should be only 1 of this item! And there are " + cStorage.getCount() + "rows in this cursor!");
+		if (cStorage.moveToFirst()){
+			if (table == ThePantryContract.Recipe.TABLE_NAME) {
+				ArrayList<Storage> recipes = makeRecipe(cStorage);
+				Recipe recipe = (Recipe) recipes.get(0);
+				return recipe;
+			} else {
+				ArrayList<Storage> searchMatches = makeSearchMatch(cStorage);
+				SearchMatch searchMatch = (SearchMatch) searchMatches.get(0);
+				return searchMatch;
+			}
 		}
+		return null;
 	}
 	
 	public ArrayList<Storage> getAllRecipes(String table) {
@@ -593,12 +600,15 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			values.put(ThePantryContract.Recipe.INGLINES, ingredientLines);
 			values.put(ThePantryContract.Recipe.IMAGE, image);
 			values.put(ThePantryContract.Recipe.SOURCE, source);
+			values.put(ThePantryContract.Recipe.FAVORITE, "false");
+			values.put(ThePantryContract.Recipe.COOKED, "false");
 
 			long newRowId;
 			if (!findItem(ThePantryContract.Recipe.TABLE_NAME, id)) {
 				try {
 					newRowId = db.insertOrThrow(ThePantryContract.Recipe.TABLE_NAME, null, values);
 					if (newRowId != -1) {
+						System.out.println("Successfully added a new recipe.........");
 						return true;
 					}
 				} catch (SQLiteException e) {
@@ -640,6 +650,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			values.put(ThePantryContract.SearchMatch.INGREDIENTS, ingredients);
 			values.put(ThePantryContract.SearchMatch.IMAGEURL, image);
 			values.put(ThePantryContract.SearchMatch.SOURCENAME, source);
+			values.put(ThePantryContract.SearchMatch.FAVORITE, "false");
+			values.put(ThePantryContract.SearchMatch.COOKED, "false");
 
 			long newRowId;
 			if (!findItem(ThePantryContract.SearchMatch.TABLE_NAME, id)) {
