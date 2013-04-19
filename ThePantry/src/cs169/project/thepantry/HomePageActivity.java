@@ -2,19 +2,11 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-import android.app.ProgressDialog;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
@@ -23,8 +15,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
-
-import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class HomePageActivity extends BasicMenuActivity implements TabListener, OnQueryTextListener {
 	

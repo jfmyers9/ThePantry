@@ -109,7 +109,6 @@
         	android:id="@+id/dirList"
         	android:layout_height="wrap_content" 
         	android:layout_width="match_parent" 
-        	android:layout_marginBottom="15dp"
         	android:orientation="vertical"
         	android:layout_below="@id/directionstext" />
 		    
@@ -117,6 +116,7 @@
         	android:id="@+id/source"
         	android:layout_height="wrap_content" 
         	android:layout_width="wrap_content"
+        	android:layout_marginTop="15dp"
         	android:layout_below="@id/overlay" />
 		    
 			<FrameLayout

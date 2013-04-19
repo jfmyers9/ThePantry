@@ -143,8 +143,12 @@ public class HomePageRecommendationsFragment extends Fragment {
 		//update list of recommendations
 		@Override
 		protected void onPostExecute(Storage result) {
-			//remove the overlay
-			mFrameOverlay.setVisibility(View.GONE);
+			if (type == "home") {
+				//remove the overlay
+				mFrameOverlay.setVisibility(View.GONE);
+			} else if (type == "recipe") {
+				progressDialog.dismiss();
+			}
 	        //display recommendation results
 			if (result != null) {
 				if (this.type == "home") {
