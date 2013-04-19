@@ -1,38 +1,32 @@
 package cs169.project.thepantry;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.ActionBar.TabListener;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.widget.SearchView;
+import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 
 import cs169.project.thepantry.ThePantryContract.Inventory;
 
-public class HomePageActivity extends BasicMenuActivity implements TabListener {
+public class HomePageActivity extends BasicMenuActivity implements TabListener, OnQueryTextListener {
 	
 	// adapter and viewpager for switching between sections - Recommendations, Recent, Favorited
 	SectionsPagerAdapter mSectionsPagerAdapter;
@@ -98,12 +92,34 @@ public class HomePageActivity extends BasicMenuActivity implements TabListener {
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
-		
-		if (isOnline()) {
-			//getRecommendations();
-		} else {
-			//TODO: display an "offline" message
-		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    // Inflate the options menu from XML
+	    MenuInflater inflater = getSupportMenuInflater();
+	    inflater.inflate(R.menu.home_page, menu);
+
+	    // Get the SearchView and set it up
+	    SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+	    searchView.setIconifiedByDefault(true); // Do not iconify the widget; expand it by default - doesnt work TODO
+	    searchView.setSubmitButtonEnabled(true);
+	    searchView.setMaxWidth(1000);
+	    searchView.setOnQueryTextListener(this);
+	    searchView.setQueryHint("Search by recipe, ingredient...");
+
+	    return true;
+	}
+	
+	@Override
+	public boolean onQueryTextChange(String newText) {
+		return false;
+	}
+	
+	@Override
+	public boolean onQueryTextSubmit(String query) {
+		search(query);
+		return true;
 	}
 	
 	@Override
@@ -125,53 +141,18 @@ public class HomePageActivity extends BasicMenuActivity implements TabListener {
 	}
 	
 	// create a search criteria and send it to a search task for searching Yummly
-	public void search(View view) throws Exception {
-		EditText searchText = (EditText) findViewById(R.id.search_text);
-    	String search = searchText.getText().toString();
+	public void search(String query) {
     	if (isOnline()) {
-    		SearchCriteria searchcriteria = new SearchCriteria("search", search);
-    		new HomeSearchTask(getApplicationContext(), "search").execute(searchcriteria);
+    		Intent intent = new Intent(getApplicationContext(), SearchResultsActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.putExtra("query", query);
+			startActivity(intent);
     	}
 	}
 	
-	// create a search criteria for recommendations and search with it
-	public void getRecommendations() {		
-		dm = new DatabaseModel(this, DATABASE_NAME);
-		Cursor youHave = dm.findAllItems(Inventory.TABLE_NAME);
-
-		String query = "";
-		SearchCriteria searchcriteria;
-		int numToPick;
-		if (youHave != null && youHave.moveToFirst()) {
-			int numItems = youHave.getCount();
-			// pick a random number between 1-5 or 1-#items to try a combination of items in your inventory to recommend recipes based on
-			if (numItems < 5) {
-				numToPick = (int)(Math.random() * numItems) + 1;
-			} else {
-				numToPick = (int)(Math.random() * 5) + 1;
-			}
-			//pick numToPick inventory items at random and recommend recipes based on them
-			// TODO redo search for < 4 results
-			for (int i = 0; i < numToPick; i++) {
-				int loc = (int)(Math.random() * (numItems));
-				while (loc > 0) {
-					youHave.moveToNext();
-					loc--;
-				}
-				query += ", " + youHave.getString(Inventory.ITEMIND);
-				youHave.moveToFirst();
-			}
-			searchcriteria = new SearchCriteria("home", query, NUM_RECOMMENDATIONS);
-		}
-		else {
-			//default
-			searchcriteria = new SearchCriteria("home", "", NUM_RECOMMENDATIONS);
-		}
-		new HomeSearchTask(getApplicationContext(), "home").execute(searchcriteria);
-	}
-	
 	/** AsyncTask for performing search
-	 *
+	 *  used for getting recipes when clicked
 	 */
 	public class HomeSearchTask extends AsyncTask<SearchCriteria, String, Storage> {
 		
@@ -190,21 +171,6 @@ public class HomePageActivity extends BasicMenuActivity implements TabListener {
 		    	this.type = type;
 		}
 		
-		//show progress wheel
-		@Override
-	    protected void onPreExecute()
-	    {
-			/*// show the overlay with the progress bar
-			if (this.type == "home") {
-				mFrameOverlay = (FrameLayout)findViewById(R.id.overlay);
-				mFrameOverlay.setVisibility(View.VISIBLE);
-			} else {
-				progressDialog = new ProgressDialog(HomePageActivity.this);
-				progressDialog.setMessage("Loading " + this.type + "...");
-				progressDialog.show();
-			}*/
-	    };
-		
 		@Override
 		protected Storage doInBackground(SearchCriteria... sc) {
 			this.type = sc[0].type;
@@ -217,35 +183,13 @@ public class HomePageActivity extends BasicMenuActivity implements TabListener {
 		//or open a recipe page if a recipe was selected
 		@Override
 		protected void onPostExecute(Storage result) {
-			
-			//remove the overlay
-			/*if (this.type == "home") {
-				mFrameOverlay.setVisibility(View.GONE);
-				
-			} else {
-				progressDialog.dismiss();
-			}*/
-	        
 			if (result != null) {
-				if (this.type == "home") {
-					/*if (srAdapter.values.size() == 0) {
-						recommendations = ((SearchResult)result).matches;
-						srAdapter = new SearchResultAdapter(HomePageActivity.this, recommendations);   
-						listView.setAdapter(srAdapter);
-					} else {
-						srAdapter.values = ((SearchResult)result).matches; 
-						srAdapter.notifyDataSetChanged();
-					}*/
-					((HomePageSectionFragment)mSectionsPagerAdapter.fragments.get(0)).matches = ((SearchResult)result).matches;
-					((HomePageSectionFragment)mSectionsPagerAdapter.fragments.get(0)).srAdapter.notifyDataSetChanged();
-					mSectionsPagerAdapter.notifyDataSetChanged();
-				}
-				else if (this.type == "search") {
+				if (this.type == "search") {
 					Intent intent = new Intent(context, SearchResultsActivity.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					intent.putExtra("result", result);
-					intent.putExtra("currentSearch", this.q);
+					intent.putExtra("query", this.q);
 					startActivity(intent);
 				}
 				else if (this.type == "recipe") {
@@ -256,7 +200,6 @@ public class HomePageActivity extends BasicMenuActivity implements TabListener {
 					startActivity(intent);
 				}
 			}
-			
 		}
 	}
 

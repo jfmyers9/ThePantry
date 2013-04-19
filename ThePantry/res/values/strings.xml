@@ -78,4 +78,7 @@
     <string name="title_recent">Recent</string>
     <string name="title_favorited">Favorited</string>
     <string name="title_activity_inventory_add_grid">InventoryAddGrid</string>
+    <string name="search_hint">Search by recipe, ingredient...</string>
+    <string name="title_userresults">User Results</string>
+    <string name="title_searchresults">Search Results</string>
 </resources>

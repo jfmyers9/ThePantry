@@ -12,10 +12,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class HomePageSectionFragment extends Fragment {
-	/**
-	 * The fragment argument representing the section number for this
-	 * fragment.
-	 */
+
 	public static final String ARG_SECTION_NUMBER = "section_number";
 	ListView matchlist;
 	ArrayList<SearchMatch> matches;

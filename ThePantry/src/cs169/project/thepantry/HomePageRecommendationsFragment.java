@@ -2,9 +2,6 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-import cs169.project.thepantry.HomePageActivity.HomeSearchTask;
-import cs169.project.thepantry.ThePantryContract.Inventory;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
@@ -15,9 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class HomePageRecommendationsFragment extends Fragment {
 	/**
@@ -131,9 +129,7 @@ public class HomePageRecommendationsFragment extends Fragment {
 			return sm.search(sc[0]);
 		}
 		
-		//update list of recommendations using a SearchResultsAdapter
-		//or open a SearchResultsActivity if a search was made
-		//or open a recipe page if a recipe was selected
+		//update list of recommendations
 		@Override
 		protected void onPostExecute(Storage result) {
 			//remove the overlay

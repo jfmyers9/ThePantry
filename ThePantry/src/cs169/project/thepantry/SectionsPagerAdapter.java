@@ -29,7 +29,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public int getCount() {
-		return 3;
+		return fragments.size();
 	}
 
 	@Override
@@ -42,6 +42,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 			return context.getString(R.string.title_recent).toUpperCase(l);
 		case 2:
 			return context.getString(R.string.title_favorited).toUpperCase(l);
+		case 3:
+			return context.getString(R.string.title_searchresults).toUpperCase(l);
+		case 4:
+			return context.getString(R.string.title_userresults).toUpperCase(l);
 		}
 		return null;
 	}
