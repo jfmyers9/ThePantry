@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -18,8 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.view.Menu;
-
-import cs169.project.thepantry.HomePageActivity.HomeSearchTask;
 public class ProfileActivity extends BasicMenuActivity {
 	
 	// assumes that when profile clicked, then extra holds username
@@ -91,9 +87,7 @@ public class ProfileActivity extends BasicMenuActivity {
 				    // When clicked
 					if (isOnline()){
 			    		SearchCriteria searchcriteria = new SearchCriteria("recipe", (String)view.getTag());
-			    		HomePageActivity hpActivity = new HomePageActivity();
-			    		HomeSearchTask hstask = hpActivity.new HomeSearchTask(getApplicationContext(), "recipe");
-			    		hstask.execute(searchcriteria);
+			    		new HomePageRecommendationsFragment().new GetRecommendationsTask(getApplicationContext(), "recipe").execute(searchcriteria);
 					}
 				}
 			});

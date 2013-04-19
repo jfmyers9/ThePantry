@@ -134,7 +134,6 @@ public class RecipeActivity extends BasicMenuActivity {
 	
 	// open the ingredient adding dialog
 	public void openIngDialog(View v) {
-
 		AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
 		dialog.context = this;
 		dialog.show(getFragmentManager(), "dialog");

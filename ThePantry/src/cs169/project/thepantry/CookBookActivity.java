@@ -11,6 +11,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
 public class CookBookActivity extends BasicMenuActivity {
 	
@@ -57,6 +58,7 @@ public class CookBookActivity extends BasicMenuActivity {
 	private ArrayList<Storage> getRecipes() {
 		dm = new DatabaseModel(this, DATABASE);
 		ArrayList<Storage> recipes = dm.getAllRecipes(tableName);
+		dm.close();
 		return recipes;
 	}
 
@@ -65,6 +67,33 @@ public class CookBookActivity extends BasicMenuActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getSupportMenuInflater().inflate(R.menu.cook_book, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent = null;
+		switch(item.getItemId()) {
+			case R.id.action_new_recipe:
+				intent = new Intent(this, AddRecipeActivity.class);
+				break;
+			case R.id.action_settings:
+				intent = new Intent(this, SettingsActivity.class);
+				break;
+			case android.R.id.home:
+				toggle();
+				return true;
+			default:
+				System.out.println(item.getItemId());
+				System.out.println(R.id.action_new_recipe);
+		}
+		
+		if (intent != null) {
+			System.out.println("FUCK THIS");
+			startActivity(intent);
+			return true;
+		}
+		
+		return false;		
 	}
 
 }
