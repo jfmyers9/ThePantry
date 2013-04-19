@@ -511,6 +511,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 
 		if (cursRecipe.moveToFirst()) {
 			while(!cursRecipe.isAfterLast()){
+				System.out.println("FUCK ME");
 				Recipe recipe = new Recipe();
 				recipe.name = cursRecipe.getString(ThePantryContract.Recipe.RECIPEIND);
 				recipe.id = cursRecipe.getString(ThePantryContract.Recipe.IDIND);
