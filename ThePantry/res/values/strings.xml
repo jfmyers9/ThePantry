@@ -17,6 +17,7 @@
     <string name="action_login">Login</string>
     <string name="action_logout">Logout</string>
     <string name="action_register">Sign Up</string>
+    <string name="action_new_recipe">Add New Recipe</string>
     <string name="add_item">Add</string>
     <string name="ingredient_types">Ingredient Type</string>
     <string name="ingredient_update">Update Inventory</string>
@@ -27,7 +28,15 @@
     <string name="sign_in">Sign In</string>
     <string name="register">Register</string>
     <string name="prompt_password_confirmation">Confirm Password</string>
-
+    <string name="add_recipe_title_hint">Recipe Title</string>
+    <string name="add_ingredient_title_hint">Add Ingredients Separated By A Comma</string>
+    <string name="add_picture_text">Add Picture</string>
+    <string name="ingredients"><b><u>Ingredients</u></b></string>
+    <string name="instructions"><b><u>Instructions</u></b></string>
+    <string name="add_instruction_hint">Add Instructions Separated By a Period</string>
+    <string name="save_recipe_butt">Save Recipe</string>
+    <string name="pic_from_gal">From Gallery</string>
+    <string name="pic_from_cam">From Camera</string>
     <string-array name="ingredient_type_array">
         <item>Grain</item>
         <item>Produce</item>
@@ -76,5 +85,6 @@
     <string name="add">Add</string>
     <string name="title_activity_inventory_add_grid">InventoryAddGrid</string>
     <string name="title_activity_cook_book">CookBookActivity</string>
+    <string name="title_activity_add_recipe">AddRecipeActivity</string>
 
 </resources>

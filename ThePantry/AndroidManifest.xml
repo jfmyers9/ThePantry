@@ -104,6 +104,10 @@
             android:name="cs169.project.thepantry.CookBookActivity"
             android:label="@string/title_activity_cook_book" >
         </activity>
+        <activity
+            android:name="cs169.project.thepantry.AddRecipeActivity"
+            android:label="@string/title_activity_add_recipe" >
+        </activity>
     </application>
 
 </manifest>
