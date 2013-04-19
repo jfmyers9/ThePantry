@@ -58,6 +58,7 @@ public class CookBookActivity extends BasicMenuActivity {
 	private ArrayList<Storage> getRecipes() {
 		dm = new DatabaseModel(this, DATABASE);
 		ArrayList<Storage> recipes = dm.getAllRecipes(tableName);
+		dm.close();
 		return recipes;
 	}
 
