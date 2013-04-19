@@ -636,7 +636,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		Cursor c = db.query(distinct, table, columns, selection, selectionArgs, null, null, null, null);
 		if (c.moveToFirst()) {
 			if(table != Ingredients.TABLE_NAME) {
-				System.out.println(selection);
 				if(isItemChecked(table, selection, ThePantryContract.REMOVEFLAG)){
 					return null;
 				}
