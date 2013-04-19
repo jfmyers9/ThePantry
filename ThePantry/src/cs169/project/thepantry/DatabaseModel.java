@@ -544,6 +544,21 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			return searchMatch;
 		}
 	}
+	
+	public ArrayList<Storage> getAllRecipes(String table) {
+		SQLiteDatabase db = getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		if (table == ThePantryContract.Recipe.TABLE_NAME) {
+			qb.setTables(ThePantryContract.Recipe.TABLE_NAME);
+		} else {
+			qb.setTables(ThePantryContract.SearchMatch.TABLE_NAME);
+		}
+		
+		Cursor cStorage = qb.query(db, null, null, null, null, null, null, null);
+		
+		ArrayList<Storage> recipes = makeRecipe(cStorage);
+		return recipes;
+	}
 
 	/**
 	 * Adds a given recipe to the database

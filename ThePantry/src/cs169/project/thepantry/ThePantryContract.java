@@ -38,6 +38,17 @@ public class ThePantryContract {
 	    public static final int CHECKEDIND = 3;
 	}
 	
+	/** Inner class that defines the CookBook table */
+	public static abstract class CookBook extends Storage implements BaseColumns {
+		
+		public static final String TABLE_NAME = "cookbook";
+	    public static final String INGLINES = "ingredientLines";
+	    public static final String IMAGE = "image";
+	    public static final String ATTRIBUTE = "attribute";
+	    public static final String SOURCE = "source";
+		
+	}
+	
 	/** Inner class that defines the Inventory table */
 	public static abstract class Inventory implements BaseColumns {
 	    public static final String TABLE_NAME = "inventory";

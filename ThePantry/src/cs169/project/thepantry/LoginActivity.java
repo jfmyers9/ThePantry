@@ -195,6 +195,7 @@ public class LoginActivity extends Activity {
 	    		gsjo = new GetJsonObject(obj);
 	    		gsjo.execute(urlLogin);
 	    	} catch (Exception e) {
+	    		showProgress(false);
 				Context context = getApplicationContext();
 				CharSequence text = "Something went wrong.";
 				int duration = Toast.LENGTH_LONG;
@@ -282,6 +283,7 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 	            JSONObject respObj = new JSONObject(result);
 	            return respObj;
 	    	} catch (Exception e) {
+	    		showProgress(false);
 	    		e.printStackTrace();
 	    		return new JSONObject();
 	    	}
@@ -313,6 +315,7 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
 				} else if (!success) {
+					showProgress(false);
 					Context context = getApplicationContext();
 					CharSequence text = info;
 					int duration = Toast.LENGTH_LONG;
@@ -320,6 +323,7 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 					toast.show();
 				}
 			} catch (Exception e) {
+				showProgress(false);
 				Context context = getApplicationContext();
 				CharSequence text = "Something went horribly wrong.";
 				int duration = Toast.LENGTH_LONG;

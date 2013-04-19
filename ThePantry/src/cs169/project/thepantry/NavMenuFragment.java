@@ -18,6 +18,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +53,7 @@ public class NavMenuFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView lv, View v, int position, long id) {
 		Context context = getActivity();
+		Fragment fragment;
 		boolean open = true;
 		Intent intent = null;
 		switch (position) {
@@ -76,12 +78,15 @@ public class NavMenuFragment extends ListFragment {
 			intent = new Intent(context, ShoppingListActivity.class);
 			break;
 		case 3:
-			intent = new Intent(context, ProfileActivity.class);
+			intent = new Intent(context, CookBookActivity.class);
 			break;
 		case 4:
-			intent = new Intent(context, SettingsActivity.class);
+			intent = new Intent(context, ProfileActivity.class);
 			break;
 		case 5:
+			intent = new Intent(context, SettingsActivity.class);
+			break;
+		case 6:
 			IngredientSyncTask slSync = new IngredientSyncTask(getActivity());
 			slSync.execute(ThePantryContract.ShoppingList.TABLE_NAME, auth_token);
 			try {
@@ -118,6 +123,16 @@ public class NavMenuFragment extends ListFragment {
 			lo.execute(urlLogout);
 		}
 		
+	}
+	
+	
+	private void switchFragment(Fragment fragment) {
+		if (getActivity() == null) {
+			return;
+		} else {
+			getActivity().getSupportFragmentManager().beginTransaction()
+			.replace(R.id.content_frame, fragment).commit();
+		}
 	}
 	
 private class LogoutTask extends AsyncTask<String, String, JSONObject> {
