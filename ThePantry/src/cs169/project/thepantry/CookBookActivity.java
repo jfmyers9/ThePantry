@@ -33,9 +33,6 @@ public class CookBookActivity extends BasicMenuActivity {
 		context = this;
 		
 		recipes = getRecipes();
-		if (recipes == null) {
-			recipes = new ArrayList<Recipe> ();
-		}
 		
 		setTitle(TITLE);
 		

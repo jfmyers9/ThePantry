@@ -119,16 +119,9 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			groupNames.add(g.getGroup());
 			g.setChildren(getItems(table, g.getGroup()));
 		}
-		fillChildren();
 		if (table != ThePantryContract.Inventory.TABLE_NAME) {
 			setChecked();
 		}
-	}
-	
-	public void fillChildren() {
-		dm = new DatabaseModel(this, DATABASE_NAME);
-		children = dm.findAllItems(table);
-		dm.close();
 	}
 	
 	public void setChecked() {
@@ -155,6 +148,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		ArrayList<IngredientChild> items = dm.findTypeItems(table, type);
 		dm.close();
+		children.addAll(items);
 		return items;
 	}
 	
@@ -207,13 +201,15 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		String message = "";
 		for (IngredientChild c : children) {
+			System.out.println(c.getName());
+			System.out.println(c.isSelected());
 			if (c.isSelected()) {
 				System.out.println(c.getName());
 				boolean success = dm.addIngredient(Inventory.TABLE_NAME, c.getName(),c.getGroup(),"1");
 				message += c.getName() + "\n";
 				// If the shopping list "updates" the ingredients are removed from list
 				dm.check(table, c.getName(), ThePantryContract.CHECKED, false);
-				if (table == ShoppingList.TABLE_NAME) {
+				if (table.equals(ShoppingList.TABLE_NAME)) {
 					dm.check(table, c.getName(), ThePantryContract.REMOVEFLAG, true);
 				} 
 				if (!success) {

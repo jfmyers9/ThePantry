@@ -73,7 +73,7 @@ public class HomePageRecommendationsFragment extends Fragment {
 			String query = "";
 			SearchCriteria searchcriteria;
 			int numToPick;
-			if (youHave != null) {
+			if (youHave.size() > 0) {
 				int numItems = youHave.size();
 				// pick a random number between 1-5 or 1-#items to try a combination of items in your inventory to recommend recipes based on
 				if (numItems < 5) {
@@ -84,7 +84,7 @@ public class HomePageRecommendationsFragment extends Fragment {
 				//pick numToPick inventory items at random and recommend recipes based on them
 				// TODO redo search for < 4 results
 				for (int i = 0; i < numToPick; i++) {
-					int loc = (int)(Math.random() * (numItems));
+					int loc = (int)(Math.random() * (numItems-1));
 					query += ", " + youHave.get(loc);
 				}
 				searchcriteria = new SearchCriteria("home", query, NUM_RECOMMENDATIONS);
