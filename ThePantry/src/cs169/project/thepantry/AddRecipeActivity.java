@@ -1,8 +1,10 @@
 package cs169.project.thepantry;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 import android.app.Activity;
@@ -12,6 +14,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.Menu;
@@ -31,7 +34,9 @@ import com.amazonaws.services.s3.model.ResponseHeaderOverrides;
 public class AddRecipeActivity extends Activity {
 	
     private static final int SELECT_PICTURE = 1;
-    private static final int CAMERA_REQUEST = 1888; 
+    private static final int CAMERA_REQUEST = 1888;
+	private static final String JPEG_FILE_PREFIX = "CookBook";
+	private static final String JPEG_FILE_SUFFIX = ".jpg"; 
     private String selectedImagePath;
     private ImageView iv;
     private AmazonS3Client s3Client;
@@ -97,6 +102,8 @@ public class AddRecipeActivity extends Activity {
 			DatabaseModel dm = new DatabaseModel(this, ThePantryContract.DATABASE_NAME);
 			dm.addStorage(ThePantryContract.CookBook.TABLE_NAME, recipe);
 			dm.close();
+			Intent intent = new Intent(this, CookBookActivity.class);
+			startActivity(intent);
 		} catch (Exception e) {
 			
 		}		
@@ -116,9 +123,15 @@ public class AddRecipeActivity extends Activity {
                                 "Select Picture"), SELECT_PICTURE);
                         return true;
 					case R.id.pic_from_cam:
-		                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE); 
-		                startActivityForResult(cameraIntent, CAMERA_REQUEST);
-		                return true;
+						try {
+							File f = createImageFile();
+			                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+			                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+			                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+			                return true;
+						} catch (Exception e) {
+							return false;
+						}
 					default:
 						return false;
 				}
@@ -135,10 +148,37 @@ public class AddRecipeActivity extends Activity {
                 selectedImagePath = getPath(selectedImageUri);
                 iv.setImageURI(selectedImageUri);
             } else if (requestCode == CAMERA_REQUEST) {  
-	            Bitmap photo = (Bitmap) data.getExtras().get("data");
-	            iv.setImageBitmap(photo);
+	            iv.setImageURI(Uri.fromFile(new File(selectedImagePath)));
             }
         }  
+    }
+    
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = 
+            new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
+        File image = File.createTempFile(
+            imageFileName, 
+            JPEG_FILE_SUFFIX, 
+            getAlbumDir()
+        );
+        selectedImagePath = image.getAbsolutePath();
+        return image;
+    }
+    
+    public File getAlbumDir() {
+    	File storageDir = new File(
+    		    Environment.getExternalStoragePublicDirectory(
+    		        Environment.DIRECTORY_PICTURES
+    		    ), 
+    		    getAlbumName()
+    		);         
+    	return storageDir;
+    }
+    
+    public String getAlbumName() {
+    	return "ThePantry";
     }
 
     public String getPath(Uri uri) {
