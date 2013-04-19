@@ -24,27 +24,12 @@ public class ShoppingListActivityTest extends ActivityInstrumentationTestCase2<S
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		//setActivityInitialTouchMode(false);
 	    act = getActivity();
-	    //mSpinner =(Spinner) listAct.findViewById(cs169.project.thepantry.R.id.add_sl_types);
-	    //mPlanetData = mSpinner.getAdapter();
-	    //mText = (EditText) listAct.findViewById(cs169.project.thepantry.R.id.shopping_list_text);
 	}
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
-
-	/*public void testPreConditions() {
-	    assertTrue(mSpinner.getOnItemSelectedListener() != null);
-	    assertTrue(mPlanetData != null);
-	    assertEquals(mPlanetData.getCount(),ADAPTER_COUNT);
-	  } // end of testPreConditions() method definition
-
-	public void testAddShopItem() {
-		listAct.addShopItem(mText);
-		assertNull(mText.getText());
-	}*/
 	
 	/** Helper method to convert IngredientGroup arrays into their String representations */
 	protected ArrayList<String> groupToName(ArrayList<IngredientGroup> group) {
@@ -57,14 +42,17 @@ public class ShoppingListActivityTest extends ActivityInstrumentationTestCase2<S
 	}
 	
 	public void testFillArrays() {
-		listAct.table = "ingredients";
-		listAct.fillArrays();
-		int itemCount = listAct.groupItems.size();
-		int childrenCount = listAct.children.size();
-		int nameCount = listAct.groupNames.size();
+		act.table = "ingredients";
+		act.fillArrays();
+		int itemCount = act.groupItems.size();
+		int childrenCount = act.children.size();
+		int nameCount = act.groupNames.size();
 		assertFalse("Item array should not be empty", itemCount == 0);
 		assertFalse("Children array should not be empty", childrenCount == 0);
 		assertFalse("Name array should not be empty", nameCount == 0);
+	}
+	
+	public void testSetChecked() {
 	}
 	
 	public void testGetTypes() {
@@ -116,6 +104,14 @@ public class ShoppingListActivityTest extends ActivityInstrumentationTestCase2<S
 			thrown = true;
 		}
 		assertTrue("Expecting IOException, spaces input not allowed", thrown);
+	}
+	
+	public void testAddShopItem() {
+		//implement later
+	}
+	
+	public void testRetrieveType() {
+		//implement later
 	}
 
 }

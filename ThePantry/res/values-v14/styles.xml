@@ -8,5 +8,7 @@
     <style name="AppBaseTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar">
         <!-- API 14 theme customizations can go here. -->
     </style>
+    
+    
 
 </resources>

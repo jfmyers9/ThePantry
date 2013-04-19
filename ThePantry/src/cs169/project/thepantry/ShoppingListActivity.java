@@ -85,5 +85,12 @@ public class ShoppingListActivity extends BaseListActivity {
 		}
 		eText.setText("");
 	}
+	
+	/*
+	public String retrieveType(View view) {
+		EditText eText = (EditText) findViewById();
+		String type = eText.getText().toString().toLowerCase().trim();
+		return type
+	}*/
 
 }

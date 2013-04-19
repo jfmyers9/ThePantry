@@ -1,52 +1,31 @@
 package cs169.project.thepantry.test;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.database.Cursor;
-import android.test.AndroidTestCase;
 import cs169.project.thepantry.DatabaseModel;
-import cs169.project.thepantry.Storage;
+import cs169.project.thepantry.IngredientChild;
+import cs169.project.thepantry.IngredientGroup;
 import cs169.project.thepantry.ThePantryContract;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.MatrixCursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.test.AndroidTestCase;
 
 public class DatabaseModelTest extends AndroidTestCase {
-
-	DatabaseModel testdm;
-	//private static final String DATABASE_NAME = "testdatabase";
 	
-	/** Set up method for DatabaseModelTest module */
+	DatabaseModel testdm;
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		testdm = new DatabaseModel(getContext(), "testdatabase");
 	}
 
-	/** Tear down method for DatabaseModelTest module */
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		testdm.close();
 		testdm = null;
-	}
-	
-	/** Helper method to parse through the items in the Cursor
-	 *  Returns an ArrayList of strings containing the items from
-	 *  the cursor. */
-	protected ArrayList<String> parseCursor(Cursor items) {
-		ArrayList<String> result = new ArrayList<String>();
-		if (items != null){
-			while(!items.isAfterLast()){
-				String data = items.getString(0);
-				result.add(data);
-				items.moveToNext();
-			}
-		}
-		items.close();
-		return result;
 	}
 	
 	/** Helper method to find an item in the specified table */
@@ -54,383 +33,357 @@ public class DatabaseModelTest extends AndroidTestCase {
 		boolean success = testdm.findItem(table, item);
 		return success;
 	}
-	
+
 	/** Helper method to check if an item is in the specified table */
 	protected boolean isChecked(String table, String item, String col) {
 		boolean success = testdm.isItemChecked(table, item, col);
 		return success;
 	}
-	
-	/** Tests the add method in the DatabaseModel by adding eggs to the
-	 *  ingredients table. Asserts that the method returns true and eggs
-	 *  can now be looked up in the database.  */
-	public void testAdd() {
-		String table = "ingredients";
-		String item = "Eggs";
-		String type = "Dairy";
+
+	/** Functional test for adding an ingredient.*/
+	public void testAddIngredient() {
+		String table = ThePantryContract.Inventory.TABLE_NAME;
+		String item = "eggs";
+		String type = "dairy";
 		String amount = "12";
 		boolean success = testdm.addIngredient(table, item, type, amount);
-		assertTrue("DatabaseModel.add() returned false", success);
+		assertTrue("DatabaseModel.addIngredient() returned false", success);
 		assertTrue("Error: Eggs not added to database", findItem(table, item));
 	}
-	
-	
-	public void testAddFail() {
-		String table = "helloworld";
-		String item = "Eggs";
-		String type = "Dairy";
-		String amount = "12";
-		boolean success = testdm.addIngredient(table, item, type, amount);
-		assertFalse("DatabaseModel.add() returned false, table doesn't exist", success);
-		assertFalse("Error: Eggs should not be added to database", findItem(table, item));	
-	}
-	
-	/** Tests the remove method for the DatabaseModel. Asserts that strawberries
-	 *  can be find in the database before the removal attempt, removes strawberries,
-	 *  and asserts that the remove method returned true and strawberries can no
-	 *  longer be found in the database.
-	 */
-	public void testRemove() {
-		String table = "ingredients";
-		String item = "Eggs";
-		assertTrue("Eggs should still be in the database", findItem(table, item));
-		boolean success = testdm.remove(table, item);
-		assertTrue("DatabaseModel.remove() returned false", success);
-		assertFalse("Error: Eggs are still in database", findItem(table, item));
-	}
-	
-	public void testRemoveFail() {
-		String table = "ingredients";
-		String item = "Canteloupe";
-		boolean success = testdm.remove(table, item);
-		assertFalse("DatabaseModel.remove() returned true, Cantelope not in database", success);
-	}
-	
-	public void testRemoveException() {
-		String table = "helloworld";
-		String item = "Canteloupe";
-		boolean success = testdm.remove(table, item);
-		assertFalse("Expected exception and return false, helloworld is not a table", success);
+
+	public void testAddStorage() {
+		fail("Not yet implemented");
 	}
 
-	/** Tests the find all items method in the DatabaseModel.
-	 *  For each item in the returned Cursor, asserts that it is in known items.
-	 */
+	/** Unit test for addToDatabase, add method that interacts directly with the database */
+	public void testAddToDatabase() {
+		ContentValues values = new ContentValues();
+		String table = ThePantryContract.Inventory.TABLE_NAME;
+		String item = "bananas";
+		String type = "produce";
+		String amount = "5";
+		values.put(ThePantryContract.ITEM, item);
+		values.put(ThePantryContract.TYPE, type);
+		values.put(ThePantryContract.AMOUNT, amount);
+		values.put(ThePantryContract.ADDFLAG, "true");
+		values.put(ThePantryContract.REMOVEFLAG, "false");
+		boolean success = testdm.addToDatabase(table, item, values);
+		assertTrue("DatabaseModel.addToDatabase() returned false", success);
+		assertTrue("Error: bananas not added to database", testdm.findItem(table, item));
+	}
+
+	public void testCheck() {
+		String table = ThePantryContract.Ingredients.TABLE_NAME;
+		String item = "strawberries";
+		assertFalse("Error: Spinach hasn't been cooked", isChecked(table, item, "checked"));
+		boolean success = testdm.check(table, item, "checked", true);
+		assertTrue("DatabaseModel.checked() returned false", success);
+		assertTrue("Error: Strawberries have been checked", isChecked(table, item, "checked"));
+	}
+
+	public void testCheckedItems() {
+		String table = ThePantryContract.Ingredients.TABLE_NAME;
+		String select = "common";
+		ArrayList<IngredientChild> result = testdm.checkedItems(table, select);
+		String milk = result.get(0).getName();
+		String chicken = result.get(1).getName();
+		assertEquals(milk, "milk");
+		assertEquals(chicken, "chicken");
+	}
+
+	/** Unit test for clearing a table */
+	public void testClear() {
+		String table = ThePantryContract.Inventory.TABLE_NAME;
+		boolean success = testdm.clear(table);
+		assertTrue("Error: Database not cleared", success);
+		assertFalse("Error: shouldn't have anything in table", testdm.findItem(table, "milk"));
+	}
+
+	/** Unit test for cursorToAmount */
+	public void testCursorToAmount() {
+		String[] colNames = {"amount"};
+		String[] values = {"40"};
+		MatrixCursor cursor = new MatrixCursor(colNames);
+		cursor.addRow(values);
+		assertEquals(testdm.cursorToAmount(cursor), "40");
+	}
+	
+	/** Unit test for cursorToAmount default amount */
+	public void testCursorToAmountDefault() {
+		assertEquals(testdm.cursorToAmount(null), ThePantryContract.DEFAULTAMOUNT);
+	}
+
+	/** Functional test for cursorToObject looking for amountval */
+	public void testCursorToObjectAmount() {
+		String[] colNames = {"amount"};
+		String[] values = {"40"};
+		MatrixCursor cursor = new MatrixCursor(colNames);
+		cursor.addRow(values);
+		String result = (String) testdm.cursorToObject(cursor, ThePantryContract.Ingredients.TABLE_NAME, ThePantryContract.AMOUNTVAL);
+		assertEquals(result, "40");
+	}
+	
+	/** Functional test for cursorToObject looking for childlist */
+	public void testCursorToObjectChildList() {
+		String[] colNames = {"item", "type", "amount", "checked"};
+		String[] values = {"marshmallows", "dessert", "40", "false"};
+		MatrixCursor cursor = new MatrixCursor(colNames);
+		cursor.addRow(values);
+		String table = ThePantryContract.Ingredients.TABLE_NAME;
+		ArrayList<IngredientChild> result = 
+				(ArrayList<IngredientChild>) testdm.cursorToObject(cursor, table, ThePantryContract.CHILDLIST);
+		assertEquals(result.get(0).getName(), "marshmallows");
+	}
+	
+	/** Functional test for cursorToObject looking for grouplist */
+	public void testCursorToObjectGroupList() {
+		String[] colNames = {"type"};
+		String[] values = {"dessert"};
+		String[] values2 = {"sweets"};
+		String table = ThePantryContract.Ingredients.TABLE_NAME;
+		MatrixCursor cursor = new MatrixCursor(colNames);
+		cursor.addRow(values);
+		cursor.addRow(values2);
+		ArrayList<IngredientGroup> groups =
+				(ArrayList<IngredientGroup>) testdm.cursorToObject(cursor, table, ThePantryContract.GROUPLIST);
+		assertEquals(groups.get(0).getGroup(), "dessert");
+		assertEquals(groups.get(1).getGroup(), "sweets");
+		
+	}
+	
+	/** Functional test for cursorToObject looking for group */
+	public void testCursorToObjectGroup() {
+		String[] colNames = {"type"};
+		String[] values = {"dessert"};
+		String table = ThePantryContract.Ingredients.TABLE_NAME;
+		MatrixCursor cursor = new MatrixCursor(colNames);
+		cursor.addRow(values);
+		IngredientGroup group =
+				(IngredientGroup) testdm.cursorToObject(cursor, table, ThePantryContract.GROUPLIST);
+		assertEquals(group.getGroup(), "dessert");
+	}
+	
+	/** Functional test for cursorToObject looking for stringlist */
+	public void testCursorToObjectStringList() {
+		String[] colNames = {"name"};
+		String[] value1 = {"alice"};
+		String[] value2 = {"bob"};
+		String[] value3 = {"charles"};
+		MatrixCursor cursor = new MatrixCursor(colNames);
+		cursor.addRow(value1);
+		cursor.addRow(value2);
+		cursor.addRow(value3);
+		ArrayList<String> names =
+				(ArrayList<String>)testdm.cursorToObject(cursor, ThePantryContract.Ingredients.TABLE_NAME, ThePantryContract.STRINGLIST);
+		assertEquals(names.get(0), "alice");
+		assertEquals(names.get(1), "bob");
+		assertEquals(names.get(2), "charles");
+	}
+		
+	/** Functional test for cursorToObject looking for storage */
+	public void testCursorToObjectStorage() {
+		String[] colNames = {"item", "type", "amount", "checked"};
+		String[] values = {"marshmallows", "dessert", "40", "false"};
+		MatrixCursor cursor = new MatrixCursor(colNames);
+		cursor.addRow(values);
+	}
+
+	/** Unit test for cursorToStringList */
+	public void testCursorToStringList() {
+		ArrayList<String> result = testdm.cursorToStringList(null);
+		assertEquals(result.size(), 0);
+	}
+
+	/** Functional test */
 	public void testFindAllItems() {
-		String table = "ingredients";
-		Cursor citems = testdm.findAllItems(table);
-		ArrayList<String> items = parseCursor(citems);
-		String[] match = {"Strawberries", "Milk", "Chicken", "Bread", "Lettuce", "Eggs"};
-		for (String item : items) {
-			boolean contains = Arrays.asList(match).contains(item);
-			assertTrue("Error: Incorrect type " + item, contains);
+		String table = ThePantryContract.SearchMatch.TABLE_NAME;
+		ArrayList<IngredientChild> items = testdm.findAllItems(table);
+		String[] match = {"candied bacon", "spinach salad", "german chocolate cake"};
+		for (IngredientChild item : items) {
+			boolean contains = Arrays.asList(match).contains(item.getName());
+			assertTrue("Error: Incorrect type " + item.getName(), contains);
 		}
 	}
-	
-	public void testFindAllItemsFail() {
-		String table = "helloworld";
-		Cursor citems = testdm.findAllItems(table);
-		assertNull("Table helloworld shouldn't exist", citems);
-	}
-	
-	/** Tests the findItem method in the DatabaseModel
-	 *  Tries to look for cookies, which do not exist.
-	 *  Asserts the method returns false.
-	 */
-	public void testFindItem1() {
+
+	/** Functional test */
+	public void testFindAllTypes() {
 		String table = "ingredients";
-		String item = "Cookies";
-		boolean success = testdm.findItem(table, item);
-		assertFalse("Error: We don't have any cookies", success);
+		ArrayList<IngredientGroup> types = testdm.findAllTypes(table);
+		String[] match = {"Produce", "Dairy", "Poultry", "Grain"};
+		for (IngredientGroup type : types) {
+			boolean contains = Arrays.asList(match).contains(type.getGroup());
+		assertTrue("Error: Incorrect type " + type.getGroup(), contains);
+		}
 	}
-	
-	/** Tests the findItem method in the DatabaseModel
-	 *  Tries to look for milk, which does exist.
-	 *  Asserts the method returns true.
-	 */
-	public void testFindItem2() {
-		String table = "ingredients";
-		String item = "Milk";
+
+	/** Functional test */
+	public void testFindAmount() {
+		String table = ThePantryContract.Ingredients.TABLE_NAME;
+		String item = "chicken";
+		String amount = testdm.findAmount(table, item);
+		assertEquals("Error: Chicken amount is not " + amount, amount, "4");
+	}
+
+	/** Unit test for finding if an item exists in the table */
+	public void testFindItem() {
+		String table = ThePantryContract.Ingredients.TABLE_NAME;
+		String item = "milk";
 		boolean success = testdm.findItem(table, item);
 		assertTrue("Error: We do have milk", success);
 	}
 	
 	public void testFindItemFail() {
-		String table = "helloworld";
-		String item = "Milk";
+		String table = ThePantryContract.Ingredients.TABLE_NAME;
+		String item = "cookies";
 		boolean success = testdm.findItem(table, item);
-		assertFalse("Error: Helloworld table should not exist", success);
+		assertFalse("Error: We don't have any cookies", success);
 	}
 
-	/** Tests the findTypeItems method in the DatabaseModel.
-	 *  Searches for all ingredients of type produce and
-	 *  asserts the items returned are Strawberries and Lettuce.
-	 */
-	public void testFindTypeItems() {
+	/** Functional test */
+	public void testFindItemNames() {
 		String table = "ingredients";
-		String type = "Dairy";
-		Cursor citems = testdm.findTypeItems(table, type);
-		ArrayList<String> items = parseCursor(citems);
-		assertEquals("Error: Milk is not ", items.get(0), "Milk");
-	}
-	
-	public void testFindTypeItemsFail() {
-		String table = "ingredients";
-		String type = "Cardboard";
-		Cursor citems = testdm.findTypeItems(table, type);
-		assertNull("Column cardboard should not exist", citems);
-	}
-
-	/** Tests the findType method in DatabaseModel.
-	 *  Asserts that Strawberries are of type produce.
-	 */
-	public void testFindType() {
-		String table = "ingredients";
-		String item = "Milk";
-		Cursor ctype = testdm.findType(table, item);
-		ArrayList<String> types = parseCursor(ctype);
-		String type = types.get(0);
-		assertEquals("Error: Milk is not " + type, type, "Dairy");
-	}
-	
-	/** Tests both the findType method in DatabaseModel
-	 *  Tries to find bananas in the database, which do not exist.
-	 *  Asserts the returned Cursor is null.
-	 */
-	public void testFindTypeFail() {
-		String table = "ingredients";
-		String item = "Bananas";
-		Cursor ctype = testdm.findType(table, item);
-		assertNull("Bananas should not be in the database", ctype);
-	}
-
-	/** Tests the findAmount method in DatabaseModel.
-	 *  Asserts that Chicken has amount 4.
-	 */
-	public void testFindAmount() {
-		String table = "ingredients";
-		String item = "Chicken";
-		Cursor camount = testdm.findAmount(table, item);
-		ArrayList<String> amounts = parseCursor(camount);
-		String amount = amounts.get(0);
-		assertEquals("Error: Chicken amount is not " + amount, amount, "4");
-	}
-	
-	public void testFindAmountFail() {
-		String table = "ingredients";
-		String item = "Duck";
-		Cursor camount = testdm.findAmount(table, item);
-		assertNull("Duck should not be in the database", camount);
-	}
-
-	/** Tests the findAllTypes method in DatabaseModel.
-	 *  Asserts that each type returned by the Cursor parser is a member
-	 *  of the known types.
-	 */
-	public void testFindAllTypes() {
-		String table = "ingredients";
-		Cursor ctypes = testdm.findAllTypes(table);
-		ArrayList<String> types = parseCursor(ctypes);
-		String[] match = {"Produce", "Dairy", "Poultry", "Grain"};
-		for (String type : types) {
-			boolean contains = Arrays.asList(match).contains(type);
-			assertTrue("Error: Incorrect type " + type, contains);
-		}
-	}
-	
-	public void testFindAllTypesFail() {
-		String table = "helloworld";
-		Cursor ctypes = testdm.findAllTypes(table);
-		assertNull("Helloworld table should not exist", ctypes);
-	}
-
-	public void testSearch() {
-		String table = "ingredients";
-		testdm.check(table, "Lettuce", "removeFlag", true);
-		Cursor cItems = testdm.search(table, "c");
-		ArrayList<String> items = parseCursor(cItems);
-		String[] match = {"Chicken", "Carrots", "Lettuce"};
-		for (String item : items) {
+		ArrayList<String> names = testdm.findItemNames(table);
+		String[] match = {"candied bacon", "spinach salad", "german chocolate cake"};
+		for (String item : names) {
 			boolean contains = Arrays.asList(match).contains(item);
 			assertTrue("Error: Incorrect item " + item, contains);
 		}
 	}
 
-	public void testChecked() {
-		String table = "recipes";
-		String recipe = "Spinach";
-		//assertFalse("Error: Spinach hasn't been cooked", isChecked(table, recipe, "cooked"));
-		boolean success = testdm.check(table, recipe, "cooked", true);
-		assertTrue("DatabaseModel.checked() returned false", success);
-		assertTrue("Error: Spinach has been cooked", isChecked(table, recipe, "cooked"));
+	/** Functional test */
+	public void testFindType() {
+		String table = ThePantryContract.Ingredients.TABLE_NAME;
+		String item = "milk";
+		IngredientGroup type = testdm.findType(table, item);
+		assertEquals("Error: Milk is not " + type.getGroup(), type.getGroup(), "Dairy");
 	}
 
-	public void testCheckedFail() {
-		String table = "ingredients";
-		String recipe = "Spinach";
-		boolean success = testdm.check(table, recipe, "cooked", true);
-		assertFalse("Spinach should not be in the ingredients table", success);
-	}
-		
-	public void testCheckedItems1() {
-		String table = "ingredients";
-		Cursor c = testdm.checkedItems(table, "checked");
-		assertNull("Error: No items were checked", c);
-	}
-	
-	public void testCheckedItems2() {
-		String table = "recipes";
-		Cursor c = testdm.checkedItems(table, "favorite");
-		ArrayList<String> checked = parseCursor(c);
-		String item = checked.get(0);
-		assertEquals("Error: Bacon is not " + item, item, "Bacon");
+	/** Functional test */
+	public void testFindTypeItems() {
+		String table = ThePantryContract.Ingredients.TABLE_NAME;
+		String type = "dairy";
+		ArrayList<IngredientChild> items = testdm.findTypeItems(table, type);
+		assertEquals("Error: Milk is not ", items.get(0).getName(), "Milk");
 	}
 
+	public void testGetAllRecipes() {
+		//fail("Not yet implemented");
+	}
+
+	public void testGetCookOrFav() {
+		//fail("Not yet implemented");
+	}
+
+	public void testGetStorage() {
+		//fail("Not yet implemented");
+	}
+
+	/** Unit test for checking whether an item is checked or not */
 	public void testIsItemChecked() {
-		String table = "recipes";
-		String recipe = "Fried Rice";
-		boolean checked1 = testdm.isItemChecked(table, recipe, "favorite");
-		assertFalse("Error: Fried Rice is not a favorite", checked1);
-	}
-	
-	public void testIsItemChecked2() {
-		String table = "recipes";
-		String recipe = "Fried Rice";
-		boolean checked2 = testdm.isItemChecked(table, recipe, "cooked");
-		assertTrue("Error: Fried Rice has been cooked", checked2);
-	}
-	
-	public void testFindItemNames() {
-		String table = "ingredients";
-		Cursor cnames = testdm.findItemNames(table);
-		ArrayList<String> result = parseCursor(cnames);
-		String[] expected = {"Strawberries", "Milk", "Chicken", "Bread", "Lettuce", "Eggs"};
-		for (String item : result) {
-			boolean contains = Arrays.asList(expected).contains(item);
-			assertTrue("Error: Incorrect item " + item, contains);
-		}
-	}
-	
-	public void testRemoveAllBut() {
-		String table = "inventory";
-		ArrayList<String> keep = new ArrayList<String>();
-		keep.add("Cookies");
-		keep.add("Milk");
-		boolean success = testdm.removeAllBut(table, keep);
-		//assertTrue("Remove operation failed", success);
-		assertFalse(findItem(table, "Vegetables"));
+		String item = "chicken";
+		String col = "common";
+		String table = ThePantryContract.Ingredients.TABLE_NAME;
+		boolean checked = testdm.isItemChecked(table, item, col);
+		assertTrue("Chicken should be common", checked);
 	}
 
-	public void testClear() {
-		String table = "ingredients";
-		boolean success = testdm.clear(table);
-		assertTrue("Error: Database not cleared", success);
-		assertFalse("Error: shouldn't have anything in table", testdm.findItem(table, "milk"));
+	public void testMakeIngredientChildren() {
+		String[] colNames = {"item", "type", "amount", "checked"};
+		String[] values = {"marshmallows", "dessert", "40", "false"};
+		int[] indices = {0, 1};
+		String table = "helloworld";
+		MatrixCursor cursor = new MatrixCursor(colNames);
+		cursor.addRow(values);
+		ArrayList<IngredientChild> result = testdm.makeIngredientChildren(cursor, indices, table);
+		assertEquals("marshamllows", result.get(0).getName());
 	}
 	
-	// Doesn't work because privacy with recipe class, really annoying!
-	public void testRecipe() {
-		Recipe recipe = new Recipe();
-		recipe.id = "testID";
-		recipe.name = "testName";
-		
-		Attribution att = new Attribution("testURL", "testText", "testLogo");
-		recipe.attribution = att;
-		
-		ArrayList<String> ingredients = new ArrayList<String>();
-		ingredients.add("testIng1");
-		ingredients.add("testIng2");
-		recipe.ingredientLines = ingredients;
-		
-		RecipeImages img = new RecipeImages("testLargeUrl", "testSmallUrl");
-		recipe.images = img;
-		
-		RecipeSource src = new RecipeSource("testRecipeUrl", "testSiteUrl", "testSourceName");
-		recipe.source = src;
-		
-		//boolean success = testdm.addRecipe((Recipe)recipe);
-		//assertTrue("Remove operation failed", success);
-		
-		/* Test should be like this
-		 * dm = new DatabaseModel(this, ThePantryContract.DATABASE_NAME);
-		ArrayList<Recipe> recipes = dm.getCookOrFav(ThePantryContract.Recipe.COOKED);
-		Recipe recipe = recipes.get(0);
-		System.out.println("Size should be 1: " + recipes.size());
-		System.out.println("Should be bacon: " + recipe.name);
-		System.out.println("Should be Bacon with tons of bacon: " + recipe.name);
-		System.out.println("Should be testID: " + recipe.id);
-		
-		System.out.println("Should be Bacon: " + recipe.ingredientLines.get(0));
-		System.out.println("Should be Beets: " + recipe.ingredientLines.get(1));
-		System.out.println("Should be Carrots: " + recipe.ingredientLines.get(2));
-		
-		System.out.println("Should be testLargeURL: " + recipe.images.hostedLargeUrl);
-		System.out.println("Should be testSmallURL: " + recipe.images.hostedSmallUrl);
-		
-		System.out.println("Should be testURL: " + recipe.attribution.url);
-		System.out.println("Should be testText: " + recipe.attribution.text);
-		System.out.println("Should be testLogo: " + recipe.attribution.logo);
+	public void testMakeIngredientChildrenNull() {
+		ArrayList<IngredientChild> result = testdm.makeIngredientChildren(null, null, null);
+		assertEquals(result.size(), 0);
+	}
+
+	public void testMakeIngredientGroups() {
+		String[] colNames = {"type"};
+		String[] values = {"dessert"};
+		int[] indices = {0, 1};
+		MatrixCursor cursor = new MatrixCursor(colNames);
+		cursor.addRow(values);
+		ArrayList<IngredientGroup> result = testdm.makeIngredientGroups(cursor, indices);
+		assertEquals("dessert", result.get(0).getGroup());
+	}
 	
-		System.out.println("Should be testRecipeURL: " + recipe.source.sourceRecipeUrl);
-		System.out.println("Should be testSiteURL: " + recipe.source.sourceSiteUrl);
-		System.out.println("Should be testSourceName: " + recipe.source.sourceDisplayName);
-		 */
+	public void testMakeIngredientGroupNull() {
+		ArrayList<IngredientGroup> result = testdm.makeIngredientGroups(null, null);
+		assertEquals(result.size(), 0);
 	}
-}
 
-
-
-/** All Recipes below added from Storage in order to test Recipe Database
- */
-class Recipe extends Storage implements Serializable {
-	String id;
-	String name;
-	Boolean cooked; // can probably take out, leave until caching works properly
-	Boolean favorite; // can probably take out, leave until caching works properly
-	Attribution attribution;
-	ArrayList<String> ingredientLines; //in order
-	RecipeImages images; //not always present
-	RecipeSource source; //not always present
-
-	Recipe() {
-		cooked=false;
-		favorite=false;
+	public void testMakeRecipe() {
+		//fail("Not yet implemented");
 	}
-	public String getId() {
-		return id;
-	}
-}
 
-class Attribution extends Storage implements Serializable {
-	String url;
-	String text;
-	String logo;
+	public void testMakeSearchMatch() {
+		//fail("Not yet implemented");
+	}
+
+	public void testMakeStorageValue() {
+		//fail("Not yet implemented");
+	}
+
+	public void testQueryToChecked() {
+		SQLiteDatabase db = testdm.getReadableDatabase();
+		boolean checked = testdm.queryToChecked(db, false, ThePantryContract.Ingredients.TABLE_NAME,
+												new String[]{"item"}, "common", new String[]{"chicken"});
+		assertTrue("Chicken should be common", checked);
+	}
 	
-	Attribution (String url, String text, String logo) {
-		this.url = url;
-		this.text = text;
-		this.logo = logo;
+	public void testQueryToCheckedFalse() {
+		SQLiteDatabase db = testdm.getReadableDatabase();
+		boolean checked = testdm.queryToChecked(db, false, ThePantryContract.Ingredients.TABLE_NAME,
+												new String[]{"item"}, "checked", new String[]{"chicken"});
+		assertTrue("Chicken should not be checked", checked);
 	}
-}
 
-class RecipeImages extends Storage implements Serializable {
-	String hostedLargeUrl;
-	String hostedSmallUrl;
-	
-	RecipeImages(String lrgUrl, String smlUrl) {
-		hostedLargeUrl = lrgUrl;
-		hostedSmallUrl = smlUrl;
+	public void testQueryToCursor() {
+		SQLiteDatabase db = testdm.getReadableDatabase();
+		Cursor checked = testdm.queryToCursor(db, false, ThePantryContract.Ingredients.TABLE_NAME,
+				new String[]{"item"}, "checked", new String[]{"sandwiches"});
+		assertNull(checked);
 	}
-}
 
-class RecipeSource extends Storage implements Serializable {
-	String sourceRecipeUrl;
-	String sourceSiteUrl;
-	String sourceDisplayName;
-	
-	RecipeSource(String recipeUrl, String siteUrl, String name) {
-		sourceRecipeUrl = recipeUrl;
-		sourceSiteUrl = siteUrl;
-		sourceDisplayName = name;
+	/** Unit test for removing items from the database */
+	public void testRemove() {
+		String table = ThePantryContract.Recipe.TABLE_NAME;
+		String item = "spinach salad";
+		assertTrue("Spinach salad should still be in the database", findItem(table, item));
+		boolean success = testdm.remove(table, item);
+		assertTrue("DatabaseModel.remove() returned false", success);
+		assertFalse("Error: Spinch salad is still in database", findItem(table, item));
 	}
+
+	public void testSearch() {
+		fail("Not yet implemented");
+	}
+
+	/** Unit test for setting indices in the ingredients table */
+	public void testSetIndicesIngredients() {
+		int[] answer = {0, 1};
+		int[] indices = testdm.setIndices(ThePantryContract.Ingredients.TABLE_NAME);
+		assertEquals(answer, indices);
+	}
+	
+	/** Unit test for setting indices in the inventory table */
+	public void testSetIndicesInventory() {
+		int[] answer = {2, 3};
+		int[] indices = testdm.setIndices(ThePantryContract.Inventory.TABLE_NAME);
+		assertEquals(answer, indices);
+	}
+	
+	/** Unit test for setting indices in the shopping list table */
+	public void testSetIndicesShoppingList() {
+		int[] answer = {1, 2};
+		int[] indices = testdm.setIndices(ThePantryContract.ShoppingList.TABLE_NAME);
+		assertEquals(answer, indices);
+	}
+
 }

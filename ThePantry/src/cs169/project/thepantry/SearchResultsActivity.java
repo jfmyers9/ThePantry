@@ -2,7 +2,10 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.WindowManager;
@@ -93,11 +96,14 @@ public class SearchResultsActivity extends BasicMenuActivity implements TabListe
 	    // Get the SearchView and set it up
 	    // submit the original query to search
 	    SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+	    SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+	    searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 	    searchView.setSubmitButtonEnabled(true);
 	    searchView.setMaxWidth(1000);
 	    searchView.setOnQueryTextListener(this);
 	    searchView.setQuery(query,true);
-
+	    searchView.setQueryRefinementEnabled(true);
+	
 	    return true;
 	}
 	
@@ -109,6 +115,7 @@ public class SearchResultsActivity extends BasicMenuActivity implements TabListe
 	@Override
 	public boolean onQueryTextSubmit(String query) {
 		SearchCriteria searchcriteria = new SearchCriteria("search", query);
+		// for storing recent queries
 		searchresults.new SearchTask(getBaseContext(), "search").execute(searchcriteria);
 		//userresults.new SearchTask(getBaseContext(), "search").execute(searchcriteria);
 		return true;
