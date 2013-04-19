@@ -117,6 +117,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		groupItems = getTypes(table);
 		for (IngredientGroup g : groupItems) {
 			groupNames.add(g.getGroup());
+			System.out.println(g.getGroup());
 			g.setChildren(getItems(table, g.getGroup()));
 		}
 	}
@@ -150,6 +151,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			while(!items.isAfterLast()){
 				String data = items.getString(0);
 				IngredientChild temp = new IngredientChild(data,type);
+				System.out.println(temp.getName());
 				if (table != ThePantryContract.Inventory.TABLE_NAME) {
 					boolean checked = dm.isItemChecked(table, data, ThePantryContract.CHECKED);
 					temp.setSelected(checked);
@@ -170,7 +172,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			throw new IOException("Ingredient cannot be empty, please try again");
 		}
 		DatabaseModel dm = new DatabaseModel(this, DATABASE_NAME);
-		boolean success = dm.add(table, item, type, amount);
+		boolean success = dm.addIngredient(table, item, type, amount);
 		int groupPos = 0;
 		IngredientGroup temp = new IngredientGroup(type,new ArrayList<IngredientChild>());
 		if (success) {
@@ -223,7 +225,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		for (IngredientChild c : children) {
 			if (c.isSelected()) {
 				System.out.println(c.getName());
-				boolean success = dm.add(Inventory.TABLE_NAME, c.getName(),c.getGroup(),"1");
+				boolean success = dm.addIngredient(Inventory.TABLE_NAME, c.getName(),c.getGroup(),"1");
 				message += c.getName() + "\n";
 				// If the shopping list "updates" the ingredients are removed from list
 				dm.check(table, c.getName(), ThePantryContract.CHECKED, false);

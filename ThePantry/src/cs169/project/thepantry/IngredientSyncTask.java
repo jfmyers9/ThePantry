@@ -160,7 +160,7 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
 		dbModel = new DatabaseModel(act, "thepantry");
 		dbModel.clear(tableName);
 		for (int i = 0; i < ingredients.size(); i++) {
-			dbModel.add(tableName, ingredients.get(i), groups.get(i), "1");
+			dbModel.addIngredient(tableName, ingredients.get(i), groups.get(i), "1");
 			dbModel.check(tableName, ingredients.get(i),ThePantryContract.ADDFLAG, false);
 		}
 	}

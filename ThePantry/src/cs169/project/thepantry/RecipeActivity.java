@@ -134,7 +134,6 @@ public class RecipeActivity extends BasicMenuActivity {
 	
 	// open the ingredient adding dialog
 	public void openIngDialog(View v) {
-
 		AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
 		dialog.context = this;
 		dialog.show(getFragmentManager(), "dialog");
@@ -178,7 +177,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		// update recipe table of database so favorited column is yes/no
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		// need to add recipe to database if not already in it
-		dm.addRecipe(recipe);
+		dm.addStorage(ThePantryContract.Recipe.TABLE_NAME, recipe);
 		if (faved) {
 			faved = false;
 			dm.check(ThePantryContract.Recipe.TABLE_NAME, recipe.name, ThePantryContract.Recipe.FAVORITE, false);
@@ -198,7 +197,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		// update recipe table of database so cooked column is true
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		// need to add recipe if not already in database
-		dm.addRecipe(recipe);
+		dm.addStorage(ThePantryContract.Recipe.TABLE_NAME, recipe);
 		if (cooked) {
 			cooked = false;
 			dm.check(ThePantryContract.Recipe.TABLE_NAME, recipe.name, ThePantryContract.Recipe.COOKED, false);
@@ -224,7 +223,7 @@ public class RecipeActivity extends BasicMenuActivity {
 				String amt = parsed[0] + " " + parsed[1];
 				String ingred_name = parsed[3];
 				dm = new DatabaseModel(context, DATABASE_NAME);	
-				dm.add(ShoppingList.TABLE_NAME, ingred_name, "Other", amt);
+				dm.addIngredient(ShoppingList.TABLE_NAME, ingred_name, "Other", amt);
 				dm.close();
 			}
 		}
