@@ -209,7 +209,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		int[] indices = setIndices(table);
 
 		if (objectType.equals(ThePantryContract.STORAGELIST) || objectType.equals(ThePantryContract.STORAGE)) {
-			if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
+			if (table.equals(ThePantryContract.Recipe.TABLE_NAME) || table.equals(ThePantryContract.CookBook.TABLE_NAME)) {
 				ArrayList<Storage> recipes = makeRecipe(cursor, table);
 				result = recipes;
 			} else {
@@ -313,7 +313,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			SQLiteDatabase db = getReadableDatabase();
 
 			String selection;
-			if (table.equals(ThePantryContract.Recipe.TABLE_NAME) || table.equals(ThePantryContract.SearchMatch.TABLE_NAME)) {
+			if (table.equals(ThePantryContract.Recipe.TABLE_NAME) || table.equals(ThePantryContract.SearchMatch.TABLE_NAME) || table.equals(ThePantryContract.CookBook.TABLE_NAME)) {
 				selection = ThePantryContract.Recipe.ID + " = ?";
 			} else {
 				item = item.toLowerCase().trim();
@@ -511,31 +511,60 @@ public class DatabaseModel extends SQLiteAssetHelper {
 
 		if (cursRecipe.moveToFirst()) {
 			while(!cursRecipe.isAfterLast()){
-				System.out.println("FUCK ME");
-				Recipe recipe = new Recipe();
-				recipe.name = cursRecipe.getString(ThePantryContract.Recipe.RECIPEIND);
-				recipe.id = cursRecipe.getString(ThePantryContract.Recipe.IDIND);
+				
+				if (table.equals(ThePantryContract.CookBook.TABLE_NAME)) {
+					Recipe recipe = new Recipe();
+					recipe.name = cursRecipe.getString(ThePantryContract.CookBook.RECIPEIND);
+					recipe.id = cursRecipe.getString(ThePantryContract.CookBook.IDIND);
 
-				ArrayList<String> ingredientLines = new ArrayList<String>(Arrays.asList(cursRecipe.getString(ThePantryContract.Recipe.INGLINESIND).split(ThePantryContract.SEPERATOR)));
-				recipe.ingredientLines = ingredientLines;
+					ArrayList<String> ingredientLines = new ArrayList<String>(Arrays.asList(cursRecipe.getString(ThePantryContract.CookBook.INGLINESIND).split(ThePantryContract.SEPERATOR)));
+					recipe.ingredientLines = ingredientLines;
 
-				String[] imgArray = cursRecipe.getString(ThePantryContract.Recipe.IMGIND).split(ThePantryContract.SEPERATOR);
-				RecipeImages img = new RecipeImages(imgArray[0], imgArray[1]);
-				recipe.images = img;
+					String[] imgArray = cursRecipe.getString(ThePantryContract.CookBook.IMGIND).split(ThePantryContract.SEPERATOR);
+					RecipeImages img;
+					if (imgArray.length == 1) {
+						img = new RecipeImages(imgArray[0], imgArray[0]);
+					} else {
+						img = new RecipeImages(imgArray[0], imgArray[1]);
+					}
+					recipe.images = img;
+					
+					recipes.add(recipe);
 
-				if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
-					String[] srcArray = cursRecipe.getString(ThePantryContract.Recipe.SOURCEIND).split(ThePantryContract.SEPERATOR);
-					RecipeSource src = new RecipeSource(srcArray[0], srcArray[1], srcArray[2]);
-					recipe.source = src;
-
-					String[] attArray = cursRecipe.getString(ThePantryContract.Recipe.ATTIND).split(ThePantryContract.SEPERATOR);
-					Attribution att = new Attribution(attArray[0], attArray[1], attArray[2]);
-					recipe.attribution = att;
+					cursRecipe.moveToNext();
+					
+				} else if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
+				
+					Recipe recipe = new Recipe();
+					recipe.name = cursRecipe.getString(ThePantryContract.Recipe.RECIPEIND);
+					recipe.id = cursRecipe.getString(ThePantryContract.Recipe.IDIND);
+	
+					ArrayList<String> ingredientLines = new ArrayList<String>(Arrays.asList(cursRecipe.getString(ThePantryContract.Recipe.INGLINESIND).split(ThePantryContract.SEPERATOR)));
+					recipe.ingredientLines = ingredientLines;
+	
+					String[] imgArray = cursRecipe.getString(ThePantryContract.Recipe.IMGIND).split(ThePantryContract.SEPERATOR);
+					RecipeImages img;
+					if (imgArray.length == 1) {
+						img = new RecipeImages(imgArray[0], imgArray[0]);
+					} else {
+						img = new RecipeImages(imgArray[0], imgArray[1]);
+					}
+					recipe.images = img;
+	
+					if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
+						String[] srcArray = cursRecipe.getString(ThePantryContract.Recipe.SOURCEIND).split(ThePantryContract.SEPERATOR);
+						RecipeSource src = new RecipeSource(srcArray[0], srcArray[1], srcArray[2]);
+						recipe.source = src;
+	
+						String[] attArray = cursRecipe.getString(ThePantryContract.Recipe.ATTIND).split(ThePantryContract.SEPERATOR);
+						Attribution att = new Attribution(attArray[0], attArray[1], attArray[2]);
+						recipe.attribution = att;
+					}
+	
+					recipes.add(recipe);
+	
+					cursRecipe.moveToNext();
 				}
-
-				recipes.add(recipe);
-
-				cursRecipe.moveToNext();
 			}
 		}
 		cursRecipe.close();

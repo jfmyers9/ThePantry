@@ -54,6 +54,7 @@ public class ThePantryContract {
 	    public static final int COOKEDIND = 5;
 		public static final int FAVORITEIND = 6;	
 	    public static final int INGLINESIND = 7;
+	    public static final int IMGIND= 8;
 	}
 	
 	/** Inner class that defines the Ingredients table */

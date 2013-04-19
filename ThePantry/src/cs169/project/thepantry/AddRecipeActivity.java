@@ -203,12 +203,16 @@ public class AddRecipeActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(URL url) {
+			dialog.dismiss();
 			try {
 				Recipe recipe = new Recipe();
 				recipe.name = recName;
 				recipe.id = recName;
 				RecipeImages img = new RecipeImages(url.toURI().toString(), url.toURI().toString());
 				recipe.images = img;
+				System.out.println(recName);
+				System.out.println(ingredients);
+				System.out.println(instructions);
 				ArrayList<String> ingLines = new ArrayList<String>();
 				for (String s : ingredients.split(",")) {
 					ingLines.add(s);
@@ -223,7 +227,6 @@ public class AddRecipeActivity extends Activity {
 				dm.addStorage(ThePantryContract.CookBook.TABLE_NAME, recipe);
 				dm.close();
 				Intent intent = new Intent(context, CookBookActivity.class);
-				dialog.dismiss();
 				startActivity(intent);
 			} catch (Exception e) {
 				e.printStackTrace();
