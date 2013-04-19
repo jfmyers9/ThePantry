@@ -32,12 +32,13 @@ public class DatabaseModel extends SQLiteAssetHelper {
 	 * If a SQLiteException is thrown, returns false and prints out the error
 	 * message to System.err (could be due to no table or no column).
 	 */
-	public boolean add(String table, String item, String type, String amount) {
+	public boolean addIngredient(String table, String item, String type, String amount) {
 		try {
-			SQLiteDatabase db = getWritableDatabase();
+			//SQLiteDatabase db = getWritableDatabase();
 			ContentValues values = new ContentValues();
 			
 			item = item.toLowerCase().trim();
+			type = type.toLowerCase().trim();
 			values.put(ThePantryContract.ITEM, item);
 			values.put(ThePantryContract.TYPE, type);
 			values.put(ThePantryContract.AMOUNT, amount);
@@ -48,7 +49,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			} if(!table.equals(ThePantryContract.Inventory.TABLE_NAME)){
 				values.put(ThePantryContract.CHECKED, "false");
 			}
-			long newRowId;
+			return addToDatabase(table, item, values);
+			/*long newRowId;
 			if (!findItem(table, item)) {
 				try {
 					newRowId = db.insertOrThrow(table, null, values);
@@ -70,33 +72,186 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				// increment amount
 				// add a popup to ask if they want amount to be incremented?
 				return true;
+			}*/
+		} catch (SQLiteException e) {
+			System.err.println(e.getMessage());
+			return false;
+		} //Make this ThePantryException, change later
+	}
+
+	
+	/**
+	 * Adds a given storage to the database
+	 * @param table specifies the table to add storage to
+	 * @param storage a recipe object
+	 * @return boolean signifies successful database insert
+	 */
+	public boolean addStorage(String table, Storage storage) {
+		String id = storage.id;
+		ContentValues values = makeStorageValue(table, storage);
+		
+		try {
+			addToDatabase(table, id, values);
+		} catch (SQLiteException e) {
+			System.err.println(e.getMessage());
+			return false;
+		} //also catch ThePantryException
+		return true;
+	}
+	
+	/**
+	 * Adds a given searchMatch to the database
+	 * @param recipe -- a recipe object
+	 * @return boolean -- signifies successful database insert
+	 */ /*
+	public boolean addSearchMatch(SearchMatch searchMatch) {
+		String id = searchMatch.id;
+		String name = searchMatch.name;
+		String image = searchMatch.smallImageUrl;
+		String source = searchMatch.sourceDisplayName;
+		
+		String ingredients = "";
+		for (String ingredient : searchMatch.ingredients) {
+			if (!ingredients.equals("")) {
+				ingredients += ThePantryContract.SEPERATOR;
+			}
+			ingredients += ingredient;
+		}
+		
+		try {
+			SQLiteDatabase db = getWritableDatabase();
+			ContentValues values = new ContentValues();
+			values.put(ThePantryContract.SearchMatch.RECIPE, name);
+			values.put(ThePantryContract.SearchMatch.ID, id);
+			values.put(ThePantryContract.SearchMatch.INGREDIENTS, ingredients);
+			values.put(ThePantryContract.SearchMatch.IMAGEURL, image);
+			values.put(ThePantryContract.SearchMatch.SOURCENAME, source);
+			values.put(ThePantryContract.SearchMatch.FAVORITE, "false");
+			values.put(ThePantryContract.SearchMatch.COOKED, "false");
+
+			long newRowId;
+			if (!findItem(ThePantryContract.SearchMatch.TABLE_NAME, id)) {
+				try {
+					newRowId = db.insertOrThrow(ThePantryContract.SearchMatch.TABLE_NAME, null, values);
+					if (newRowId != -1) {
+						return true;
+					}
+				} catch (SQLiteException e) {
+					//do something
+				}
+				return false;
+			} 
+		} catch (SQLiteException e) {
+			System.err.println(e.getMessage());
+			return false;
+		}
+		return true;
+	}*/
+	
+	/** Adds either a recipe, ingredient, or searchMatch to the given table.
+	 * @param table Database Table
+	 * @param query Recipe ID or an Item
+	 * @param values Information to be added as a row in the table
+	 * @return true or false based on success of addition
+	 */
+	public boolean addToDatabase(String table, String query, ContentValues values) {
+		SQLiteDatabase db = getWritableDatabase();
+		long newRowId;
+		if (!findItem(table, query)) {
+			try {
+				newRowId = db.insertOrThrow(table, null, values);
+				if (newRowId != -1) {
+					return true;
+				}
+			} catch (SQLiteException e) {
+				//throw ThePantryException
+			}
+			return false;
+		} else {
+			if(table != Ingredients.TABLE_NAME) {	
+				if(isItemChecked(table, query, ThePantryContract.REMOVEFLAG)){
+					check(table, query, ThePantryContract.ADDFLAG, true);
+					check(table, query, ThePantryContract.REMOVEFLAG, false);
+					return true;
+				}
+			}
+			// increment amount
+			// add a popup to ask if they want amount to be incremented?
+			return true;
+		}
+	}
+
+	/** Sets the check value of the item to whatever checked it
+	 *  @query is either an item or a recipe id. */
+	public boolean check(String table, String query, String col, boolean checked) {
+		try {
+			SQLiteDatabase db = getWritableDatabase();
+			String selection;
+			if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
+				selection = ThePantryContract.Recipe.ID + " = ?";
+				check(ThePantryContract.SearchMatch.TABLE_NAME, query, col, checked);
+				// if we want to check the SearchMatch, we can add it in here later
+			} else {
+				selection = ThePantryContract.ITEM + " = ?";	
+			}
+			String[] selectionArgs = {query};
+			ContentValues values = new ContentValues();
+
+			String newCheck;
+			if (checked) {
+				newCheck = "true";
+			} else {
+				newCheck="false";
+			}
+			values.put(col, newCheck);
+			int rows = db.update(table, values, selection, selectionArgs);
+			if (rows != 0) {
+				return true;
+			} else {
+				return false;
 			}
 		} catch (SQLiteException e) {
 			System.err.println(e.getMessage());
 			return false;
 		}
 	}
+	
+	/** Returns list of all items checked */
+	public Cursor checkedItems(String table, String col) {
+		try {
+			SQLiteDatabase db = getReadableDatabase();
+			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+			qb.setTables(table);
+
+			String selection = col + " = ?";
+			String[] selectionArgs = {"true"};
 
 
-	/** Removes the ITEM from the specified TABLE.
-	 * Returns true if the modification was successful, false otherwise.
-	 * If a SQLiteException is thrown, returns false and prints out the error
-	 * message to System.err (could be due to no table or no column).
-	 */
-	public boolean remove(String table, String item) {
+			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
+			if (c.moveToFirst()) {
+				return c;
+			} else {
+				return null;
+			}
+		} catch (SQLiteException e) {
+			System.err.println(e.getMessage());
+			return null;
+		}
+	}
+
+	public boolean clear(String table) {
 		try {
 			SQLiteDatabase db = getWritableDatabase();
-			String selection = ThePantryContract.ITEM + " = ?";
-			item = item.toLowerCase().trim();
-			String[] selectionArgs = {item};
+			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+			qb.setTables(table);
 
-			int val = db.delete(table, selection, selectionArgs);			
+			int val = db.delete(table, null, null);			
 			if (val != 0) {
 				return true;
 			} else {
 				return false;
 			}
-		} catch (SQLiteException e) {
+		} catch(SQLiteException e) {
 			System.err.println(e.getMessage());
 			return false;
 		}
@@ -123,171 +278,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 
 			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null, null);
 			if (c.moveToFirst()) {
-				return c;
-			} else {
-				return null;
-			}
-		} catch (SQLiteException e) {
-			System.err.println(e.getMessage());
-			return null;
-		}
-	}
-
-	/** Finds all items in the specified TABLE that contain given text
-	 * If a SQLiteException is thrown, returns null and prints out the error
-	 * message to System.err (could be due to no table or no column). */
-	public Cursor search(String table, String query) {
-		try {
-			SQLiteDatabase db = getReadableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
-
-			String selection;
-			String[] columns = {ThePantryContract.ITEM};
-			ArrayList<String> selectionArgsList = new ArrayList<String>();
-			query = query.toLowerCase().trim();
-			if(table == Ingredients.TABLE_NAME) {
-				selection = ThePantryContract.ITEM + " LIKE ?";
-				selectionArgsList.add("%"+query+"%");
-			} else {
-				selection = ThePantryContract.ITEM + " LIKE ?" + " AND " + ThePantryContract.REMOVEFLAG + " = ?";
-				selectionArgsList.add("%"+query+"%");
-				selectionArgsList.add("false");
-			}
-			String[] selectionArgs = selectionArgsList.toArray(new String[0]);
-
-			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			if (c.moveToFirst()) {
-				System.out.println(c.getString(0));
-				return c;
-			} else {
-				return null;
-			}
-		} catch (SQLiteException e) {
-			System.err.println(e.getMessage());
-			return null;
-		}
-	}
-
-	/** Finds if an item is in the specified TABLE.
-	 *  If a SQLiteException is thrown, returns false and prints out the error
-	 *  message to System.err (could be due to no table or no column). */
-	public boolean findItem(String table, String item) {
-		try {
-			SQLiteDatabase db = getReadableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
-			String selection;
-			if (table == ThePantryContract.Recipe.TABLE_NAME || table == ThePantryContract.SearchMatch.TABLE_NAME) {
-				selection = ThePantryContract.Recipe.ID + " = ?";
-			} else {
-				selection = ThePantryContract.ITEM + " = ?";
-			}
-			item = item.toLowerCase().trim();
-			String[] selectionArgs = {item};
-
-			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
-			if(c.moveToFirst()) {
-				/*
-					if(table != Ingredients.TABLE_NAME) {	
-						if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
-							return false;
-						}
-					}*/
-				return true;
-			}else {
-				return false;
-			}
-		} catch (SQLiteException e) {
-			System.err.println(e.getMessage());
-			return false;
-		}
-	}
-
-	/** Returns all items of the TYPE from the specified TABLE.
-	 *  If a SQLiteException is thrown, returns false and prints out the error
-	 *  message to System.err (could be due to no table or no column). */
-	public Cursor findTypeItems(String table, String type) {
-		try {
-			SQLiteDatabase db = getReadableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
-
-			String[] columns = {ThePantryContract.ITEM};
-
-			String selection;
-			type = type.toLowerCase().trim();
-			ArrayList<String> selectionArgsList = new ArrayList<String>();
-			if(table == Ingredients.TABLE_NAME) {
-				selection = ThePantryContract.TYPE + " = ?";
-				selectionArgsList.add(type);
-			} else {
-				selection = ThePantryContract.TYPE + " = ?" + " AND " + ThePantryContract.REMOVEFLAG + " = ?";
-				selectionArgsList.add(type);
-				selectionArgsList.add("false");
-			}
-			String[] selectionArgs = selectionArgsList.toArray(new String[0]);
-
-			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			if (c.moveToFirst()) {
-				return c;
-			} else {
-				return null;
-			}
-		} catch (SQLiteException e) {
-			System.err.println(e.getMessage());
-			return null;
-		}
-	}
-
-	/** Returns the type of the ITEM from the specified TABLE. */
-	public Cursor findType(String table, String item) {
-		try {
-			SQLiteDatabase db = getReadableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
-
-			String[] columns = {ThePantryContract.TYPE};
-			String selection = ThePantryContract.ITEM + " = ?";
-			item = item.toLowerCase().trim();
-			String[] selectionArgs = {item};
-
-			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			if (c.moveToFirst()) {
-				if(table != Ingredients.TABLE_NAME) {	
-					if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
-						return null;
-					}
-				}
-				return c;
-			} else {
-				return null;
-			}
-		} catch (SQLiteException e) {
-			System.err.println(e.getMessage());
-			return null;
-		}
-	}
-
-	/** Returns the amount of the ITEM from the specified TABLE. */
-	public Cursor findAmount(String table, String item) {
-		try {
-			SQLiteDatabase db = getReadableDatabase();
-			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-			qb.setTables(table);
-
-			String[] columns = {ThePantryContract.AMOUNT};
-			String selection = ThePantryContract.ITEM + " = ?";
-			item = item.toLowerCase().trim();
-			String[] selectionArgs = {item};
-
-			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-			if (c.moveToFirst()) {
-				if(table != Ingredients.TABLE_NAME) {	
-					if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
-						return null;
-					}
-				}
 				return c;
 			} else {
 				return null;
@@ -330,59 +320,25 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 	}
 
-
-	/** Sets the check value of the item to whatever checked it */
-	public boolean check(String table, String item, String col, boolean checked) {
-		try {
-			SQLiteDatabase db = getWritableDatabase();
-			String selection;
-			if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
-				// Should this be id instead?
-				selection = ThePantryContract.Recipe.RECIPE + " = ?";
-				check(ThePantryContract.SearchMatch.TABLE_NAME, item, col, checked);
-			} else if (table.equals(ThePantryContract.SearchMatch.TABLE_NAME)){
-				// Should this be id instead?
-				selection = ThePantryContract.SearchMatch.RECIPE + " = ?";
-				check(ThePantryContract.Recipe.TABLE_NAME, item, col, checked);
-			} else {
-				selection = ThePantryContract.ITEM + " = ?";	
-			}
-			String[] selectionArgs = {item};
-			ContentValues values = new ContentValues();
-
-			String newCheck;
-			if (checked) {
-				newCheck = "true";
-			} else {
-				newCheck="false";
-			}
-			values.put(col, newCheck);
-			int rows = db.update(table, values, selection, selectionArgs);
-			if (rows != 0) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch (SQLiteException e) {
-			System.err.println(e.getMessage());
-			return false;
-		}
-	}
-
-
-	/** Returns list of all items checked */
-	public Cursor checkedItems(String table, String col) {
+	/** Returns the amount of the ITEM from the specified TABLE. */
+	public Cursor findAmount(String table, String item) {
 		try {
 			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
 
-			String selection = col + " = ?";
-			String[] selectionArgs = {"true"};
+			String[] columns = {ThePantryContract.AMOUNT};
+			String selection = ThePantryContract.ITEM + " = ?";
+			item = item.toLowerCase().trim();
+			String[] selectionArgs = {item};
 
-
-			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
+			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
 			if (c.moveToFirst()) {
+				if(table != Ingredients.TABLE_NAME) {	
+					if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
+						return null;
+					}
+				}
 				return c;
 			} else {
 				return null;
@@ -392,38 +348,40 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			return null;
 		}
 	}
-
-
-	/** Returns false if item is not checked and true if item is checked for
-	 * favorited and cooked recipe
-	 */
-	public boolean isItemChecked(String table, String name, String col) {
-		SQLiteDatabase db = getReadableDatabase();
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		qb.setTables(table);
-
-		String[] columns = {col};
-		String selection;
-		if (table == ThePantryContract.Recipe.TABLE_NAME) {
-			selection = ThePantryContract.Recipe.RECIPE + " = ?";
-		} else {
-			selection = ThePantryContract.ITEM + " = ?";
-		}
-		name = name.toLowerCase().trim();
-		String[] selectionArgs = {name};
-		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
-
-		if (c.moveToFirst()) {
-			String data = c.getString(0);
-			if (data.equals("true")) {
-				c.close();
-				return true;
+	
+	/** Finds if an item is in the specified TABLE.
+	 *  If a SQLiteException is thrown, returns false and prints out the error
+	 *  message to System.err (could be due to no table or no column). */
+	public boolean findItem(String table, String item) {
+		try {
+			SQLiteDatabase db = getReadableDatabase();
+			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+			qb.setTables(table);
+			String selection;
+			if (table == ThePantryContract.Recipe.TABLE_NAME || table == ThePantryContract.SearchMatch.TABLE_NAME) {
+				selection = ThePantryContract.Recipe.ID + " = ?";
+			} else {
+				item = item.toLowerCase().trim();
+				selection = ThePantryContract.ITEM + " = ?";
 			}
-			c.close();
+			String[] selectionArgs = {item};
+
+			Cursor c = qb.query(db, null, selection, selectionArgs, null, null, null);
+			if(c.moveToFirst()) {
+				/*
+					if(table != Ingredients.TABLE_NAME) {	
+						if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
+							return false;
+						}
+					}*/
+				return true;
+			}else {
+				return false;
+			}
+		} catch (SQLiteException e) {
+			System.err.println(e.getMessage());
 			return false;
-		} else {
-			return false;
-		}		
+		}
 	}
 
 	public Cursor findItemNames(String table) {
@@ -446,46 +404,89 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 	}
 
-	public boolean removeAllBut(String table, ArrayList<String> ingredients) {
-		boolean success = false;
-		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		qb.setTables(table);
-
-		ArrayList<String> result = new ArrayList<String>();
-		Cursor currentItems = findItemNames(table);
-		if (currentItems.moveToFirst()) {
-			while(!currentItems.isAfterLast()) {
-				String item = currentItems.getString(0);
-				result.add(item);
-				currentItems.moveToNext();
-			}
-			currentItems.close();
-		}
-		for (String item : result) {
-			if (!ingredients.contains(item)) {
-				success = remove(table, item);
-			}
-		}
-		return success;
-	}
-
-	public boolean clear(String table) {
+	/** Returns the type of the ITEM from the specified TABLE. */
+	public Cursor findType(String table, String item) {
 		try {
-			SQLiteDatabase db = getWritableDatabase();
+			SQLiteDatabase db = getReadableDatabase();
 			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 			qb.setTables(table);
 
-			int val = db.delete(table, null, null);			
-			if (val != 0) {
-				return true;
+			String[] columns = {ThePantryContract.TYPE};
+			String selection = ThePantryContract.ITEM + " = ?";
+			item = item.toLowerCase().trim();
+			String[] selectionArgs = {item};
+
+			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
+			if (c.moveToFirst()) {
+				if(table != Ingredients.TABLE_NAME) {	
+					if(isItemChecked(table, item, ThePantryContract.REMOVEFLAG)){
+						return null;
+					}
+				}
+				return c;
 			} else {
-				return false;
+				return null;
 			}
-		} catch(SQLiteException e) {
+		} catch (SQLiteException e) {
 			System.err.println(e.getMessage());
-			return false;
+			return null;
 		}
 	}
+
+	/** Returns all items of the TYPE from the specified TABLE.
+	 *  If a SQLiteException is thrown, returns false and prints out the error
+	 *  message to System.err (could be due to no table or no column). */
+	public Cursor findTypeItems(String table, String type) {
+		try {
+			SQLiteDatabase db = getReadableDatabase();
+			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+			qb.setTables(table);
+
+			String[] columns = {ThePantryContract.ITEM};
+
+			String selection;
+			//type = type.toLowerCase().trim();
+			ArrayList<String> selectionArgsList = new ArrayList<String>();
+			if(table == Ingredients.TABLE_NAME) {
+				selection = ThePantryContract.TYPE + " = ?";
+				selectionArgsList.add(type);
+			} else {
+				selection = ThePantryContract.TYPE + " = ?" + " AND " + ThePantryContract.REMOVEFLAG + " = ?";
+				selectionArgsList.add(type);
+				selectionArgsList.add("false");
+			}
+			String[] selectionArgs = selectionArgsList.toArray(new String[0]);
+
+			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
+			if (c.moveToFirst()) {
+				return c;
+			} else {
+				return null;
+			}
+		} catch (SQLiteException e) {
+			System.err.println(e.getMessage());
+			return null;
+		}
+	}
+
+	public ArrayList<Storage> getAllRecipes(String table) {
+		SQLiteDatabase db = getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		if (table == ThePantryContract.Recipe.TABLE_NAME) {
+			qb.setTables(ThePantryContract.Recipe.TABLE_NAME);
+		} else {
+			qb.setTables(ThePantryContract.SearchMatch.TABLE_NAME);
+		}
+		
+		Cursor cStorage = qb.query(db, null, null, null, null, null, null, null);
+		
+		ArrayList<Storage> recipes = makeRecipe(cStorage);
+		return recipes;
+	}
+
+
+
+
 
 	/**
 	 * Returns all cooked or favorited recipes in recipe table
@@ -514,7 +515,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			return searchMatches;
 		}
 	}
-	
+
 	/**
 	 * Finds the recipe with the associated ID
 	 * @param id -- ID of a specific recipe
@@ -529,122 +530,56 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			qb.setTables(ThePantryContract.SearchMatch.TABLE_NAME);
 		}
 			
-		String selection = ThePantryContract.Storage.ID + " = ?";
+		String selection = ThePantryContract.Recipe.ID + " = ?";
 		String[] selectionArgs = {id};
 		
 		Cursor cStorage = qb.query(db, null, selection, selectionArgs, null, null, null, null);
-		
-		if (table == ThePantryContract.Recipe.TABLE_NAME) {
-			ArrayList<Storage> recipes = makeRecipe(cStorage);
-			Recipe recipe = (Recipe) recipes.get(0);
-			return recipe;
-		} else {
-			ArrayList<Storage> searchMatches = makeSearchMatch(cStorage);
-			SearchMatch searchMatch = (SearchMatch) searchMatches.get(0);
-			return searchMatch;
-		}
-	}
-
-	/**
-	 * Adds a given recipe to the database
-	 * @param recipe -- a recipe object
-	 * @return boolean -- signifies successful database insert
-	 */
-	public boolean addRecipe(Recipe recipe) {
-		String id = recipe.id;
-		String name = recipe.name;
-
-		String attribution = recipe.attribution.url + ThePantryContract.SEPERATOR + recipe.attribution.text 
-				+ ThePantryContract.SEPERATOR + recipe.attribution.logo;
-
-		String ingredientLines = "";
-		for (String ingredient : recipe.ingredientLines) {
-			if (!ingredientLines.equals("")) {
-				ingredientLines += ThePantryContract.SEPERATOR;
+		if (cStorage.moveToFirst()){
+			if (table == ThePantryContract.Recipe.TABLE_NAME) {
+				ArrayList<Storage> recipes = makeRecipe(cStorage);
+				Recipe recipe = (Recipe) recipes.get(0);
+				return recipe;
+			} else {
+				ArrayList<Storage> searchMatches = makeSearchMatch(cStorage);
+				SearchMatch searchMatch = (SearchMatch) searchMatches.get(0);
+				return searchMatch;
 			}
-			ingredientLines += ingredient;
 		}
-
-		String image = recipe.images.hostedLargeUrl + ThePantryContract.SEPERATOR + recipe.images.hostedSmallUrl; //not always present
-		String source = recipe.source.sourceDisplayName + ThePantryContract.SEPERATOR
-				+ recipe.source.sourceRecipeUrl + ThePantryContract.SEPERATOR + recipe.source.sourceSiteUrl;
-
-		try {
-			SQLiteDatabase db = getWritableDatabase();
-			ContentValues values = new ContentValues();
-			values.put(ThePantryContract.Recipe.ID, id);
-			values.put(ThePantryContract.Recipe.RECIPE, name);
-			values.put(ThePantryContract.Recipe.ATTRIBUTE, attribution);
-			values.put(ThePantryContract.Recipe.INGLINES, ingredientLines);
-			values.put(ThePantryContract.Recipe.IMAGE, image);
-			values.put(ThePantryContract.Recipe.SOURCE, source);
-
-			long newRowId;
-			if (!findItem(ThePantryContract.Recipe.TABLE_NAME, id)) {
-				try {
-					newRowId = db.insertOrThrow(ThePantryContract.Recipe.TABLE_NAME, null, values);
-					if (newRowId != -1) {
-						return true;
-					}
-				} catch (SQLiteException e) {
-					//do something
-				}
-				return false;
-			} 
-		} catch (SQLiteException e) {
-			System.err.println(e.getMessage());
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Adds a given searchMatch to the database
-	 * @param recipe -- a recipe object
-	 * @return boolean -- signifies successful database insert
-	 */
-	public boolean addSearchMatch(SearchMatch searchMatch) {
-		String id = searchMatch.id;
-		String name = searchMatch.name;
-		String image = searchMatch.smallImageUrl;
-		String source = searchMatch.sourceDisplayName;
-		
-		String ingredients = "";
-		for (String ingredient : searchMatch.ingredients) {
-			if (!ingredients.equals("")) {
-				ingredients += ThePantryContract.SEPERATOR;
-			}
-			ingredients += ingredient;
-		}
-		
-		try {
-			SQLiteDatabase db = getWritableDatabase();
-			ContentValues values = new ContentValues();
-			values.put(ThePantryContract.SearchMatch.RECIPE, name);
-			values.put(ThePantryContract.SearchMatch.ID, id);
-			values.put(ThePantryContract.SearchMatch.INGREDIENTS, ingredients);
-			values.put(ThePantryContract.SearchMatch.IMAGEURL, image);
-			values.put(ThePantryContract.SearchMatch.SOURCENAME, source);
-
-			long newRowId;
-			if (!findItem(ThePantryContract.SearchMatch.TABLE_NAME, id)) {
-				try {
-					newRowId = db.insertOrThrow(ThePantryContract.SearchMatch.TABLE_NAME, null, values);
-					if (newRowId != -1) {
-						return true;
-					}
-				} catch (SQLiteException e) {
-					//do something
-				}
-				return false;
-			} 
-		} catch (SQLiteException e) {
-			System.err.println(e.getMessage());
-			return false;
-		}
-		return true;
+		return null;
 	}
 	
+	/** Returns false if item is not checked and true if item is checked for
+	 * favorited and cooked recipe
+	 */
+	public boolean isItemChecked(String table, String name, String col) {
+		SQLiteDatabase db = getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(table);
+
+		String[] columns = {col};
+		String selection;
+		if (table == ThePantryContract.Recipe.TABLE_NAME) {
+			selection = ThePantryContract.Recipe.RECIPE + " = ?";
+		} else {
+			name = name.toLowerCase().trim();
+			selection = ThePantryContract.ITEM + " = ?";
+		}
+		String[] selectionArgs = {name};
+		Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
+
+		if (c.moveToFirst()) {
+			String data = c.getString(0);
+			if (data.equals("true")) {
+				c.close();
+				return true;
+			}
+			c.close();
+			return false;
+		} else {
+			return false;
+		}		
+	}
+
 	/**
 	 * Parses the given cursor into a Recipe object
 	 */
@@ -680,7 +615,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		cursRecipe.close();
 		return recipes;
 	}
-	
+
 	/**
 	 * Parses the given cursor into a SearchMatch object
 	 */
@@ -703,6 +638,141 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 		cursSearchMatch.close();
 		return searchMatches;
+	}
+
+	public ContentValues makeStorageValue(String table, Storage storage) {
+		String id = storage.id;
+		String name = storage.name;
+		ContentValues values = new ContentValues();
+		values.put(ThePantryContract.Storage.ID, id);
+		values.put(ThePantryContract.Storage.RECIPE, name);
+		values.put(ThePantryContract.Storage.FAVORITE, "false");
+		values.put(ThePantryContract.Storage.COOKED, "false");
+		
+		if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
+			String attribution = ((Recipe) storage).attribution.url + ThePantryContract.SEPERATOR
+					+ ((Recipe) storage).attribution.text 
+					+ ThePantryContract.SEPERATOR + ((Recipe) storage).attribution.logo;
+
+			String ingredientLines = "";
+			for (String ingredient : ((Recipe) storage).ingredientLines) {
+				if (!ingredientLines.equals("")) {
+					ingredientLines += ThePantryContract.SEPERATOR;
+				}
+				ingredientLines += ingredient;
+			}
+
+			String image = ((Recipe) storage).images.hostedLargeUrl + ThePantryContract.SEPERATOR
+					+ ((Recipe) storage).images.hostedSmallUrl; //not always present
+			String source = ((Recipe) storage).source.sourceDisplayName + ThePantryContract.SEPERATOR
+					+ ((Recipe) storage).source.sourceRecipeUrl + ThePantryContract.SEPERATOR
+					+ ((Recipe) storage).source.sourceSiteUrl;
+
+			values.put(ThePantryContract.Recipe.ATTRIBUTE, attribution);
+			values.put(ThePantryContract.Recipe.INGLINES, ingredientLines);
+			values.put(ThePantryContract.Recipe.IMAGE, image);
+			values.put(ThePantryContract.Recipe.SOURCE, source);
+		} else {
+			String image = ((SearchMatch) storage).smallImageUrl;
+			String source = ((SearchMatch) storage).sourceDisplayName;
+			
+			String ingredients = "";
+			for (String ingredient : ((SearchMatch) storage).ingredients) {
+				if (!ingredients.equals("")) {
+					ingredients += ThePantryContract.SEPERATOR;
+				}
+				ingredients += ingredient;
+			}
+			
+			values.put(ThePantryContract.SearchMatch.INGREDIENTS, ingredients);
+			values.put(ThePantryContract.SearchMatch.IMAGEURL, image);
+			values.put(ThePantryContract.SearchMatch.SOURCENAME, source);
+		}
+		return values;
+	}
+	
+	/** Removes the ITEM from the specified TABLE.
+	 * Returns true if the modification was successful, false otherwise.
+	 * If a SQLiteException is thrown, returns false and prints out the error
+	 * message to System.err (could be due to no table or no column).
+	 */
+	public boolean remove(String table, String item) {
+		try {
+			SQLiteDatabase db = getWritableDatabase();
+			String selection = ThePantryContract.ITEM + " = ?";
+			item = item.toLowerCase().trim();
+			String[] selectionArgs = {item};
+
+			int val = db.delete(table, selection, selectionArgs);			
+			if (val != 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLiteException e) {
+			System.err.println(e.getMessage());
+			return false;
+		}
+	}
+
+	
+	
+	public boolean removeAllBut(String table, ArrayList<String> ingredients) {
+		boolean success = false;
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables(table);
+
+		ArrayList<String> result = new ArrayList<String>();
+		Cursor currentItems = findItemNames(table);
+		if (currentItems.moveToFirst()) {
+			while(!currentItems.isAfterLast()) {
+				String item = currentItems.getString(0);
+				result.add(item);
+				currentItems.moveToNext();
+			}
+			currentItems.close();
+		}
+		for (String item : result) {
+			if (!ingredients.contains(item)) {
+				success = remove(table, item);
+			}
+		}
+		return success;
+	}
+	
+	/** Finds all items in the specified TABLE that contain given text
+	 * If a SQLiteException is thrown, returns null and prints out the error
+	 * message to System.err (could be due to no table or no column). */
+	public Cursor search(String table, String query) {
+		try {
+			SQLiteDatabase db = getReadableDatabase();
+			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+			qb.setTables(table);
+
+			String selection;
+			String[] columns = {ThePantryContract.ITEM};
+			ArrayList<String> selectionArgsList = new ArrayList<String>();
+			query = query.toLowerCase().trim();
+			if(table == Ingredients.TABLE_NAME) {
+				selection = ThePantryContract.ITEM + " LIKE ?";
+				selectionArgsList.add("%"+query+"%");
+			} else {
+				selection = ThePantryContract.ITEM + " LIKE ?" + " AND " + ThePantryContract.REMOVEFLAG + " = ?";
+				selectionArgsList.add("%"+query+"%");
+				selectionArgsList.add("false");
+			}
+			String[] selectionArgs = selectionArgsList.toArray(new String[0]);
+
+			Cursor c = qb.query(db, columns, selection, selectionArgs, null, null, null);
+			if (c.moveToFirst()) {
+				return c;
+			} else {
+				return null;
+			}
+		} catch (SQLiteException e) {
+			System.err.println(e.getMessage());
+			return null;
+		}
 	}
 
 }

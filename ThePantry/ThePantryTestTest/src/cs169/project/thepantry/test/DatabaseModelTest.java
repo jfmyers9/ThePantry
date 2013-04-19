@@ -69,7 +69,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 		String item = "Eggs";
 		String type = "Dairy";
 		String amount = "12";
-		boolean success = testdm.add(table, item, type, amount);
+		boolean success = testdm.addIngredient(table, item, type, amount);
 		assertTrue("DatabaseModel.add() returned false", success);
 		assertTrue("Error: Eggs not added to database", findItem(table, item));
 	}
@@ -80,7 +80,7 @@ public class DatabaseModelTest extends AndroidTestCase {
 		String item = "Eggs";
 		String type = "Dairy";
 		String amount = "12";
-		boolean success = testdm.add(table, item, type, amount);
+		boolean success = testdm.addIngredient(table, item, type, amount);
 		assertFalse("DatabaseModel.add() returned false, table doesn't exist", success);
 		assertFalse("Error: Eggs should not be added to database", findItem(table, item));	
 	}

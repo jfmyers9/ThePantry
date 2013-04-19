@@ -81,4 +81,5 @@
     <string name="search_hint">Search by recipe, ingredient...</string>
     <string name="title_userresults">User Results</string>
     <string name="title_searchresults">Search Results</string>
+    <string name="title_activity_cook_book">CookBookActivity</string>
 </resources>
