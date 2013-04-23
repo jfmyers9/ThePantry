@@ -105,9 +105,7 @@ public class UserRecipeSyncTask extends AsyncTask<String, String, JSONArray> {
 		authToken = params[1];
 		String urlAddon = "";
 		if (authToken != null) {
-			if (tableName.equals(ThePantryContract.CookBook.TABLE_NAME)) {
-				urlAddon = "user_recipe/?auth_token=" + authToken;
-			}
+			urlAddon = "user_recipe/?auth_token=" + authToken;
 			String url = baseURL + urlAddon;
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(url);

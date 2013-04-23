@@ -77,7 +77,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		//Render directions to view.
 		//fetch and parse directions aynchronously
 		dm = new DatabaseModel(this, DATABASE_NAME);
-		if (dm.findItem(ThePantryContract.Recipe.TABLE_NAME, recipe.id)) {
+		if (dm.findItem(ThePantryContract.Recipe.TABLE_NAME, recipe.id) || dm.findItem(ThePantryContract.CookBook.TABLE_NAME, recipe.id)) {
 			displayDirections(recipe.directionLines);
 		} else {
 			new ParseDirectionsTask().execute(recipe.source.sourceRecipeUrl);
@@ -85,13 +85,15 @@ public class RecipeActivity extends BasicMenuActivity {
 		
 		//display the source and link to the web page source, open in a webview inside the app if clicked
 		Button source = (Button)findViewById(R.id.source);
-		source.setText("Source: " + recipe.source.sourceDisplayName);
-		source.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                displayWebpage(recipe.source.sourceRecipeUrl);
-            }
-        });
+		if (recipe.source != null) {
+			source.setText("Source: " + recipe.source.sourceDisplayName);
+			source.setOnClickListener(new OnClickListener() {
+		        @Override
+		        public void onClick(View view) {
+		            displayWebpage(recipe.source.sourceRecipeUrl);
+		        }
+		    });
+		}
 		
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		// check if recipe is in database and get favorite and cooked values true or false
