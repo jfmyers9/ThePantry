@@ -6,11 +6,14 @@ public class IngredientChild {
 	
 	private String name;
 	private String group;
+	private String image;
+	private boolean common;
 	private boolean selected;
 	
 	public IngredientChild(String name, String group) {
 		this.name = name;
 		this.group = group;
+		this.common = false;
 		this.selected = false;
 	}
 	public IngredientChild(String name) {
@@ -34,6 +37,14 @@ public class IngredientChild {
 		return group;
 	}
 	
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
+	public String getImage() {
+		return image;
+	}
+	
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
@@ -41,6 +52,16 @@ public class IngredientChild {
 	public boolean isSelected() {
 		return selected;
 	}
+	
+	public void setCommon(boolean common) {
+		this.common = common;
+	}
+	
+	public boolean isCommon() {
+		return common;
+	}
+	
+	
 	
 	public boolean equals(Object o) {
 		boolean result = false;

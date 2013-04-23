@@ -68,12 +68,16 @@ public class ThePantryContract {
 	/** Inner class that defines the Ingredients table */
 	public static abstract class Ingredients implements BaseColumns {
 	    public static final String TABLE_NAME = "ingredients";
+	    public static final String COMMON = "common";
+	    public static final String IMAGE = "image";
 	    
 	    // DATABASE COLUMN INDEXS
 	    public static final int ITEMIND = 0;
 	    public static final int TYPEIND = 1;
 	    public static final int AMOUNTIND = 2;
 	    public static final int CHECKEDIND = 3;
+	    public static final int COMMONIND = 4;
+	    public static final int IMAGEIND = 5;
 	}
 	
 	/** Inner class that defines the Inventory table */

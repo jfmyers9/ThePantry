@@ -119,16 +119,31 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			groupNames.add(g.getGroup());
 			g.setChildren(getItems(table, g.getGroup()));
 		}
-		if (table != ThePantryContract.Inventory.TABLE_NAME) {
+		if (table == ThePantryContract.Ingredients.TABLE_NAME) {
+			setCommImg(); // combine this with setChecked to clean up later
+		} else if (table != ThePantryContract.Inventory.TABLE_NAME) {
 			setChecked();
 		}
 	}
 	
+	// sets if a child is marked as checked
 	public void setChecked() {
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		for (IngredientChild child : children) {
 			boolean checked = dm.isItemChecked(table, child.getName(), ThePantryContract.CHECKED);
 			child.setSelected(checked);
+		}
+		dm.close();
+	}
+	
+	// Sets the common and image field for each child 
+	public void setCommImg() {
+		dm = new DatabaseModel(this, DATABASE_NAME);
+		for (IngredientChild child : children) {
+			String childName = child.getName();
+			boolean checked = dm.isItemChecked(table, childName, ThePantryContract.Ingredients.COMMON);
+			child.setCommon(checked);
+			child.setImage(dm.findIngImg(childName));
 		}
 		dm.close();
 	}

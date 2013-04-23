@@ -2,6 +2,7 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
+
 public class IngredientGroup {
 	
 	private String name;

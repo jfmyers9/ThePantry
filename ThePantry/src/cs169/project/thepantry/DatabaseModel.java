@@ -434,6 +434,32 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			return null;
 		}
 	}
+	
+	/** Returns the Image of the ITEM from the specified Ingredient Table. */
+	public String findIngImg(String item) {
+		try {
+			SQLiteDatabase db = getReadableDatabase();
+			SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+			qb.setTables(ThePantryContract.Ingredients.TABLE_NAME);
+			
+			String[] columns = {ThePantryContract.Ingredients.IMAGE};
+			String selection = ThePantryContract.ITEM + " = ?";
+			item = item.toLowerCase().trim();
+			String[] selectionArgs = {item};
+
+			Cursor cursor = queryToCursor(db, false, ThePantryContract.Ingredients.TABLE_NAME, columns, selection, selectionArgs);
+			
+			// Add this to CursorToObject Later
+			if (cursor != null) {
+				return cursor.getString(0); 
+			} else {
+				return null;
+			}
+		} catch (SQLiteException e) {
+			System.err.println(e.getMessage());
+			return null;
+		}
+	}
 
 	/** Returns all items of the TYPE from the specified TABLE.
 	 *  If a SQLiteException is thrown, returns false and prints out the error
@@ -516,6 +542,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			selection = ThePantryContract.ITEM + " = ?";
 		}
 		String[] selectionArgs = {query};
+		
 		return queryToChecked(db, false, table, columns, selection, selectionArgs);
 		
 	}
@@ -667,7 +694,6 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				if (!directions.equals("")) {
 					directions += ThePantryContract.SEPERATOR;
 				}
-				System.out.println(direction);
 				directions += direction;
 			}
 
@@ -727,10 +753,8 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			String[] columns, String selection, String[] selectionArgs) {
 		Cursor c = db.query(distinct, table, columns, selection, selectionArgs, null, null, null, null);
 		if (c.moveToFirst()) {
-			System.out.println("%%%%%#*#*#*#*#*#%%");
 			return c;
 		} else {
-			System.out.println("%eowiohew%");
 			return null;
 		}
 	}
