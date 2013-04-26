@@ -246,22 +246,28 @@ public class RecipeActivity extends BasicMenuActivity {
 	}
 	
 	public void displayDirections(ArrayList<String> directionsList) {	
-		LinearLayout directionsll = (LinearLayout)findViewById(R.id.dirList);
-		LayoutInflater inflater = (LayoutInflater)getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View thisDirection = inflater.inflate(R.layout.direction, null);
 		if (directionsList != null && directionsList.size() > 0 && !directionsList.get(0).equals("")){
 			for (int i = 0; i < directionsList.size(); i++) {
+				LinearLayout directionsll = (LinearLayout)findViewById(R.id.dirList);
+				LayoutInflater inflater = (LayoutInflater)getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				View thisDirection = inflater.inflate(R.layout.direction, null);
 				TextView number = (TextView)thisDirection.findViewById(R.id.number);
 				number.setText(i+1+"");				
 				
 				TextView directions = (TextView)thisDirection.findViewById(R.id.direction);
 				directions.setText(directionsList.get(i));
+				
+				directionsll.addView(thisDirection);
 			}
 		} else {
+			LinearLayout directionsll = (LinearLayout)findViewById(R.id.dirList);
+			LayoutInflater inflater = (LayoutInflater)getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View thisDirection = inflater.inflate(R.layout.direction, null);
 			TextView directions = (TextView)thisDirection.findViewById(R.id.direction); // Change layout for this text
 			directions.setText("Directions currently unavailable");
+			directionsll.addView(thisDirection);
 		}
-		directionsll.addView(thisDirection);
+		
 	}
 	
 	/* Class for asynchronously retrieving directions
