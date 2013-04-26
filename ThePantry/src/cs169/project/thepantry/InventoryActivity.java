@@ -60,6 +60,11 @@ public class InventoryActivity extends BaseListActivity {
 		startActivity(intent);
 	}
 	
-
+	/** Takes you to InventoryAdd Activity */
+	public void editTwo(View view) {
+		Context context = getApplicationContext();
+		Intent intent = new Intent(context, InventoryAddGrid.class);
+		startActivity(intent);
+	}
 	
 }
