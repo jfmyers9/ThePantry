@@ -58,6 +58,7 @@ public class AddRecipeActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_recipe);
+		selectedImagePath = null;
 		ingredients = new ArrayList<EditText>();
 		ingredients.add((EditText)findViewById(R.id.ingredients1));
 		ingredients.add((EditText)findViewById(R.id.ingredients2));
@@ -109,7 +110,12 @@ public class AddRecipeActivity extends Activity {
 				int duration = Toast.LENGTH_LONG;
 				toast = Toast.makeText(this, text, duration);
 				toast.show();
-			} else {	
+			} else if (selectedImagePath == null || selectedImagePath.isEmpty()){
+				CharSequence text = "Please Enter a picture.";
+				int duration = Toast.LENGTH_LONG;
+				toast = Toast.makeText(this, text, duration);
+				toast.show();
+			} else {
 				AmazonS3AsyncTask s3Task = new AmazonS3AsyncTask(picName, getApplicationContext(), recName, ingrs, instructions, this);
 				s3Task.execute();
 			}
