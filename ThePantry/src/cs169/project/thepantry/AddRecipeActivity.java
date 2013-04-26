@@ -94,7 +94,7 @@ public class AddRecipeActivity extends Activity {
 			String picName = recName + login_status;
 			Toast toast = null;
 			
-			if (ingredients.size() == 0) {
+			if (ingrs.size() == 0) {
 				CharSequence text = "Please Enter Some Ingredients";
 				int duration = Toast.LENGTH_LONG;
 				toast = Toast.makeText(this, text, duration);
