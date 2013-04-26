@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -57,6 +58,7 @@ public class AddRecipeActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_recipe);
+		selectedImagePath = null;
 		ingredients = new ArrayList<EditText>();
 		ingredients.add((EditText)findViewById(R.id.ingredients1));
 		ingredients.add((EditText)findViewById(R.id.ingredients2));
@@ -91,9 +93,32 @@ public class AddRecipeActivity extends Activity {
 			}
 			String instructions = ((EditText)findViewById(R.id.instructions)).getText().toString();
 			String picName = recName + login_status;
+			Toast toast = null;
 			
-			AmazonS3AsyncTask s3Task = new AmazonS3AsyncTask(picName, getApplicationContext(), recName, ingrs, instructions, this);
-			s3Task.execute();
+			if (ingrs.size() == 0) {
+				CharSequence text = "Please Enter Some Ingredients";
+				int duration = Toast.LENGTH_LONG;
+				toast = Toast.makeText(this, text, duration);
+				toast.show();
+			} else if (instructions.isEmpty() || instructions == null) {
+				CharSequence text = "Please enter some instructions.";
+				int duration = Toast.LENGTH_LONG;
+				toast = Toast.makeText(this, text, duration);
+				toast.show();
+			} else if (recName.isEmpty() || recName == null) {
+				CharSequence text = "Please Enter a Recipe Title.";
+				int duration = Toast.LENGTH_LONG;
+				toast = Toast.makeText(this, text, duration);
+				toast.show();
+			} else if (selectedImagePath == null || selectedImagePath.isEmpty()){
+				CharSequence text = "Please Enter a picture.";
+				int duration = Toast.LENGTH_LONG;
+				toast = Toast.makeText(this, text, duration);
+				toast.show();
+			} else {
+				AmazonS3AsyncTask s3Task = new AmazonS3AsyncTask(picName, getApplicationContext(), recName, ingrs, instructions, this);
+				s3Task.execute();
+			}
 		} catch (Exception e) {
 			System.out.println("2");
 			e.printStackTrace();
