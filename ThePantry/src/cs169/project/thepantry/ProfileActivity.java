@@ -2,6 +2,7 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,7 +30,7 @@ public class ProfileActivity extends BasicMenuActivity {
 	
 	// database access
 	DatabaseModel dm;
-	private static final String DATABASE_NAME = "thepantry";
+	private static final String DATABASE_NAME = ThePantryContract.DATABASE_NAME;
 	private final String LOGGED_IN = "log_in";
 	
 	// set up listview for history
@@ -57,21 +58,21 @@ public class ProfileActivity extends BasicMenuActivity {
 			invSync.execute(ThePantryContract.Inventory.TABLE_NAME, login_status);
 			UserRecipeSyncTask urSync = new UserRecipeSyncTask(this);
 			urSync.execute(ThePantryContract.CookBook.TABLE_NAME, login_status);
-			DatabaseModel dm = new DatabaseModel(this, "thepantry");
+			DatabaseModel dm = new DatabaseModel(this, DATABASE_NAME);
 			
 			// set text for textviews
 			TextView cooked_text = (TextView)findViewById(R.id.user_cooked_text);
 			cooked_text.setText("Cooking History");
 			
 			// get user information
-			username = shared_pref.getString("username", "");
+			username = shared_pref.getString("username", "Username");
 			TextView name = (TextView)findViewById(R.id.username);
 			name.setText(username);
 			
 			likes = (TextView)findViewById(R.id.user_likes);
 			allergic = (TextView)findViewById(R.id.user_allergic);
-			likes.setText("Likes: " + shared_pref.getString("likes", ""));
-			allergic.setText("Allergies: " + shared_pref.getString("allergies", ""));
+			likes.setText("Likes: " + shared_pref.getString("likes", "You have not specified any ingredients you like."));
+			allergic.setText("Allergies: " + shared_pref.getString("allergies", "You have not specified any allergies."));
 			
 			history = (ListView)findViewById(R.id.user_cook_history);
 			cookAdapter = new SearchResultAdapter(this, cooked);
@@ -84,18 +85,34 @@ public class ProfileActivity extends BasicMenuActivity {
 			// when recipes are clicked
 
 			history.setOnItemClickListener(new OnItemClickListener() {
-				public void onItemClick(AdapterView<?> parent, View view,
+				/*public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 				    // When clicked
 					if (isOnline()){
 			    		SearchCriteria searchcriteria = new SearchCriteria("recipe", (String)view.getTag());
 			    		new HomePageRecommendationsFragment().new GetRecommendationsTask(getApplicationContext(), "recipe").execute(searchcriteria);
 					}
+				}*/
+				
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+				    // online check?
+					String recipeID = (String)view.getTag();
+			    	//SearchCriteria searchcriteria = new SearchCriteria("recipe", recipeID);
+			    	DatabaseModel dm = makeDM();
+			    	Recipe recipe = (Recipe) dm.getStorage(ThePantryContract.Recipe.TABLE_NAME, recipeID);
+			    	
+			    	if (recipe != null) {
+			    		openRecipe(recipe);
+			    	}
+			    	dm.close();
 				}
 			});
 			
 		} else {
 			Intent i = new Intent(this, LoginActivity.class);
+			i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(i);
 		}
 		
@@ -106,6 +123,18 @@ public class ProfileActivity extends BasicMenuActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getSupportMenuInflater().inflate(R.menu.profile, menu);
 		return true;
+	}
+	
+	public DatabaseModel makeDM() {
+		return new DatabaseModel(this, DATABASE_NAME);
+	}
+	
+	public void openRecipe(Recipe recipe) {
+		Intent intent = new Intent(this, RecipeActivity.class);
+		intent.putExtra("result", recipe);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
 	}
 	
 	public boolean isOnline() {
@@ -123,7 +152,7 @@ public class ProfileActivity extends BasicMenuActivity {
 	 */
 	public void setHistory() {
 		// TODO
-		//dm = new DatabaseModel(this, DATABASE_NAME);
+		dm = new DatabaseModel(this, DATABASE_NAME);
 		/*
 		Cursor cooked = dm.checkedItems(ThePantryContract.Recipe.TABLE_NAME, ThePantryContract.Recipe.COOKED);
 		
@@ -137,11 +166,11 @@ public class ProfileActivity extends BasicMenuActivity {
 			}
 			cooked.close();
 		}*/
-//		ArrayList<Storage> cookedRecipes = dm.getCookOrFav(ThePantryContract.SearchMatch.TABLE_NAME, ThePantryContract.SearchMatch.COOKED);
-//		dm.close();
-//		for (Storage recipe : cookedRecipes) {
-//			cooked.add((SearchMatch)recipe);
-//		}
+		ArrayList<Storage> cookedRecipes = dm.getCookOrFav(ThePantryContract.SearchMatch.TABLE_NAME, ThePantryContract.SearchMatch.COOKED);
+		dm.close();
+		for (Storage recipe : cookedRecipes) {
+			cooked.add((SearchMatch)recipe);
+		}
 		System.out.println("Can I cast Recipe to SearchMatch object");
 	}
 	
