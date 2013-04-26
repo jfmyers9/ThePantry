@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -25,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 
@@ -40,6 +42,7 @@ public class AddRecipeActivity extends Activity {
     private static final int CAMERA_REQUEST = 1888;
 	private static final String JPEG_FILE_PREFIX = "CookBook";
 	private static final String JPEG_FILE_SUFFIX = ".jpg"; 
+	private final int SIZE_DP = 100;
     private String selectedImagePath;
     private ImageButton ib;
     private AmazonS3Client s3Client;
@@ -48,11 +51,17 @@ public class AddRecipeActivity extends Activity {
     private final String MY_PICTURE_BUCKET = "thepantryproject";
 	private final String LOGGED_IN = "log_in";
 	private String login_status;
+	private ArrayList<EditText> ingredients;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_recipe);
+		ingredients = new ArrayList<EditText>();
+		ingredients.add((EditText)findViewById(R.id.ingredients1));
+		ingredients.add((EditText)findViewById(R.id.ingredients2));
+		ingredients.add((EditText)findViewById(R.id.ingredients3));
+		
 		SharedPreferences shared_pref = PreferenceManager.getDefaultSharedPreferences(this);
 		login_status = shared_pref.getString(LOGGED_IN, null);
 		if (login_status == null) {
@@ -73,16 +82,30 @@ public class AddRecipeActivity extends Activity {
 	public void saveRecipe(View view) {
 		try {
 			String recName = ((EditText)findViewById(R.id.recipe_title)).getText().toString();
-			String ingredients = ((EditText)findViewById(R.id.ingredients)).getText().toString();
+			ArrayList<String> ingrs = new ArrayList<String>();
+			for (EditText et : ingredients) {
+				String text = et.getText().toString();
+				if (text != null && !text.isEmpty()) {
+					ingrs.add(text);
+				}
+			}
 			String instructions = ((EditText)findViewById(R.id.instructions)).getText().toString();
 			String picName = recName + login_status;
 			
-			AmazonS3AsyncTask s3Task = new AmazonS3AsyncTask(picName, getApplicationContext(), recName, ingredients, instructions, this);
+			AmazonS3AsyncTask s3Task = new AmazonS3AsyncTask(picName, getApplicationContext(), recName, ingrs, instructions, this);
 			s3Task.execute();
 		} catch (Exception e) {
 			System.out.println("2");
 			e.printStackTrace();
 		}		
+	}
+	
+	public void addEditText(View view) {
+		EditText edit = new EditText(this);
+		edit.setHint("Add Ingredient");
+		LinearLayout layout = (LinearLayout)findViewById(R.id.ingredient_layout);
+		layout.addView(edit);
+		ingredients.add(edit);
 	}
 	
 	
@@ -124,16 +147,24 @@ public class AddRecipeActivity extends Activity {
             BitmapDrawable bd = (BitmapDrawable)ib.getDrawable();
             bd.getBitmap().recycle();
             ib.setImageBitmap(null);
+            final float scale = this.getResources().getDisplayMetrics().density;
+            int p = (int) (SIZE_DP * scale + 0.5f);
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
             try {
+            	Bitmap bm = null;
 	            if (requestCode == SELECT_PICTURE) {
 	                Uri selectedImageUri = data.getData();
 	                selectedImagePath = getPath(selectedImageUri);
-	                Bitmap bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-	                bm = Bitmap.createScaledBitmap(bm, 50, 50, false);
-	                ib.setImageBitmap(bm);
+	                bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
 	            } else if (requestCode == CAMERA_REQUEST) {
-	            	Bitmap bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.fromFile(new File(selectedImagePath)));
-	                bm = Bitmap.createScaledBitmap(bm, 50, 50, false);
+	            	bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.fromFile(new File(selectedImagePath)));
+	            }
+	            if (bm != null) {
+	            	float scaleWidth = ((float) p) / bm.getWidth();
+	            	float scaleHeight = ((float) p) / bm.getHeight();
+	                matrix.postScale(scaleWidth, scaleHeight);
+	                bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, false);
 	                ib.setImageBitmap(bm);
 	            }
             } catch (Exception e) {
@@ -180,57 +211,53 @@ public class AddRecipeActivity extends Activity {
     private class AmazonS3AsyncTask extends AsyncTask<Void, URL, URL> {
     	
     	private String picName, recName, ingredients, instructions;
+    	private ArrayList<String> ingrs;
     	private Context context;
     	private ProgressDialog dialog;
+    	private Activity act;
     	
-    	public AmazonS3AsyncTask(String picName, Context context, String recName, String ingredients, String instructions, Activity act) {
+    	public AmazonS3AsyncTask(String picName, Context context, String recName, ArrayList<String> ingrs, String instructions, Activity act) {
     		this.picName = picName;
     		this.context = context;
     		this.recName = recName;
-    		this.ingredients = ingredients;
+    		this.ingrs = ingrs;
     		this.instructions = instructions;
-    		dialog = new ProgressDialog(act);
+    		this.dialog = new ProgressDialog(act);
     	}
     	
     	@Override
     	protected void onPreExecute() {
-    		this.dialog.setMessage("Adding Recipe");
-    		this.dialog.show();
+    		dialog.setTitle("Adding Recipe");
+    		dialog.show();
     	}
 
 		@Override
 		protected URL doInBackground(Void ... params) {
-			
 			PutObjectRequest por = new PutObjectRequest(MY_PICTURE_BUCKET, picName, new java.io.File(selectedImagePath));  
 			s3Client.putObject(por);
-			
 			ResponseHeaderOverrides override = new ResponseHeaderOverrides();
 			override.setContentType( "image/jpeg" );
 			GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(MY_PICTURE_BUCKET, picName);
 			urlRequest.setExpiration( new Date( System.currentTimeMillis() + 3600000 ) );  // Added an hour's worth of milliseconds to the current time.
 			urlRequest.setResponseHeaders(override);
 			URL url = s3Client.generatePresignedUrl(urlRequest);
-			
+			dialog.dismiss();
 			return url;
 		}
 		
 		@Override
 		protected void onPostExecute(URL url) {
-			dialog.dismiss();
 			try {
 				Recipe recipe = new Recipe();
 				recipe.name = recName;
 				recipe.id = recName;
 				RecipeImages img = new RecipeImages(url.toURI().toString(), url.toURI().toString());
 				recipe.images = img;
+				RecipeSource source = new RecipeSource("http://google.com","http://google.com","The Pantry");
+				recipe.source = source;
 				System.out.println(recName);
-				System.out.println(ingredients);
 				System.out.println(instructions);
-				ArrayList<String> ingLines = new ArrayList<String>();
-				for (String s : ingredients.split(",")) {
-					ingLines.add(s);
-				}
-				recipe.ingredientLines = ingLines;
+				recipe.ingredientLines = ingrs;
 				ArrayList<String> instLines = new ArrayList<String>();
 				for(String s : instructions.split("\\.")) {
 					instLines.add(s);

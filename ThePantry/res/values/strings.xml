@@ -37,6 +37,7 @@
     <string name="save_recipe_butt">Save Recipe</string>
     <string name="pic_from_gal">From Gallery</string>
     <string name="pic_from_cam">From Camera</string>
+    <string name="more_ing">More Ingredients</string>
     <string-array name="ingredient_type_array">
         <item>Grain</item>
         <item>Produce</item>
