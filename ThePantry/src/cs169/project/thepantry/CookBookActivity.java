@@ -83,6 +83,9 @@ public class CookBookActivity extends BasicMenuActivity {
 			case android.R.id.home:
 				toggle();
 				return true;
+			case R.id.menu_add:
+				intent = new Intent(this, AddRecipeActivity.class);
+				break;
 			default:
 				System.out.println(item.getItemId());
 				System.out.println(R.id.action_new_recipe);
