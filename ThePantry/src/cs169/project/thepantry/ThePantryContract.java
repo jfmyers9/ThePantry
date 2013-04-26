@@ -131,9 +131,9 @@ public class ThePantryContract {
 		public static final int IDIND = 1;
 		public static final int INGREDIENTSIND = 2;
 		public static final int IMGIND = 3;
-		public static final int SOURCEIND = 5;
-		public static final int COOKEDIND = 6;
-		public static final int FAVORITEIND = 7;
+		public static final int SOURCEIND = 4;
+		public static final int COOKEDIND = 5;
+		public static final int FAVORITEIND = 6;
 	}
 	
 	/** Inner class that defines the Shopping List table */
