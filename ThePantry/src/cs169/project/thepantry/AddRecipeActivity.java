@@ -13,6 +13,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,7 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 
@@ -39,7 +41,7 @@ public class AddRecipeActivity extends Activity {
 	private static final String JPEG_FILE_PREFIX = "CookBook";
 	private static final String JPEG_FILE_SUFFIX = ".jpg"; 
     private String selectedImagePath;
-    private ImageView iv;
+    private ImageButton ib;
     private AmazonS3Client s3Client;
     private final String MY_ACCESS_KEY_ID = "AKIAIDQSE7PHPGL35IYQ";
     private final String MY_SECRET_KEY = "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";
@@ -57,7 +59,7 @@ public class AddRecipeActivity extends Activity {
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivity(intent);
 		}
-		iv = (ImageView) findViewById(R.id.picture_preview);
+		ib = (ImageButton) findViewById(R.id.add_recipe_picture_button);
 		s3Client = new AmazonS3Client( new BasicAWSCredentials( MY_ACCESS_KEY_ID, MY_SECRET_KEY ) );
 	}
 
@@ -119,12 +121,23 @@ public class AddRecipeActivity extends Activity {
 	
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_PICTURE) {
-                Uri selectedImageUri = data.getData();
-                selectedImagePath = getPath(selectedImageUri);
-                iv.setImageURI(selectedImageUri);
-            } else if (requestCode == CAMERA_REQUEST) {  
-	            iv.setImageURI(Uri.fromFile(new File(selectedImagePath)));
+            BitmapDrawable bd = (BitmapDrawable)ib.getDrawable();
+            bd.getBitmap().recycle();
+            ib.setImageBitmap(null);
+            try {
+	            if (requestCode == SELECT_PICTURE) {
+	                Uri selectedImageUri = data.getData();
+	                selectedImagePath = getPath(selectedImageUri);
+	                Bitmap bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+	                bm = Bitmap.createScaledBitmap(bm, 50, 50, false);
+	                ib.setImageBitmap(bm);
+	            } else if (requestCode == CAMERA_REQUEST) {
+	            	Bitmap bm = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.fromFile(new File(selectedImagePath)));
+	                bm = Bitmap.createScaledBitmap(bm, 50, 50, false);
+	                ib.setImageBitmap(bm);
+	            }
+            } catch (Exception e) {
+            	e.printStackTrace();
             }
         }  
     }

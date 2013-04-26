@@ -29,7 +29,7 @@
     <string name="register">Register</string>
     <string name="prompt_password_confirmation">Confirm Password</string>
     <string name="add_recipe_title_hint">Recipe Title</string>
-    <string name="add_ingredient_title_hint">Add Ingredients Separated By A Comma</string>
+    <string name="add_ingredient_title_hint">Add Ingredient</string>
     <string name="add_picture_text">Add Picture</string>
     <string name="ingredients"><b><u>Ingredients</u></b></string>
     <string name="instructions"><b><u>Instructions</u></b></string>

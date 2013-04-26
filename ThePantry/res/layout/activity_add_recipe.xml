@@ -16,42 +16,55 @@
         android:layout_height="wrap_content"
         android:layout_width="150dp" />
     
-    <Button
+    <ImageButton
         android:id="@+id/add_recipe_picture_button"
+        android:src="@drawable/ic_menu_gallery"
         android:layout_toRightOf="@id/recipe_title"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_marginLeft="50dp"
         android:text="@string/add_picture_text"
         android:onClick="addPicture" />
     
-    <ImageView 
-        android:id="@+id/picture_preview"
-        android:layout_toRightOf="@id/add_recipe_picture_button"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_alignParentRight="true" />
-    
-    <TextView 
-        android:id="@+id/add_ingredient_title"
-        android:layout_height="wrap_content"
+    <LinearLayout android:id="@+id/ingredient_layout"
+        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_below="@id/recipe_title"
-        android:paddingTop="20dp"
-        android:text="@string/ingredients"
-        android:textSize="20sp" /> 
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_recipe_picture_button" >
         
-	<EditText 
-        android:id="@+id/ingredients"
-        android:hint="@string/add_ingredient_title_hint"
-        android:layout_height="100dp"
-        android:layout_width="fill_parent" 
-        android:layout_below="@id/add_ingredient_title"/>
+	    <TextView 
+	        android:id="@+id/add_ingredient_title"
+	        android:layout_height="wrap_content"
+	        android:layout_width="fill_parent"
+	        android:paddingTop="20dp"
+	        android:text="@string/ingredients"
+	        android:textSize="20sp" /> 
+	        
+		<EditText 
+	        android:id="@+id/ingredients"
+	        android:hint="@string/add_ingredient_title_hint"
+	        android:layout_height="wrap_content"
+	        android:layout_width="fill_parent" />
+		
+		<EditText 
+	        android:id="@+id/ingredients2"
+	        android:hint="@string/add_ingredient_title_hint"
+	        android:layout_height="wrap_content"
+	        android:layout_width="fill_parent" />
+		
+		<EditText 
+	        android:id="@+id/ingredients3"
+	        android:hint="@string/add_ingredient_title_hint"
+	        android:layout_height="wrap_content"
+	        android:layout_width="fill_parent" />
+        
+    </LinearLayout>
 	
 	<TextView 
         android:id="@+id/add_instruction_title"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:layout_below="@id/ingredients"
+        android:layout_below="@id/ingredient_layout"
         android:paddingTop="20dp"
         android:text="@string/instructions"
         android:textSize="20sp" />

@@ -139,7 +139,6 @@ public class IngredientSyncTask extends AsyncTask<String, String, JSONArray> {
 			return new JSONArray();
 		}
 	}
-	
 	@Override
 	public void onPostExecute(JSONArray response) {
 		if (dialog.isShowing()) {
