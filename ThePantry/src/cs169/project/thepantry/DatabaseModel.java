@@ -670,13 +670,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 			values.put(ThePantryContract.ADDFLAG, "true");
 			values.put(ThePantryContract.REMOVEFLAG, "false");
 
-			String ingredientLines = "";
-			for (String ingredient : ((Recipe) storage).ingredientLines) {
-				if (!ingredientLines.equals("")) {
-					ingredientLines += ThePantryContract.SEPERATOR;
-				}
-				ingredientLines += ingredient;
-			}
+			String ingredientLines = arrayListToString(((Recipe) storage).ingredientLines);
 
 			String image = "";
 			if (((Recipe) storage).images.hostedLargeUrl != null) {
@@ -688,14 +682,7 @@ public class DatabaseModel extends SQLiteAssetHelper {
 				image += ((Recipe) storage).images.hostedSmallUrl; 
 			}
 
-			// Recipes don't have directionLines yet so cooked and favorite functionalities will fail
-			String directions = "";
-			for (String direction : ((Recipe) storage).directionLines) {
-				if (!directions.equals("")) {
-					directions += ThePantryContract.SEPERATOR;
-				}
-				directions += direction;
-			}
+			String directions = arrayListToString(((Recipe) storage).directionLines);
 
 			if (table.equals(ThePantryContract.Recipe.TABLE_NAME)) {
 				String source =  ((Recipe) storage).source.sourceRecipeUrl + ThePantryContract.SEPERATOR
@@ -814,6 +801,45 @@ public class DatabaseModel extends SQLiteAssetHelper {
 		}
 	}
 
+	/** Parses an arrayList of strings into a single string separated
+	 * by ThePantryContract.SEPERATOR	 */
+	String arrayListToString (ArrayList<String> arrayList) {
+		String string = "";
+		for (String str : arrayList) {
+			if (!string.equals("")) {
+				string += ThePantryContract.SEPERATOR;
+			}
+			string += str;
+		}
+		return string;
+	}
+	
+	/** Sets the directions of a given recipe
+	 *  @param id is a recipe id
+	 *  @param direcitons are the directions for a given recipe */
+	public boolean setDirections(String table, String id, ArrayList<String> directionLines) {
+		try {
+			SQLiteDatabase db = getWritableDatabase();
+			ContentValues values = new ContentValues();
+			String selection = ThePantryContract.Recipe.ID + " = ?";
+			String[] selectionArgs = {id};
+			
+			String directions = arrayListToString(directionLines);
+			values.put(ThePantryContract.Recipe.DIRECTIONS, directions);
+				
+			int rows = db.update(table, values, selection, selectionArgs);
+			if (rows != 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLiteException e) {
+				System.err.println(e.getMessage());
+				return false;
+		}
+	}
+					
+	
 	/** Sets the item and type indices for cursorToObject method*/
 	public Integer[] setIndices(String table) {
 		ArrayList<Integer> indicesTemp = new ArrayList<Integer>();

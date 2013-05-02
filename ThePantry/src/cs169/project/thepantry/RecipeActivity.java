@@ -295,7 +295,13 @@ public class RecipeActivity extends BasicMenuActivity {
 			//also store the recipe
 			dm = new DatabaseModel(RecipeActivity.this, DATABASE_NAME);
 			recipe.directionLines = directionsList;
-			dm.addStorage(ThePantryContract.Recipe.TABLE_NAME, recipe);
+			boolean success;
+			if (dm.findItem(ThePantryContract.Recipe.TABLE_NAME, recipe.id)){
+				success = dm.setDirections(ThePantryContract.Recipe.TABLE_NAME, recipe.id, directionsList);
+			}else {
+				success = dm.addStorage(ThePantryContract.Recipe.TABLE_NAME, recipe);
+			}
+			// Do something with success?
 			dm.close();
 			
 			mFrameOverlay.setVisibility(View.GONE);
