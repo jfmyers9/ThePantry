@@ -42,10 +42,6 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	    View listItem = inflater.inflate(R.layout.list_result, parent, false);
 	
 	    if (values.size() > 0) {
-	    	// check which ingredients are in database
-	    	// add them to you have or you need accordingly
-	    	//dm = new DatabaseModel(context, DATABASE_NAME);
-			//ArrayList<IngredientChild> invItems = dm.findAllItems(Inventory.TABLE_NAME);
 			Boolean found;
 	    	for (int i=0; i < values.get(position).ingredients.size(); i++) {
 	    		found = false;
@@ -58,25 +54,10 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	    			}
 	    		}
 	    		if (found) {
-	    			//youHave += values.get(position).ingredients.get(i) + ", ";
 	    			havenum++;
-	    		}
-	    		else {
-	    			//youNeed += values.get(position).ingredients.get(i) + ", ";
 	    		}
 	    	}
 	    	
-	    	//take off trailing commas, or recognize that there are no items
-	    	/*if (youHave.length() > 0) {
-	    		youHave = youHave.substring(0, youHave.length()-2);
-	    	} else {
-	    		youHave = "nothing useful..";
-	    	}
-	    	if (youNeed.length() > 0) {
-	    		youNeed = youNeed.substring(0, youNeed.length()-2);
-	    	} else {
-	    		youNeed = "nothing more..";
-	    	}*/
 	    	listItem.setTag(values.get(position).id);
 	    
 		    // set the title of the result item
