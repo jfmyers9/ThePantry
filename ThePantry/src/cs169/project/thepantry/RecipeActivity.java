@@ -339,9 +339,18 @@ public class RecipeActivity extends BasicMenuActivity {
 	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 	        builder.setTitle(R.string.dialog_add_ingredients_to_shopping_list)
 	        	   .setMessage(getCheckedIngredientsString()) // TODO: change to editable view
-	               .setPositiveButton(R.string.add_item, new DialogInterface.OnClickListener() {
+	               .setPositiveButton(R.string.dialog_add_and_return, new DialogInterface.OnClickListener() {
 	                   public void onClick(DialogInterface dialog, int id) {
 	                       addToShopping(context);
+	                   }
+	               })
+	               .setNeutralButton(R.string.dialog_go_to_shopping, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                	    addToShopping(context);
+	               			Intent intent = new Intent(getActivity(), ShoppingListActivity.class);
+	               			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	               			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+	               			startActivity(intent);
 	                   }
 	               })
 	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
