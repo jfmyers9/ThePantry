@@ -2,6 +2,7 @@ package cs169.project.thepantry;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -274,7 +275,13 @@ public class AddRecipeActivity extends Activity {
 			GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(MY_PICTURE_BUCKET, picName);
 			urlRequest.setExpiration( new Date( System.currentTimeMillis() + 3600000 ) );  // Added an hour's worth of milliseconds to the current time.
 			urlRequest.setResponseHeaders(override);
-			URL url = s3Client.generatePresignedUrl(urlRequest);
+			String u = s3Client.getResourceUrl(MY_PICTURE_BUCKET, picName);
+			URL url = null;
+			try {
+				url = new URL(u);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
 			dialog.dismiss();
 			return url;
 		}
