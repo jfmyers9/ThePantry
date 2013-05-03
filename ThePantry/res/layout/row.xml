@@ -17,6 +17,7 @@
   android:listSelector="@null"
   android:background="@drawable/border"
   />
+
     
   <ImageView
   android:id = "@+id/check"
@@ -27,7 +28,16 @@
   android:layout_alignParentRight="true"
   />
   </FrameLayout>
-   
+
+	  <ImageView
+  android:id = "@+id/divider"
+  android:adjustViewBounds="true"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:scaleType="fitCenter"
+  android:clickable="false"
+  />
+
   <TextView
   android:id = "@+id/image_name"
   android:layout_width = "fill_parent"             

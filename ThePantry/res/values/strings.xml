@@ -97,4 +97,6 @@
     <string name="title_you_have">You have: </string>
     <string name="title_you_need">You need: </string>
     <string name="no_items"> You have not selected any items</string>
+    <string name="common"> Common Ingredients</string>
+    <string name="alpha"> Other Ingredients </string>
 </resources>

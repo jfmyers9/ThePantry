@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.text.WordUtils;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -27,10 +28,12 @@ import cs169.project.thepantry.ThePantryContract.Ingredients;
 import cs169.project.thepantry.ThePantryContract.Inventory;
 
 
+@SuppressLint("ResourceAsColor")
 public class InventoryAddGrid extends BaseListActivity {
 
-	public ArrayList<IngredientChild> displayChildren;
-	public ImageAdapter imgAdapter;
+	public ArrayList<IngredientChild> commonChildren;
+	public final ImageAdapter imgAdapterComm = new ImageAdapter(this);
+	public final ImageAdapter imgAdapterAlpha = new ImageAdapter(this);
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,7 @@ public class InventoryAddGrid extends BaseListActivity {
 		table = Ingredients.TABLE_NAME;
 		groupNames = new ArrayList<String>();
 		children = new ArrayList<IngredientChild>();
-		imgAdapter = new ImageAdapter(this);
+		//imgAdapter 
 		// Fills children, groupItems, and groupNames
 		// arrays from the database
 		fillArrays();
@@ -60,9 +63,11 @@ public class InventoryAddGrid extends BaseListActivity {
 				//groupItems.contains(type); // This doesn't work for some reason, would be nice to get it working
 				if (groupItems.contains(new IngredientGroup(type, children))) {
 					IngredientGroup group = find(groupItems, type);
-					displayChildren = getCommonChildren(group);
-					imgAdapter.ingredients = displayChildren;
-					imgAdapter.notifyDataSetChanged();
+					commonChildren = getCommonChildren(group);
+					imgAdapterComm.ingredients = commonChildren;
+					imgAdapterComm.notifyDataSetChanged();
+					imgAdapterAlpha.ingredients = group.getChildren();
+					imgAdapterAlpha.notifyDataSetChanged();
 				} else {
 					//throw PantryException();
 				}
@@ -88,31 +93,36 @@ public class InventoryAddGrid extends BaseListActivity {
 		SlidingMenu sm = getSlidingMenu();
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 
-		GridView gridview = (GridView) findViewById(R.id.inventoryGrid);
-		gridview.setAdapter(imgAdapter);
-
-		gridview.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				// Decide if this is the best way to determine if its been selected previously
-				IngredientChild child = displayChildren.get(position);
-				child.setSelected(!child.isSelected());
-				if (child.isSelected()) {
-					dm = new DatabaseModel(InventoryAddGrid.this, DATABASE_NAME);
-					dm.check(table, child.getName(), ThePantryContract.CHECKED, true);
-					Toast.makeText(InventoryAddGrid.this, WordUtils.capitalizeFully(displayChildren.get(position).getName()) + " added to your pantry", Toast.LENGTH_SHORT).show();
-					boolean success = dm.addIngredient(Inventory.TABLE_NAME, child.getName(), child.getGroup(),"1");
-				} else {
-					dm.check(table, child.getName(), ThePantryContract.CHECKED, false);
-					Toast.makeText(InventoryAddGrid.this, WordUtils.capitalizeFully(displayChildren.get(position).getName()) + " removed from your pantry", Toast.LENGTH_SHORT).show();
-				}
-				imgAdapter.notifyDataSetChanged();
-				dm.close();
-				
-				//Toast.makeText(InventoryAddGrid.this, "" + displayChildren.get(position).getName(), Toast.LENGTH_SHORT).show();
-			}
-		});
+		// Set common title
+		TextView commonTitle = (TextView) findViewById(R.id.common);
+		commonTitle.setText(R.string.common);
+		commonTitle.setTextColor(R.color.grey);
+		
+		// Set gridview of common ingredients
+		ExpandableHeightGridView gridViewCommon = (ExpandableHeightGridView) findViewById(R.id.inventoryGrid);
+		setupGridView(gridViewCommon, imgAdapterComm, commonChildren);
+		
+		// Set divider
+		View view = (View) findViewById(R.id.divider);
+		
+		// Set alphabetical title
+		TextView alphaTitle = (TextView) findViewById(R.id.alpha);
+		alphaTitle.setText(R.string.alpha);
+		alphaTitle.setTextColor(R.color.grey);
+		
+		// Set gridview of alphabetical order ingredients
+		ExpandableHeightGridView gridViewAlpha = (ExpandableHeightGridView) findViewById(R.id.inventoryGridAlpha);
+		setupGridView(gridViewAlpha, imgAdapterAlpha, children);
+	}
+	
+	public void setupGridView(ExpandableHeightGridView gridView, ImageAdapter imageAdapter, ArrayList<IngredientChild> children) {
+		gridView.setAdapter(imageAdapter);
+		gridView.setExpanded(true);
+		ImageListener listener = new ImageListener(imageAdapter, children);
+		gridView.setOnItemClickListener(listener);
 	}
 
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -154,4 +164,32 @@ public class InventoryAddGrid extends BaseListActivity {
 		return common;
 	}
 	
+	class ImageListener implements OnItemClickListener {
+		ImageAdapter imageAdapter;
+		ArrayList<IngredientChild> children;
+		ImageListener(ImageAdapter imageAdapter, ArrayList<IngredientChild> children) {
+			this.imageAdapter = imageAdapter;
+			this.children = children;
+		}
+		@Override
+		public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+			// Decide if this is the best way to determine if its been selected previously
+			IngredientChild child = children.get(position);
+			child.setSelected(!child.isSelected());
+			if (child.isSelected()) {
+				DatabaseModel dm = new DatabaseModel(InventoryAddGrid.this, DATABASE_NAME);
+				dm.check(table, child.getName(), ThePantryContract.CHECKED, true);
+				Toast.makeText(InventoryAddGrid.this, WordUtils.capitalizeFully(children.get(position).getName()) + " added to your pantry", Toast.LENGTH_SHORT).show();
+				boolean success = dm.addIngredient(Inventory.TABLE_NAME, child.getName(), child.getGroup(),"1");
+			} else {
+				dm.check(table, child.getName(), ThePantryContract.CHECKED, false);
+				// TODO: Add remove non-recent with display box
+				Toast.makeText(InventoryAddGrid.this, WordUtils.capitalizeFully(children.get(position).getName()) + " removed from your pantry", Toast.LENGTH_SHORT).show();
+			}
+			imageAdapter.notifyDataSetChanged();
+			dm.close();
+			
+		}
+		
+	}
 }

@@ -2,6 +2,8 @@ package cs169.project.thepantry;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -125,7 +127,20 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		if (table != ThePantryContract.Inventory.TABLE_NAME) {
 			setChecked();
 		}
+		Collections.sort(children, ALPHABETICAL_ORDER);
 	}
+	
+	private static Comparator<IngredientChild> ALPHABETICAL_ORDER = new Comparator<IngredientChild>() {
+	    public int compare(IngredientChild child1, IngredientChild child2) {
+	    	String str1 = child1.getName();
+	    	String str2 = child2.getName();
+	        int res = String.CASE_INSENSITIVE_ORDER.compare(str1, str2);
+	        if (res == 0) {
+	            res = str1.compareTo(str2);
+	        }
+	        return res;
+	    }
+	};
 	
 	// sets if a child is marked as checked
 	public void setChecked() {
