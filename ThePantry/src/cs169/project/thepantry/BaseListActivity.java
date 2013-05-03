@@ -32,10 +32,10 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	public DatabaseModel dm;
 	public ExpandableListView eView;
 	public ListView lView;
-	BaseListAdapter eAdapter;
+	public BaseListAdapter eAdapter;
 	public static String table;
 	public static final String DATABASE_NAME = "thepantry";
-	public ArrayList<IngredientGroup> groupItems;
+	public static ArrayList<IngredientGroup> groupItems;
 	public ArrayList<String> groupNames;
 	public ArrayList<IngredientChild> children;
 	public SearchView mSearchView;
@@ -52,64 +52,19 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		return true;
 	}
 
+	// get the search view and then call this, and then set the hint in the activity
 	public void setupSearchView() {
 		mSearchView.setIconifiedByDefault(false);
 		mSearchView.setOnQueryTextListener(this);
 		mSearchView.setSubmitButtonEnabled(true);
-		mSearchView.setQueryHint(getString(R.string.ingredient_search));
 	}
-
+	
 	public boolean onQueryTextChange(String newText) {
-		if (TextUtils.isEmpty(newText)) {
-			lView.setVisibility(View.INVISIBLE);
-			eView.setVisibility(View.VISIBLE);
-		} else {
-			ArrayList<IngredientChild> tmpItems = search(newText);
-			ArrayList<IngredientChild> items = new ArrayList<IngredientChild>();
-			for (IngredientChild c : children) {
-				if (tmpItems.contains(c)){
-					items.add(c);
-				}
-			}
-			BaseListViewAdapter lAdapter = new BaseListViewAdapter(this,  items, table);
-			lView.setAdapter(lAdapter);
-			eView.setVisibility(View.INVISIBLE);
-			lView.setVisibility(View.VISIBLE);
-		}
-		return true;
+		return false;
 	}
 
 	public boolean onQueryTextSubmit(String query) {
-		String message;
-		if(dm.findItem(table, query)) {
-			// TODO: Make this popup window to increment amount
-			message = "You already have this item";
-			Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
-			toast.show();
-			return true;
-		} else {
-			AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
-		    ListView lv = new ListView(this);
-		    
-		    ArrayList<IngredientGroup> gTypes = getTypes(Ingredients.TABLE_NAME);
-		    ArrayList<String> types = new ArrayList<String>();
-		    for (IngredientGroup g : gTypes) {
-		    	types.add(g.getGroup());
-			}
-		    types.add("Other");
-		    
-		    ListAdapter listTypes = new ArrayAdapter<String>(this,
-		            android.R.layout.simple_list_item_checked, types);
-		    lv.setAdapter(listTypes);
-			
-			dialog.context = this;
-			dialog.message = "Select a category to add " + query + " to your pantry?";
-			dialog.types = types.toArray(new String[0]);
-			dialog.item = query;
-			dialog.content = lv;
-			dialog.show(getFragmentManager(), "dialog");
-			return true;
-		}
+		return false;
 	}
 	
 	/** Fills the arrays with database data. */
@@ -170,24 +125,27 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	
 	/** Adds the given item to the list and the database
 	 * @throws IOException */
-	public void addItem(String table, String item, String type, String amount) throws IOException {
-		if (item.matches("[\\s]*")) {
+	public void addItem(String table, String query, Context context) throws IOException {
+		if (query.matches("[\\s]*")) {
 			throw new IOException("Ingredient cannot be empty, please try again");
 		}
-		DatabaseModel dm = new DatabaseModel(this, DATABASE_NAME);
-		boolean success = dm.addIngredient(table, item, type, amount);
-		int groupPos = 0;
-		IngredientGroup temp = new IngredientGroup(type,new ArrayList<IngredientChild>());
-		if (success) {
-			IngredientChild child = new IngredientChild(item, type);
-			children.add(child);
-			if (groupItems.contains(temp)) {
-				groupPos = groupItems.indexOf(temp);
-				eAdapter.addChild(child, groupItems.get(groupPos));
-			} else {
-				eAdapter.addChild(child, temp);
-			}
+	    ListView lv = new ListView(this);
+		ArrayList<IngredientGroup> gTypes = getTypes(Ingredients.TABLE_NAME);
+	    ArrayList<String> types = new ArrayList<String>();
+	    for (IngredientGroup g : gTypes) {
+	    	types.add(g.getGroup());
 		}
+	    ListAdapter listTypes = new ArrayAdapter<String>(this,
+	            android.R.layout.simple_list_item_checked, types);
+	    lv.setAdapter(listTypes);
+	    
+		AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
+		dialog.context = context;
+		dialog.message = "Select a category for " + query + ".";
+		dialog.types = types.toArray(new String[0]);
+		dialog.item = query;
+		dialog.content = lv;
+		dialog.show(getFragmentManager(), "dialog");
 	}
 	
 	/** Search database with a given string */
@@ -271,7 +229,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	               })
 	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
 	                   public void onClick(DialogInterface dialog, int id) {
-	               		
+	               	
 	                   }
 	               });
 	        // Create the AlertDialog object and return it
@@ -288,7 +246,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		String message;
 		String[] types;
 		String item;
-		String selectedType;
+		String selectedType = "dairy";
 		ListView content;
 		
 	    @Override
@@ -301,7 +259,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						if (which == -1) {
-							selectedType = "Other";
+							selectedType = "other";
 						} else {
 							selectedType = types[which];
 						}
@@ -311,9 +269,20 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	                   public void onClick(DialogInterface dialog, int id) {
 	                	   // call context function
 	                	   // adds selected category to the database
-	                	   
-	                	   //DatabaseModel dm = new DatabaseModel(context, ThePantryContract.DATABASE_NAME);
-	                	   //dm.add(table, item, selectedType, "1");
+	               			DatabaseModel dm = new DatabaseModel(context, DATABASE_NAME);
+	                	    boolean success = dm.addIngredient(table, item, selectedType, "1");
+	                	    int groupPos = 0;
+	                		IngredientGroup temp = new IngredientGroup(selectedType,new ArrayList<IngredientChild>());
+	                		if (success) {
+	                			IngredientChild child = new IngredientChild(item, selectedType);
+	                			children.add(child);
+	                			if (groupItems.contains(temp)) {
+	                				groupPos = groupItems.indexOf(temp);
+	                				eAdapter.addChild(child, groupItems.get(groupPos));
+	                			} else {
+	                				eAdapter.addChild(child, temp);
+	                			}
+	                		}
 	                   }
 	               })
 	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {

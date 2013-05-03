@@ -21,7 +21,6 @@
     <string name="add_item">Add</string>
     <string name="ingredient_types">Ingredient Type</string>
     <string name="ingredient_update">Update Inventory</string>
-    <string name="ingredient_search">Enter Item</string>
     <string name="edit">Edit</string>
     <string name="search">Search</string>
     <string name="ShoppingListTitle">Your Shopping List</string>
@@ -50,7 +49,7 @@
         <item>Other</item>
     </string-array>
 
-    <string name="ingredient_search">Enter an ingredient</string>
+    <string name="ingredient_search">Add something to your shopping list...</string>
     <string name="add_to_shopping_list">Add to Shopping List</string>
     <string name="tutorial_title">Welcome To the Pantry!</string>
     <string name="setup_inventory">Setup Inventory</string>
@@ -68,7 +67,7 @@
     <string name="InventoryAddTitle">Add Ingredients</string>
     <string name="InventoryTitle">Your Pantry</string>
     <string name="title_activity_nav_menu_fragment">NavMenuFragment</string>
-    <string name="update_inventory">Update Inventory</string>
+    <string name="update_inventory_button">Add Checked to Inventory</string>
     <string name="title_activity_basic_menu">BasicMenuActivity</string>
     <string name="recommendations">Recommendations:</string>
     <string name="title_activity_base_list">BaseListActivity</string>
@@ -102,6 +101,9 @@
     <string name="refresh">Refresh</string>
     <string name="loginerror">You gotta login you dingus!</string>
     <string name="title_activity_user_search_results_fragment">Jim Sucks</string>
-    <string name="dialog_go_to_shopping">Add and go to shopping list</string>
-    <string name="dialog_add_and_return">Add and return to recipe</string>
+    <string name="dialog_go_to_shopping">Add and go to Shopping List</string>
+    <string name="dialog_add_and_return">Add and return to Recipe</string>
+    <string name="add_ing_to_shopping">Add something to your shopping list...</string>
+    <string name="inv_find">Looking for something?</string>
+    <string name="remove_checked_button">Remove Checked</string>
 </resources>
