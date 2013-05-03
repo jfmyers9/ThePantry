@@ -13,7 +13,7 @@ public class IngredientGroup {
 	private ArrayList<IngredientChild> children;
 	
 	public IngredientGroup(String name, ArrayList<IngredientChild> children) {
-		this.name = name;
+		this.name = name.toLowerCase();
 		this.children = children;
 		Collections.sort(this.children, ALPHABETICAL_ORDER);
 	}
@@ -50,7 +50,7 @@ public class IngredientGroup {
 	public boolean equals(Object o) {
 		boolean result = false;
 		if (o instanceof IngredientGroup) {
-			result = name.equals(((IngredientGroup)o).getGroup());
+			result = name.equals(((IngredientGroup)o).getGroup().toLowerCase());
 		}else if (o instanceof String) {
 			result = name.equals((String) o);
 		}

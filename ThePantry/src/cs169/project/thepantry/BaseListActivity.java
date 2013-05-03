@@ -105,8 +105,14 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		}
 	}
 	
+	public static void resetChildren() {
+		DatabaseModel dm = new DatabaseModel(context, ThePantryContract.DATABASE_NAME);
+		children = dm.findAllItems(table);
+	}
+	
 	/** Fills the arrays with database data. */
 	public static void fillArrays() {
+		children = new ArrayList<IngredientChild>();
 		groupItems = getTypes(table);
 		for (IngredientGroup g : groupItems) {
 			groupNames.add(g.getGroup());
@@ -210,14 +216,12 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	/** Removes the given item from the database and list 
 	 * @throws ThePantryException */
 	public void removeChecked(View v) throws ThePantryException {
-		dm = new DatabaseModel(this, DATABASE_NAME);
 		String message = "";
 		for (IngredientChild c : children) {
 			if (c.isSelected()) {
 				message += c.getName() + "\n";
 			}
 		}
-		dm.close();
 		// Opens pop up window with items being removed
 		if (message.equals("")) {
 			message = "You have not selected any items";
@@ -387,9 +391,12 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 				if (c.isSelected()) {
 					// If the shopping list "updates" the ingredients are removed from list
 					eAdapter.removeChild(c, find(groupItems,c.getGroup()));
+					System.out.println("in remove items " + find(groupItems,c.getGroup()).getGroup());
+					System.out.println(c.getGroup());
 				}
 			}
 			fillArrays();
+			//resetChildren();
 			eAdapter.notifyDataSetChanged();
 		}	
 		

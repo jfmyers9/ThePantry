@@ -53,6 +53,10 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		// Pop up a window to ask if user wants to remove item
 		
 		int index = groups.indexOf(group);
+		for (IngredientGroup g : groups) {
+			System.out.println(g.getGroup());
+		}
+		System.out.println("looking for  " + group.getGroup());
 		ArrayList<IngredientChild> children = groups.get(index).getChildren();
 		children.remove(child);
 		if (children.size() <= 0) {
