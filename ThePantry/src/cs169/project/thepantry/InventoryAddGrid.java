@@ -97,10 +97,13 @@ public class InventoryAddGrid extends BaseListActivity {
 				if (child.isSelected()) {
 					dm = new DatabaseModel(InventoryAddGrid.this, DATABASE_NAME);
 					dm.check(table, child.getName(), ThePantryContract.CHECKED, true);
+					Toast.makeText(InventoryAddGrid.this, "" + displayChildren.get(position).getName(), Toast.LENGTH_SHORT).show();
 					boolean success = dm.addIngredient(Inventory.TABLE_NAME, child.getName(), child.getGroup(),"1");
 				} else {
 					dm.check(table, child.getName(), ThePantryContract.CHECKED, false);
+					Toast.makeText(InventoryAddGrid.this, "" + displayChildren.get(position).getName(), Toast.LENGTH_SHORT).show();
 				}
+				imgAdapter.notifyDataSetChanged();
 				dm.close();
 				
 				//Toast.makeText(InventoryAddGrid.this, "" + displayChildren.get(position).getName(), Toast.LENGTH_SHORT).show();

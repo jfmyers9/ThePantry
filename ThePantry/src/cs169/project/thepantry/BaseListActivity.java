@@ -121,7 +121,8 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		}
 		if (table == ThePantryContract.Ingredients.TABLE_NAME) {
 			setCommImg(); // combine this with setChecked to clean up later
-		} else if (table != ThePantryContract.Inventory.TABLE_NAME) {
+		} 
+		if (table != ThePantryContract.Inventory.TABLE_NAME) {
 			setChecked();
 		}
 	}
@@ -233,10 +234,16 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		}
 		
 		// Opens pop up window with items being added to the pantry
-		UpdateIngredientsDialogFragment dialog = new UpdateIngredientsDialogFragment();
-		dialog.context = this;
-		dialog.message = message;
-		dialog.show(getFragmentManager(), "dialog");
+		if (message.equals("")) {
+			message = "You have not selected any items";
+			Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+			toast.show();
+		} else {
+			UpdateIngredientsDialogFragment dialog = new UpdateIngredientsDialogFragment();
+			dialog.context = this;
+			dialog.message = message;
+			dialog.show(getFragmentManager(), "dialog");
+		}
 	}
 	
 	/* Class for displaying popup dialog for adding ingredients
