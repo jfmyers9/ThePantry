@@ -77,11 +77,22 @@ public class HomePageRecommendationsFragment extends Fragment {
 		});
 		
 		if (((HomePageActivity)getActivity()).isOnline()) {
+			mErrorOverlay.setVisibility(View.GONE);
 			getRecommendations();
 		} else {
 			mErrorOverlay.setVisibility(View.VISIBLE);
 		}
+		
 		return rootView;
+	}
+	
+	public void refreshRecs() {
+		if (((HomePageActivity)getActivity()).isOnline()) {
+			mErrorOverlay.setVisibility(View.GONE);
+			getRecommendations();
+		} else {
+			mErrorOverlay.setVisibility(View.VISIBLE);
+		}
 	}
 	
 	public void openRecipe(Recipe recipe) {
@@ -122,6 +133,7 @@ public class HomePageRecommendationsFragment extends Fragment {
 					int loc = (int)(Math.random() * (numItems)); // numitems-1?
 					query += ", " + youHave.get(loc); 
 				}
+				System.out.println(query);
 				searchcriteria = new SearchCriteria("home", query, NUM_RECOMMENDATIONS);
 			}
 			else {

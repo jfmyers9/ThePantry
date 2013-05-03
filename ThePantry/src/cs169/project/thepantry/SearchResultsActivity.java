@@ -18,6 +18,7 @@ import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.ActionBar.TabListener;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 
@@ -127,6 +128,14 @@ public class SearchResultsActivity extends BasicMenuActivity implements TabListe
 		if (login_status != null) {
 			userresults.new SearchTask(getBaseContext(), login_status).execute(query);
 		}
+		return true;
+	}
+	
+	// set up refresh button
+	public boolean refreshclick(MenuItem item) {
+		SearchCriteria searchcriteria = new SearchCriteria("search", query);
+		// for storing recent queries
+		searchresults.new SearchTask(getBaseContext(), "search").execute(searchcriteria);
 		return true;
 	}
 	

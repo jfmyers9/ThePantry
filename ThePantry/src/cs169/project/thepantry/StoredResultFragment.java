@@ -1,5 +1,6 @@
 package cs169.project.thepantry;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -68,6 +69,8 @@ public class StoredResultFragment extends Fragment {
 			result = new ArrayList<Storage>();
 		}
 		dm.close();
+		//display most recent results first
+		Collections.reverse(result);
 		return result;
 	}
 

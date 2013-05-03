@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	  @Override
 	  public View getView(int position, View convertView, ViewGroup parent) {
 		String youHave = "";
-		String youNeed = "";
+		int havenum = 0;
 		String source = "Unknown";
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    View listItem = inflater.inflate(R.layout.list_result, parent, false);
@@ -57,15 +58,16 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	    			}
 	    		}
 	    		if (found) {
-	    			youHave += values.get(position).ingredients.get(i) + ", ";
+	    			//youHave += values.get(position).ingredients.get(i) + ", ";
+	    			havenum++;
 	    		}
 	    		else {
-	    			youNeed += values.get(position).ingredients.get(i) + ", ";
+	    			//youNeed += values.get(position).ingredients.get(i) + ", ";
 	    		}
 	    	}
 	    	
 	    	//take off trailing commas, or recognize that there are no items
-	    	if (youHave.length() > 0) {
+	    	/*if (youHave.length() > 0) {
 	    		youHave = youHave.substring(0, youHave.length()-2);
 	    	} else {
 	    		youHave = "nothing useful..";
@@ -74,8 +76,7 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	    		youNeed = youNeed.substring(0, youNeed.length()-2);
 	    	} else {
 	    		youNeed = "nothing more..";
-	    	}
-	    
+	    	}*/
 	    	listItem.setTag(values.get(position).id);
 	    
 		    // set the title of the result item
@@ -84,12 +85,7 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 		    
 		    //set you have and you need
 		    TextView youHaveView = (TextView) listItem.findViewById(R.id.you_have);
-		    youHaveView.setText(youHave);
-		    youHaveView.setSelected(true); //scroll marquee
-		    
-		    TextView youNeedView = (TextView) listItem.findViewById(R.id.you_need);
-		    youNeedView.setText(youNeed);
-		    youNeedView.setSelected(true);
+		    youHaveView.setText(Html.fromHtml("You have <b>" + havenum + "</b> of <b>" + values.get(position).ingredients.size() + "</b> ingredients."));
 		    
 		    // display the source
 		    TextView timeView = (TextView) listItem.findViewById(R.id.source);

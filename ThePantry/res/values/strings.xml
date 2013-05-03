@@ -39,7 +39,6 @@
     <string name="pic_from_cam">From Camera</string>
     <string name="more_ing">More Ingredients</string>
     <string name="add_recipe">Add Recipe</string>
-
     <string-array name="ingredient_type_array">
         <item>Grain</item>
         <item>Produce</item>
@@ -99,6 +98,5 @@
     <string name="title_you_need">You need: </string>
     <string name="no_items"> You have not selected any items</string>
     <string name="recerror">Recommendations unavailable.\nYou may be offline.</string>
-    <string name="title_activity_user_search_results_fragment">UserSearchResultsFragment</string>
-
+    <string name="refresh">Refresh</string>
 </resources>
