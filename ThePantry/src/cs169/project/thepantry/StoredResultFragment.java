@@ -39,9 +39,13 @@ public class StoredResultFragment extends Fragment {
 		return searchmatches;
 	}
 	
-	public void refresh() {
-		matches = storageToSearchMatch(getMatchesByType(type));
+	@Override
+	public void onResume()
+	{  // After a pause OR at startup
+	    super.onResume();
+	    //Refresh data sets when you return
 		srAdapter.notifyDataSetChanged();
+
 	}
 
 	public ArrayList<Storage> getMatchesByType(int type) {
