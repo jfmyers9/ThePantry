@@ -71,6 +71,7 @@ public class InventoryActivity extends BaseListActivity {
 
 	/** Takes you to InventoryAdd Activity */
 	public void edit(View view) {
+		// TODO Thread shit doesn't do anything -- total bull shit
 		thread = new Thread()
 		{
 		    @Override

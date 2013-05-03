@@ -45,6 +45,8 @@ public class InventoryAddGrid extends BaseListActivity {
 	public ArrayList<IngredientChild> recentAdds;
 	public final ImageAdapter imgAdapterComm = new ImageAdapter(this);
 	public final ImageAdapter imgAdapterAlpha = new ImageAdapter(this);
+	public ImageListener commonListener = new ImageListener(this);
+	public ImageListener alphaListener = new ImageListener(this);
 	Toast addRemoveToast;
 	
 	@Override
@@ -92,7 +94,8 @@ public class InventoryAddGrid extends BaseListActivity {
 		
 		// Set gridview of common ingredients
 		ExpandableHeightGridView gridViewCommon = (ExpandableHeightGridView) findViewById(R.id.inventoryGrid);
-		setupGridView(gridViewCommon, imgAdapterComm, commonChildren);
+		commonListener = new ImageListener(this, imgAdapterComm, commonChildren);
+		setupGridView(gridViewCommon, imgAdapterComm, commonListener);
 		
 		// Set divider
 		View view = (View) findViewById(R.id.divider);
@@ -104,13 +107,13 @@ public class InventoryAddGrid extends BaseListActivity {
 		
 		// Set gridview of alphabetical order ingredients
 		ExpandableHeightGridView gridViewAlpha = (ExpandableHeightGridView) findViewById(R.id.inventoryGridAlpha);
-		setupGridView(gridViewAlpha, imgAdapterAlpha, alphaChildren);
+		alphaListener = new ImageListener(this, imgAdapterAlpha, alphaChildren);
+		setupGridView(gridViewAlpha, imgAdapterAlpha, alphaListener);
 	}
 	
-	public void setupGridView(ExpandableHeightGridView gridView, ImageAdapter imageAdapter, ArrayList<IngredientChild> children) {
+	public void setupGridView(ExpandableHeightGridView gridView, ImageAdapter imageAdapter, ImageListener listener) {
 		gridView.setAdapter(imageAdapter);
 		gridView.setExpanded(true);
-		ImageListener listener = new ImageListener(this, imageAdapter, children);
 		gridView.setOnItemClickListener(listener);
 	}
 
@@ -168,6 +171,7 @@ public class InventoryAddGrid extends BaseListActivity {
 		ImageAdapter imageAdapter;
 		ArrayList<IngredientChild> children;
 		Context context;
+		ImageListener(Context context){}
 		ImageListener(Context context, ImageAdapter imageAdapter, ArrayList<IngredientChild> children) {
 			this.imageAdapter = imageAdapter;
 			this.children = children;
@@ -231,9 +235,11 @@ public class InventoryAddGrid extends BaseListActivity {
 				IngredientGroup group = find(groupItems, type);
 				commonChildren = getCommonChildren(group, true);
 				imgAdapterComm.ingredients = commonChildren;
+				commonListener.children = commonChildren;
 				imgAdapterComm.notifyDataSetChanged();
 				alphaChildren = getCommonChildren(group, false);
 				imgAdapterAlpha.ingredients = alphaChildren;
+				alphaListener.children = alphaChildren;
 				imgAdapterAlpha.notifyDataSetChanged();
 			} else {
 				//throw PantryException();

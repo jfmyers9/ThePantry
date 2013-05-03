@@ -44,7 +44,6 @@ public class CookBookActivity extends BasicMenuActivity {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				System.out.println("HI");
 				Recipe rec = (Recipe) view.getTag();
 				Intent intent = new Intent(context, RecipeActivity.class);
 				intent.putExtra("result", rec);
