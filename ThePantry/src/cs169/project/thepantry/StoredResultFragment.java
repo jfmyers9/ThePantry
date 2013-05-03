@@ -16,9 +16,9 @@ import cs169.project.thepantry.R;
 public class StoredResultFragment extends Fragment {
 
 	public static final String ARG_SECTION_NUMBER = "section_number";
-	ArrayList<SearchMatch> matches;
-	ListView matchlist;
-	SearchResultAdapter srAdapter;
+	public static ArrayList<SearchMatch> matches;
+	public static ListView matchlist;
+	public static SearchResultAdapter srAdapter;
 	SearchModel sm = new SearchModel();
 	DatabaseModel dm;
 	FrameLayout mFrameOverlay;
@@ -32,7 +32,7 @@ public class StoredResultFragment extends Fragment {
 	}
 
 	public ArrayList<SearchMatch> storageToSearchMatch(ArrayList<Storage> storage) {
-		ArrayList<SearchMatch >searchmatches = new ArrayList<SearchMatch>();
+		ArrayList<SearchMatch>searchmatches = new ArrayList<SearchMatch>();
 		for (Storage item : storage) {
 			searchmatches.add((SearchMatch)item);
 		}
@@ -44,8 +44,10 @@ public class StoredResultFragment extends Fragment {
 	{  // After a pause OR at startup
 	    super.onResume();
 	    //Refresh data sets when you return
+	    matches = storageToSearchMatch(getMatchesByType(type));
+		srAdapter = new SearchResultAdapter(getActivity(), matches);   
+		matchlist.setAdapter(srAdapter);
 		srAdapter.notifyDataSetChanged();
-
 	}
 
 	public ArrayList<Storage> getMatchesByType(int type) {
