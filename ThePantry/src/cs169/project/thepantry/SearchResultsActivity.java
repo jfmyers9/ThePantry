@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -16,6 +18,7 @@ import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.ActionBar.TabListener;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 
@@ -24,6 +27,7 @@ public class SearchResultsActivity extends BasicMenuActivity implements TabListe
 	// adapter and viewpager for switching between sections - Search Results, User Results
 	SectionsPagerAdapter mSectionsPagerAdapter;
 	ViewPager mViewPager;
+	private final String LOGGED_IN = "log_in";
 	
 	ArrayList<SearchMatch> matches;
 	//public for testing
@@ -31,10 +35,11 @@ public class SearchResultsActivity extends BasicMenuActivity implements TabListe
 	public SearchModel sm = new SearchModel();
 	public ListView listView;
 	String query = "";
+	String login_status;
 	
 	// fragments for the 2 results - Yummly and User
 	SearchResultsFragment searchresults;
-	SearchResultsFragment userresults;
+	UserSearchResultsFragment userresults;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,10 +47,13 @@ public class SearchResultsActivity extends BasicMenuActivity implements TabListe
 		setContentView(R.layout.activity_search_results_pager);
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 		
+		SharedPreferences shared_pref = PreferenceManager.getDefaultSharedPreferences(this);
+		login_status = shared_pref.getString(LOGGED_IN, null);
+		
 		// set up fragments
 		ArrayList<Fragment> frags = new ArrayList<Fragment>();
 		searchresults = new SearchResultsFragment();
-		userresults = new SearchResultsFragment();
+		userresults = new UserSearchResultsFragment();
 		frags.add(searchresults);
 		frags.add(userresults);
 		
@@ -117,7 +125,17 @@ public class SearchResultsActivity extends BasicMenuActivity implements TabListe
 		SearchCriteria searchcriteria = new SearchCriteria("search", query);
 		// for storing recent queries
 		searchresults.new SearchTask(getBaseContext(), "search").execute(searchcriteria);
-		//userresults.new SearchTask(getBaseContext(), "search").execute(searchcriteria);
+		if (login_status != null) {
+			userresults.new SearchTask(getBaseContext(), login_status).execute(query);
+		}
+		return true;
+	}
+	
+	// set up refresh button
+	public boolean refreshclick(MenuItem item) {
+		SearchCriteria searchcriteria = new SearchCriteria("search", query);
+		// for storing recent queries
+		searchresults.new SearchTask(getBaseContext(), "search").execute(searchcriteria);
 		return true;
 	}
 	

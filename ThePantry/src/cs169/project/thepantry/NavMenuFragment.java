@@ -45,6 +45,9 @@ public class NavMenuFragment extends ListFragment {
 		shared_pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		auth_token = shared_pref.getString(LOGGED_IN, null);
 		String[] menu = getResources().getStringArray(R.array.nav_menu_items);
+		if (auth_token == null) {
+			menu[6] = "Login";
+		}
 		ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(getActivity(), 
 				android.R.layout.simple_list_item_1, android.R.id.text1, menu);
 		setListAdapter(menuAdapter);
@@ -87,33 +90,35 @@ public class NavMenuFragment extends ListFragment {
 			intent = new Intent(context, SettingsActivity.class);
 			break;
 		case 6:
-			IngredientSyncTask slSync = new IngredientSyncTask(getActivity());
-			slSync.execute(ThePantryContract.ShoppingList.TABLE_NAME, auth_token);
-			try {
-				slSync.get(3000, TimeUnit.MILLISECONDS);
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (auth_token == null) {
+				intent = new Intent(context, LoginActivity.class);
+				break;
+			} else {
+				IngredientSyncTask slSync = new IngredientSyncTask(getActivity());
+				slSync.execute(ThePantryContract.ShoppingList.TABLE_NAME, auth_token);
+				try {
+					slSync.get(3000, TimeUnit.MILLISECONDS);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				IngredientSyncTask invSync = new IngredientSyncTask(getActivity());
+				invSync.execute(ThePantryContract.Inventory.TABLE_NAME, auth_token);
+				try {
+					invSync.get(3000, TimeUnit.MILLISECONDS);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				UserRecipeSyncTask urSync = new UserRecipeSyncTask(getActivity());
+				urSync.execute(ThePantryContract.CookBook.TABLE_NAME, auth_token);
+				try {
+					urSync.get(3000, TimeUnit.MILLISECONDS);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				logout();
+				intent = new Intent(context, HomePageActivity.class);
+				break;
 			}
-			IngredientSyncTask invSync = new IngredientSyncTask(getActivity());
-			invSync.execute(ThePantryContract.Inventory.TABLE_NAME, auth_token);
-			try {
-				invSync.get(3000, TimeUnit.MILLISECONDS);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			UserRecipeSyncTask urSync = new UserRecipeSyncTask(getActivity());
-			urSync.execute(ThePantryContract.Inventory.TABLE_NAME, auth_token);
-			try {
-				urSync.get(3000, TimeUnit.MILLISECONDS);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			logout();
-			if (context instanceof HomePageActivity) {
-				open = false;
-			}
-			intent = new Intent(context, HomePageActivity.class);
-			break;
 		}
 		if (!open) {
 			BasicMenuActivity ba = (BasicMenuActivity) getActivity();

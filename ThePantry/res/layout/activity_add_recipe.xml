@@ -27,9 +27,8 @@
 	        android:maxHeight="60dp"
 	        android:maxWidth="70dp"
 	        android:onClick="addPicture"
-	        android:contentDescription="@string/add_picture_text" />
-	    
-	    <!-- android:src="@drawable/ic_menu_gallery"  ADD THIS INTO IMAGE BUTTON ABOVE-->
+	        android:contentDescription="@string/add_picture_text"
+	        android:src="@drawable/ic_menu_gallery" />
 	    
 	    <LinearLayout android:id="@+id/ingredient_layout"
 	        android:orientation="vertical"
