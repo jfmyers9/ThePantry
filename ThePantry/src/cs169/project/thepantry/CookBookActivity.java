@@ -56,6 +56,7 @@ public class CookBookActivity extends BasicMenuActivity {
 				Recipe rec = (Recipe) view.getTag();
 				Intent intent = new Intent(context, RecipeActivity.class);
 				intent.putExtra("result", rec);
+				intent.putExtra("type", "cookbook");
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);

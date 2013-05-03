@@ -57,31 +57,15 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		return true;
 	}
 
+	// get the search view and then call this, and then set the hint in the activity
 	public void setupSearchView() {
 		mSearchView.setIconifiedByDefault(false);
 		mSearchView.setOnQueryTextListener(this);
 		mSearchView.setSubmitButtonEnabled(true);
-		mSearchView.setQueryHint(getString(R.string.ingredient_search));
 	}
-
+	
 	public boolean onQueryTextChange(String newText) {
-		if (TextUtils.isEmpty(newText)) {
-			lView.setVisibility(View.INVISIBLE);
-			eView.setVisibility(View.VISIBLE);
-		} else {
-			ArrayList<IngredientChild> tmpItems = search(newText);
-			ArrayList<IngredientChild> items = new ArrayList<IngredientChild>();
-			for (IngredientChild c : children) {
-				if (tmpItems.contains(c)){
-					items.add(c);
-				}
-			}
-			lAdapter = new BaseListViewAdapter(this,  items, table);
-			lView.setAdapter(lAdapter);
-			eView.setVisibility(View.INVISIBLE);
-			lView.setVisibility(View.VISIBLE);
-		}
-		return true;
+		return false;
 	}
 
 	public boolean onQueryTextSubmit(String query) {
@@ -93,9 +77,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			toast.show();
 			return true;
 		} else {
-			AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
-		    ListView lv = new ListView(this);
-		    
+			AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();		    
 		    ArrayList<IngredientGroup> gTypes = getTypes(Ingredients.TABLE_NAME);
 		    ArrayList<String> types = new ArrayList<String>();
 		    for (IngredientGroup g : gTypes) {
@@ -187,31 +169,33 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	
 	/** Adds the given item to the list and the database
 	 * @throws IOException */
-	public void addItem(String table, String item, String type, String amount) throws IOException {
-		if (item.matches("[\\s]*")) {
+	public void addItem(String table, String query, Context context) throws IOException {
+		if (query.matches("[\\s]*")) {
 			throw new IOException("Ingredient cannot be empty, please try again");
 		}
-		DatabaseModel dm = new DatabaseModel(this, DATABASE_NAME);
-		boolean success = dm.addIngredient(table, item, type, amount);
-		int groupPos = 0;
-		IngredientGroup temp = new IngredientGroup(type,new ArrayList<IngredientChild>());
-		if (success) {
-			IngredientChild child = new IngredientChild(item, type);
-			children.add(child);
-			if (groupItems.contains(temp)) {
-				groupPos = groupItems.indexOf(temp);
-				eAdapter.addChild(child, groupItems.get(groupPos));
-			} else {
-				eAdapter.addChild(child, temp);
-			}
+	    ListView lv = new ListView(this);
+		ArrayList<IngredientGroup> gTypes = getTypes(Ingredients.TABLE_NAME);
+	    ArrayList<String> types = new ArrayList<String>();
+	    for (IngredientGroup g : gTypes) {
+	    	types.add(g.getGroup());
 		}
+	    ListAdapter listTypes = new ArrayAdapter<String>(this,
+	            android.R.layout.simple_list_item_checked, types);
+	    lv.setAdapter(listTypes);
+	    
+		AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
+		dialog.context = context;
+		dialog.message = "Select a category for " + query + ".";
+		dialog.types = types.toArray(new String[0]);
+		dialog.item = query;
+		dialog.show(getFragmentManager(), "dialog");
 	}
 	
 	/** Search database with a given string */
 	public ArrayList<IngredientChild> search(String query) {
 		// might return ingredient child if I make a custom adapter for listView
 		dm = new DatabaseModel(this, DATABASE_NAME);
-		ArrayList<IngredientChild> items = dm.search(table, query);
+		ArrayList<IngredientChild> items = dm.search(Ingredients.TABLE_NAME, query);
 		dm.close();
 		return items;
 	}
@@ -288,7 +272,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	               })
 	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
 	                   public void onClick(DialogInterface dialog, int id) {
-	               		
+	               	
 	                   }
 	               });
 	        // Create the AlertDialog object and return it
@@ -331,8 +315,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 					lAdapter.addItem(child);
 				}
 			}
-		}
-		
+		}		
 	    @Override
 	    public Dialog onCreateDialog(Bundle savedInstanceState) {
 	        // Use the Builder class for convenient dialog construction
