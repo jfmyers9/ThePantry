@@ -63,7 +63,6 @@ public class HomePageRecommendationsFragment extends Fragment {
 		    		SearchMatch sm = findSearchMatch(recipeID);
 		    		if (sm != null) {
 		    			dm.addStorage(ThePantryContract.SearchMatch.TABLE_NAME, findSearchMatch(recipeID));
-		    			((HomePageActivity)getActivity()).recents.refresh(); // no idea if this will work
 		    		}
 		    		new GetRecommendationsTask(getActivity(), "recipe").execute(searchcriteria);
 		    	}

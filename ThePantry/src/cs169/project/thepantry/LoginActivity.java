@@ -299,6 +299,7 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 					if (logged_in.getString(LOGGED_IN, null) == null) {
 						SharedPreferences.Editor editor = logged_in.edit();
 						editor.putString(LOGGED_IN, auth_token);
+						editor.putString("username", "haha");
 						editor.commit();
 					} else {
 						Context context = getApplicationContext();
