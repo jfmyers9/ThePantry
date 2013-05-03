@@ -44,6 +44,7 @@ public class ProfileActivity extends BasicMenuActivity {
 	{  // After a pause OR at startup
 	    super.onResume();
 	    //Refresh data sets when you return
+	    cooked.clear();
 	    setHistory();
 		cookAdapter = new SearchResultAdapter(this, cooked);
 		history = (ListView)findViewById(R.id.user_cook_history);

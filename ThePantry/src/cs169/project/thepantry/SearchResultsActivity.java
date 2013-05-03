@@ -126,7 +126,7 @@ public class SearchResultsActivity extends BasicMenuActivity implements TabListe
 		// for storing recent queries
 		searchresults.new SearchTask(getBaseContext(), "search").execute(searchcriteria);
 		if (login_status != null) {
-			//userresults.new SearchTask(getBaseContext(), login_status).execute(query);
+			userresults.new SearchTask(getBaseContext(), login_status).execute(query);
 		}
 		return true;
 	}
