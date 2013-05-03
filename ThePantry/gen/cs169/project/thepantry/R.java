@@ -1291,20 +1291,21 @@ containing a value of this type.
         public static final int activity_search_results_pager=0x7f030028;
         public static final int activity_shopping_list=0x7f030029;
         public static final int activity_tutorial=0x7f03002a;
-        public static final int child_row=0x7f03002b;
-        public static final int child_row_inventory=0x7f03002c;
-        public static final int content_frame=0x7f03002d;
-        public static final int cook_book_list=0x7f03002e;
-        public static final int direction=0x7f03002f;
-        public static final int group_row=0x7f030030;
-        public static final int list=0x7f030031;
-        public static final int list_result=0x7f030032;
-        public static final int menu_frame=0x7f030033;
-        public static final int pager_home_page=0x7f030034;
-        public static final int row=0x7f030035;
-        public static final int sherlock_spinner_dropdown_item=0x7f030036;
-        public static final int sherlock_spinner_item=0x7f030037;
-        public static final int slidingmenumain=0x7f030038;
+        public static final int activity_user_search_results_fragment=0x7f03002b;
+        public static final int child_row=0x7f03002c;
+        public static final int child_row_inventory=0x7f03002d;
+        public static final int content_frame=0x7f03002e;
+        public static final int cook_book_list=0x7f03002f;
+        public static final int direction=0x7f030030;
+        public static final int group_row=0x7f030031;
+        public static final int list=0x7f030032;
+        public static final int list_result=0x7f030033;
+        public static final int menu_frame=0x7f030034;
+        public static final int pager_home_page=0x7f030035;
+        public static final int row=0x7f030036;
+        public static final int sherlock_spinner_dropdown_item=0x7f030037;
+        public static final int sherlock_spinner_item=0x7f030038;
+        public static final int slidingmenumain=0x7f030039;
     }
     public static final class menu {
         public static final int add_picture=0x7f0d0000;
@@ -1325,6 +1326,7 @@ containing a value of this type.
         public static final int search_results=0x7f0d000f;
         public static final int shopping_list=0x7f0d0010;
         public static final int tutorial=0x7f0d0011;
+        public static final int user_search_results=0x7f0d0012;
     }
     public static final class string {
         public static final int InventoryAddTitle=0x7f0a0040;
@@ -1482,6 +1484,7 @@ containing a value of this type.
         public static final int title_activity_settings=0x7f0a006e;
         public static final int title_activity_shopping_list=0x7f0a0015;
         public static final int title_activity_tutorial=0x7f0a0010;
+        public static final int title_activity_user_search_results_fragment=0x7f0a0061;
         public static final int title_favorited=0x7f0a0056;
         public static final int title_recent=0x7f0a0055;
         public static final int title_recommended=0x7f0a0054;

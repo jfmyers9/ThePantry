@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -183,11 +184,18 @@ public class RecipeActivity extends BasicMenuActivity {
 	*/
 	public void toggleFavorites(View v) {
 		// update recipe table of database so favorited column is yes/no
+		Toast toast;
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		// need to add recipe to database if not already in it
 		dm.addStorage(ThePantryContract.Recipe.TABLE_NAME, recipe);
 		faved = !faved;
 		dm.check(ThePantryContract.Recipe.TABLE_NAME, recipe.id, ThePantryContract.Recipe.FAVORITE, faved);
+		if (faved) {
+			toast = Toast.makeText(this, "This recipe has been added to your favorites!", Toast.LENGTH_SHORT);
+		} else {
+			toast = Toast.makeText(this, "This recipe has been removed from your favorites!", Toast.LENGTH_SHORT);
+		}
+		toast.show();
 		setStarButton(faved);
 		dm.close();
 	}
@@ -199,11 +207,18 @@ public class RecipeActivity extends BasicMenuActivity {
 	 */
 	public void toggleCooked(View v) {
 		// update recipe table of database so cooked column is true
+		Toast toast;
 		dm = new DatabaseModel(this, DATABASE_NAME);
 		// need to add recipe if not already in database
 		dm.addStorage(ThePantryContract.Recipe.TABLE_NAME, recipe);
 		cooked = !cooked;
 		dm.check(ThePantryContract.Recipe.TABLE_NAME, recipe.id, ThePantryContract.Recipe.COOKED, cooked);
+		if (cooked) {
+			toast = Toast.makeText(this, "You have cooked this recipe!", Toast.LENGTH_SHORT);
+		} else {
+			toast = Toast.makeText(this, "You haven't cooked this recipe before!", Toast.LENGTH_SHORT);
+		}
+		toast.show();
 		setCheckButton(cooked);
 		dm.close();
 	}
