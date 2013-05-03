@@ -33,6 +33,7 @@ import cs169.project.thepantry.ThePantryContract.ShoppingList;
 public class RecipeActivity extends BasicMenuActivity {
 	
 	Recipe recipe;
+	String type;
 	
 	SmartImageView picture;
 	TextView name;
@@ -58,6 +59,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		//Get bundle with recipe information.
 		//Intent i = this.getIntent();
 		recipe = (Recipe)getIntent().getExtras().getSerializable("result");
+		type = getIntent().getExtras().getString("type");
 		
 		//Display recipe picture if there is one.
 		picture = (SmartImageView)findViewById(R.id.recipePic);
@@ -83,34 +85,41 @@ public class RecipeActivity extends BasicMenuActivity {
 		} else {
 			new ParseDirectionsTask().execute(recipe.source.sourceRecipeUrl);
 		}
+
+		Button source = (Button)findViewById(R.id.source);
+		
+		star = (ImageButton)findViewById(R.id.favorite);
+		check = (ImageButton)findViewById(R.id.cooked);
 		
 		//display the source and link to the web page source, open in a webview inside the app if clicked
-		Button source = (Button)findViewById(R.id.source);
-		if (recipe.source != null) {
-			source.setText("Source: " + recipe.source.sourceDisplayName);
-			source.setOnClickListener(new OnClickListener() {
-		        @Override
-		        public void onClick(View view) {
-		            displayWebpage(recipe.source.sourceRecipeUrl);
-		        }
-		    });
+		if (type.equals("cookbook")) {
+			source.setVisibility(View.GONE);
+			star.setVisibility(View.GONE);
+			check.setVisibility(View.GONE);
+		} else {
+			if (recipe.source != null) {
+				source.setText("Source: " + recipe.source.sourceDisplayName);
+				source.setOnClickListener(new OnClickListener() {
+			        @Override
+			        public void onClick(View view) {
+			            displayWebpage(recipe.source.sourceRecipeUrl);
+			        }
+			    });
+			}
+			dm = new DatabaseModel(this, DATABASE_NAME);
+			// check if recipe is in database and get favorite and cooked values true or false
+			faved = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, recipe.id, ThePantryContract.Recipe.FAVORITE);
+			cooked = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, recipe.id, ThePantryContract.Recipe.COOKED);
+			
+			//set favorite button to grayscale or colored image based on state in db
+			//check if recipe in database or if not favorited
+			setStarButton(faved);
+			
+			//set cooked button to grayscale or colored image based on state in db
+			//check if recipe is in db or not cooked
+			setCheckButton(cooked);
+			dm.close();
 		}
-		
-		dm = new DatabaseModel(this, DATABASE_NAME);
-		// check if recipe is in database and get favorite and cooked values true or false
-		faved = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, recipe.id, ThePantryContract.Recipe.FAVORITE);
-		cooked = dm.isItemChecked(ThePantryContract.Recipe.TABLE_NAME, recipe.id, ThePantryContract.Recipe.COOKED);
-		
-		//set favorite button to grayscale or colored image based on state in db
-		//check if recipe in database or if not favorited
-		star = (ImageButton)findViewById(R.id.favorite);
-		setStarButton(faved);
-		
-		//set cooked button to grayscale or colored image based on state in db
-		//check if recipe is in db or not cooked
-		check = (ImageButton)findViewById(R.id.cooked);
-		setCheckButton(cooked);
-		dm.close();
 		
 	}
 	
