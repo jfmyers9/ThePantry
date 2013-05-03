@@ -6,6 +6,13 @@
           android:showAsAction="ifRoom|collapseActionView"
           android:actionViewClass="com.actionbarsherlock.widget.SearchView" />
     
+    <item android:id="@+id/menu_refresh"
+          android:title="@string/refresh"
+          android:icon="@drawable/ic_action_refresh"
+          android:showAsAction="ifRoom|collapseActionView"
+          android:onClick="refreshclick"
+        />
+    
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

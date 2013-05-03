@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -13,6 +14,7 @@ import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.ActionBar.TabListener;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 
@@ -101,6 +103,12 @@ public class HomePageActivity extends BasicMenuActivity implements TabListener, 
 	    searchView.setQueryHint("Search by recipe, ingredient...");
 
 	    return true;
+	}
+	
+	// set up refresh button
+	public boolean refreshclick(MenuItem item) {
+		recs.refreshRecs();
+		return true;
 	}
 	
 	@Override
