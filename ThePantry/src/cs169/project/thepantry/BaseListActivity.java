@@ -77,7 +77,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 
 	public boolean onQueryTextSubmit(String query) {
 		String message;
-		if(dm.findItem(table, query)) {
+		if(dm.findItem(table, query) && !dm.isItemChecked(table, query, ThePantryContract.REMOVEFLAG)) {
 			// TODO: Make this popup window to increment amount
 			message = "You already have this item";
 			Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
