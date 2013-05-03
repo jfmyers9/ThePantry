@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -66,12 +67,18 @@ public class AddRecipeActivity extends Activity {
 		
 		SharedPreferences shared_pref = PreferenceManager.getDefaultSharedPreferences(this);
 		login_status = shared_pref.getString(LOGGED_IN, null);
+		ib = (ImageButton) findViewById(R.id.add_recipe_picture_button);
+		s3Client = new AmazonS3Client( new BasicAWSCredentials( MY_ACCESS_KEY_ID, MY_SECRET_KEY ) );
 		if (login_status == null) {
 			Intent intent = new Intent(this, LoginActivity.class);
 			startActivity(intent);
 		}
-		ib = (ImageButton) findViewById(R.id.add_recipe_picture_button);
-		s3Client = new AmazonS3Client( new BasicAWSCredentials( MY_ACCESS_KEY_ID, MY_SECRET_KEY ) );
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		super.finish();
 	}
 
 	@Override

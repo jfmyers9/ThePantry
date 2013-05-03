@@ -61,22 +61,8 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	    			//youHave += values.get(position).ingredients.get(i) + ", ";
 	    			havenum++;
 	    		}
-	    		else {
-	    			//youNeed += values.get(position).ingredients.get(i) + ", ";
-	    		}
 	    	}
 	    	
-	    	//take off trailing commas, or recognize that there are no items
-	    	/*if (youHave.length() > 0) {
-	    		youHave = youHave.substring(0, youHave.length()-2);
-	    	} else {
-	    		youHave = "nothing useful..";
-	    	}
-	    	if (youNeed.length() > 0) {
-	    		youNeed = youNeed.substring(0, youNeed.length()-2);
-	    	} else {
-	    		youNeed = "nothing more..";
-	    	}*/
 	    	listItem.setTag(values.get(position).id);
 	    
 		    // set the title of the result item
