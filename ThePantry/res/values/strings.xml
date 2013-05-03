@@ -100,4 +100,8 @@
     <string name="no_items"> You have not selected any items</string>
     <string name="recerror">Recommendations unavailable.\nYou may be offline.</string>
     <string name="refresh">Refresh</string>
+    <string name="loginerror">You gotta login you dingus!</string>
+    <string name="title_activity_user_search_results_fragment">Jim Sucks</string>
+    <string name="dialog_go_to_shopping">Add and go to shopping list</string>
+    <string name="dialog_add_and_return">Add and return to recipe</string>
 </resources>

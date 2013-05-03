@@ -39,7 +39,7 @@ public class SearchResultsActivity extends BasicMenuActivity implements TabListe
 	
 	// fragments for the 2 results - Yummly and User
 	SearchResultsFragment searchresults;
-	UserSearchResultsFragment userresults;
+	//UserSearchResultsFragment userresults;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,9 +53,9 @@ public class SearchResultsActivity extends BasicMenuActivity implements TabListe
 		// set up fragments
 		ArrayList<Fragment> frags = new ArrayList<Fragment>();
 		searchresults = new SearchResultsFragment();
-		userresults = new UserSearchResultsFragment();
+		//userresults = new UserSearchResultsFragment();
 		frags.add(searchresults);
-		frags.add(userresults);
+		//frags.add(userresults);
 		
 		// Set up the action bar 
 		final ActionBar actionBar = getSupportActionBar();
@@ -126,7 +126,7 @@ public class SearchResultsActivity extends BasicMenuActivity implements TabListe
 		// for storing recent queries
 		searchresults.new SearchTask(getBaseContext(), "search").execute(searchcriteria);
 		if (login_status != null) {
-			userresults.new SearchTask(getBaseContext(), login_status).execute(query);
+			//userresults.new SearchTask(getBaseContext(), login_status).execute(query);
 		}
 		return true;
 	}

@@ -186,6 +186,9 @@ public class LoginActivity extends Activity {
 			showProgress(true);
 	    	String user = mEmail;
 	    	String password = mPassword;
+			SharedPreferences.Editor editor = logged_in.edit();
+			editor.putString("username", mEmail.split("@")[0]);
+			editor.commit();
 	    	JSONObject obj = new JSONObject();
 	    	try {
 	    		JSONObject userObj = new JSONObject();
@@ -299,7 +302,6 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 					if (logged_in.getString(LOGGED_IN, null) == null) {
 						SharedPreferences.Editor editor = logged_in.edit();
 						editor.putString(LOGGED_IN, auth_token);
-						editor.putString("username", "haha");
 						editor.commit();
 					} else {
 						Context context = getApplicationContext();
