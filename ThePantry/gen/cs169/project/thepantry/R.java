@@ -1118,13 +1118,9 @@ containing a value of this type.
         public static final int abs__title=0x7f050020;
         public static final int abs__titleDivider=0x7f050021;
         public static final int abs__up=0x7f05000b;
-        public static final int action_forgot_password=0x7f050095;
-        public static final int action_new_recipe=0x7f050094;
-<<<<<<< HEAD
+        public static final int action_forgot_password=0x7f050096;
+        public static final int action_new_recipe=0x7f050095;
         public static final int action_settings=0x7f050092;
-=======
-        public static final int action_settings=0x7f050091;
->>>>>>> b712d1d653e72b0de7707ead341c9ca97c006ad0
         public static final int add_ingredient_title=0x7f05003b;
         public static final int add_instruction_title=0x7f050040;
         public static final int add_recipe_picture_button=0x7f050039;
@@ -1174,16 +1170,10 @@ containing a value of this type.
         public static final int login_status_message=0x7f050058;
         public static final int main=0x7f050064;
         public static final int margin=0x7f050012;
-<<<<<<< HEAD
         public static final int matchList=0x7f05008d;
+        public static final int menu_add=0x7f050094;
         public static final int menu_frame=0x7f05008c;
         public static final int menu_search=0x7f050093;
-=======
-        public static final int matchList=0x7f05008c;
-        public static final int menu_add=0x7f050093;
-        public static final int menu_frame=0x7f05008b;
-        public static final int menu_search=0x7f050092;
->>>>>>> b712d1d653e72b0de7707ead341c9ca97c006ad0
         public static final int more_ing_button=0x7f05003f;
         public static final int normal=0x7f050001;
         public static final int number=0x7f050083;
@@ -1223,27 +1213,16 @@ containing a value of this type.
         public static final int tabMode=0x7f050003;
         public static final int textView=0x7f050080;
         public static final int textView1=0x7f05004d;
-<<<<<<< HEAD
         public static final int title=0x7f050087;
-=======
-        public static final int title=0x7f050086;
->>>>>>> b712d1d653e72b0de7707ead341c9ca97c006ad0
-        public static final int title_activity_home_page=0x7f050096;
-        public static final int title_activity_inventory=0x7f050097;
-        public static final int title_activity_login=0x7f050098;
-        public static final int title_activity_logout=0x7f050099;
-        public static final int title_activity_register=0x7f05009a;
-<<<<<<< HEAD
+        public static final int title_activity_home_page=0x7f050097;
+        public static final int title_activity_inventory=0x7f050098;
+        public static final int title_activity_login=0x7f050099;
+        public static final int title_activity_logout=0x7f05009a;
+        public static final int title_activity_register=0x7f05009b;
         public static final int title_you_have=0x7f050088;
         public static final int title_you_need=0x7f05008a;
         public static final int update_button=0x7f050053;
         public static final int update_inventory_button=0x7f050076;
-=======
-        public static final int title_you_have=0x7f050087;
-        public static final int title_you_need=0x7f050089;
-        public static final int update_button=0x7f050052;
-        public static final int update_inventory_button=0x7f050075;
->>>>>>> b712d1d653e72b0de7707ead341c9ca97c006ad0
         public static final int useLogo=0x7f050004;
         public static final int user_allergic=0x7f050061;
         public static final int user_cook_history=0x7f050063;
