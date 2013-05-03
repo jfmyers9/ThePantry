@@ -2,8 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:layout_marginLeft="5dip"
-    android:layout_marginRight = "5dip">
+    android:listSelector="@null" >
     
 <FrameLayout
   android:layout_width="wrap_content"
@@ -15,6 +14,7 @@
   android:layout_width="180sp"
   android:layout_height="180sp"
   android:scaleType="fitCenter"
+  android:listSelector="@null"
   android:background="@drawable/border"
   />
     
@@ -22,6 +22,7 @@
   android:id = "@+id/check"
   android:layout_width="70sp"
   android:layout_height="70sp"
+   android:listSelector="@null" 
   android:layout_alignParentBottom="true"
   android:layout_alignParentRight="true"
   />
@@ -33,6 +34,7 @@
   android:layout_height="wrap_content"
   android:gravity="left"
   android:textSize="17sp"
+   android:listSelector="@null" 
   android:layout_alignBottom="@+id/image"
   />
   

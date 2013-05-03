@@ -65,7 +65,6 @@ public class ImageAdapter extends BaseAdapter {
         	int img = mContext.getResources().getIdentifier(image,"drawable", mContext.getPackageName());
         	imageView.setImageResource(img);
         }
-        
         check = (ImageView)row.findViewById(R.id.check);
         if(ingredients.get(position).isSelected()) {
         	check.setImageResource(R.drawable.check_on);
