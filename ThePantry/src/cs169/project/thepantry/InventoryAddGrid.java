@@ -2,6 +2,8 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -97,10 +99,13 @@ public class InventoryAddGrid extends BaseListActivity {
 				if (child.isSelected()) {
 					dm = new DatabaseModel(InventoryAddGrid.this, DATABASE_NAME);
 					dm.check(table, child.getName(), ThePantryContract.CHECKED, true);
+					Toast.makeText(InventoryAddGrid.this, WordUtils.capitalizeFully(displayChildren.get(position).getName()) + " added to your pantry", Toast.LENGTH_SHORT).show();
 					boolean success = dm.addIngredient(Inventory.TABLE_NAME, child.getName(), child.getGroup(),"1");
 				} else {
 					dm.check(table, child.getName(), ThePantryContract.CHECKED, false);
+					Toast.makeText(InventoryAddGrid.this, WordUtils.capitalizeFully(displayChildren.get(position).getName()) + " removed from your pantry", Toast.LENGTH_SHORT).show();
 				}
+				imgAdapter.notifyDataSetChanged();
 				dm.close();
 				
 				//Toast.makeText(InventoryAddGrid.this, "" + displayChildren.get(position).getName(), Toast.LENGTH_SHORT).show();

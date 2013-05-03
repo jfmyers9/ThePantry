@@ -2,25 +2,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:layout_marginLeft="5dip"
-    android:layout_marginRight = "5dip">
-
-    <ImageView
+    android:listSelector="@null" >
+    
+<FrameLayout
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
+  
+  <ImageView
   android:id = "@+id/image"
   android:adjustViewBounds="true"
   android:layout_width="180sp"
   android:layout_height="180sp"
-  android:layout_gravity="center_horizontal|bottom"
   android:scaleType="fitCenter"
-  android:paddingTop="8dip"
-  android:background="#000000"
+  android:listSelector="@null"
+  android:background="@drawable/border"
   />
+    
+  <ImageView
+  android:id = "@+id/check"
+  android:layout_width="70sp"
+  android:layout_height="70sp"
+   android:listSelector="@null" 
+  android:layout_alignParentBottom="true"
+  android:layout_alignParentRight="true"
+  />
+  </FrameLayout>
    
   <TextView
   android:id = "@+id/image_name"
   android:layout_width = "fill_parent"             
   android:layout_height="wrap_content"
-  android:gravity="center_horizontal"
+  android:gravity="left"
+  android:textSize="17sp"
+   android:listSelector="@null" 
+  android:layout_alignBottom="@+id/image"
   />
   
 
