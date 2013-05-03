@@ -60,7 +60,7 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		}
 		notifyDataSetChanged();
 		dm = new DatabaseModel(context, DATABASE_NAME);
-		if (table == Inventory.TABLE_NAME) {
+		if (table != Inventory.TABLE_NAME) { //TODO: CHANGE OR SOMETHING VISCO SAID
 			dm.check(Ingredients.TABLE_NAME, child.getName(), ThePantryContract.CHECKED, false);
 		}
 		if (table != Ingredients.TABLE_NAME) {

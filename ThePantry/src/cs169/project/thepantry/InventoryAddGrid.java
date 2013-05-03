@@ -125,15 +125,6 @@ public class InventoryAddGrid extends BaseListActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private IngredientGroup find(ArrayList<IngredientGroup> groups, String groupName) {
-		for (IngredientGroup group : groups) {
-			if (group.equals(groupName)) {
-				return group;
-			}
-		}
-		return null;
-	}
-	
 	private IngredientChild find(ArrayList<IngredientChild> children, IngredientChild childFind) {
 		for (IngredientChild child : children) {
 			if (child.equals(childFind)) {

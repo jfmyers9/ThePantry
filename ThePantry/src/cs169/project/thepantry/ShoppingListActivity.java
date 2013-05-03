@@ -3,8 +3,6 @@ package cs169.project.thepantry;
 import java.util.ArrayList;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.SearchView;
 
@@ -41,10 +39,6 @@ public class ShoppingListActivity extends BaseListActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getSupportMenuInflater().inflate(R.menu.shopping_list, menu);
 		return true;
-	}
-
-	public void removeChecked(View v) {
-		
 	}
 
 }
