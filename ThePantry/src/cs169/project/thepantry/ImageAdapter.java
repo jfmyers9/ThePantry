@@ -4,11 +4,14 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.text.WordUtils;
 
+import cs169.project.thepantry.R.color;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -52,10 +55,10 @@ public class ImageAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         
         View row=inflater.inflate(R.layout.row, parent, false);
-        
+
         TextView label=(TextView)row.findViewById(R.id.image_name);
         label.setText(WordUtils.capitalizeFully(ingredients.get(position).getName()));
-        
+
         imageView=(ImageView)row.findViewById(R.id.image);
         String image = ingredients.get(position).getImage();
         if (image.equals("default")) {

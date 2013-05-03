@@ -1,8 +1,32 @@
-<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/inventoryGrid"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:id="@+id/gridScroll"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+<LinearLayout
+    android:id="@+id/gridLinear"
+    android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".InventoryAddGrid" >
+
+    <TextView
+  android:id = "@+id/common"
+  android:layout_width = "fill_parent"             
+  android:layout_height="wrap_content"
+  android:gravity="center"
+  android:textSize="30sp"
+  android:textStyle="bold"
+  android:listSelector="@null" 
+  />
+    
+<cs169.project.thepantry.ExpandableHeightGridView     
+    android:id="@+id/inventoryGrid"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
     android:columnWidth="90dp"
     android:numColumns="3"
     android:padding="8dp"
@@ -11,4 +35,43 @@
     android:horizontalSpacing="10dp"
     android:stretchMode="columnWidth"
     android:gravity="center"
-    tools:context=".InventoryAddGrid"  />
+    />
+
+<View
+     android:id="@+id/divider"
+    android:layout_width="fill_parent"
+    android:layout_height="3dp"
+    android:layout_weight="0"
+    android:layout_marginTop="7dp"
+    android:layout_marginBottom="7dp"
+    android:layout_alignBottom="@+id/inventoryGrid"
+    android:background="@color/grey"
+    android:gravity="center"
+/>
+
+<TextView
+  android:id = "@+id/alpha"
+  android:layout_width = "fill_parent"             
+  android:layout_height="wrap_content"
+  android:gravity="center"
+  android:textSize="30sp"
+  android:textStyle="bold"
+  android:listSelector="@null" 
+  />
+
+<cs169.project.thepantry.ExpandableHeightGridView
+    android:id="@+id/inventoryGridAlpha"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="10"
+    android:columnWidth="90dp"
+    android:numColumns="3"
+    android:padding="8dp"
+    android:listSelector="@android:color/transparent"
+    android:verticalSpacing="10dp"
+    android:horizontalSpacing="10dp"
+    android:stretchMode="columnWidth"
+    android:gravity="center"
+    />
+</LinearLayout>
+</ScrollView>
