@@ -128,15 +128,6 @@ public class InventoryAddGrid extends BaseListActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private IngredientGroup find(ArrayList<IngredientGroup> groups, String groupName) {
-		for (IngredientGroup group : groups) {
-			if (group.equals(groupName)) {
-				return group;
-			}
-		}
-		return null;
-	}
-	
 	private IngredientChild find(ArrayList<IngredientChild> children, IngredientChild childFind) {
 		for (IngredientChild child : children) {
 			if (child.equals(childFind)) {
@@ -202,7 +193,7 @@ public class InventoryAddGrid extends BaseListActivity {
 				if (!recentAdds.contains(child)) {
 					RemoveDialogFragment dialog = new RemoveDialogFragment();
 					dialog.context = context;
-					String message = "Are you sure you want to removec" + childName + " from your pantry?";
+					String message = "Are you sure you want to remove " + childName + " from your pantry?";
 					dialog.message = message;
 					dialog.child = child;
 					dialog.imageAdapter = imageAdapter;

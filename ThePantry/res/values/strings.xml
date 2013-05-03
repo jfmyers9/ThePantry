@@ -111,4 +111,6 @@
     <string name="add_ing_to_shopping">Add something to your shopping list...</string>
     <string name="inv_find">Looking for something?</string>
     <string name="remove_checked_button">Remove Checked</string>
+    <string name="dialog_remove_items">Remove items?</string>
+    <string name="yes">Yes</string>
 </resources>

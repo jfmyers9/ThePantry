@@ -24,7 +24,7 @@ import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class BaseListAdapter extends BaseExpandableListAdapter {
 	
-	private ArrayList<IngredientGroup> groups;
+	public ArrayList<IngredientGroup> groups;
 	private Context context;
 	private String table;
 	private DatabaseModel dm;
@@ -53,6 +53,12 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		// Pop up a window to ask if user wants to remove item
 		
 		int index = groups.indexOf(group);
+		for (IngredientGroup g : groups) {
+			System.out.println(g.getGroup());
+			System.out.println(group.getGroup());
+			System.out.println(g.equals(group));
+		}
+		System.out.println("looking for " + group.getGroup());
 		ArrayList<IngredientChild> children = groups.get(index).getChildren();
 		children.remove(child);
 		if (children.size() <= 0) {
@@ -66,6 +72,7 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		} else {
 			dm.remove(table, child.getName());
 		}
+		dm.close();
 	}
 
 	@Override

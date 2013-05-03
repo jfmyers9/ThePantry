@@ -85,11 +85,12 @@ public class ThePantryContract {
 	    public static final String TABLE_NAME = "inventory";
 	    
 	    // DATABASE COLUMN INDEXS
-	    public static final int REMOVEFLAGIND = 0;
-	    public static final int ADDFLAGIND = 1;
-	    public static final int ITEMIND = 2;
-	    public static final int TYPEIND = 3;
-	    public static final int AMOUNTIND = 4;
+	    public static final int CHECKEDIND = 0;
+	    public static final int REMOVEFLAGIND = 1;
+	    public static final int ADDFLAGIND = 2;
+	    public static final int ITEMIND = 3;
+	    public static final int TYPEIND = 4;
+	    public static final int AMOUNTIND = 5;
 	}
 	
 	/** Inner class that defines the Recipe table */

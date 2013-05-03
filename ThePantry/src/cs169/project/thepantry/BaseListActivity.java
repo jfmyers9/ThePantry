@@ -2,7 +2,6 @@ package cs169.project.thepantry;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -13,10 +12,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
@@ -33,7 +29,7 @@ import cs169.project.thepantry.ThePantryContract.ShoppingList;
 
 public abstract class BaseListActivity extends BasicMenuActivity implements SearchView.OnQueryTextListener {
 
-	public DatabaseModel dm;
+	public static DatabaseModel dm;
 	public ExpandableListView eView;
 	public ListView lView;
 	BaseListAdapter eAdapter;
@@ -41,12 +37,14 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	public static String table;
 	public static final String DATABASE_NAME = "thepantry";
 	public static ArrayList<IngredientGroup> groupItems;
-	public ArrayList<String> groupNames;
+	public static ArrayList<String> groupNames;
 	public static ArrayList<IngredientChild> children;
 	public SearchView mSearchView;
+	public static Context context;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		context = getApplicationContext();
 		super.onCreate(savedInstanceState);
 	}
 
@@ -64,13 +62,22 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		mSearchView.setSubmitButtonEnabled(true);
 	}
 	
+	public static IngredientGroup find(ArrayList<IngredientGroup> groups, String groupName) {
+		for (IngredientGroup group : groups) {
+			if (group.equals(groupName)) {
+				return group;
+			}
+		}
+		return null;
+	}
+	
 	public boolean onQueryTextChange(String newText) {
 		return false;
 	}
 
 	public boolean onQueryTextSubmit(String query) {
 		String message;
-		if(dm.findItem(table, query)) {
+		if(dm.findItem(table, query) && !dm.isItemChecked(table, query, ThePantryContract.REMOVEFLAG)) {
 			// TODO: Make this popup window to increment amount
 			message = "You already have this item";
 			Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
@@ -98,8 +105,14 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		}
 	}
 	
+	public static void resetChildren() {
+		DatabaseModel dm = new DatabaseModel(context, ThePantryContract.DATABASE_NAME);
+		children = dm.findAllItems(table);
+	}
+	
 	/** Fills the arrays with database data. */
-	public void fillArrays() {
+	public static void fillArrays() {
+		children = new ArrayList<IngredientChild>();
 		groupItems = getTypes(table);
 		for (IngredientGroup g : groupItems) {
 			groupNames.add(g.getGroup());
@@ -127,8 +140,8 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	};
 	
 	// sets if a child is marked as checked
-	public void setChecked() {
-		dm = new DatabaseModel(this, DATABASE_NAME);
+	public static void setChecked() {
+		dm = new DatabaseModel(context, DATABASE_NAME);
 		for (IngredientChild child : children) {
 			boolean checked = dm.isItemChecked(table, child.getName(), ThePantryContract.CHECKED);
 			child.setSelected(checked);
@@ -137,8 +150,8 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	}
 	
 	// Sets the common and image field for each child 
-	public void setCommImg() {
-		dm = new DatabaseModel(this, DATABASE_NAME);
+	public static void setCommImg() {
+		dm = new DatabaseModel(context, DATABASE_NAME);
 		for (IngredientChild child : children) {
 			String childName = child.getName();
 			boolean checked = dm.isItemChecked(table, childName, ThePantryContract.Ingredients.COMMON);
@@ -150,8 +163,8 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	
 	/** Retrieves ingredient types from the database and
 	 *  returns an ArrayList with said types to be used for display */
-	public ArrayList<IngredientGroup> getTypes(String table) {
-		dm = new DatabaseModel(this, DATABASE_NAME);
+	public static ArrayList<IngredientGroup> getTypes(String table) {
+		dm = new DatabaseModel(context, DATABASE_NAME);
 		ArrayList<IngredientGroup> types = dm.findAllTypes(table);
 		dm.close();
 		return types;
@@ -159,8 +172,8 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	
 	/** Retrieves ingredients from the database and
 	 *  returns an ArrayList with the ingredients to be used for display */
-	public ArrayList<IngredientChild> getItems(String table, String type) {
-		dm = new DatabaseModel(this, DATABASE_NAME);
+	public static ArrayList<IngredientChild> getItems(String table, String type) {
+		dm = new DatabaseModel(context, DATABASE_NAME);
 		ArrayList<IngredientChild> items = dm.findTypeItems(table, type);
 		dm.close();
 		children.addAll(items);
@@ -202,13 +215,27 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	
 	/** Removes the given item from the database and list 
 	 * @throws ThePantryException */
-	public void removeItem(String table, String item) throws ThePantryException {
-		dm = new DatabaseModel(this, DATABASE_NAME);
-		boolean success = dm.remove(table, item);
-		if (!success) {
-			//throw new ThePantryException(item + " could not be removed from database");
+	public void removeChecked(View v) throws ThePantryException {
+		String message = "";
+		for (IngredientChild c : children) {
+			if (c.isSelected()) {
+				message += c.getName() + "\n";
+			}
 		}
-		dm.close();
+		// Opens pop up window with items being removed
+		if (message.equals("")) {
+			message = "You have not selected any items";
+			Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+			toast.show();
+		} else {
+			RemoveIngredientsDialogFragment dialog = new RemoveIngredientsDialogFragment();
+			dialog.context = this;
+			dialog.message = message;
+			dialog.table = table;
+			dialog.eAdapter = eAdapter;
+			dialog.lAdapter = lAdapter;
+			dialog.show(getFragmentManager(), "dialog");
+		}
 	}
 	
 	/** Adds all items to inventory database that have been checked 
@@ -225,7 +252,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 				dm.check(table, c.getName(), ThePantryContract.CHECKED, false);
 				if (table.equals(ShoppingList.TABLE_NAME)) {
 					dm.check(table, c.getName(), ThePantryContract.REMOVEFLAG, true);
-				} 
+				}
 				if (!success) {
 					// Pantry Exception instead
 					System.err.println("You Fucked Up");
@@ -340,6 +367,61 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	               		
 	                   }
 	               });
+	        // Create the AlertDialog object and return it
+	        return builder.create();
+	    }
+	}
+	
+	/* Class for displaying popup dialog for removing ingredients
+	 * 
+	 */
+	public static class RemoveIngredientsDialogFragment extends DialogFragment {
+		
+		Context context;
+		String message;
+		String[] types;
+		String item;
+		String table;
+		String selectedType;
+		BaseListViewAdapter lAdapter;
+		BaseListAdapter eAdapter;
+		DatabaseModel dm;
+		
+		private void removeItems() {
+			for (IngredientChild child : children) {
+				if (child.isSelected()) {
+					// If the shopping list "updates" the ingredients are removed from list
+					dm = new DatabaseModel(context, DATABASE_NAME);
+					dm.check(Ingredients.TABLE_NAME, child.getName(), ThePantryContract.CHECKED, false);
+					if (table != Ingredients.TABLE_NAME) {
+						dm.check(table, child.getName(), ThePantryContract.REMOVEFLAG, true);
+					} else {
+						dm.remove(table, child.getName());
+					}
+				}
+			}
+			fillArrays();
+			eAdapter.groups = groupItems;
+			//resetChildren();
+			eAdapter.notifyDataSetChanged();
+		}	
+		
+		@Override
+	    public Dialog onCreateDialog(Bundle savedInstanceState) {
+	        // Use the Builder class for convenient dialog construction
+	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        builder.setTitle(R.string.dialog_remove_items)
+	        	   .setMessage(message) 
+	        	   .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                	   removeItems();
+	                   }
+	               })
+	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	               	
+	                   }
+	        });
 	        // Create the AlertDialog object and return it
 	        return builder.create();
 	    }
