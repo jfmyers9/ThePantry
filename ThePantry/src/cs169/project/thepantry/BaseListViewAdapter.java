@@ -54,15 +54,10 @@ public class BaseListViewAdapter extends BaseAdapter {
         ViewHolder holder = null;
         if (convertView == null) {
         	LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-        	if (table == Inventory.TABLE_NAME) {
-				convertView = infalInflater.inflate(R.layout.child_row_inventory, null);
-			} else {
-				convertView = infalInflater.inflate(R.layout.child_row, null);
-			}
+        	convertView = infalInflater.inflate(R.layout.child_row, null);
         }
         IngredientChild item = getItem(position);
         final ViewHolder childHolder;
-        if (table != Inventory.TABLE_NAME) {
         	childHolder = new ViewHolder((CheckBox)convertView.findViewById(R.id.checkBox1), item.isSelected());
         	childHolder.cb.setText(item.getName());
         	convertView.setOnClickListener(new OnClickListener (){
@@ -75,10 +70,6 @@ public class BaseListViewAdapter extends BaseAdapter {
 					dm.check(table, item.getName(), ThePantryContract.CHECKED, ((CheckBox)childHolder.cb).isChecked());
     			}
     		});
-        } else {
-        	childHolder = new ViewHolder((TextView)convertView.findViewById(R.id.textView));
-			childHolder.cb.setText(item.getName());
-        }	
         childHolder.cb.setTag(item);
         
         return convertView;

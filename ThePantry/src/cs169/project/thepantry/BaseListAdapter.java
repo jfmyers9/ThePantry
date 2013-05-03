@@ -60,9 +60,7 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		}
 		notifyDataSetChanged();
 		dm = new DatabaseModel(context, DATABASE_NAME);
-		if (table == Inventory.TABLE_NAME) {
-			dm.check(Ingredients.TABLE_NAME, child.getName(), ThePantryContract.CHECKED, false);
-		}
+		dm.check(Ingredients.TABLE_NAME, child.getName(), ThePantryContract.CHECKED, false);
 		if (table != Ingredients.TABLE_NAME) {
 			dm.check(table, child.getName(), ThePantryContract.REMOVEFLAG, true);
 		} else {
@@ -87,56 +85,26 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		if (convertView == null) {
 			dm = new DatabaseModel(context, DATABASE_NAME);
 			LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-			if (table == Inventory.TABLE_NAME) {
-				convertView = infalInflater.inflate(R.layout.child_row_inventory, null);
-			} else {
-				convertView = infalInflater.inflate(R.layout.child_row, null);
-			}
+			convertView = infalInflater.inflate(R.layout.child_row, null);
 		}
 		IngredientChild child = getChild(groupPosition, childPosition);
 		final IngredientGroup group = getGroup(groupPosition);
 		final ViewHolder childHolder;
-		if (table != Inventory.TABLE_NAME) {
-			childHolder = new ViewHolder((CheckBox)convertView.findViewById(R.id.checkBox1), child.isSelected());
-		} else {
-			childHolder = new ViewHolder((TextView)convertView.findViewById(R.id.textView));
-		}
+		childHolder = new ViewHolder((CheckBox)convertView.findViewById(R.id.checkBox1), child.isSelected());
 		childHolder.cb.setText(WordUtils.capitalizeFully(child.getName()));
-		// Detects if a given item was swiped
-		final SwipeDetector swipeDetector = new SwipeDetector();
-		convertView.setOnTouchListener(swipeDetector);
 		
 		convertView.setOnClickListener(new OnClickListener (){
 			@Override
 			public void onClick(View v) {
 				IngredientChild child = (IngredientChild) childHolder.cb
 						.getTag();
-				if (swipeDetector.swipeDetected()) {
-					//showDialog(); // currently not working will display a box to ask user if they want to delete
-					//System.out.println(dm.isItemChecked(table, child.getName(), ThePantryContract.REMOVEFLAG));
-					removeChild(child, group);
-				} else if (table != Inventory.TABLE_NAME) {
-					((CheckBox)childHolder.cb).toggle();
-					child.setSelected(((CheckBox)childHolder.cb).isChecked());
-					dm.check(table, child.getName(), ThePantryContract.CHECKED, ((CheckBox)childHolder.cb).isChecked());
-				}
+				((CheckBox)childHolder.cb).toggle();
+				child.setSelected(((CheckBox)childHolder.cb).isChecked());
+				dm.check(table, child.getName(), ThePantryContract.CHECKED, ((CheckBox)childHolder.cb).isChecked());
 			}
 		});
 		childHolder.cb.setTag(child);
 		return convertView;
-	}
-	
-	public void showDialog(IngredientChild child, IngredientGroup group) {
-		AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
-		dialog.context = context;
-		dialog.message = child.getName();
-		dialog.child = child;
-		dialog.group = group;
-		dialog.adapter = currAdapt;
-		
-		// Figure out how to do FragmentManager in a class
-		//FragmentManager tmp = new FragmentManager();
-		//dialog.show(getFragmentManager(), "dialog");
 	}
 
 	@Override
@@ -194,35 +162,5 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 	    }
 	}
 	
-	/* Class for displaying popup dialog for adding ingredients
-	 * 
-	 */
-	public static class AddIngredientsDialogFragment extends DialogFragment {
-		
-		Context context;
-		String message;
-		BaseListAdapter adapter;
-		IngredientChild child;
-		IngredientGroup group;
-		
-	    @Override
-	    public Dialog onCreateDialog(Bundle savedInstanceState) {
-	        // Use the Builder class for convenient dialog construction
-	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	        builder.setTitle(R.string.delete_check + message + "?")
-	        	   .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-	                   public void onClick(DialogInterface dialog, int id) {
-	                	   adapter.removeChild(child, group); // pass in instance of baselist?
-	                   }
-	               })
-	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-	                   public void onClick(DialogInterface dialog, int id) {
-	                	   //Do Nothing
-	                   }
-	               });
-	        // Create the AlertDialog object and return it
-	        return builder.create();
-	    }
-	}
 	
 }
