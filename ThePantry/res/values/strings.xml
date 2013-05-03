@@ -19,8 +19,10 @@
     <string name="action_register">Sign Up</string>
     <string name="action_new_recipe">Add New Recipe</string>
     <string name="add_item">Add</string>
+    <string name="remove_item">Remove</string>
     <string name="ingredient_types">Ingredient Type</string>
     <string name="ingredient_update">Update Inventory</string>
+    <string name="ingredient_search">Add Your Own Item</string>
     <string name="edit">Edit</string>
     <string name="search">Search</string>
     <string name="ShoppingListTitle">Your Shopping List</string>
@@ -97,6 +99,8 @@
     <string name="title_you_have">You have: </string>
     <string name="title_you_need">You need: </string>
     <string name="no_items"> You have not selected any items</string>
+    <string name="common"> Common Ingredients</string>
+    <string name="alpha"> Other Ingredients </string>
     <string name="recerror">Recommendations unavailable.\nYou may be offline.</string>
     <string name="refresh">Refresh</string>
     <string name="loginerror">You gotta login you dingus!</string>

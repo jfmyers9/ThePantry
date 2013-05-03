@@ -2,8 +2,10 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -22,10 +24,13 @@ import cs169.project.thepantry.ThePantryContract.Inventory;
 
 
 public class InventoryActivity extends BaseListActivity {
-	
+	ProgressDialog progressDialog;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (progressDialog != null) {
+			progressDialog.dismiss();
+		}
 		setTitle(getString(R.string.InventoryTitle));
 		setContentView(R.layout.activity_inventory);
 		table = Inventory.TABLE_NAME;
@@ -71,40 +76,6 @@ public class InventoryActivity extends BaseListActivity {
 		}
 		return true;
 	}
-	
-	public boolean onQueryTextSubmit(String query) {
-		String message;
-		if(dm.findItem(table, query)) {
-			// TODO: Make this popup window to increment amount
-			message = "You already have this item";
-			Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
-			toast.show();
-			return true;
-		} else {
-			AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();
-		    ListView lv = new ListView(this);
-		    
-		    ArrayList<IngredientGroup> gTypes = getTypes(Ingredients.TABLE_NAME);
-		    ArrayList<String> types = new ArrayList<String>();
-		    for (IngredientGroup g : gTypes) {
-		    	types.add(g.getGroup());
-			}
-		    types.add("Other");
-		    
-		    ListAdapter listTypes = new ArrayAdapter<String>(this,
-		            android.R.layout.simple_list_item_checked, types);
-		    lv.setAdapter(listTypes);
-			
-			dialog.context = this;
-			dialog.message = "Select a category for " + query + ".";
-			dialog.types = types.toArray(new String[0]);
-			dialog.item = query;
-			dialog.content = lv;
-			dialog.show(getFragmentManager(), "dialog");
-			return true;
-		}
-	}
-	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -122,16 +93,13 @@ public class InventoryActivity extends BaseListActivity {
 
 	/** Takes you to InventoryAdd Activity */
 	public void edit(View view) {
-		Context context = getApplicationContext();
-		Intent intent = new Intent(context, InventoryAddActivity.class);
-		startActivity(intent);
-	}
-	
-	/** Takes you to InventoryAdd Activity */
-	public void editTwo(View view) {
+		progressDialog = new ProgressDialog(this);
+		progressDialog.setMessage("Loading Ingredients...");
+		progressDialog.show();
 		Context context = getApplicationContext();
 		Intent intent = new Intent(context, InventoryAddGrid.class);
 		startActivity(intent);
 	}
+	
 	
 }

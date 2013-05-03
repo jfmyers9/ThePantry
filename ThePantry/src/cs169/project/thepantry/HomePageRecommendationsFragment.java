@@ -98,6 +98,7 @@ public class HomePageRecommendationsFragment extends Fragment {
 	public void openRecipe(Recipe recipe) {
 		Intent intent = new Intent(getActivity(), RecipeActivity.class);
 		intent.putExtra("result", recipe);
+		intent.putExtra("type", "normal");
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);

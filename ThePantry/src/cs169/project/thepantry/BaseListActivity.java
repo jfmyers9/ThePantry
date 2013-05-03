@@ -2,6 +2,10 @@ package cs169.project.thepantry;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import org.apache.commons.lang3.text.WordUtils;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -32,12 +36,13 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	public DatabaseModel dm;
 	public ExpandableListView eView;
 	public ListView lView;
-	public BaseListAdapter eAdapter;
+	BaseListAdapter eAdapter;
+	BaseListViewAdapter lAdapter;
 	public static String table;
 	public static final String DATABASE_NAME = "thepantry";
 	public static ArrayList<IngredientGroup> groupItems;
 	public ArrayList<String> groupNames;
-	public ArrayList<IngredientChild> children;
+	public static ArrayList<IngredientChild> children;
 	public SearchView mSearchView;
 	
 	@Override
@@ -64,7 +69,33 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	}
 
 	public boolean onQueryTextSubmit(String query) {
-		return false;
+		String message;
+		if(dm.findItem(table, query)) {
+			// TODO: Make this popup window to increment amount
+			message = "You already have this item";
+			Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+			toast.show();
+			return true;
+		} else {
+			AddIngredientsDialogFragment dialog = new AddIngredientsDialogFragment();		    
+		    ArrayList<IngredientGroup> gTypes = getTypes(Ingredients.TABLE_NAME);
+		    ArrayList<String> types = new ArrayList<String>();
+		    for (IngredientGroup g : gTypes) {
+		    	types.add(WordUtils.capitalizeFully(g.getGroup()));
+			}
+		    
+			dialog.context = this;
+			dialog.message = "Select a category to add " + query + " to your pantry?";
+			dialog.types = types.toArray(new String[0]);
+			dialog.item = query;
+			dialog.eAdapter = eAdapter;
+			dialog.table = table;
+			if (table.equals(Inventory.TABLE_NAME)) {
+				dialog.lAdapter = lAdapter;
+			}
+			dialog.show(getFragmentManager(), "dialog");
+			return true;
+		}
 	}
 	
 	/** Fills the arrays with database data. */
@@ -80,7 +111,20 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		if (table != ThePantryContract.Inventory.TABLE_NAME) {
 			setChecked();
 		}
+		//Collections.sort(children, ALPHABETICAL_ORDER);
 	}
+	
+	public static Comparator<IngredientChild> ALPHABETICAL_ORDER = new Comparator<IngredientChild>() {
+	    public int compare(IngredientChild child1, IngredientChild child2) {
+	    	String str1 = child1.getName();
+	    	String str2 = child2.getName();
+	        int res = String.CASE_INSENSITIVE_ORDER.compare(str1, str2);
+	        if (res == 0) {
+	            res = str1.compareTo(str2);
+	        }
+	        return res;
+	    }
+	};
 	
 	// sets if a child is marked as checked
 	public void setChecked() {
@@ -144,7 +188,6 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		dialog.message = "Select a category for " + query + ".";
 		dialog.types = types.toArray(new String[0]);
 		dialog.item = query;
-		dialog.content = lv;
 		dialog.show(getFragmentManager(), "dialog");
 	}
 	
@@ -246,9 +289,33 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		String message;
 		String[] types;
 		String item;
-		String selectedType = "dairy";
-		ListView content;
+		String table;
+		String selectedType;
+		BaseListViewAdapter lAdapter;
+		BaseListAdapter eAdapter;
 		
+		private void addItem() {
+			DatabaseModel dm = new DatabaseModel(context, ThePantryContract.DATABASE_NAME);
+			if (selectedType == null) {
+				selectedType = types[0];
+			}
+			boolean success = dm.addIngredient(table, item, selectedType, "1");
+			IngredientGroup temp = new IngredientGroup(selectedType,new ArrayList<IngredientChild>());
+			if (success) {
+				IngredientChild child = new IngredientChild(item, selectedType);
+				children.add(child);
+				if (groupItems.contains(temp)) {
+					int groupPos = groupItems.indexOf(temp);
+					eAdapter.addChild(child, groupItems.get(groupPos));
+				} else {
+					eAdapter.addChild(child, temp);
+				}
+				eAdapter.notifyDataSetChanged();
+				if (table.equals(Inventory.TABLE_NAME)) {
+					lAdapter.addItem(child);
+				}
+			}
+		}		
 	    @Override
 	    public Dialog onCreateDialog(Bundle savedInstanceState) {
 	        // Use the Builder class for convenient dialog construction
@@ -258,31 +325,14 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	        			   new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						if (which == -1) {
-							selectedType = "other";
-						} else {
-							selectedType = types[which];
-						}
+						selectedType = types[which];
 					}
 	        	   })
 	        	   .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
 	                   public void onClick(DialogInterface dialog, int id) {
 	                	   // call context function
 	                	   // adds selected category to the database
-	               			DatabaseModel dm = new DatabaseModel(context, DATABASE_NAME);
-	                	    boolean success = dm.addIngredient(table, item, selectedType, "1");
-	                	    int groupPos = 0;
-	                		IngredientGroup temp = new IngredientGroup(selectedType,new ArrayList<IngredientChild>());
-	                		if (success) {
-	                			IngredientChild child = new IngredientChild(item, selectedType);
-	                			children.add(child);
-	                			if (groupItems.contains(temp)) {
-	                				groupPos = groupItems.indexOf(temp);
-	                				eAdapter.addChild(child, groupItems.get(groupPos));
-	                			} else {
-	                				eAdapter.addChild(child, temp);
-	                			}
-	                		}
+	                	   addItem();
 	                   }
 	               })
 	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {

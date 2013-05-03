@@ -42,16 +42,6 @@ public class ShoppingListActivity extends BaseListActivity {
 		getSupportMenuInflater().inflate(R.menu.shopping_list, menu);
 		return true;
 	}
-	
-	public boolean onQueryTextSubmit(String query) {
-		try {
-			addItem(table, query, this);
-			eAdapter.notifyDataSetChanged();
-			((BaseExpandableListAdapter)eView.getExpandableListAdapter()).notifyDataSetChanged();
-			mSearchView.setQuery("", false);
-		} catch (Exception e) {}
-		return true;
-	}
 
 	public void removeChecked(View v) {
 		
