@@ -97,4 +97,5 @@
     <string name="title_you_have">You have: </string>
     <string name="title_you_need">You need: </string>
     <string name="no_items"> You have not selected any items</string>
+    <string name="recerror">Recommendations unavailable.\nYou may be offline.</string>
 </resources>

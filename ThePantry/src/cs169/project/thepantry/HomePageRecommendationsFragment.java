@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class HomePageRecommendationsFragment extends Fragment {
@@ -31,6 +33,8 @@ public class HomePageRecommendationsFragment extends Fragment {
 	SearchModel sm = new SearchModel();
 	DatabaseModel dm;
 	FrameLayout mFrameOverlay;
+	FrameLayout mErrorOverlay;
+	RelativeLayout root;
 
 	public HomePageRecommendationsFragment() {
 	}
@@ -43,6 +47,8 @@ public class HomePageRecommendationsFragment extends Fragment {
 		recommendations = new ArrayList<SearchMatch>();
 		listView = (ListView) rootView.findViewById(R.id.matchList);
 		mFrameOverlay = (FrameLayout) rootView.findViewById(R.id.overlay);
+		mErrorOverlay = (FrameLayout) rootView.findViewById(R.id.erroroverlay);
+		root = (RelativeLayout) rootView.findViewById(R.id.recommendations);
 		srAdapter = new SearchResultAdapter(getActivity(), recommendations);   
 		listView.setAdapter(srAdapter);
 		srAdapter.notifyDataSetChanged();
@@ -73,7 +79,7 @@ public class HomePageRecommendationsFragment extends Fragment {
 		if (((HomePageActivity)getActivity()).isOnline()) {
 			getRecommendations();
 		} else {
-			//TODO: display an "offline" message
+			mErrorOverlay.setVisibility(View.VISIBLE);
 		}
 		return rootView;
 	}
@@ -178,8 +184,12 @@ public class HomePageRecommendationsFragment extends Fragment {
 				if (this.type == "home") {
 					if (srAdapter.values.size() == 0) {
 						recommendations = ((SearchResult)result).matches;
-						srAdapter = new SearchResultAdapter(context, recommendations);   
-						listView.setAdapter(srAdapter);
+						if (recommendations.size() > 0) {
+							srAdapter = new SearchResultAdapter(context, recommendations);   
+							listView.setAdapter(srAdapter);
+						} else {
+							mErrorOverlay.setVisibility(View.VISIBLE);
+						}
 					} else {
 						srAdapter.values = ((SearchResult)result).matches; 
 						srAdapter.notifyDataSetChanged();
@@ -187,6 +197,8 @@ public class HomePageRecommendationsFragment extends Fragment {
 				} else if (this.type == "recipe") {
 					openRecipe((Recipe)result);
 				}
+			} else {
+				mErrorOverlay.setVisibility(View.VISIBLE);
 			}
 		}
 	}

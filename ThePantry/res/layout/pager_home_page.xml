@@ -32,6 +32,39 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|center"
             android:indeterminate="true" />
+    		
+    </FrameLayout>
+    
+    <FrameLayout
+        android:id="@+id/erroroverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:id="@+id/sadandrecs"
+            android:layout_width="match_parent"
+        	android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center|center">
+        
+        <ImageView
+            android:id="@+id/sadtaco"
+            android:layout_width="300dp"
+        	android:layout_height="300dp"
+        	android:src="@drawable/sadfood" 
+        	android:scaleType="fitXY"
+        	/>
+        
+        <TextView
+            android:text="@string/recerror"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:gravity="center"
+            />
+        
+        </LinearLayout>
     
     </FrameLayout>
     

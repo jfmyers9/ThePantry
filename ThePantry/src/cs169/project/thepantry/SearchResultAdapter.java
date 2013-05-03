@@ -97,9 +97,8 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 		    
 		    //load the image
 		    SmartImageView imageView = (SmartImageView) listItem.findViewById(R.id.image);
-		    if (values.get(position).smallImageUrl != null) { //might need an online check
-		    	imageView.setImageUrl(values.get(position).smallImageUrl);
-		    }
+		    //if (values.get(position).smallImageUrl != null) { //might need an online check
+		    imageView.setImageUrl(values.get(position).smallImageUrl, R.drawable.default_image);
 	    }   
 	    return listItem;
 	  }
