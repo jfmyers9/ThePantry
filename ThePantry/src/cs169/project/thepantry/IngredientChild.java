@@ -61,6 +61,9 @@ public class IngredientChild {
 		return common;
 	}
 	
+	public String toString() {
+		return name;
+	}
 	
 	
 	public boolean equals(Object o) {

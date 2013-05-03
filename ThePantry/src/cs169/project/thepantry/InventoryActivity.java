@@ -2,8 +2,10 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -16,10 +18,13 @@ import cs169.project.thepantry.ThePantryContract.Inventory;
 
 
 public class InventoryActivity extends BaseListActivity {
-	
+	ProgressDialog progressDialog;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (progressDialog != null) {
+			progressDialog.dismiss();
+		}
 		setTitle(getString(R.string.InventoryTitle));
 		setContentView(R.layout.activity_inventory);
 		table = Inventory.TABLE_NAME;
@@ -65,16 +70,13 @@ public class InventoryActivity extends BaseListActivity {
 
 	/** Takes you to InventoryAdd Activity */
 	public void edit(View view) {
-		Context context = getApplicationContext();
-		Intent intent = new Intent(context, InventoryAddActivity.class);
-		startActivity(intent);
-	}
-	
-	/** Takes you to InventoryAdd Activity */
-	public void editTwo(View view) {
+		progressDialog = new ProgressDialog(this);
+		progressDialog.setMessage("Loading Ingredients...");
+		progressDialog.show();
 		Context context = getApplicationContext();
 		Intent intent = new Intent(context, InventoryAddGrid.class);
 		startActivity(intent);
 	}
+	
 	
 }

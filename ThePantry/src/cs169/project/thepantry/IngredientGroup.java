@@ -15,7 +15,7 @@ public class IngredientGroup {
 	public IngredientGroup(String name, ArrayList<IngredientChild> children) {
 		this.name = name;
 		this.children = children;
-		Collections.sort(children, ALPHABETICAL_ORDER);
+		Collections.sort(this.children, ALPHABETICAL_ORDER);
 	}
 	
 	private static Comparator<IngredientChild> ALPHABETICAL_ORDER = new Comparator<IngredientChild>() {
@@ -44,6 +44,7 @@ public class IngredientGroup {
 	
 	public void setChildren(ArrayList<IngredientChild> children) {
 		this.children = children;
+		Collections.sort(this.children, ALPHABETICAL_ORDER);
 	}
 	
 	public boolean equals(Object o) {

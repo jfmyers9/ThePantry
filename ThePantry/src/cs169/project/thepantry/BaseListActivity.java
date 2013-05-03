@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -35,11 +37,12 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	public ExpandableListView eView;
 	public ListView lView;
 	BaseListAdapter eAdapter;
+	BaseListViewAdapter lAdapter;
 	public static String table;
 	public static final String DATABASE_NAME = "thepantry";
-	public ArrayList<IngredientGroup> groupItems;
+	public static ArrayList<IngredientGroup> groupItems;
 	public ArrayList<String> groupNames;
-	public ArrayList<IngredientChild> children;
+	public static ArrayList<IngredientChild> children;
 	public SearchView mSearchView;
 	
 	@Override
@@ -73,7 +76,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 					items.add(c);
 				}
 			}
-			BaseListViewAdapter lAdapter = new BaseListViewAdapter(this,  items, table);
+			lAdapter = new BaseListViewAdapter(this,  items, table);
 			lView.setAdapter(lAdapter);
 			eView.setVisibility(View.INVISIBLE);
 			lView.setVisibility(View.VISIBLE);
@@ -96,19 +99,18 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		    ArrayList<IngredientGroup> gTypes = getTypes(Ingredients.TABLE_NAME);
 		    ArrayList<String> types = new ArrayList<String>();
 		    for (IngredientGroup g : gTypes) {
-		    	types.add(g.getGroup());
+		    	types.add(WordUtils.capitalizeFully(g.getGroup()));
 			}
-		    types.add("Other");
 		    
-		    ListAdapter listTypes = new ArrayAdapter<String>(this,
-		            android.R.layout.simple_list_item_checked, types);
-		    lv.setAdapter(listTypes);
-			
 			dialog.context = this;
 			dialog.message = "Select a category to add " + query + " to your pantry?";
 			dialog.types = types.toArray(new String[0]);
 			dialog.item = query;
-			dialog.content = lv;
+			dialog.eAdapter = eAdapter;
+			dialog.table = table;
+			if (table.equals(Inventory.TABLE_NAME)) {
+				dialog.lAdapter = lAdapter;
+			}
 			dialog.show(getFragmentManager(), "dialog");
 			return true;
 		}
@@ -127,10 +129,10 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		if (table != ThePantryContract.Inventory.TABLE_NAME) {
 			setChecked();
 		}
-		Collections.sort(children, ALPHABETICAL_ORDER);
+		//Collections.sort(children, ALPHABETICAL_ORDER);
 	}
 	
-	private static Comparator<IngredientChild> ALPHABETICAL_ORDER = new Comparator<IngredientChild>() {
+	public static Comparator<IngredientChild> ALPHABETICAL_ORDER = new Comparator<IngredientChild>() {
 	    public int compare(IngredientChild child1, IngredientChild child2) {
 	    	String str1 = child1.getName();
 	    	String str2 = child2.getName();
@@ -303,8 +305,33 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		String message;
 		String[] types;
 		String item;
+		String table;
 		String selectedType;
-		ListView content;
+		BaseListViewAdapter lAdapter;
+		BaseListAdapter eAdapter;
+		
+		private void addItem() {
+			DatabaseModel dm = new DatabaseModel(context, ThePantryContract.DATABASE_NAME);
+			if (selectedType == null) {
+				selectedType = types[0];
+			}
+			boolean success = dm.addIngredient(table, item, selectedType, "1");
+			IngredientGroup temp = new IngredientGroup(selectedType,new ArrayList<IngredientChild>());
+			if (success) {
+				IngredientChild child = new IngredientChild(item, selectedType);
+				children.add(child);
+				if (groupItems.contains(temp)) {
+					int groupPos = groupItems.indexOf(temp);
+					eAdapter.addChild(child, groupItems.get(groupPos));
+				} else {
+					eAdapter.addChild(child, temp);
+				}
+				eAdapter.notifyDataSetChanged();
+				if (table.equals(Inventory.TABLE_NAME)) {
+					lAdapter.addItem(child);
+				}
+			}
+		}
 		
 	    @Override
 	    public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -315,20 +342,14 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	        			   new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						if (which == -1) {
-							selectedType = "Other";
-						} else {
-							selectedType = types[which];
-						}
+						selectedType = types[which];
 					}
 	        	   })
 	        	   .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
 	                   public void onClick(DialogInterface dialog, int id) {
 	                	   // call context function
 	                	   // adds selected category to the database
-	                	   
-	                	   //DatabaseModel dm = new DatabaseModel(context, ThePantryContract.DATABASE_NAME);
-	                	   //dm.add(table, item, selectedType, "1");
+	                	   addItem();
 	                   }
 	               })
 	               .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
