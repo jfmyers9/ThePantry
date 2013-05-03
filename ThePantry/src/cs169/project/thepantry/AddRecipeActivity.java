@@ -78,7 +78,9 @@ public class AddRecipeActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		super.finish();
+		if (login_status == null) {
+			super.finish();
+		}
 	}
 
 	@Override
