@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 import cs169.project.thepantry.Storage;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -32,6 +33,9 @@ public class CookBookActivity extends BasicMenuActivity {
 		recipes = new ArrayList<Storage>();
 		context = this;
 		
+//		TextView noRecipes = (TextView) findViewById(R.id.no_recipes);
+//		noRecipes.setText(R.string.no_recipes);
+		
 		recipes = getRecipes();
 		
 		setTitle(TITLE);
@@ -40,6 +44,11 @@ public class CookBookActivity extends BasicMenuActivity {
 		cbAdapter = new CookbookListAdapter(this, recipes);
 		listView.setAdapter(cbAdapter);
 		cbAdapter.notifyDataSetChanged();
+		
+//		if (recipes.size() > 0) {
+//			noRecipes.setVisibility(View.INVISIBLE);
+//			
+//		}
 		
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,

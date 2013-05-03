@@ -107,4 +107,6 @@
     <string name="title_activity_user_search_results_fragment">Jim Sucks</string>
     <string name="dialog_go_to_shopping">Add and go to shopping list</string>
     <string name="dialog_add_and_return">Add and return to recipe</string>
+    <string name="no_recipes">You Have No User Recipes</string>
+    
 </resources>

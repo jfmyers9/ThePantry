@@ -202,7 +202,7 @@ public class InventoryAddGrid extends BaseListActivity {
 				if (!recentAdds.contains(child)) {
 					RemoveDialogFragment dialog = new RemoveDialogFragment();
 					dialog.context = context;
-					String message = "Are you sure you want to remove" + childName + "from your pantry?";
+					String message = "Are you sure you want to removec" + childName + " from your pantry?";
 					dialog.message = message;
 					dialog.child = child;
 					dialog.imageAdapter = imageAdapter;
