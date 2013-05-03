@@ -18,15 +18,17 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	
 	  private final Context context;
 	  public List<SearchMatch> values;
-	  DatabaseModel dm;
-	  private static final String DATABASE_NAME = "thepantry";
-
+	  DatabaseModel dm = new DatabaseModel(this.getContext(), ThePantryContract.DATABASE_NAME);
+	  ArrayList<IngredientChild> invItems;
+	  
 	  public SearchResultAdapter(Context context, List<SearchMatch> values) {
 		  
 	  //call the super class constructor and provide the ID of the resource to use instead of the default list view item
 	    super(context, R.layout.list_result, values);
 	    this.context = context;
 	    this.values = values;
+	    invItems = dm.findAllItems(Inventory.TABLE_NAME);
+	    dm.close();
 	  }
 	  
 	  //this method is called once for each item in the list
@@ -41,8 +43,8 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	    if (values.size() > 0) {
 	    	// check which ingredients are in database
 	    	// add them to you have or you need accordingly
-	    	dm = new DatabaseModel(context, DATABASE_NAME);
-			ArrayList<IngredientChild> invItems = dm.findAllItems(Inventory.TABLE_NAME);
+	    	//dm = new DatabaseModel(context, DATABASE_NAME);
+			//ArrayList<IngredientChild> invItems = dm.findAllItems(Inventory.TABLE_NAME);
 			Boolean found;
 	    	for (int i=0; i < values.get(position).ingredients.size(); i++) {
 	    		found = false;
