@@ -1297,16 +1297,15 @@ containing a value of this type.
         public static final int content_frame=0x7f03002d;
         public static final int cook_book_list=0x7f03002e;
         public static final int direction=0x7f03002f;
-        public static final int divider=0x7f030030;
-        public static final int group_row=0x7f030031;
-        public static final int list=0x7f030032;
-        public static final int list_result=0x7f030033;
-        public static final int menu_frame=0x7f030034;
-        public static final int pager_home_page=0x7f030035;
-        public static final int row=0x7f030036;
-        public static final int sherlock_spinner_dropdown_item=0x7f030037;
-        public static final int sherlock_spinner_item=0x7f030038;
-        public static final int slidingmenumain=0x7f030039;
+        public static final int group_row=0x7f030030;
+        public static final int list=0x7f030031;
+        public static final int list_result=0x7f030032;
+        public static final int menu_frame=0x7f030033;
+        public static final int pager_home_page=0x7f030034;
+        public static final int row=0x7f030035;
+        public static final int sherlock_spinner_dropdown_item=0x7f030036;
+        public static final int sherlock_spinner_item=0x7f030037;
+        public static final int slidingmenumain=0x7f030038;
     }
     public static final class menu {
         public static final int add_picture=0x7f0d0000;
