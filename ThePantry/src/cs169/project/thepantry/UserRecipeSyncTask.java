@@ -72,7 +72,7 @@ public class UserRecipeSyncTask extends AsyncTask<String, String, JSONArray> {
     			try {
     				recip.put("id", id);
     				recip.put("name", name);
-    				recip.put("imgage", imgUrl);
+    				recip.put("image", imgUrl);
     				recip.put("ingLines", ingLines);
     				recip.put("dirLines", dirLines);
     				recip.put("cooked", cooked);
