@@ -19,6 +19,7 @@ import cs169.project.thepantry.ThePantryContract.Inventory;
 
 public class InventoryActivity extends BaseListActivity {
 	ProgressDialog progressDialog;
+	Thread thread;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,9 +71,17 @@ public class InventoryActivity extends BaseListActivity {
 
 	/** Takes you to InventoryAdd Activity */
 	public void edit(View view) {
-		progressDialog = new ProgressDialog(this);
-		progressDialog.setMessage("Loading Ingredients...");
-		progressDialog.show();
+		thread = new Thread()
+		{
+		    @Override
+		    public void run() {
+					ProgressDialog progressDialog = new ProgressDialog(InventoryActivity.this);
+					progressDialog.setMessage("Loading Ingredients...");
+					progressDialog.show();
+					
+		    }
+		};
+		thread.run();
 		Context context = getApplicationContext();
 		Intent intent = new Intent(context, InventoryAddGrid.class);
 		startActivity(intent);
