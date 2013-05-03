@@ -2,6 +2,8 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -58,6 +60,9 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		}
 		notifyDataSetChanged();
 		dm = new DatabaseModel(context, DATABASE_NAME);
+		if (table == Inventory.TABLE_NAME) {
+			dm.check(Ingredients.TABLE_NAME, child.getName(), ThePantryContract.CHECKED, false);
+		}
 		if (table != Ingredients.TABLE_NAME) {
 			dm.check(table, child.getName(), ThePantryContract.REMOVEFLAG, true);
 		} else {
@@ -96,7 +101,7 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 		} else {
 			childHolder = new ViewHolder((TextView)convertView.findViewById(R.id.textView));
 		}
-		childHolder.cb.setText(child.getName());
+		childHolder.cb.setText(WordUtils.capitalizeFully(child.getName()));
 		// Detects if a given item was swiped
 		final SwipeDetector swipeDetector = new SwipeDetector();
 		convertView.setOnTouchListener(swipeDetector);
@@ -163,7 +168,7 @@ public class BaseListAdapter extends BaseExpandableListAdapter {
 			convertView = inf.inflate(R.layout.group_row, null);
 		}
 		TextView tv = (TextView)convertView.findViewById(R.id.checkedText1);
-		tv.setText(group.getGroup());
+		tv.setText(WordUtils.capitalizeFully(group.getGroup()));
 		return convertView;
 	}
 
