@@ -3,7 +3,9 @@ package cs169.project.thepantry;
 import java.util.ArrayList;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.actionbarsherlock.view.Menu;
@@ -32,6 +34,8 @@ public class ShoppingListActivity extends BaseListActivity {
 		fillArrays();
 		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems, table);
 		eView.setAdapter(eAdapter);
+		lView = (ListView) findViewById(R.id.shop_list);
+		lView.setVisibility(View.INVISIBLE);
 	}
 	
 	@Override

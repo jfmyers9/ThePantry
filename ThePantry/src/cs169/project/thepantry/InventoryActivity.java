@@ -51,26 +51,6 @@ public class InventoryActivity extends BaseListActivity {
 		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems, table);
 		eView.setAdapter(eAdapter);
 	}
-	
-	public boolean onQueryTextChange(String newText) {
-		if (TextUtils.isEmpty(newText)) {
-			lView.setVisibility(View.INVISIBLE);
-			eView.setVisibility(View.VISIBLE);
-		} else {
-			ArrayList<IngredientChild> tmpItems = search(newText);
-			ArrayList<IngredientChild> items = new ArrayList<IngredientChild>();
-			for (IngredientChild c : children) {
-				if (tmpItems.contains(c)){
-					items.add(c);
-				}
-			}
-			lAdapter = new BaseListViewAdapter(this,  items, table);
-			lView.setAdapter(lAdapter);
-			eView.setVisibility(View.INVISIBLE);
-			lView.setVisibility(View.VISIBLE);
-		}
-		return true;
-	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

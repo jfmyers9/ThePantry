@@ -27,6 +27,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp" />
     
+     <ListView 
+        android:id="@+id/shop_list"
+        android:layout_below = "@+id/search"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" 
+        android:descendantFocusability="blocksDescendants" />
+    
     <LinearLayout 
         android:layout_width="match_parent"
     	android:layout_height="wrap_content"

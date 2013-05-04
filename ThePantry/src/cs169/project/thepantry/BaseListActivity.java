@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
@@ -72,7 +73,18 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	}
 	
 	public boolean onQueryTextChange(String newText) {
-		return false;
+		if (TextUtils.isEmpty(newText)) {
+			lView.setVisibility(View.INVISIBLE);
+			eView.setVisibility(View.VISIBLE);
+		} else {
+			ArrayList<IngredientChild> items = search(newText);
+			lAdapter = new BaseListViewAdapter(this,  items, table);
+			lAdapter.eAdapter = eAdapter;
+			lView.setAdapter(lAdapter);
+			eView.setVisibility(View.INVISIBLE);
+			lView.setVisibility(View.VISIBLE);
+		}
+		return true;
 	}
 
 	public boolean onQueryTextSubmit(String query) {
