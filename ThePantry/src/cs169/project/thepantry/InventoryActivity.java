@@ -64,7 +64,7 @@ public class InventoryActivity extends BaseListActivity {
 					items.add(c);
 				}
 			}
-			BaseListViewAdapter lAdapter = new BaseListViewAdapter(this,  items, table);
+			lAdapter = new BaseListViewAdapter(this,  items, table);
 			lView.setAdapter(lAdapter);
 			eView.setVisibility(View.INVISIBLE);
 			lView.setVisibility(View.VISIBLE);

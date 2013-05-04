@@ -98,9 +98,11 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			dialog.eAdapter = eAdapter;
 			dialog.table = table;
 			if (table.equals(Inventory.TABLE_NAME)) {
+				System.out.println("lAdapter " + lAdapter);
 				dialog.lAdapter = lAdapter;
 			}
 			dialog.show(getFragmentManager(), "dialog");
+			mSearchView.setQuery("", false);
 			return true;
 		}
 	}
