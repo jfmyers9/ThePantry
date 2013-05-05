@@ -113,4 +113,7 @@
     <string name="remove_checked_button">Remove Checked</string>
     <string name="dialog_remove_items">Remove items?</string>
     <string name="yes">Yes</string>
+    <string name="inventory_hint">Add something to your inventory...</string>
+    <string name="or">Or</string>
+    <string name="go_to_add_grid">Add in bulk!</string>
 </resources>

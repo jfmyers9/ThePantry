@@ -1,38 +1,39 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="fill_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context=".ShoppingListActivity" >
-    
-    <LinearLayout 
-        android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-    	android:orientation="horizontal" >
     	
-    	<SearchView
-        	android:id="@+id/search"
-        	android:layout_width="match_parent"
-        	android:layout_height="wrap_content"
-        	android:hint="@string/ingredient_search"/>
+    <SearchView
+       	android:id="@+id/search"
+       	android:layout_width="match_parent"
+       	android:layout_height="wrap_content"
+       	android:hint="@string/ingredient_search"/>
     
-    </LinearLayout>
-    
+    <RelativeLayout
+        android:id="@+id/listviews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <ExpandableListView android:id="@+id/exp_shop_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/search" />
     
-     <ListView 
+	<ListView 
         android:id="@+id/shop_list"
-        android:layout_below = "@+id/search"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" 
-        android:descendantFocusability="blocksDescendants" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search"  />
+	
+	</RelativeLayout>
     
     <LinearLayout 
         android:layout_width="match_parent"

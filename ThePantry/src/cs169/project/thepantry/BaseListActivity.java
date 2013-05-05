@@ -75,6 +75,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	public boolean onQueryTextChange(String newText) {
 		if (TextUtils.isEmpty(newText)) {
 			lView.setVisibility(View.INVISIBLE);
+			lView.setAdapter(null);
 			eView.setVisibility(View.VISIBLE);
 		} else {
 			ArrayList<IngredientChild> items = search(newText);

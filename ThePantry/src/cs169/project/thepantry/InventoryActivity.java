@@ -6,50 +6,42 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.actionbarsherlock.view.Menu;
-
 import cs169.project.thepantry.ThePantryContract.Inventory;
 
-
 public class InventoryActivity extends BaseListActivity {
+	
 	ProgressDialog progressDialog;
 	Thread thread;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (progressDialog != null) {
-			progressDialog.dismiss();
-		}
 		setTitle(getString(R.string.InventoryTitle));
 		setContentView(R.layout.activity_inventory);
 		table = Inventory.TABLE_NAME;
-		lView = (ListView) findViewById(R.id.inv_list);
-		lView.setVisibility(View.INVISIBLE);
-		
-		setupAdapter();
-	    setupSearchView();
-	}
-	
-	public void setupAdapter() {
 		eView = (ExpandableListView) findViewById(R.id.exp_view);
 		eView.setFocusable(true);
 		eView.setDividerHeight(2);
 		eView.setClickable(true);
-
+		mSearchView = (SearchView) findViewById(R.id.search);
+	    setupSearchView();
+		mSearchView.setQueryHint(getString(R.string.inventory_hint));
+		
 		groupItems = new ArrayList<IngredientGroup>();
 		groupNames = new ArrayList<String>();
 		children = new ArrayList<IngredientChild>();
-		fillArrays();
 		
-		mSearchView = (SearchView) findViewById(R.id.search);
+		fillArrays();
 		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems, table);
 		eView.setAdapter(eAdapter);
+		lView = (ListView) findViewById(R.id.inv_list);
+		lView.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
@@ -63,7 +55,9 @@ public class InventoryActivity extends BaseListActivity {
 	public void onResume() {
 		super.onResume();
 		table = Inventory.TABLE_NAME;
-		setupAdapter();
+		if (progressDialog != null) {
+			progressDialog.dismiss();
+		}
 	}
 
 	/** Takes you to InventoryAdd Activity */
@@ -73,9 +67,9 @@ public class InventoryActivity extends BaseListActivity {
 		{
 		    @Override
 		    public void run() {
-					ProgressDialog progressDialog = new ProgressDialog(InventoryActivity.this);
-					progressDialog.setMessage("Loading Ingredients...");
-					progressDialog.show();
+				progressDialog = new ProgressDialog(InventoryActivity.this);
+				progressDialog.setMessage("Loading Ingredients...");
+				progressDialog.show();
 					
 		    }
 		};
