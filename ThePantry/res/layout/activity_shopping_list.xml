@@ -21,18 +21,19 @@
         	android:hint="@string/ingredient_search"/>
     
     </LinearLayout>
+
     
     <ExpandableListView android:id="@+id/exp_shop_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp" />
     
-     <ListView 
+	         <ListView 
         android:id="@+id/shop_list"
         android:layout_below = "@+id/search"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" 
-        android:descendantFocusability="blocksDescendants" />
+        android:layout_height="wrap_content"  />
+    
     
     <LinearLayout 
         android:layout_width="match_parent"
