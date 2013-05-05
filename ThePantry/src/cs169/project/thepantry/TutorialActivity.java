@@ -22,15 +22,13 @@ import android.widget.Toast;
 public class TutorialActivity extends Activity {
 
 	private static final String OPENED = "opened";
+	private SharedPreferences opened;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		SharedPreferences opened = PreferenceManager.getDefaultSharedPreferences(this);
+		opened = PreferenceManager.getDefaultSharedPreferences(this);
 		if (opened.getBoolean(OPENED, false) == false) {
-			SharedPreferences.Editor editor = opened.edit();
-			editor.putBoolean(OPENED, true);
-			editor.commit();
 			setContentView(R.layout.activity_tutorial);
 			Gallery g = (Gallery) findViewById(R.id.gallery);
 	        g.setAdapter(new ImageAdapter(this));
@@ -38,7 +36,7 @@ public class TutorialActivity extends Activity {
 	        // Set a item click listener, and just Toast the clicked position
 	        g.setOnItemClickListener(new OnItemClickListener() {
 	            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-	                Toast.makeText(getApplicationContext(), "" + position, Toast.LENGTH_SHORT).show();
+	                Toast.makeText(getApplicationContext(), "" + getCaption(position), Toast.LENGTH_SHORT).show();
 	            }
 	        });
 		} else {
@@ -49,6 +47,32 @@ public class TutorialActivity extends Activity {
 			finish(); //this shuts down the app for a second?
 		}
 	}
+	
+	public String getCaption(int position) {
+		switch(position) {
+		case 0:
+			return "Use the HomePage to view Recommendations/Search Recipes";
+		case 1:
+			return "After clicking on a recipe, you will be brought to a recipe view.";
+		case 2:
+			return "Feel free to add ingredients from recipes to your shopping list.";
+		case 3:
+			return "In your shopping list keep track of items that you need to buy. After buying them add them to your Pantry.";
+		case 4:
+			return "Your Pantry keeps track of items currently in your inventory. Reccomendations will be tailored to your Pantry.";
+		case 5:
+			return "Feel free to add ingredients to your Pantry.";
+		case 6:
+			return "Just click on an ingredient to add it to your Pantry.";
+		case 7:
+			return "Even more functionality can be unlocked by registering an account!";
+		case 8:
+			return "For Example you can add recipes to your own cookbook which will be added to our database.";
+		case 9:
+			return "Visiting your cookbook shows you the recipes that you have added.";
+		}
+		return "";
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,6 +82,7 @@ public class TutorialActivity extends Activity {
 	}
 	
 	public void setupInventory(View view) {
+		stopTutorial();
 		Context context = getApplicationContext();
 		InventoryAddGrid invAddAct = new InventoryAddGrid();
 		Intent intent = new Intent(context, invAddAct.getClass());
@@ -65,6 +90,7 @@ public class TutorialActivity extends Activity {
 	}
 	
 	public void register(View view) {
+		stopTutorial();
 		Context context = getApplicationContext();
 		RegistrationActivity regAct = new RegistrationActivity();
 		Intent intent = new Intent(context, regAct.getClass());
@@ -72,10 +98,17 @@ public class TutorialActivity extends Activity {
 	}
 	
 	public void skipTutorial(View view) {
+		stopTutorial();
 		Context context = getApplicationContext();
 		Intent intent = new Intent(context, HomePageActivity.class);
 		startActivity(intent);
 		finish();
+	}
+	
+	public void stopTutorial() {
+		SharedPreferences.Editor editor = opened.edit();
+		editor.putBoolean(OPENED, true);
+		editor.commit();
 	}
 	
 	public boolean isOnline() {
