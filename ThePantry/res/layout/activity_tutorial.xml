@@ -15,22 +15,27 @@
         android:layout_centerHorizontal="true"
         android:textSize="20sp" />
     
-    <Button android:id="@+id/setup_inventory_button"
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
+    <Gallery android:id="@+id/gallery"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="@string/setup_inventory"
-        android:onClick="setupInventory" />
+        android:layout_below="@id/welcome_text" />
     
     <Button android:id="@+id/first_register"
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/setup_inventory_button"
+        android:layout_below="@id/gallery"
         android:layout_centerHorizontal="true"
         android:text="@string/register"
         android:onClick="register" />
+    
+   <Button android:id="@+id/setup_inventory_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/first_register"
+        android:text="@string/setup_inventory"
+        android:onClick="setupInventory" />
     
     <Button android:id="@+id/skip_button"
         android:layout_below="@id/setup_inventory_button"
