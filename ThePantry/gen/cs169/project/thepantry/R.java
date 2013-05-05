@@ -1051,39 +1051,48 @@ containing a value of this type.
         public static final int abs__textfield_searchview_holo_light=0x7f02006c;
         public static final int abs__textfield_searchview_right_holo_dark=0x7f02006d;
         public static final int abs__textfield_searchview_right_holo_light=0x7f02006e;
-        public static final int border=0x7f02006f;
-        public static final int butter=0x7f020070;
-        public static final int check_off=0x7f020071;
-        public static final int check_on=0x7f020072;
-        public static final int cheddar=0x7f020073;
-        public static final int cream_cheese=0x7f020074;
-        public static final int default_image=0x7f020075;
-        public static final int divider=0x7f020076;
-        public static final int eggs=0x7f020077;
-        public static final int half_half=0x7f020078;
-        public static final int half_half3=0x7f020079;
-        public static final int ic_action_refresh=0x7f02007a;
-        public static final int ic_action_search=0x7f02007b;
-        public static final int ic_launcher=0x7f02007c;
-        public static final int ic_menu_add=0x7f02007d;
-        public static final int ic_menu_gallery=0x7f02007e;
-        public static final int milk=0x7f02007f;
-        public static final int mozzarella_cheese=0x7f020080;
-        public static final int sadfood=0x7f020081;
-        public static final int sample_0=0x7f020082;
-        public static final int sample_1=0x7f020083;
-        public static final int sample_2=0x7f020084;
-        public static final int sample_3=0x7f020085;
-        public static final int sample_4=0x7f020086;
-        public static final int sample_5=0x7f020087;
-        public static final int sample_6=0x7f020088;
-        public static final int sample_7=0x7f020089;
-        public static final int shadow=0x7f02008a;
-        public static final int sour_cream=0x7f02008b;
-        public static final int star_off=0x7f02008c;
-        public static final int star_on=0x7f02008d;
-        public static final int thepantryicon=0x7f02008e;
-        public static final int yogurt=0x7f02008f;
+        public static final int add_recipe_demo=0x7f02006f;
+        public static final int border=0x7f020070;
+        public static final int butter=0x7f020071;
+        public static final int check_off=0x7f020072;
+        public static final int check_on=0x7f020073;
+        public static final int cheddar=0x7f020074;
+        public static final int cookbook_demo=0x7f020075;
+        public static final int cream_cheese=0x7f020076;
+        public static final int default_image=0x7f020077;
+        public static final int eggs=0x7f020078;
+        public static final int half_half=0x7f020079;
+        public static final int half_half3=0x7f02007a;
+        public static final int homepage_demo=0x7f02007b;
+        public static final int ic_action_refresh=0x7f02007c;
+        public static final int ic_action_search=0x7f02007d;
+        public static final int ic_launcher=0x7f02007e;
+        public static final int ic_menu_add=0x7f02007f;
+        public static final int ic_menu_gallery=0x7f020080;
+        public static final int inv_add_demo=0x7f020081;
+        public static final int inv_add_demo2=0x7f020082;
+        public static final int inv_demo=0x7f020083;
+        public static final int login_demo=0x7f020084;
+        public static final int milk=0x7f020085;
+        public static final int mozzarella_cheese=0x7f020086;
+        public static final int rec_sl_add_demo=0x7f020087;
+        public static final int recipe_demo=0x7f020088;
+        public static final int sadfood=0x7f020089;
+        public static final int sample_0=0x7f02008a;
+        public static final int sample_1=0x7f02008b;
+        public static final int sample_2=0x7f02008c;
+        public static final int sample_3=0x7f02008d;
+        public static final int sample_4=0x7f02008e;
+        public static final int sample_5=0x7f02008f;
+        public static final int sample_6=0x7f020090;
+        public static final int sample_7=0x7f020091;
+        public static final int shadow=0x7f020092;
+        public static final int sl_demo=0x7f020093;
+        public static final int sour_cream=0x7f020094;
+        public static final int star_off=0x7f020095;
+        public static final int star_on=0x7f020096;
+        public static final int thepantryicon=0x7f020097;
+        public static final int yogurt=0x7f020098;
     }
     public static final class id {
         public static final int abs__action_bar=0x7f050027;
@@ -1135,14 +1144,14 @@ containing a value of this type.
         public static final int addtoshop=0x7f050072;
         public static final int alpha=0x7f05005a;
         public static final int check=0x7f050092;
-        public static final int checkBox1=0x7f050083;
-        public static final int checkedText1=0x7f05008b;
+        public static final int checkBox1=0x7f050084;
+        public static final int checkedText1=0x7f05008c;
         public static final int common=0x7f050057;
-        public static final int content_frame=0x7f050085;
+        public static final int content_frame=0x7f050086;
         public static final int cookbook_list=0x7f050045;
         public static final int cooked=0x7f05006d;
         public static final int dirList=0x7f050075;
-        public static final int direction=0x7f05008a;
+        public static final int direction=0x7f05008b;
         public static final int directions=0x7f050073;
         public static final int directionstext=0x7f050074;
         public static final int disableHome=0x7f050009;
@@ -1158,10 +1167,11 @@ containing a value of this type.
         public static final int favorite=0x7f05006c;
         public static final int first_register=0x7f050081;
         public static final int fullscreen=0x7f050013;
+        public static final int gallery=0x7f050080;
         public static final int gridLinear=0x7f050056;
         public static final int gridScroll=0x7f050055;
         public static final int homeAsUp=0x7f050006;
-        public static final int image=0x7f050086;
+        public static final int image=0x7f050087;
         public static final int image_name=0x7f050093;
         public static final int ingButtons=0x7f050071;
         public static final int ingList=0x7f05006f;
@@ -1186,13 +1196,12 @@ containing a value of this type.
         public static final int margin=0x7f050012;
         public static final int matchList=0x7f05008e;
         public static final int menu_add=0x7f050099;
-        public static final int menu_frame=0x7f05008c;
+        public static final int menu_frame=0x7f05008d;
         public static final int menu_refresh=0x7f05009b;
         public static final int menu_search=0x7f050098;
         public static final int more_ing_button=0x7f05003f;
-        public static final int no_recipes=0x7f05008d;
         public static final int normal=0x7f050001;
-        public static final int number=0x7f050089;
+        public static final int number=0x7f05008a;
         public static final int overlay=0x7f050044;
         public static final int pager=0x7f05004c;
         public static final int password=0x7f050060;
@@ -1219,18 +1228,18 @@ containing a value of this type.
         public static final int searchbar=0x7f050047;
         public static final int searchresults=0x7f050079;
         public static final int selected_view=0x7f050014;
-        public static final int setup_inventory_button=0x7f050080;
+        public static final int setup_inventory_button=0x7f050082;
         public static final int shop_list=0x7f05007c;
         public static final int showCustom=0x7f050008;
         public static final int showHome=0x7f050005;
         public static final int showTitle=0x7f050007;
-        public static final int skip_button=0x7f050082;
+        public static final int skip_button=0x7f050083;
         public static final int slidingmenumain=0x7f050094;
         public static final int source=0x7f050076;
         public static final int tabMode=0x7f050003;
-        public static final int textView=0x7f050084;
+        public static final int textView=0x7f050085;
         public static final int textView1=0x7f05004f;
-        public static final int title=0x7f050087;
+        public static final int title=0x7f050088;
         public static final int update_button=0x7f050052;
         public static final int update_inventory_button=0x7f05007e;
         public static final int useLogo=0x7f050004;
@@ -1242,7 +1251,7 @@ containing a value of this type.
         public static final int webview=0x7f050046;
         public static final int welcome_text=0x7f05007f;
         public static final int wrap_content=0x7f050000;
-        public static final int you_have=0x7f050088;
+        public static final int you_have=0x7f050089;
     }
     public static final class integer {
         public static final int abs__max_action_buttons=0x7f090000;
@@ -1302,12 +1311,11 @@ containing a value of this type.
         public static final int list=0x7f030032;
         public static final int list_result=0x7f030033;
         public static final int menu_frame=0x7f030034;
-        public static final int no_recipes=0x7f030035;
-        public static final int pager_home_page=0x7f030036;
-        public static final int row=0x7f030037;
-        public static final int sherlock_spinner_dropdown_item=0x7f030038;
-        public static final int sherlock_spinner_item=0x7f030039;
-        public static final int slidingmenumain=0x7f03003a;
+        public static final int pager_home_page=0x7f030035;
+        public static final int row=0x7f030036;
+        public static final int sherlock_spinner_dropdown_item=0x7f030037;
+        public static final int sherlock_spinner_item=0x7f030038;
+        public static final int slidingmenumain=0x7f030039;
     }
     public static final class menu {
         public static final int add_picture=0x7f0d0000;
@@ -1633,6 +1641,25 @@ containing a value of this type.
         public static final int pref_notification=0x7f040003;
     }
     public static final class styleable {
+        /** Attributes that can be used with a Gallery1.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #Gallery1_android_galleryItemBackground cs169.project.thepantry:android_galleryItemBackground}</code></td><td></td></tr>
+           </table>
+           @see #Gallery1_android_galleryItemBackground
+         */
+        public static final int[] Gallery1 = {
+            0x0101004c
+        };
+        /**
+          <p>This symbol is the offset where the {@link cs169.project.thepantry.R.attr#android_galleryItemBackground}
+          attribute's value can be found in the {@link #Gallery1} array.
+          @attr name android:android_galleryItemBackground
+        */
+        public static final int Gallery1_android_galleryItemBackground = 0;
         /**  Attributes used to style the Action Bar. 
            <p>Includes the following attributes:</p>
            <table>
