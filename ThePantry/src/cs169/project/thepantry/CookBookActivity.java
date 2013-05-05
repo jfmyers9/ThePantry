@@ -8,9 +8,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import cs169.project.thepantry.Storage;
+
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
@@ -23,6 +24,9 @@ public class CookBookActivity extends BasicMenuActivity {
 	private DatabaseModel dm;
 	private CookbookListAdapter cbAdapter;
 	private Context context;
+	
+	FrameLayout noRecipesOverlay;
+	ListView listView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,17 +37,26 @@ public class CookBookActivity extends BasicMenuActivity {
 		recipes = new ArrayList<Storage>();
 		context = this;
 		
+		noRecipesOverlay = (FrameLayout)findViewById(R.id.norecipeoverlay);
+		
 //		TextView noRecipes = (TextView) findViewById(R.id.no_recipes);
 //		noRecipes.setText(R.string.no_recipes);
 		
 		recipes = getRecipes();
 		
-		setTitle(TITLE);
+		if (recipes.size() < 0) {
+			TextView tv = (TextView)findViewById(R.id.norecipeerror);
+			tv.setText("Add your own recipes by clicking the + icon at the top!");
+			noRecipesOverlay.setVisibility(View.VISIBLE);
+		} else {
+			noRecipesOverlay.setVisibility(View.GONE);
+			setTitle(TITLE);
 		
-		ListView listView = (ListView) findViewById(R.id.cookbook_list);
-		cbAdapter = new CookbookListAdapter(this, recipes);
-		listView.setAdapter(cbAdapter);
-		cbAdapter.notifyDataSetChanged();
+			listView = (ListView) findViewById(R.id.cookbook_list);
+			cbAdapter = new CookbookListAdapter(this, recipes);
+			listView.setAdapter(cbAdapter);
+			cbAdapter.notifyDataSetChanged();
+		}
 		
 //		if (recipes.size() > 0) {
 //			noRecipes.setVisibility(View.INVISIBLE);

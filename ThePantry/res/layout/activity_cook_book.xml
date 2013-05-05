@@ -13,4 +13,37 @@
         android:layout_height="fill_parent"
         android:layout_width="fill_parent" />
     
+    <FrameLayout
+        android:id="@+id/norecipeoverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+        	android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center|center">
+        
+	        <ImageView
+	            android:layout_width="300dp"
+	        	android:layout_height="300dp"
+	        	android:src="@drawable/sadfood" 
+	        	android:scaleType="fitXY"
+	        	/>
+	        
+	        <TextView
+	            android:id="@+id/norecipeerror"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginLeft="30dp"
+	            android:layout_marginRight="30dp"
+	            android:textSize="20sp"
+	            android:gravity="center"
+	            />
+        
+        </LinearLayout>
+    
+    </FrameLayout>
+    
 </RelativeLayout>
