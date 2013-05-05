@@ -2,7 +2,10 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import cs169.project.thepantry.BaseListAdapter.ViewHolder;
+import cs169.project.thepantry.ThePantryContract.Ingredients;
 import cs169.project.thepantry.ThePantryContract.Inventory;
 
 import android.content.Context;
@@ -18,6 +21,7 @@ public class BaseListViewAdapter extends BaseAdapter {
 
 	private final Context context;
 	private ArrayList<IngredientChild> items;
+	public BaseListAdapter eAdapter;
 	private DatabaseModel dm;
 	private static final String DATABASE_NAME = "thepantry";
 	private String table;
@@ -54,17 +58,12 @@ public class BaseListViewAdapter extends BaseAdapter {
         ViewHolder holder = null;
         if (convertView == null) {
         	LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-        	if (table == Inventory.TABLE_NAME) {
-				convertView = infalInflater.inflate(R.layout.child_row_inventory, null);
-			} else {
-				convertView = infalInflater.inflate(R.layout.child_row, null);
-			}
+        	convertView = infalInflater.inflate(R.layout.child_row, null);
         }
         IngredientChild item = getItem(position);
         final ViewHolder childHolder;
-        if (table != Inventory.TABLE_NAME) {
         	childHolder = new ViewHolder((CheckBox)convertView.findViewById(R.id.checkBox1), item.isSelected());
-        	childHolder.cb.setText(item.getName());
+        	childHolder.cb.setText(WordUtils.capitalizeFully(item.getName()));
         	convertView.setOnClickListener(new OnClickListener (){
     			@Override
     			public void onClick(View v) {
@@ -72,13 +71,18 @@ public class BaseListViewAdapter extends BaseAdapter {
     						.getTag();
     				((CheckBox)childHolder.cb).toggle();
 					item.setSelected(((CheckBox)childHolder.cb).isChecked());
-					dm.check(table, item.getName(), ThePantryContract.CHECKED, ((CheckBox)childHolder.cb).isChecked());
+					dm.check(Ingredients.TABLE_NAME, item.getName(), ThePantryContract.CHECKED, ((CheckBox)childHolder.cb).isChecked());
+					dm.check(table, item.getName(), ThePantryContract.CHECKED, false); // Probably not the cleanest way to do this but fuck it
+					boolean success = dm.addIngredient(table, item.getName(), item.getGroup(), "1");
+					ArrayList<IngredientChild> tmpChildren = new ArrayList<IngredientChild>(); 
+					IngredientGroup tmpGroup = new IngredientGroup(item.getGroup(), tmpChildren);
+					if (success) {
+						item.setSelected(false);
+						eAdapter.addChild(item, tmpGroup);
+						eAdapter.notifyDataSetChanged();
+					}
     			}
     		});
-        } else {
-        	childHolder = new ViewHolder((TextView)convertView.findViewById(R.id.textView));
-			childHolder.cb.setText(item.getName());
-        }	
         childHolder.cb.setTag(item);
         
         return convertView;

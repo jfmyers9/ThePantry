@@ -2,7 +2,6 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,12 +43,18 @@ public class ProfileActivity extends BasicMenuActivity {
 	{  // After a pause OR at startup
 	    super.onResume();
 	    //Refresh data sets when you return
-	    cooked.clear();
-	    setHistory();
-		cookAdapter = new SearchResultAdapter(this, cooked);
-		history = (ListView)findViewById(R.id.user_cook_history);
-		history.setAdapter(cookAdapter);
-		cookAdapter.notifyDataSetChanged();
+		SharedPreferences shared_pref = PreferenceManager.getDefaultSharedPreferences(this);
+		String login_status = shared_pref.getString(LOGGED_IN, null);
+	    if (login_status != null) {
+		    cooked.clear();
+		    setHistory();
+			cookAdapter = new SearchResultAdapter(this, cooked);
+			history = (ListView)findViewById(R.id.user_cook_history);
+			history.setAdapter(cookAdapter);
+			cookAdapter.notifyDataSetChanged();
+	    } else {
+	    	super.finish();
+	    }
 	}
 	
 	@Override
@@ -145,6 +150,7 @@ public class ProfileActivity extends BasicMenuActivity {
 	public void openRecipe(Recipe recipe) {
 		Intent intent = new Intent(this, RecipeActivity.class);
 		intent.putExtra("result", recipe);
+		intent.putExtra("type", "normal");
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);

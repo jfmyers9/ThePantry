@@ -2,9 +2,11 @@ package cs169.project.thepantry;
 
 import java.util.ArrayList;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -16,19 +18,21 @@ import cs169.project.thepantry.ThePantryContract.Inventory;
 
 
 public class InventoryActivity extends BaseListActivity {
-	
+	ProgressDialog progressDialog;
+	Thread thread;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (progressDialog != null) {
+			progressDialog.dismiss();
+		}
 		setTitle(getString(R.string.InventoryTitle));
 		setContentView(R.layout.activity_inventory);
 		table = Inventory.TABLE_NAME;
-		
 		lView = (ListView) findViewById(R.id.inv_list);
 		lView.setVisibility(View.INVISIBLE);
 		
 		setupAdapter();
-		
 	    setupSearchView();
 	}
 	
@@ -47,7 +51,6 @@ public class InventoryActivity extends BaseListActivity {
 		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems, table);
 		eView.setAdapter(eAdapter);
 	}
-	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -65,16 +68,22 @@ public class InventoryActivity extends BaseListActivity {
 
 	/** Takes you to InventoryAdd Activity */
 	public void edit(View view) {
-		Context context = getApplicationContext();
-		Intent intent = new Intent(context, InventoryAddActivity.class);
-		startActivity(intent);
-	}
-	
-	/** Takes you to InventoryAdd Activity */
-	public void editTwo(View view) {
+		// TODO Thread shit doesn't do anything -- total bull shit
+		thread = new Thread()
+		{
+		    @Override
+		    public void run() {
+					ProgressDialog progressDialog = new ProgressDialog(InventoryActivity.this);
+					progressDialog.setMessage("Loading Ingredients...");
+					progressDialog.show();
+					
+		    }
+		};
+		thread.run();
 		Context context = getApplicationContext();
 		Intent intent = new Intent(context, InventoryAddGrid.class);
 		startActivity(intent);
 	}
+	
 	
 }

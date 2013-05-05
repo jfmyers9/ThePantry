@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,52 +6,59 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context=".ShoppingListActivity" >
     
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal" >
+    	
+    	<SearchView
+        	android:id="@+id/search"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:hint="@string/ingredient_search"/>
     
-        <Button
+    </LinearLayout>
+    
+    <ExpandableListView android:id="@+id/exp_shop_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" />
+    
+     <ListView 
+        android:id="@+id/shop_list"
+        android:layout_below = "@+id/search"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" 
+        android:descendantFocusability="blocksDescendants" />
+    
+    <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal" 
+    	android:gravity="center"
+    	android:layout_marginTop="20dp" >
+    	    	
+    <Button
+        android:id="@+id/remove_checked_button"
+    	android:layout_height="wrap_content"
+     	android:layout_width="wrap_content"
+    	android:text="@string/remove_checked_button"
+     	android:onClick="removeChecked" 
+     	android:layout_gravity="center"
+     	android:layout_weight="1"/>
+    	
+    <Button
         android:id="@+id/update_inventory_button"
     	android:layout_height="wrap_content"
      	android:layout_width="wrap_content"
-     	android:layout_centerHorizontal="true"
-    	android:text="@string/update_inventory"
-    	android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" 
+    	android:text="@string/update_inventory_button"
      	android:onClick="updateInventory" 
-     	/>
+     	android:layout_gravity="center"
+     	android:layout_weight="1" />
+    
+    </LinearLayout>
         
-    <EditText
-        android:id= "@+id/shopping_list_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="@string/ingredient_search"
-        android:inputType="text"
-        android:layout_below="@id/update_inventory_button"
-        />
-    
-    <Button
-        android:id="@+id/shopping_list_button"
-    	android:layout_height="wrap_content"
-     	android:layout_width="wrap_content"
-    	android:text="@string/add_item"
-    	android:layout_below="@id/update_inventory_button"
-     	android:onClick="addShopItem"
-     	android:layout_toRightOf="@id/shopping_list_text"/>
-   
-    <Spinner
-    	android:id="@+id/add_sl_types"
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:layout_below="@id/update_inventory_button"
-    	android:layout_marginBottom="20dp"
-    	android:layout_toRightOf="@id/shopping_list_button" />
-    
-
-    
-    <ExpandableListView android:id="@+id/exp_shop_list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/shopping_list_text"/>
-        
-</RelativeLayout>
+</LinearLayout>
