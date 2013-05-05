@@ -272,9 +272,6 @@ public class AddRecipeActivity extends Activity {
 			s3Client.putObject(por);
 			ResponseHeaderOverrides override = new ResponseHeaderOverrides();
 			override.setContentType( "image/jpeg" );
-			GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(MY_PICTURE_BUCKET, picName);
-			urlRequest.setExpiration( new Date( System.currentTimeMillis() + 3600000 ) );  // Added an hour's worth of milliseconds to the current time.
-			urlRequest.setResponseHeaders(override);
 			String u = s3Client.getResourceUrl(MY_PICTURE_BUCKET, picName);
 			URL url = null;
 			try {
