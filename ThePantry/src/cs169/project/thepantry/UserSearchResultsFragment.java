@@ -121,10 +121,13 @@ public class UserSearchResultsFragment extends Fragment {
 	            JSONArray respObj = new JSONArray(result);
 	            return respObj;
 			} catch (ClientProtocolException e) {
+				progressDialog.dismiss();
 				e.printStackTrace();
 			} catch (IOException e) {
+				progressDialog.dismiss();
 				e.printStackTrace();
 			} catch (JSONException e) {
+				progressDialog.dismiss();
 				e.printStackTrace();
 			}
 			return null;
