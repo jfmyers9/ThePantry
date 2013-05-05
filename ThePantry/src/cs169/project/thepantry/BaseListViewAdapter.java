@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class BaseListViewAdapter extends BaseAdapter {
 
@@ -58,26 +59,27 @@ public class BaseListViewAdapter extends BaseAdapter {
         ViewHolder holder = null;
         if (convertView == null) {
         	LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-        	convertView = infalInflater.inflate(R.layout.child_row, null);
+        	convertView = infalInflater.inflate(R.layout.child_row_inventory, null);
         }
         IngredientChild item = getItem(position);
         final ViewHolder childHolder;
-        	childHolder = new ViewHolder((CheckBox)convertView.findViewById(R.id.checkBox1), item.isSelected());
+        	childHolder = new ViewHolder((TextView)convertView.findViewById(R.id.textView));
         	childHolder.cb.setText(WordUtils.capitalizeFully(item.getName()));
         	convertView.setOnClickListener(new OnClickListener (){
     			@Override
     			public void onClick(View v) {
     				IngredientChild item = (IngredientChild) childHolder.cb
     						.getTag();
-    				((CheckBox)childHolder.cb).toggle();
-					item.setSelected(((CheckBox)childHolder.cb).isChecked());
-					dm.check(Ingredients.TABLE_NAME, item.getName(), ThePantryContract.CHECKED, ((CheckBox)childHolder.cb).isChecked());
-					dm.check(table, item.getName(), ThePantryContract.CHECKED, false); // Probably not the cleanest way to do this but fuck it
-					boolean success = dm.addIngredient(table, item.getName(), item.getGroup(), "1");
+					item.setSelected(false);
 					ArrayList<IngredientChild> tmpChildren = new ArrayList<IngredientChild>(); 
 					IngredientGroup tmpGroup = new IngredientGroup(item.getGroup(), tmpChildren);
-					if (success) {
-						item.setSelected(false);
+					if (dm.findItem(table, item.getName()) && !dm.isItemChecked(table, item.getName(), ThePantryContract.REMOVEFLAG)) {
+						Toast toast = Toast.makeText(context, "You already have " + WordUtils.capitalizeFully(item.getName()) + " in your pantry", Toast.LENGTH_SHORT);
+						toast.show();
+					} else {
+						dm.addIngredient(table, item.getName(), item.getGroup(), "1");
+						dm.check(Ingredients.TABLE_NAME, item.getName(), ThePantryContract.CHECKED, true);
+						dm.check(table, item.getName(), ThePantryContract.CHECKED, false); // Probably not the cleanest way to do this but fuck it
 						eAdapter.addChild(item, tmpGroup);
 						eAdapter.notifyDataSetChanged();
 					}

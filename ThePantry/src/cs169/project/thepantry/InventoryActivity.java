@@ -73,7 +73,7 @@ public class InventoryActivity extends BaseListActivity {
 		{
 		    @Override
 		    public void run() {
-					ProgressDialog progressDialog = new ProgressDialog(InventoryActivity.this);
+					progressDialog = new ProgressDialog(InventoryActivity.this);
 					progressDialog.setMessage("Loading Ingredients...");
 					progressDialog.show();
 					

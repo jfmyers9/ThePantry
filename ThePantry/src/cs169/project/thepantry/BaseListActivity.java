@@ -21,6 +21,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.actionbarsherlock.view.Menu;
 
@@ -386,6 +387,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	        return builder.create();
 	    }
 	}
+	
 	
 	/* Class for displaying popup dialog for removing ingredients
 	 * 
