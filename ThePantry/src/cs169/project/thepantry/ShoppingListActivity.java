@@ -1,12 +1,8 @@
 package cs169.project.thepantry;
 
-import java.util.ArrayList;
-
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
-import android.widget.SearchView;
 
 import com.actionbarsherlock.view.Menu;
 
@@ -19,21 +15,10 @@ public class ShoppingListActivity extends BaseListActivity {
 		setTitle(getString(R.string.ShoppingListTitle));
 		setContentView(R.layout.activity_shopping_list);
 		table = ShoppingList.TABLE_NAME;
-		eView = (ExpandableListView) findViewById(R.id.exp_shop_list);
-		eView.setFocusable(true);
-		eView.setDividerHeight(2);
-		eView.setClickable(true);
-		mSearchView = (SearchView) findViewById(R.id.search);
+
+		setupAdapter();
 		setupSearchView();
 		mSearchView.setQueryHint(getString(R.string.add_ing_to_shopping));
-		
-		groupItems = new ArrayList<IngredientGroup>();
-		groupNames = new ArrayList<String>();
-		children = new ArrayList<IngredientChild>();
-		
-		fillArrays();
-		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems, table);
-		eView.setAdapter(eAdapter);
 		lView = (ListView) findViewById(R.id.shop_list);
 		lView.setVisibility(View.INVISIBLE);
 	}

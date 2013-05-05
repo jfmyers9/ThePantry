@@ -21,6 +21,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.actionbarsherlock.view.Menu;
 
@@ -56,6 +57,22 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		return true;
 	}
 
+	public void setupAdapter() {
+		eView = (ExpandableListView) findViewById(R.id.exp_view);
+		eView.setFocusable(true);
+		eView.setDividerHeight(2);
+		eView.setClickable(true);
+
+		groupItems = new ArrayList<IngredientGroup>();
+		groupNames = new ArrayList<String>();
+		children = new ArrayList<IngredientChild>();
+		fillArrays();
+
+		mSearchView = (SearchView) findViewById(R.id.search);
+		eAdapter = new BaseListAdapter(getApplicationContext(), groupItems, table);
+		eView.setAdapter(eAdapter);
+	}
+	
 	// get the search view and then call this, and then set the hint in the activity
 	public void setupSearchView() {
 		mSearchView.setIconifiedByDefault(false);
@@ -92,7 +109,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		String message;
 		if(dm.findItem(table, query) && !dm.isItemChecked(table, query, ThePantryContract.REMOVEFLAG)) {
 			// TODO: Make this popup window to increment amount
-			message = "You already have this item";
+			message = "You have already added this item.";
 			Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
 			toast.show();
 			return true;
@@ -105,7 +122,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			}
 		    
 			dialog.context = this;
-			dialog.message = "Select a category to add " + query + " to your pantry?";
+			dialog.message = "Select a category for " + query + ".";
 			dialog.types = types.toArray(new String[0]);
 			dialog.item = query;
 			dialog.eAdapter = eAdapter;
@@ -386,6 +403,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	        return builder.create();
 	    }
 	}
+	
 	
 	/* Class for displaying popup dialog for removing ingredients
 	 * 
