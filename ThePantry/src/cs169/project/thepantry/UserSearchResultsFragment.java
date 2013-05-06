@@ -19,16 +19,19 @@ import org.json.JSONObject;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 
 public class UserSearchResultsFragment extends Fragment {
 	
@@ -38,6 +41,7 @@ public class UserSearchResultsFragment extends Fragment {
 	DatabaseModel dm;
 	private CookbookListAdapter cbAdapter;
 	FrameLayout mFrameOverlay;
+	FrameLayout mErrorOverlay;
 	
 	public UserSearchResultsFragment() {
 		
@@ -53,23 +57,35 @@ public class UserSearchResultsFragment extends Fragment {
 		recipes = new ArrayList<Storage>();
 		matchlist = (ListView) rootView.findViewById(R.id.matchList);
 		mFrameOverlay = (FrameLayout) rootView.findViewById(R.id.overlay);
-		cbAdapter = new CookbookListAdapter(getActivity(), recipes);   
-		matchlist.setAdapter(cbAdapter);
-		cbAdapter.notifyDataSetChanged();
-		matchlist.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				System.out.println("HI");
-				Recipe rec = (Recipe) view.getTag();
-				Intent intent = new Intent(getActivity(), RecipeActivity.class);
-				intent.putExtra("result", rec);
-				intent.putExtra("type", "cookbook");
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
-				
-			}
-		});
+		mErrorOverlay = (FrameLayout) rootView.findViewById(R.id.erroroverlay);
+		SharedPreferences shared_pref = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+		String login_status = shared_pref.getString("log_in", null);
+		
+		if (login_status != null) {
+			mErrorOverlay.setVisibility(View.GONE);
+			cbAdapter = new CookbookListAdapter(getActivity(), recipes);   
+			matchlist.setAdapter(cbAdapter);
+			cbAdapter.notifyDataSetChanged();
+			matchlist.setOnItemClickListener(new OnItemClickListener() {
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					System.out.println("HI");
+					Recipe rec = (Recipe) view.getTag();
+					Intent intent = new Intent(getActivity(), RecipeActivity.class);
+					intent.putExtra("result", rec);
+					intent.putExtra("type", "cookbook");
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
+					
+				}
+			});
+		} else {
+			TextView tv = (TextView) rootView.findViewById(R.id.sadtacomsg);
+			tv.setText("Please login to search ThePantry's recipes!");
+			mErrorOverlay.setVisibility(View.VISIBLE);
+		}
+		
 		return rootView;
 	}
 	
