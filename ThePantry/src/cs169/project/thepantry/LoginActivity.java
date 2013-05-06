@@ -317,6 +317,7 @@ private class GetJsonObject extends AsyncTask<String, String, JSONObject> {
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
+					finish();
 				} else if (!success) {
 					showProgress(false);
 					Context context = getApplicationContext();

@@ -80,7 +80,7 @@ public class RecipeActivity extends BasicMenuActivity {
 		//Render directions to view.
 		//fetch and parse directions aynchronously
 		dm = new DatabaseModel(this, DATABASE_NAME);
-		if (dm.findItem(ThePantryContract.Recipe.TABLE_NAME, recipe.id) || dm.findItem(ThePantryContract.CookBook.TABLE_NAME, recipe.id)) {
+		if (dm.findItem(ThePantryContract.Recipe.TABLE_NAME, recipe.id) || dm.findItem(ThePantryContract.CookBook.TABLE_NAME, recipe.id) || recipe.source == null) {
 			displayDirections(recipe.directionLines);
 		} else {
 			new ParseDirectionsTask().execute(recipe.source.sourceRecipeUrl);

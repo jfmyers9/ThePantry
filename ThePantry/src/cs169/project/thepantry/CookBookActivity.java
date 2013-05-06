@@ -43,19 +43,19 @@ public class CookBookActivity extends BasicMenuActivity {
 //		noRecipes.setText(R.string.no_recipes);
 		
 		recipes = getRecipes();
+		setTitle(TITLE);
 		
-		if (recipes.size() < 0) {
-			TextView tv = (TextView)findViewById(R.id.norecipeerror);
-			tv.setText("Add your own recipes by clicking the + icon at the top!");
-			noRecipesOverlay.setVisibility(View.VISIBLE);
-		} else {
+		listView = (ListView) findViewById(R.id.cookbook_list);
+		
+		if (recipes.size() > 0) {
 			noRecipesOverlay.setVisibility(View.GONE);
-			setTitle(TITLE);
-		
-			listView = (ListView) findViewById(R.id.cookbook_list);
 			cbAdapter = new CookbookListAdapter(this, recipes);
 			listView.setAdapter(cbAdapter);
 			cbAdapter.notifyDataSetChanged();
+		} else {
+			TextView tv = (TextView)findViewById(R.id.norecipeerror);
+			tv.setText("You have not added any recipes.\nAdd your own recipes by clicking the + icon at the top!");
+			noRecipesOverlay.setVisibility(View.VISIBLE);
 		}
 		
 //		if (recipes.size() > 0) {
