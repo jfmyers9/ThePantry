@@ -106,7 +106,7 @@ public class UserSearchResultsFragment extends Fragment {
 		protected void onPreExecute() {
 			progressDialog = new ProgressDialog(getActivity());
 			progressDialog.setMessage("Loading User Recipes ...");
-			progressDialog.show();
+//			progressDialog.show();
 	    };
 		
 		@Override
@@ -114,7 +114,7 @@ public class UserSearchResultsFragment extends Fragment {
 			String[] ingredients = sc[0].split(",");
 			String url = baseUrl + authToken;
 			for (String ingredient : ingredients) {
-				url += "&ingredients[]=" + ingredient.toLowerCase();
+				url += "&ingredients[]=" + ingredient.toLowerCase().trim();
 			}
 			System.out.println(url);
 			HttpClient client = new DefaultHttpClient();
@@ -137,13 +137,13 @@ public class UserSearchResultsFragment extends Fragment {
 	            JSONArray respObj = new JSONArray(result);
 	            return respObj;
 			} catch (ClientProtocolException e) {
-				progressDialog.dismiss();
+				//progressDialog.dismiss();
 				e.printStackTrace();
 			} catch (IOException e) {
-				progressDialog.dismiss();
+				//progressDialog.dismiss();
 				e.printStackTrace();
 			} catch (JSONException e) {
-				progressDialog.dismiss();
+				//progressDialog.dismiss();
 				e.printStackTrace();
 			}
 			return null;
@@ -152,7 +152,7 @@ public class UserSearchResultsFragment extends Fragment {
 		//update list of matches
 		@Override
 		protected void onPostExecute(JSONArray result) {
-			progressDialog.dismiss();
+			//progressDialog.dismiss();
 			if (result != null) {
 				for (int i = 0; i < result.length(); i++) {
 					try {
