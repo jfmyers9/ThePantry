@@ -46,8 +46,11 @@ public class StoredResultFragment extends Fragment {
 	    super.onResume();
 	    //Refresh data sets when you return
 	    matches = storageToSearchMatch(getMatchesByType(type));
-		srAdapter = new SearchResultAdapter(getActivity(), matches);   
-		matchlist.setAdapter(srAdapter);
+		//srAdapter = new SearchResultAdapter(getActivity(), matches); 
+		srAdapter.values = matches;
+		srAdapter.type = type;
+	    matchlist.setAdapter(srAdapter);
+	    System.out.println("Matches size of " + type + " on resume: " + matches.size());
 		srAdapter.notifyDataSetChanged();
 	}
 
@@ -58,6 +61,7 @@ public class StoredResultFragment extends Fragment {
 		switch (type) {
 		case ThePantryContract.RECENT:
 			result = dm.getAllStorage(table);
+			System.out.println("Result size: " + result.size());
 			break;
 		case ThePantryContract.FAVORITED:
 			result = dm.getCookOrFav(table, ThePantryContract.Storage.FAVORITE);
@@ -83,8 +87,8 @@ public class StoredResultFragment extends Fragment {
 		matchlist = (ListView) rootView.findViewById(R.id.matchList);
 		mFrameOverlay = (FrameLayout) rootView.findViewById(R.id.overlay);
 		srAdapter = new SearchResultAdapter(getActivity(), matches);   
-		matchlist.setAdapter(srAdapter);
-		srAdapter.notifyDataSetChanged();
+		//matchlist.setAdapter(srAdapter);
+		//srAdapter.notifyDataSetChanged();
 
 		//when a search result item (recipe) is clicked
 		matchlist.setOnItemClickListener(new OnItemClickListener() {

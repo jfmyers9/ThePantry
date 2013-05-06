@@ -6,15 +6,19 @@ import java.util.Comparator;
 
 import org.apache.commons.lang3.text.WordUtils;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListAdapter;
@@ -25,6 +29,8 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.actionbarsherlock.view.Menu;
 
+import cs169.project.thepantry.InventoryAddGrid.ImageListener;
+import cs169.project.thepantry.InventoryAddGrid.RemoveDialogFragment;
 import cs169.project.thepantry.ThePantryContract.Ingredients;
 import cs169.project.thepantry.ThePantryContract.Inventory;
 import cs169.project.thepantry.ThePantryContract.ShoppingList;
@@ -99,6 +105,8 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			lAdapter = new BaseListViewAdapter(this,  items, table);
 			lAdapter.eAdapter = eAdapter;
 			lView.setAdapter(lAdapter);
+			ListViewListener listener = new ListViewListener(this, items);
+			lView.setOnItemClickListener(listener);
 			eView.setVisibility(View.INVISIBLE);
 			lView.setVisibility(View.VISIBLE);
 		}
@@ -128,7 +136,6 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 			dialog.eAdapter = eAdapter;
 			dialog.table = table;
 			if (table.equals(Inventory.TABLE_NAME)) {
-				System.out.println("lAdapter " + lAdapter);
 				dialog.lAdapter = lAdapter;
 			}
 			dialog.show(getFragmentManager(), "dialog");
@@ -251,7 +258,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		String message = "";
 		for (IngredientChild c : children) {
 			if (c.isSelected()) {
-				message += c.getName() + "\n";
+				message += WordUtils.capitalizeFully(c.getName()) + "\n";
 			}
 		}
 		// Opens pop up window with items being removed
@@ -458,6 +465,41 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 	        // Create the AlertDialog object and return it
 	        return builder.create();
 	    }
+	}
+	
+	class ListViewListener implements OnItemClickListener {
+		ArrayList<IngredientChild> children;
+		Context context;
+		
+		ListViewListener(Context context){}
+		ListViewListener(Context context, ArrayList<IngredientChild> children) {
+			this.children = children;
+			this.context = context;
+		}
+		
+		@Override
+		public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+			IngredientChild child = children.get(position);
+			String childName = child.getName();
+			parent.getChildAt(position).setBackgroundColor(Color.RED);
+			v.setBackgroundColor(Color.RED);
+			if (dm.findItem(table, childName) && !dm.isItemChecked(table, childName, ThePantryContract.REMOVEFLAG)) {
+				Toast toast = Toast.makeText(context, "You already have " + WordUtils.capitalizeFully(childName) + " in your pantry", Toast.LENGTH_SHORT);
+				toast.show();
+			} else {
+				dm.addIngredient(table, childName, child.getGroup(), "1");
+				dm.check(Ingredients.TABLE_NAME, childName, ThePantryContract.CHECKED, true);
+				dm.check(table, childName, ThePantryContract.CHECKED, false); // Probably not the cleanest way to do this but fuck it
+				fillArrays();
+				eAdapter.groups = groupItems;
+				//resetChildren();
+				eAdapter.notifyDataSetChanged();
+				lView.setVisibility(View.INVISIBLE);
+				lView.setAdapter(null);
+				eView.setVisibility(View.VISIBLE);
+				mSearchView.setQuery("", false);
+			}
+		}
 	}
 
 }

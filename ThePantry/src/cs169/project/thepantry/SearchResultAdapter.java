@@ -19,6 +19,7 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	
 	  private final Context context;
 	  public List<SearchMatch> values;
+	  public int type;
 	  DatabaseModel dm = new DatabaseModel(this.getContext(), ThePantryContract.DATABASE_NAME);
 	  ArrayList<IngredientChild> invItems;
 	  
@@ -35,6 +36,7 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	  //this method is called once for each item in the list
 	  @Override
 	  public View getView(int position, View convertView, ViewGroup parent) {
+		  
 		String youHave = "";
 		int havenum = 0;
 		String source = "Unknown";
@@ -43,6 +45,8 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	
 	    if (values.size() > 0) {
 			Boolean found;
+			System.out.println("type: " + type);
+		  	System.out.println(values.size());
 	    	for (int i=0; i < values.get(position).ingredients.size(); i++) {
 	    		found = false;
 	    		if (invItems != null) {
@@ -59,6 +63,7 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	    	}
 	    	
 	    	listItem.setTag(values.get(position).id);
+	    	System.out.println(values.get(position).name);
 	    
 		    // set the title of the result item
 		    TextView titleView = (TextView) listItem.findViewById(R.id.title);
@@ -79,4 +84,9 @@ public class SearchResultAdapter extends ArrayAdapter<SearchMatch> {
 	    }   
 	    return listItem;
 	  }
+	  
+	  @Override
+		public int getCount() {
+			return values.size();
+		}
 }

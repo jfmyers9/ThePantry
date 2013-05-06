@@ -13,6 +13,7 @@
        	android:layout_height="50dp"
        	android:text="@string/hello_world"
        	android:textColor="#FFFFFF"
+       	android:onClick="@color/red"
        	android:textSize="20sp"
        	android:gravity="center"
        	android:textStyle="bold"
