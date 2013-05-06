@@ -279,7 +279,7 @@ public abstract class BaseListActivity extends BasicMenuActivity implements Sear
 		for (IngredientChild c : children) {
 			if (c.isSelected()) {
 				boolean success = dm.addIngredient(Inventory.TABLE_NAME, c.getName(),c.getGroup(),"1");
-				message += c.getName() + "\n";
+				message += WordUtils.capitalizeFully(c.getName()) + "\n";
 				// If the shopping list "updates" the ingredients are removed from list
 				dm.check(table, c.getName(), ThePantryContract.CHECKED, false);
 				if (table.equals(ShoppingList.TABLE_NAME)) {
